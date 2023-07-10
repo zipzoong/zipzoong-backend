@@ -128,7 +128,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/rojiwon/github/nestia-template/db",
+      "value": "/Users/rojiwon/github/zipzoong-backend/db",
       "fromEnvVar": null
     },
     "config": {
@@ -156,7 +156,7 @@ const config = {
   ],
   "activeProvider": "postgresql",
   "dataProxy": false,
-  "postinstall": false
+  "postinstall": true
 }
 
 const fs = require('fs')

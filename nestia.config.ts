@@ -13,11 +13,14 @@ const NESTIA_CONFIG: nestia.INestiaConfig = {
         output: "packages/swagger/swagger.json",
         info: {
             version: "0.0.1",
-            title: "Server Title",
-            description: "Service Description",
+            title: "Zipzoong RESTAPI",
+            description: "Zipzoong Server API document",
         },
         servers: [
-            { url: "https://localhost:4000", description: "Local Server" },
+            {
+                url: "https://localhost:4000",
+                description: "Zipzoong API Server",
+            },
         ],
         security: {
             bearer: {

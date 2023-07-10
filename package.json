@@ -1,7 +1,7 @@
 {
-    "name": "nestia-template",
+    "name": "@zipzoong/zipzoong-backend",
     "version": "0.0.0",
-    "description": "nestia를 적용한 nestjs 서버",
+    "description": "집중 서비스 백엔드 코드",
     "main": "build/main",
     "scripts": {
         "check": "ts-patch check",
@@ -34,12 +34,8 @@
     "license": "UNLICENSED",
     "repository": {
         "type": "git",
-        "url": "git@github.com-industriously:industriously/nestia-template.git"
+        "url": "https://github.com/zipzoong/zipzoong-backend.git"
     },
-    "keywords": [
-        "nestjs",
-        "nestia"
-    ],
     "dependencies": {
         "@fxts/core": "^0.17.0",
         "@nestia/core": "^1.4.3",
