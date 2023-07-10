@@ -1,0 +1,18 @@
+node_modules
+
+# build
+
+build
+tbuild
+packages/sdk/lib
+
+# log
+
+test_log.md
+
+# env
+
+.env
+.env.*
+
+.DS_Store
