@@ -33,4 +33,10 @@ interface IEnv {
     readonly KAKAO_REDIRECT_URI: string;
 
     readonly ACCESS_TOKEN_KEY: string;
+
+    readonly NAVER_SENS_SERVICE_ID: string;
+    readonly NAVER_SENS_ACCESS_KEY: string;
+    readonly NAVER_SENS_SECRET_KEY: string;
+    readonly NAVER_SENS_CALLER: string;
+    readonly NAVER_SENS_HOST: string;
 }

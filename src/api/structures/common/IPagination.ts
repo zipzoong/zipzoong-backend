@@ -9,9 +9,9 @@ export interface IPaginatedResponse<T> {
 
 export interface IPage {
     /**
-     * @default 1
      * @type uint
      * @minimum 1
+     * @default 1
      */
     page?: number;
 }

@@ -1,6 +1,6 @@
 import typia from "typia";
 import { Exception } from "./exception";
-import { IUser } from "@APP/api/structures/user/user";
+import { IUser } from "@APP/api/structures/user/IUser";
 import { Mutable } from "@APP/api/types";
 import { pipe, throwIf } from "@fxts/core";
 import { throwError } from "@APP/utils";

@@ -9,7 +9,7 @@ import type { IConnection } from "@nestia/fetcher";
 import typia from "typia";
 
 import { NestiaSimulator } from "./../../utils/NestiaSimulator";
-import type { IUser } from "./../../structures/user/user";
+import type { IUser } from "../../structures/user/IUser";
 
 /**
  * this is sample api

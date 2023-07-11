@@ -1,4 +1,4 @@
-import { IUser } from "@APP/api/structures/user/user";
+import { IUser } from "@APP/api/structures/user/IUser";
 import { User } from "@APP/providers/user";
 import { TypedBody, TypedParam, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
