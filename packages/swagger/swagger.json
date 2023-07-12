@@ -3,21 +3,23 @@
   "servers": [
     {
       "url": "https://localhost:4000",
-      "description": "Local Server"
+      "description": "Zipzoong API Server"
     }
   ],
   "info": {
     "version": "0.0.1",
-    "title": "Server Title",
-    "description": "Service Description"
+    "title": "Zipzoong RESTAPI",
+    "description": "Zipzoong Server API document"
   },
   "paths": {
-    "/auth/sign-in/kakao": {
+    "/auth/sign-in": {
       "post": {
-        "tags": [],
+        "tags": [
+          "authentication"
+        ],
         "parameters": [],
         "requestBody": {
-          "description": "",
+          "description": "oauth code, oauth type, user type",
           "content": {
             "application/json": {
               "schema": {
@@ -29,56 +31,27 @@
           "x-nestia-encrypted": false
         },
         "responses": {
-          "201": {
-            "description": "",
-            "x-nestia-encrypted": false
-          }
-        },
-        "x-nestia-namespace": "auth.sign-in.kakao.execute",
-        "x-nestia-jsDocTags": []
-      }
-    },
-    "/users/{user_id}": {
-      "get": {
-        "tags": [
-          "users"
-        ],
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "user id",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
           "200": {
-            "description": "user info",
+            "description": "사용자 권한이 부여된 토큰",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/IUser"
+                  "$ref": "#/components/schemas/IAuthentication.IResponse.ISignIn"
                 }
               }
             },
             "x-nestia-encrypted": false
-          },
-          "404": {
-            "description": "Not Found"
           }
         },
-        "summary": "user find by user id",
-        "description": "this is sample api\n@summary user find by user id\n@tag users\n@param user_id user id\n@return user info\n@throw 404 Not Found",
-        "x-nestia-namespace": "users.getOne",
+        "summary": "로그인",
+        "description": "전달된 정보에 대응하는 특정 회원에 대한 권한이 부여된 인증 토큰을 발급한다.\n\n에러 코드\n- OAUTH_FAIL : oauth 인증에 실패한 경우\n- ACCOUNT_NOT_FOUND : 집중 서버에 계정 정보가 없는 경우\n- ACCOUNT_INACTIVE : 비활성화된 계정인 경우\n- USER_NOT_FOUND : 사용자 정보가 없는 경우\n\n@summary 로그인\n\n@tag authentication\n\n@param body oauth code, oauth type, user type\n\n@return 사용자 권한이 부여된 토큰",
+        "x-nestia-namespace": "auth.sign-in.execute",
         "x-nestia-jsDocTags": [
           {
             "name": "summary",
             "text": [
               {
-                "text": "user find by user id",
+                "text": "로그인",
                 "kind": "text"
               }
             ]
@@ -87,7 +60,7 @@
             "name": "tag",
             "text": [
               {
-                "text": "users",
+                "text": "authentication",
                 "kind": "text"
               }
             ]
@@ -96,7 +69,7 @@
             "name": "param",
             "text": [
               {
-                "text": "user_id",
+                "text": "body",
                 "kind": "parameterName"
               },
               {
@@ -104,7 +77,7 @@
                 "kind": "space"
               },
               {
-                "text": "user id",
+                "text": "oauth code, oauth type, user type",
                 "kind": "text"
               }
             ]
@@ -113,16 +86,7 @@
             "name": "return",
             "text": [
               {
-                "text": "user info",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "throw",
-            "text": [
-              {
-                "text": "404 Not Found",
+                "text": "사용자 권한이 부여된 토큰",
                 "kind": "text"
               }
             ]
@@ -130,16 +94,18 @@
         ]
       }
     },
-    "/users": {
+    "/auth/sign-up": {
       "post": {
-        "tags": [],
+        "tags": [
+          "authentication"
+        ],
         "parameters": [],
         "requestBody": {
-          "description": "",
+          "description": "oauth code, oauth type",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/IUser.ICreate1"
+                "$ref": "#/components/schemas/IAuthentication.ISignUp"
               }
             }
           },
@@ -148,12 +114,66 @@
         },
         "responses": {
           "201": {
-            "description": "",
+            "description": "계정 권한이 부여된 토큰",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IAuthentication.IResponse.ISignUp"
+                }
+              }
+            },
             "x-nestia-encrypted": false
           }
         },
-        "x-nestia-namespace": "users.create",
-        "x-nestia-jsDocTags": []
+        "summary": "계정 생성(회원가입)",
+        "description": "회원을 생성하거나 계정 프로필 정보 요청을 위한 인증 토큰을 발급한다.\n\naccount에 포함된 정보는 회원 정보에 기본값으로 사용할 수 있다.\n\n에러 코드\n- OAUTH_FAIL : oauth 인증에 실패한 경우\n- ACCOUNT_INACTIVE : 비활성화된 계정인 경우\n\n@summary 계정 생성(회원가입)\n\n@tag authentication\n\n@param body oauth code, oauth type\n\n@return 계정 권한이 부여된 토큰",
+        "x-nestia-namespace": "auth.sign-up.create",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "계정 생성(회원가입)",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "authentication",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "oauth code, oauth type",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "return",
+            "text": [
+              {
+                "text": "계정 권한이 부여된 토큰",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
       }
     }
   },
@@ -162,282 +182,141 @@
       "IAuthentication.ISignIn": {
         "type": "object",
         "properties": {
+          "user": {
+            "$ref": "#/components/schemas/IUser.Type"
+          },
           "code": {
+            "description": "oauth 인증을 통해 얻은 code를 입력한다.",
             "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string"
+          },
+          "oauth": {
+            "description": "인증에 사용한 oauth 서비스 유형을 입력한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "kakao"
+            ]
           }
         },
         "nullable": false,
         "required": [
-          "code"
+          "user",
+          "code",
+          "oauth"
         ],
+        "description": "권한을 얻고자 하는 사용자 유형을 입력한다.\n\n해당 소셜 계정에 존재하는 사용자 유형인 경우만 인증이 완료된다.",
         "x-typia-jsDocTags": []
       },
-      "IUser": {
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/INormalUser"
-          },
-          {
-            "$ref": "#/components/schemas/IAdmin"
-          }
+      "IUser.Type": {
+        "type": "string",
+        "enum": [
+          "client",
+          "real estate agent",
+          "home service provider"
         ]
       },
-      "INormalUser": {
+      "IAuthentication.IResponse.ISignIn": {
         "type": "object",
         "properties": {
-          "type": {
+          "access_token": {
+            "$ref": "#/components/schemas/IAuthentication.IToken"
+          },
+          "refresh_token": {
+            "$ref": "#/components/schemas/IAuthentication.IToken"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "access_token",
+          "refresh_token"
+        ],
+        "description": "access_token 재발급용 토큰",
+        "x-typia-jsDocTags": []
+      },
+      "IAuthentication.IToken": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "description": "특정 권한이 부여된 토큰",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "expired_at": {
+            "description": "토큰 만료일자\n@format date-time",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "datetime"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "date-time",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "token",
+          "expired_at"
+        ],
+        "description": "토큰 만료일자\n@format date-time",
+        "x-typia-jsDocTags": []
+      },
+      "IAuthentication.ISignUp": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "oauth 인증을 통해 얻은 code를 입력한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "oauth": {
+            "description": "인증에 사용한 oauth 서비스 유형을 입력한다.",
             "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string",
             "enum": [
-              "normal"
+              "kakao"
             ]
-          },
-          "id": {
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
-          },
-          "name": {
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
-          },
-          "email": {
-            "description": "@format email",
-            "x-typia-metaTags": [
-              {
-                "kind": "format",
-                "value": "email"
-              }
-            ],
-            "x-typia-jsDocTags": [
-              {
-                "name": "format",
-                "text": [
-                  {
-                    "text": "email",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string",
-            "format": "email"
-          },
-          "created_at": {
-            "description": "@format date-time",
-            "x-typia-metaTags": [
-              {
-                "kind": "format",
-                "value": "datetime"
-              }
-            ],
-            "x-typia-jsDocTags": [
-              {
-                "name": "format",
-                "text": [
-                  {
-                    "text": "date-time",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated_at": {
-            "description": "@format date-time",
-            "x-typia-metaTags": [
-              {
-                "kind": "format",
-                "value": "datetime"
-              }
-            ],
-            "x-typia-jsDocTags": [
-              {
-                "name": "format",
-                "text": [
-                  {
-                    "text": "date-time",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string",
-            "format": "date-time"
           }
         },
         "nullable": false,
         "required": [
-          "type",
-          "id",
-          "name",
-          "email",
-          "created_at",
-          "updated_at"
+          "code",
+          "oauth"
         ],
+        "description": "인증에 사용한 oauth 서비스 유형을 입력한다.",
         "x-typia-jsDocTags": []
       },
-      "IAdmin": {
+      "IAuthentication.IResponse.ISignUp": {
         "type": "object",
         "properties": {
-          "type": {
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string",
-            "enum": [
-              "admin"
-            ]
-          },
-          "id": {
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
-          },
-          "name": {
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
-          },
-          "email": {
-            "description": "@format email",
-            "x-typia-metaTags": [
-              {
-                "kind": "format",
-                "value": "email"
-              }
-            ],
-            "x-typia-jsDocTags": [
-              {
-                "name": "format",
-                "text": [
-                  {
-                    "text": "email",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string",
-            "format": "email"
-          },
-          "created_at": {
-            "description": "@format date-time",
-            "x-typia-metaTags": [
-              {
-                "kind": "format",
-                "value": "datetime"
-              }
-            ],
-            "x-typia-jsDocTags": [
-              {
-                "name": "format",
-                "text": [
-                  {
-                    "text": "date-time",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated_at": {
-            "description": "@format date-time",
-            "x-typia-metaTags": [
-              {
-                "kind": "format",
-                "value": "datetime"
-              }
-            ],
-            "x-typia-jsDocTags": [
-              {
-                "name": "format",
-                "text": [
-                  {
-                    "text": "date-time",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string",
-            "format": "date-time"
+          "account_token": {
+            "$ref": "#/components/schemas/IAuthentication.IToken"
           }
         },
         "nullable": false,
         "required": [
-          "type",
-          "id",
-          "name",
-          "email",
-          "created_at",
-          "updated_at"
+          "account_token"
         ],
-        "x-typia-jsDocTags": []
-      },
-      "IUser.ICreate1": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
-          },
-          "email": {
-            "description": "@format email",
-            "x-typia-metaTags": [
-              {
-                "kind": "format",
-                "value": "email"
-              }
-            ],
-            "x-typia-jsDocTags": [
-              {
-                "name": "format",
-                "text": [
-                  {
-                    "text": "email",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string",
-            "format": "email"
-          },
-          "password": {
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "name",
-          "email",
-          "password"
-        ],
+        "description": "회원 가입시 발급된다.\n\n다음과 같은 작업을 할 수 있다.\n- 사용자 정보 생성\n- 소셜 계정 프로필 조회",
         "x-typia-jsDocTags": []
       }
     },

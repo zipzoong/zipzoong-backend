@@ -1,7 +1,7 @@
 {
-  "name": "@project/sdk",
+  "name": "@zipzoong/sdk",
   "version": "0.0.1",
-  "description": "SDK for REST API",
+  "description": "SDK for Zipzoong REST API",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "repository": {

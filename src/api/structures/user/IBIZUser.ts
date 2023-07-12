@@ -7,7 +7,7 @@ export namespace IBIZUser {
         readonly title: string;
         /**
          * 사업자 소개 내용
-         * @maxLength 200
+         * @maxLength 500
          */
         readonly content: string;
     }

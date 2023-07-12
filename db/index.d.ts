@@ -350,7 +350,9 @@ export type ImageAccessType = (typeof ImageAccessType)[keyof typeof ImageAccessT
 
 
 export const OauthType: {
-  kakao: 'kakao'
+  kakao: 'kakao',
+  naver: 'naver',
+  apple: 'apple'
 };
 
 export type OauthType = (typeof OauthType)[keyof typeof OauthType]

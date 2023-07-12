@@ -17,3 +17,11 @@ export const throwError =
     (input: T) => {
         throw err(input);
     };
+
+export const isActive = <T extends { is_deleted: boolean }>(
+    input: T,
+): input is T & { is_deleted: false } => !input.is_deleted;
+
+export const isInActive = <T extends { is_deleted: boolean }>(
+    input: T,
+): input is T & { is_deleted: true } => !isActive(input);

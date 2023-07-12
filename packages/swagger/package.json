@@ -1,21 +1,21 @@
 {
-  "name": "@project/swagger",
+  "name": "@zipzoong/swagger",
   "version": "0.0.1",
-  "description": "Swagger UI for RESTAPI",
+  "description": "Swagger UI for Zipzoong RESTAPI",
   "main": "./index.mjs",
   "bin": { 
     "swagger": "./index.mjs"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/industriously/nestia-template"
+    "url": "https://github.com/zipzoong/zipzoong-backend"
   },
   "author": "industriously",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/industriously/nestia-template/issues"
+    "url": "https://github.com/zipzoong/zipzoong-backend/issues"
   },
-  "homepage": "https://github.com/industriously/nestia-template/packages/swagger#readme",
+  "homepage": "https://github.com/zipzoong/zipzoong-backend/packages/swagger#readme",
   "dependencies": {
     "express": "^4.18.2",
     "swagger-ui-express": "^4.6.3"

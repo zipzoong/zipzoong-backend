@@ -1,4 +1,4 @@
-import { IAuthentication } from "@APP/api/structures/authentication";
+import { IAuthentication } from "@APP/api/structures/IAuthentication";
 import { Authentication } from "@APP/providers/authentication";
 import typia from "typia";
 

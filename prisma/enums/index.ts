@@ -5,7 +5,7 @@ export const GenderType = createEnum("GenderType", (Enum) => {
 });
 
 export const OauthType = createEnum("OauthType", (Enum) => {
-    Enum.addValue("kakao");
+    Enum.addValue("kakao").addValue("naver").addValue("apple");
 });
 
 export const ServiceType = createEnum("ServiceType", (Enum) => {

@@ -277,7 +277,9 @@ exports.ImageAccessType = {
 };
 
 exports.OauthType = {
-  kakao: 'kakao'
+  kakao: 'kakao',
+  naver: 'naver',
+  apple: 'apple'
 };
 
 exports.Prisma.ModelName = {

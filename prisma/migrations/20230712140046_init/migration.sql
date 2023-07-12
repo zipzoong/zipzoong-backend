@@ -2,7 +2,7 @@
 CREATE TYPE "GenderType" AS ENUM ('female', 'male');
 
 -- CreateEnum
-CREATE TYPE "OauthType" AS ENUM ('kakao');
+CREATE TYPE "OauthType" AS ENUM ('kakao', 'naver', 'apple');
 
 -- CreateEnum
 CREATE TYPE "ServiceType" AS ENUM ('HS', 'RE');

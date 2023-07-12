@@ -1,3 +1,7 @@
+import { IClient } from "./IClient";
+import { IHSProvider } from "./IHSProvider";
+import { IREAgent } from "./IREAgent";
+
 export namespace IUser {
     export type Type = "client" | "real estate agent" | "home service provider";
     export type GenderType = "female" | "male";
@@ -36,4 +40,9 @@ export namespace IUser {
          */
         readonly updated_at: string;
     }
+
+    export type ICreateRequest =
+        | IClient.ICreateRequest
+        | IREAgent.ICreateRequest
+        | IHSProvider.ICreateRequest;
 }

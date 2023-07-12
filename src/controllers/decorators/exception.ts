@@ -5,6 +5,6 @@ export namespace Exception {
         | "Authorization Header Required"
         | "Value of Authorization Header Invalid";
 
-    export const Unauthorized = (message: UnauthorizedMessage) =>
+    export const Unauthorized = (message: UnauthorizedMessage) => () =>
         new UnauthorizedException(message);
 }

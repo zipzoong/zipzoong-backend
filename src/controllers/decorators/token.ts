@@ -1,15 +1,20 @@
 import { isNull, isUndefined, negate, pipe } from "@fxts/core";
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
-import {
-    extract_authorization_header,
-    extract_token,
-    validate_token_type,
-} from "./internal";
 import { Exception } from "./exception";
 import { skip, throwError } from "@APP/utils";
+import { IToken } from "@APP/providers/authentication/interface";
+import { Request } from "express";
 
-export const Token = (token_type: "basic" | "bearer" = "bearer") =>
-    createParamDecorator((type: "basic" | "bearer", ctx: ExecutionContext) =>
+const extract_authorization_header = (context: ExecutionContext) =>
+    context.switchToHttp().getRequest<Request>().headers["authorization"];
+
+const validate_token_type = (type: IToken.Type) => (input: string) =>
+    input.match(new RegExp(`^${type}\\s+\\S+`, "i"));
+
+const extract_token = (input: RegExpMatchArray) => input[0].split(/\s+/)[1];
+
+export const Token = (token_type: IToken.Type) =>
+    createParamDecorator((type: IToken.Type, ctx: ExecutionContext) =>
         pipe(
             ctx,
 
@@ -17,7 +22,7 @@ export const Token = (token_type: "basic" | "bearer" = "bearer") =>
 
             skip(
                 negate(isUndefined),
-                throwError(() =>
+                throwError(
                     Exception.Unauthorized("Authorization Header Required"),
                 ),
             ),
@@ -26,7 +31,7 @@ export const Token = (token_type: "basic" | "bearer" = "bearer") =>
 
             skip(
                 negate(isNull),
-                throwError(() =>
+                throwError(
                     Exception.Unauthorized(
                         "Value of Authorization Header Invalid",
                     ),
@@ -37,7 +42,7 @@ export const Token = (token_type: "basic" | "bearer" = "bearer") =>
 
             skip(
                 negate(isUndefined),
-                throwError(() =>
+                throwError(
                     Exception.Unauthorized(
                         "Value of Authorization Header Invalid",
                     ),
