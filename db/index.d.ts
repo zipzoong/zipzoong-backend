@@ -375,9 +375,6 @@ export type OauthType = (typeof OauthType)[keyof typeof OauthType]
 export class PrismaClient<
   T extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
   U = 'log' extends keyof T ? T['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<T['log']> : never : never,
-  GlobalReject extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined = 'rejectOnNotFound' extends keyof T
-    ? T['rejectOnNotFound']
-    : false,
   ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs
 > {
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
@@ -398,7 +395,7 @@ export class PrismaClient<
    */
 
   constructor(optionsArg ?: Prisma.Subset<T, Prisma.PrismaClientOptions>);
-  $on<V extends (U | 'beforeExit')>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : V extends 'beforeExit' ? () => Promise<void> : Prisma.LogEvent) => void): void;
+  $on<V extends U>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : Prisma.LogEvent) => void): void;
 
   /**
    * Connect with the database
@@ -491,7 +488,7 @@ export class PrismaClient<
     * const userModels = await prisma.userModel.findMany()
     * ```
     */
-  get userModel(): Prisma.UserModelDelegate<GlobalReject, ExtArgs>;
+  get userModel(): Prisma.UserModelDelegate<ExtArgs>;
 
   /**
    * `prisma.clientModel`: Exposes CRUD operations for the **ClientModel** model.
@@ -501,7 +498,7 @@ export class PrismaClient<
     * const clientModels = await prisma.clientModel.findMany()
     * ```
     */
-  get clientModel(): Prisma.ClientModelDelegate<GlobalReject, ExtArgs>;
+  get clientModel(): Prisma.ClientModelDelegate<ExtArgs>;
 
   /**
    * `prisma.bIZUserModel`: Exposes CRUD operations for the **BIZUserModel** model.
@@ -511,7 +508,7 @@ export class PrismaClient<
     * const bIZUserModels = await prisma.bIZUserModel.findMany()
     * ```
     */
-  get bIZUserModel(): Prisma.BIZUserModelDelegate<GlobalReject, ExtArgs>;
+  get bIZUserModel(): Prisma.BIZUserModelDelegate<ExtArgs>;
 
   /**
    * `prisma.bIZCertificationImageModel`: Exposes CRUD operations for the **BIZCertificationImageModel** model.
@@ -521,7 +518,7 @@ export class PrismaClient<
     * const bIZCertificationImageModels = await prisma.bIZCertificationImageModel.findMany()
     * ```
     */
-  get bIZCertificationImageModel(): Prisma.BIZCertificationImageModelDelegate<GlobalReject, ExtArgs>;
+  get bIZCertificationImageModel(): Prisma.BIZCertificationImageModelDelegate<ExtArgs>;
 
   /**
    * `prisma.rEAgentModel`: Exposes CRUD operations for the **REAgentModel** model.
@@ -531,7 +528,7 @@ export class PrismaClient<
     * const rEAgentModels = await prisma.rEAgentModel.findMany()
     * ```
     */
-  get rEAgentModel(): Prisma.REAgentModelDelegate<GlobalReject, ExtArgs>;
+  get rEAgentModel(): Prisma.REAgentModelDelegate<ExtArgs>;
 
   /**
    * `prisma.rEExpertiseModel`: Exposes CRUD operations for the **REExpertiseModel** model.
@@ -541,7 +538,7 @@ export class PrismaClient<
     * const rEExpertiseModels = await prisma.rEExpertiseModel.findMany()
     * ```
     */
-  get rEExpertiseModel(): Prisma.REExpertiseModelDelegate<GlobalReject, ExtArgs>;
+  get rEExpertiseModel(): Prisma.REExpertiseModelDelegate<ExtArgs>;
 
   /**
    * `prisma.hSProviderModel`: Exposes CRUD operations for the **HSProviderModel** model.
@@ -551,7 +548,7 @@ export class PrismaClient<
     * const hSProviderModels = await prisma.hSProviderModel.findMany()
     * ```
     */
-  get hSProviderModel(): Prisma.HSProviderModelDelegate<GlobalReject, ExtArgs>;
+  get hSProviderModel(): Prisma.HSProviderModelDelegate<ExtArgs>;
 
   /**
    * `prisma.hSSubExpertiseModel`: Exposes CRUD operations for the **HSSubExpertiseModel** model.
@@ -561,7 +558,7 @@ export class PrismaClient<
     * const hSSubExpertiseModels = await prisma.hSSubExpertiseModel.findMany()
     * ```
     */
-  get hSSubExpertiseModel(): Prisma.HSSubExpertiseModelDelegate<GlobalReject, ExtArgs>;
+  get hSSubExpertiseModel(): Prisma.HSSubExpertiseModelDelegate<ExtArgs>;
 
   /**
    * `prisma.hSSuperExpertiseModel`: Exposes CRUD operations for the **HSSuperExpertiseModel** model.
@@ -571,7 +568,7 @@ export class PrismaClient<
     * const hSSuperExpertiseModels = await prisma.hSSuperExpertiseModel.findMany()
     * ```
     */
-  get hSSuperExpertiseModel(): Prisma.HSSuperExpertiseModelDelegate<GlobalReject, ExtArgs>;
+  get hSSuperExpertiseModel(): Prisma.HSSuperExpertiseModelDelegate<ExtArgs>;
 
   /**
    * `prisma.hSSubExpertiseRelationModel`: Exposes CRUD operations for the **HSSubExpertiseRelationModel** model.
@@ -581,7 +578,7 @@ export class PrismaClient<
     * const hSSubExpertiseRelationModels = await prisma.hSSubExpertiseRelationModel.findMany()
     * ```
     */
-  get hSSubExpertiseRelationModel(): Prisma.HSSubExpertiseRelationModelDelegate<GlobalReject, ExtArgs>;
+  get hSSubExpertiseRelationModel(): Prisma.HSSubExpertiseRelationModelDelegate<ExtArgs>;
 
   /**
    * `prisma.rEPortfolioModel`: Exposes CRUD operations for the **REPortfolioModel** model.
@@ -591,7 +588,7 @@ export class PrismaClient<
     * const rEPortfolioModels = await prisma.rEPortfolioModel.findMany()
     * ```
     */
-  get rEPortfolioModel(): Prisma.REPortfolioModelDelegate<GlobalReject, ExtArgs>;
+  get rEPortfolioModel(): Prisma.REPortfolioModelDelegate<ExtArgs>;
 
   /**
    * `prisma.hSPortfolioModel`: Exposes CRUD operations for the **HSPortfolioModel** model.
@@ -601,7 +598,7 @@ export class PrismaClient<
     * const hSPortfolioModels = await prisma.hSPortfolioModel.findMany()
     * ```
     */
-  get hSPortfolioModel(): Prisma.HSPortfolioModelDelegate<GlobalReject, ExtArgs>;
+  get hSPortfolioModel(): Prisma.HSPortfolioModelDelegate<ExtArgs>;
 
   /**
    * `prisma.oauthAccountModel`: Exposes CRUD operations for the **OauthAccountModel** model.
@@ -611,7 +608,7 @@ export class PrismaClient<
     * const oauthAccountModels = await prisma.oauthAccountModel.findMany()
     * ```
     */
-  get oauthAccountModel(): Prisma.OauthAccountModelDelegate<GlobalReject, ExtArgs>;
+  get oauthAccountModel(): Prisma.OauthAccountModelDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -669,8 +666,8 @@ export namespace Prisma {
   export type Exact<T, W> = $Public.Exact<T, W>
 
   /**
-   * Prisma Client JS version: 4.16.2
-   * Query Engine version: 4bc8b6e1b66cb932731fb1bdbbc550d1e010de81
+   * Prisma Client JS version: 5.0.0
+   * Query Engine version: 6b0aef69b7cdfc787f822ecd7cdc76d5f1991584
    */
   export type PrismaVersion = {
     client: string
@@ -1079,9 +1076,9 @@ export namespace Prisma {
   type MaybeTupleToUnion<T> = T extends any[] ? TupleToUnion<T> : T
 
   /**
-   * Like `Pick`, but with an array
+   * Like `Pick`, but additionally can also accept an array of keys
    */
-  type PickArray<T, K extends Array<keyof T>> = Prisma__Pick<T, TupleToUnion<K>>
+  type PickEnumerable<T, K extends Enumerable<keyof T> | keyof T> = Prisma__Pick<T, MaybeTupleToUnion<K>>
 
   /**
    * Exclude all keys with underscores
@@ -1130,6 +1127,7 @@ export namespace Prisma {
     model: {
       UserModel: {
         payload: UserModelPayload<ExtArgs>
+        fields: Prisma.UserModelFieldRefs
         operations: {
           findUnique: {
             args: Prisma.UserModelFindUniqueArgs<ExtArgs>,
@@ -1195,6 +1193,7 @@ export namespace Prisma {
       }
       ClientModel: {
         payload: ClientModelPayload<ExtArgs>
+        fields: Prisma.ClientModelFieldRefs
         operations: {
           findUnique: {
             args: Prisma.ClientModelFindUniqueArgs<ExtArgs>,
@@ -1260,6 +1259,7 @@ export namespace Prisma {
       }
       BIZUserModel: {
         payload: BIZUserModelPayload<ExtArgs>
+        fields: Prisma.BIZUserModelFieldRefs
         operations: {
           findUnique: {
             args: Prisma.BIZUserModelFindUniqueArgs<ExtArgs>,
@@ -1325,6 +1325,7 @@ export namespace Prisma {
       }
       BIZCertificationImageModel: {
         payload: BIZCertificationImageModelPayload<ExtArgs>
+        fields: Prisma.BIZCertificationImageModelFieldRefs
         operations: {
           findUnique: {
             args: Prisma.BIZCertificationImageModelFindUniqueArgs<ExtArgs>,
@@ -1390,6 +1391,7 @@ export namespace Prisma {
       }
       REAgentModel: {
         payload: REAgentModelPayload<ExtArgs>
+        fields: Prisma.REAgentModelFieldRefs
         operations: {
           findUnique: {
             args: Prisma.REAgentModelFindUniqueArgs<ExtArgs>,
@@ -1455,6 +1457,7 @@ export namespace Prisma {
       }
       REExpertiseModel: {
         payload: REExpertiseModelPayload<ExtArgs>
+        fields: Prisma.REExpertiseModelFieldRefs
         operations: {
           findUnique: {
             args: Prisma.REExpertiseModelFindUniqueArgs<ExtArgs>,
@@ -1520,6 +1523,7 @@ export namespace Prisma {
       }
       HSProviderModel: {
         payload: HSProviderModelPayload<ExtArgs>
+        fields: Prisma.HSProviderModelFieldRefs
         operations: {
           findUnique: {
             args: Prisma.HSProviderModelFindUniqueArgs<ExtArgs>,
@@ -1585,6 +1589,7 @@ export namespace Prisma {
       }
       HSSubExpertiseModel: {
         payload: HSSubExpertiseModelPayload<ExtArgs>
+        fields: Prisma.HSSubExpertiseModelFieldRefs
         operations: {
           findUnique: {
             args: Prisma.HSSubExpertiseModelFindUniqueArgs<ExtArgs>,
@@ -1650,6 +1655,7 @@ export namespace Prisma {
       }
       HSSuperExpertiseModel: {
         payload: HSSuperExpertiseModelPayload<ExtArgs>
+        fields: Prisma.HSSuperExpertiseModelFieldRefs
         operations: {
           findUnique: {
             args: Prisma.HSSuperExpertiseModelFindUniqueArgs<ExtArgs>,
@@ -1715,6 +1721,7 @@ export namespace Prisma {
       }
       HSSubExpertiseRelationModel: {
         payload: HSSubExpertiseRelationModelPayload<ExtArgs>
+        fields: Prisma.HSSubExpertiseRelationModelFieldRefs
         operations: {
           findUnique: {
             args: Prisma.HSSubExpertiseRelationModelFindUniqueArgs<ExtArgs>,
@@ -1780,6 +1787,7 @@ export namespace Prisma {
       }
       REPortfolioModel: {
         payload: REPortfolioModelPayload<ExtArgs>
+        fields: Prisma.REPortfolioModelFieldRefs
         operations: {
           findUnique: {
             args: Prisma.REPortfolioModelFindUniqueArgs<ExtArgs>,
@@ -1845,6 +1853,7 @@ export namespace Prisma {
       }
       HSPortfolioModel: {
         payload: HSPortfolioModelPayload<ExtArgs>
+        fields: Prisma.HSPortfolioModelFieldRefs
         operations: {
           findUnique: {
             args: Prisma.HSPortfolioModelFindUniqueArgs<ExtArgs>,
@@ -1910,6 +1919,7 @@ export namespace Prisma {
       }
       OauthAccountModel: {
         payload: OauthAccountModelPayload<ExtArgs>
+        fields: Prisma.OauthAccountModelFieldRefs
         operations: {
           findUnique: {
             args: Prisma.OauthAccountModelFindUniqueArgs<ExtArgs>,
@@ -1999,45 +2009,9 @@ export namespace Prisma {
   }
   export const defineExtension: $Extensions.ExtendsHook<'define', Prisma.TypeMapCb, $Extensions.DefaultArgs>
   export type DefaultPrismaClient = PrismaClient
-  export type RejectOnNotFound = boolean | ((error: Error) => Error)
-  export type RejectPerModel = { [P in ModelName]?: RejectOnNotFound }
-  export type RejectPerOperation =  { [P in "findUnique" | "findFirst"]?: RejectPerModel | RejectOnNotFound } 
-  type IsReject<T> = T extends true ? True : T extends (err: Error) => Error ? True : False
-  export type HasReject<
-    GlobalRejectSettings extends Prisma.PrismaClientOptions['rejectOnNotFound'],
-    LocalRejectSettings,
-    Action extends PrismaAction,
-    Model extends ModelName
-  > = LocalRejectSettings extends RejectOnNotFound
-    ? IsReject<LocalRejectSettings>
-    : GlobalRejectSettings extends RejectPerOperation
-    ? Action extends keyof GlobalRejectSettings
-      ? GlobalRejectSettings[Action] extends RejectOnNotFound
-        ? IsReject<GlobalRejectSettings[Action]>
-        : GlobalRejectSettings[Action] extends RejectPerModel
-        ? Model extends keyof GlobalRejectSettings[Action]
-          ? IsReject<GlobalRejectSettings[Action][Model]>
-          : False
-        : False
-      : False
-    : IsReject<GlobalRejectSettings>
   export type ErrorFormat = 'pretty' | 'colorless' | 'minimal'
 
   export interface PrismaClientOptions {
-    /**
-     * Configure findUnique/findFirst to throw an error if the query returns null. 
-     * @deprecated since 4.0.0. Use `findUniqueOrThrow`/`findFirstOrThrow` methods instead.
-     * @example
-     * ```
-     * // Reject on both findUnique/findFirst
-     * rejectOnNotFound: true
-     * // Reject only on findFirst with a custom error
-     * rejectOnNotFound: { findFirst: (err) => new Error("Custom Error")}
-     * // Reject on user.findUnique with a custom error
-     * rejectOnNotFound: { findUnique: {User: (err) => new Error("User not found")}}
-     * ```
-     */
-    rejectOnNotFound?: RejectOnNotFound | RejectPerOperation
     /**
      * Overwrites the datasource url from your schema.prisma file
      */
@@ -2502,7 +2476,7 @@ export namespace Prisma {
      * 
      * Determine the order of UserModels to fetch.
      */
-    orderBy?: Enumerable<UserModelOrderByWithRelationInput>
+    orderBy?: UserModelOrderByWithRelationInput | UserModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -2554,8 +2528,8 @@ export namespace Prisma {
 
   export type UserModelGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: UserModelWhereInput
-    orderBy?: Enumerable<UserModelOrderByWithAggregationInput>
-    by: UserModelScalarFieldEnum[]
+    orderBy?: UserModelOrderByWithAggregationInput | UserModelOrderByWithAggregationInput[]
+    by: UserModelScalarFieldEnum[] | UserModelScalarFieldEnum
     having?: UserModelScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -2580,7 +2554,7 @@ export namespace Prisma {
 
   type GetUserModelGroupByPayload<T extends UserModelGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<UserModelGroupByOutputType, T['by']> &
+      PickEnumerable<UserModelGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof UserModelGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -2600,8 +2574,8 @@ export namespace Prisma {
     deleted_at?: boolean
     name?: boolean
     email?: boolean
-    client?: boolean | ClientModelArgs<ExtArgs>
-    biz_user?: boolean | BIZUserModelArgs<ExtArgs>
+    client?: boolean | UserModel$clientArgs<ExtArgs>
+    biz_user?: boolean | UserModel$biz_userArgs<ExtArgs>
   }, ExtArgs["result"]["userModel"]>
 
   export type UserModelSelectScalar = {
@@ -2615,8 +2589,8 @@ export namespace Prisma {
   }
 
   export type UserModelInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    client?: boolean | ClientModelArgs<ExtArgs>
-    biz_user?: boolean | BIZUserModelArgs<ExtArgs>
+    client?: boolean | UserModel$clientArgs<ExtArgs>
+    biz_user?: boolean | UserModel$biz_userArgs<ExtArgs>
   }
 
 
@@ -2627,7 +2601,7 @@ export namespace Prisma {
       select?: UserModelCountAggregateInputType | true
     }
 
-  export interface UserModelDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+  export interface UserModelDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserModel'], meta: { name: 'UserModel' } }
     /**
      * Find zero or one UserModel that matches the filter.
@@ -2640,9 +2614,9 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findUnique<T extends UserModelFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findUnique<T extends UserModelFindUniqueArgs<ExtArgs>>(
       args: SelectSubset<T, UserModelFindUniqueArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'UserModel'> extends True ? Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
+    ): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
 
     /**
      * Find one UserModel that matches the filter or throw an error  with `error.code='P2025'` 
@@ -2658,7 +2632,7 @@ export namespace Prisma {
     **/
     findUniqueOrThrow<T extends UserModelFindUniqueOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, UserModelFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
+    ): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
 
     /**
      * Find the first UserModel that matches the filter.
@@ -2673,13 +2647,13 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findFirst<T extends UserModelFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findFirst<T extends UserModelFindFirstArgs<ExtArgs>>(
       args?: SelectSubset<T, UserModelFindFirstArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'UserModel'> extends True ? Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
+    ): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
 
     /**
      * Find the first UserModel that matches the filter or
-     * throw `NotFoundError` if no matches were found.
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {UserModelFindFirstOrThrowArgs} args - Arguments to find a UserModel
@@ -2693,7 +2667,7 @@ export namespace Prisma {
     **/
     findFirstOrThrow<T extends UserModelFindFirstOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, UserModelFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
+    ): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
 
     /**
      * Find zero or more UserModels that matches the filter.
@@ -2713,7 +2687,7 @@ export namespace Prisma {
     **/
     findMany<T extends UserModelFindManyArgs<ExtArgs>>(
       args?: SelectSubset<T, UserModelFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'findMany', never>>
+    ): Prisma.PrismaPromise<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'findMany'>>
 
     /**
      * Create a UserModel.
@@ -2729,7 +2703,7 @@ export namespace Prisma {
     **/
     create<T extends UserModelCreateArgs<ExtArgs>>(
       args: SelectSubset<T, UserModelCreateArgs<ExtArgs>>
-    ): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
+    ): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
 
     /**
      * Create many UserModels.
@@ -2761,7 +2735,7 @@ export namespace Prisma {
     **/
     delete<T extends UserModelDeleteArgs<ExtArgs>>(
       args: SelectSubset<T, UserModelDeleteArgs<ExtArgs>>
-    ): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
+    ): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
 
     /**
      * Update one UserModel.
@@ -2780,7 +2754,7 @@ export namespace Prisma {
     **/
     update<T extends UserModelUpdateArgs<ExtArgs>>(
       args: SelectSubset<T, UserModelUpdateArgs<ExtArgs>>
-    ): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
+    ): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
 
     /**
      * Delete zero or more UserModels.
@@ -2838,7 +2812,7 @@ export namespace Prisma {
     **/
     upsert<T extends UserModelUpsertArgs<ExtArgs>>(
       args: SelectSubset<T, UserModelUpsertArgs<ExtArgs>>
-    ): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
+    ): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
 
     /**
      * Count the number of UserModels.
@@ -2917,7 +2891,7 @@ export namespace Prisma {
         ? { orderBy: UserModelGroupByArgs['orderBy'] }
         : { orderBy?: UserModelGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends TupleToUnion<T['by']>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -2965,7 +2939,10 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, UserModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-
+  /**
+   * Fields of the UserModel model
+   */
+  readonly fields: UserModelFieldRefs;
   }
 
   /**
@@ -2989,9 +2966,9 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    client<T extends ClientModelArgs<ExtArgs> = {}>(args?: Subset<T, ClientModelArgs<ExtArgs>>): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+    client<T extends UserModel$clientArgs<ExtArgs> = {}>(args?: Subset<T, UserModel$clientArgs<ExtArgs>>): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
-    biz_user<T extends BIZUserModelArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModelArgs<ExtArgs>>): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+    biz_user<T extends UserModel$biz_userArgs<ExtArgs> = {}>(args?: Subset<T, UserModel$biz_userArgs<ExtArgs>>): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
     private get _document();
     /**
@@ -3018,12 +2995,26 @@ export namespace Prisma {
 
 
 
+  /**
+   * Fields of the UserModel model
+   */ 
+  interface UserModelFieldRefs {
+    readonly id: FieldRef<"UserModel", 'String'>
+    readonly created_at: FieldRef<"UserModel", 'DateTime'>
+    readonly updated_at: FieldRef<"UserModel", 'DateTime'>
+    readonly is_deleted: FieldRef<"UserModel", 'Boolean'>
+    readonly deleted_at: FieldRef<"UserModel", 'DateTime'>
+    readonly name: FieldRef<"UserModel", 'String'>
+    readonly email: FieldRef<"UserModel", 'String'>
+  }
+    
+
   // Custom InputTypes
 
   /**
-   * UserModel base type for findUnique actions
+   * UserModel findUnique
    */
-  export type UserModelFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type UserModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the UserModel
      */
@@ -3038,17 +3029,6 @@ export namespace Prisma {
     where: UserModelWhereUniqueInput
   }
 
-  /**
-   * UserModel findUnique
-   */
-  export interface UserModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends UserModelFindUniqueArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * UserModel findUniqueOrThrow
@@ -3070,9 +3050,9 @@ export namespace Prisma {
 
 
   /**
-   * UserModel base type for findFirst actions
+   * UserModel findFirst
    */
-  export type UserModelFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type UserModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the UserModel
      */
@@ -3090,7 +3070,7 @@ export namespace Prisma {
      * 
      * Determine the order of UserModels to fetch.
      */
-    orderBy?: Enumerable<UserModelOrderByWithRelationInput>
+    orderBy?: UserModelOrderByWithRelationInput | UserModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -3114,20 +3094,9 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of UserModels.
      */
-    distinct?: Enumerable<UserModelScalarFieldEnum>
+    distinct?: UserModelScalarFieldEnum | UserModelScalarFieldEnum[]
   }
 
-  /**
-   * UserModel findFirst
-   */
-  export interface UserModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends UserModelFindFirstArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * UserModel findFirstOrThrow
@@ -3150,7 +3119,7 @@ export namespace Prisma {
      * 
      * Determine the order of UserModels to fetch.
      */
-    orderBy?: Enumerable<UserModelOrderByWithRelationInput>
+    orderBy?: UserModelOrderByWithRelationInput | UserModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -3174,7 +3143,7 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of UserModels.
      */
-    distinct?: Enumerable<UserModelScalarFieldEnum>
+    distinct?: UserModelScalarFieldEnum | UserModelScalarFieldEnum[]
   }
 
 
@@ -3199,7 +3168,7 @@ export namespace Prisma {
      * 
      * Determine the order of UserModels to fetch.
      */
-    orderBy?: Enumerable<UserModelOrderByWithRelationInput>
+    orderBy?: UserModelOrderByWithRelationInput | UserModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -3218,7 +3187,7 @@ export namespace Prisma {
      * Skip the first `n` UserModels.
      */
     skip?: number
-    distinct?: Enumerable<UserModelScalarFieldEnum>
+    distinct?: UserModelScalarFieldEnum | UserModelScalarFieldEnum[]
   }
 
 
@@ -3248,7 +3217,7 @@ export namespace Prisma {
     /**
      * The data used to create many UserModels.
      */
-    data: Enumerable<UserModelCreateManyInput>
+    data: UserModelCreateManyInput | UserModelCreateManyInput[]
     skipDuplicates?: boolean
   }
 
@@ -3345,6 +3314,38 @@ export namespace Prisma {
      * Filter which UserModels to delete
      */
     where?: UserModelWhereInput
+  }
+
+
+  /**
+   * UserModel.client
+   */
+  export type UserModel$clientArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClientModel
+     */
+    select?: ClientModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ClientModelInclude<ExtArgs> | null
+    where?: ClientModelWhereInput
+  }
+
+
+  /**
+   * UserModel.biz_user
+   */
+  export type UserModel$biz_userArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BIZUserModel
+     */
+    select?: BIZUserModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: BIZUserModelInclude<ExtArgs> | null
+    where?: BIZUserModelWhereInput
   }
 
 
@@ -3460,7 +3461,7 @@ export namespace Prisma {
      * 
      * Determine the order of ClientModels to fetch.
      */
-    orderBy?: Enumerable<ClientModelOrderByWithRelationInput>
+    orderBy?: ClientModelOrderByWithRelationInput | ClientModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -3512,8 +3513,8 @@ export namespace Prisma {
 
   export type ClientModelGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: ClientModelWhereInput
-    orderBy?: Enumerable<ClientModelOrderByWithAggregationInput>
-    by: ClientModelScalarFieldEnum[]
+    orderBy?: ClientModelOrderByWithAggregationInput | ClientModelOrderByWithAggregationInput[]
+    by: ClientModelScalarFieldEnum[] | ClientModelScalarFieldEnum
     having?: ClientModelScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -3540,7 +3541,7 @@ export namespace Prisma {
 
   type GetClientModelGroupByPayload<T extends ClientModelGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<ClientModelGroupByOutputType, T['by']> &
+      PickEnumerable<ClientModelGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof ClientModelGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -3593,7 +3594,7 @@ export namespace Prisma {
       select?: ClientModelCountAggregateInputType | true
     }
 
-  export interface ClientModelDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+  export interface ClientModelDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClientModel'], meta: { name: 'ClientModel' } }
     /**
      * Find zero or one ClientModel that matches the filter.
@@ -3606,9 +3607,9 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findUnique<T extends ClientModelFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findUnique<T extends ClientModelFindUniqueArgs<ExtArgs>>(
       args: SelectSubset<T, ClientModelFindUniqueArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'ClientModel'> extends True ? Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
+    ): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
 
     /**
      * Find one ClientModel that matches the filter or throw an error  with `error.code='P2025'` 
@@ -3624,7 +3625,7 @@ export namespace Prisma {
     **/
     findUniqueOrThrow<T extends ClientModelFindUniqueOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, ClientModelFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
+    ): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
 
     /**
      * Find the first ClientModel that matches the filter.
@@ -3639,13 +3640,13 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findFirst<T extends ClientModelFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findFirst<T extends ClientModelFindFirstArgs<ExtArgs>>(
       args?: SelectSubset<T, ClientModelFindFirstArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'ClientModel'> extends True ? Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
+    ): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
 
     /**
      * Find the first ClientModel that matches the filter or
-     * throw `NotFoundError` if no matches were found.
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {ClientModelFindFirstOrThrowArgs} args - Arguments to find a ClientModel
@@ -3659,7 +3660,7 @@ export namespace Prisma {
     **/
     findFirstOrThrow<T extends ClientModelFindFirstOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, ClientModelFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
+    ): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
 
     /**
      * Find zero or more ClientModels that matches the filter.
@@ -3679,7 +3680,7 @@ export namespace Prisma {
     **/
     findMany<T extends ClientModelFindManyArgs<ExtArgs>>(
       args?: SelectSubset<T, ClientModelFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'findMany', never>>
+    ): Prisma.PrismaPromise<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'findMany'>>
 
     /**
      * Create a ClientModel.
@@ -3695,7 +3696,7 @@ export namespace Prisma {
     **/
     create<T extends ClientModelCreateArgs<ExtArgs>>(
       args: SelectSubset<T, ClientModelCreateArgs<ExtArgs>>
-    ): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
+    ): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
 
     /**
      * Create many ClientModels.
@@ -3727,7 +3728,7 @@ export namespace Prisma {
     **/
     delete<T extends ClientModelDeleteArgs<ExtArgs>>(
       args: SelectSubset<T, ClientModelDeleteArgs<ExtArgs>>
-    ): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
+    ): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
 
     /**
      * Update one ClientModel.
@@ -3746,7 +3747,7 @@ export namespace Prisma {
     **/
     update<T extends ClientModelUpdateArgs<ExtArgs>>(
       args: SelectSubset<T, ClientModelUpdateArgs<ExtArgs>>
-    ): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
+    ): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
 
     /**
      * Delete zero or more ClientModels.
@@ -3804,7 +3805,7 @@ export namespace Prisma {
     **/
     upsert<T extends ClientModelUpsertArgs<ExtArgs>>(
       args: SelectSubset<T, ClientModelUpsertArgs<ExtArgs>>
-    ): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
+    ): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
 
     /**
      * Count the number of ClientModels.
@@ -3883,7 +3884,7 @@ export namespace Prisma {
         ? { orderBy: ClientModelGroupByArgs['orderBy'] }
         : { orderBy?: ClientModelGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends TupleToUnion<T['by']>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -3931,7 +3932,10 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, ClientModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClientModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-
+  /**
+   * Fields of the ClientModel model
+   */
+  readonly fields: ClientModelFieldRefs;
   }
 
   /**
@@ -3955,9 +3959,9 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    base<T extends UserModelArgs<ExtArgs> = {}>(args?: Subset<T, UserModelArgs<ExtArgs>>): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+    base<T extends UserModelArgs<ExtArgs> = {}>(args?: Subset<T, UserModelArgs<ExtArgs>>): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
-    oauth_accounts<T extends ClientModel$oauth_accountsArgs<ExtArgs> = {}>(args?: Subset<T, ClientModel$oauth_accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findMany', never>| Null>;
+    oauth_accounts<T extends ClientModel$oauth_accountsArgs<ExtArgs> = {}>(args?: Subset<T, ClientModel$oauth_accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findMany'>| Null>;
 
     private get _document();
     /**
@@ -3984,12 +3988,28 @@ export namespace Prisma {
 
 
 
+  /**
+   * Fields of the ClientModel model
+   */ 
+  interface ClientModelFieldRefs {
+    readonly id: FieldRef<"ClientModel", 'String'>
+    readonly birth: FieldRef<"ClientModel", 'DateTime'>
+    readonly gender: FieldRef<"ClientModel", 'GenderType'>
+    readonly phone: FieldRef<"ClientModel", 'String'>
+    readonly address_zone_code: FieldRef<"ClientModel", 'String'>
+    readonly address_road: FieldRef<"ClientModel", 'String'>
+    readonly address_detail: FieldRef<"ClientModel", 'String'>
+    readonly address_extra: FieldRef<"ClientModel", 'String'>
+    readonly profile_image_url: FieldRef<"ClientModel", 'String'>
+  }
+    
+
   // Custom InputTypes
 
   /**
-   * ClientModel base type for findUnique actions
+   * ClientModel findUnique
    */
-  export type ClientModelFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type ClientModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the ClientModel
      */
@@ -4004,17 +4024,6 @@ export namespace Prisma {
     where: ClientModelWhereUniqueInput
   }
 
-  /**
-   * ClientModel findUnique
-   */
-  export interface ClientModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends ClientModelFindUniqueArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * ClientModel findUniqueOrThrow
@@ -4036,9 +4045,9 @@ export namespace Prisma {
 
 
   /**
-   * ClientModel base type for findFirst actions
+   * ClientModel findFirst
    */
-  export type ClientModelFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type ClientModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the ClientModel
      */
@@ -4056,7 +4065,7 @@ export namespace Prisma {
      * 
      * Determine the order of ClientModels to fetch.
      */
-    orderBy?: Enumerable<ClientModelOrderByWithRelationInput>
+    orderBy?: ClientModelOrderByWithRelationInput | ClientModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -4080,20 +4089,9 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of ClientModels.
      */
-    distinct?: Enumerable<ClientModelScalarFieldEnum>
+    distinct?: ClientModelScalarFieldEnum | ClientModelScalarFieldEnum[]
   }
 
-  /**
-   * ClientModel findFirst
-   */
-  export interface ClientModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends ClientModelFindFirstArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * ClientModel findFirstOrThrow
@@ -4116,7 +4114,7 @@ export namespace Prisma {
      * 
      * Determine the order of ClientModels to fetch.
      */
-    orderBy?: Enumerable<ClientModelOrderByWithRelationInput>
+    orderBy?: ClientModelOrderByWithRelationInput | ClientModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -4140,7 +4138,7 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of ClientModels.
      */
-    distinct?: Enumerable<ClientModelScalarFieldEnum>
+    distinct?: ClientModelScalarFieldEnum | ClientModelScalarFieldEnum[]
   }
 
 
@@ -4165,7 +4163,7 @@ export namespace Prisma {
      * 
      * Determine the order of ClientModels to fetch.
      */
-    orderBy?: Enumerable<ClientModelOrderByWithRelationInput>
+    orderBy?: ClientModelOrderByWithRelationInput | ClientModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -4184,7 +4182,7 @@ export namespace Prisma {
      * Skip the first `n` ClientModels.
      */
     skip?: number
-    distinct?: Enumerable<ClientModelScalarFieldEnum>
+    distinct?: ClientModelScalarFieldEnum | ClientModelScalarFieldEnum[]
   }
 
 
@@ -4214,7 +4212,7 @@ export namespace Prisma {
     /**
      * The data used to create many ClientModels.
      */
-    data: Enumerable<ClientModelCreateManyInput>
+    data: ClientModelCreateManyInput | ClientModelCreateManyInput[]
     skipDuplicates?: boolean
   }
 
@@ -4327,11 +4325,11 @@ export namespace Prisma {
      */
     include?: OauthAccountModelInclude<ExtArgs> | null
     where?: OauthAccountModelWhereInput
-    orderBy?: Enumerable<OauthAccountModelOrderByWithRelationInput>
+    orderBy?: OauthAccountModelOrderByWithRelationInput | OauthAccountModelOrderByWithRelationInput[]
     cursor?: OauthAccountModelWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Enumerable<OauthAccountModelScalarFieldEnum>
+    distinct?: OauthAccountModelScalarFieldEnum | OauthAccountModelScalarFieldEnum[]
   }
 
 
@@ -4429,7 +4427,7 @@ export namespace Prisma {
      * 
      * Determine the order of BIZUserModels to fetch.
      */
-    orderBy?: Enumerable<BIZUserModelOrderByWithRelationInput>
+    orderBy?: BIZUserModelOrderByWithRelationInput | BIZUserModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -4481,8 +4479,8 @@ export namespace Prisma {
 
   export type BIZUserModelGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: BIZUserModelWhereInput
-    orderBy?: Enumerable<BIZUserModelOrderByWithAggregationInput>
-    by: BIZUserModelScalarFieldEnum[]
+    orderBy?: BIZUserModelOrderByWithAggregationInput | BIZUserModelOrderByWithAggregationInput[]
+    by: BIZUserModelScalarFieldEnum[] | BIZUserModelScalarFieldEnum
     having?: BIZUserModelScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -4506,7 +4504,7 @@ export namespace Prisma {
 
   type GetBIZUserModelGroupByPayload<T extends BIZUserModelGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<BIZUserModelGroupByOutputType, T['by']> &
+      PickEnumerable<BIZUserModelGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof BIZUserModelGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -4526,8 +4524,8 @@ export namespace Prisma {
     phone?: boolean
     profile_image_url?: boolean
     base?: boolean | UserModelArgs<ExtArgs>
-    re_agent?: boolean | REAgentModelArgs<ExtArgs>
-    hs_provider?: boolean | HSProviderModelArgs<ExtArgs>
+    re_agent?: boolean | BIZUserModel$re_agentArgs<ExtArgs>
+    hs_provider?: boolean | BIZUserModel$hs_providerArgs<ExtArgs>
     oauth_accounts?: boolean | BIZUserModel$oauth_accountsArgs<ExtArgs>
     biz_certification_images?: boolean | BIZUserModel$biz_certification_imagesArgs<ExtArgs>
     _count?: boolean | BIZUserModelCountOutputTypeArgs<ExtArgs>
@@ -4544,8 +4542,8 @@ export namespace Prisma {
 
   export type BIZUserModelInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     base?: boolean | UserModelArgs<ExtArgs>
-    re_agent?: boolean | REAgentModelArgs<ExtArgs>
-    hs_provider?: boolean | HSProviderModelArgs<ExtArgs>
+    re_agent?: boolean | BIZUserModel$re_agentArgs<ExtArgs>
+    hs_provider?: boolean | BIZUserModel$hs_providerArgs<ExtArgs>
     oauth_accounts?: boolean | BIZUserModel$oauth_accountsArgs<ExtArgs>
     biz_certification_images?: boolean | BIZUserModel$biz_certification_imagesArgs<ExtArgs>
     _count?: boolean | BIZUserModelCountOutputTypeArgs<ExtArgs>
@@ -4559,7 +4557,7 @@ export namespace Prisma {
       select?: BIZUserModelCountAggregateInputType | true
     }
 
-  export interface BIZUserModelDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+  export interface BIZUserModelDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BIZUserModel'], meta: { name: 'BIZUserModel' } }
     /**
      * Find zero or one BIZUserModel that matches the filter.
@@ -4572,9 +4570,9 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findUnique<T extends BIZUserModelFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findUnique<T extends BIZUserModelFindUniqueArgs<ExtArgs>>(
       args: SelectSubset<T, BIZUserModelFindUniqueArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'BIZUserModel'> extends True ? Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
+    ): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
 
     /**
      * Find one BIZUserModel that matches the filter or throw an error  with `error.code='P2025'` 
@@ -4590,7 +4588,7 @@ export namespace Prisma {
     **/
     findUniqueOrThrow<T extends BIZUserModelFindUniqueOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, BIZUserModelFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
+    ): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
 
     /**
      * Find the first BIZUserModel that matches the filter.
@@ -4605,13 +4603,13 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findFirst<T extends BIZUserModelFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findFirst<T extends BIZUserModelFindFirstArgs<ExtArgs>>(
       args?: SelectSubset<T, BIZUserModelFindFirstArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'BIZUserModel'> extends True ? Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
+    ): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
 
     /**
      * Find the first BIZUserModel that matches the filter or
-     * throw `NotFoundError` if no matches were found.
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {BIZUserModelFindFirstOrThrowArgs} args - Arguments to find a BIZUserModel
@@ -4625,7 +4623,7 @@ export namespace Prisma {
     **/
     findFirstOrThrow<T extends BIZUserModelFindFirstOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, BIZUserModelFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
+    ): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
 
     /**
      * Find zero or more BIZUserModels that matches the filter.
@@ -4645,7 +4643,7 @@ export namespace Prisma {
     **/
     findMany<T extends BIZUserModelFindManyArgs<ExtArgs>>(
       args?: SelectSubset<T, BIZUserModelFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findMany', never>>
+    ): Prisma.PrismaPromise<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findMany'>>
 
     /**
      * Create a BIZUserModel.
@@ -4661,7 +4659,7 @@ export namespace Prisma {
     **/
     create<T extends BIZUserModelCreateArgs<ExtArgs>>(
       args: SelectSubset<T, BIZUserModelCreateArgs<ExtArgs>>
-    ): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
+    ): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
 
     /**
      * Create many BIZUserModels.
@@ -4693,7 +4691,7 @@ export namespace Prisma {
     **/
     delete<T extends BIZUserModelDeleteArgs<ExtArgs>>(
       args: SelectSubset<T, BIZUserModelDeleteArgs<ExtArgs>>
-    ): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
+    ): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
 
     /**
      * Update one BIZUserModel.
@@ -4712,7 +4710,7 @@ export namespace Prisma {
     **/
     update<T extends BIZUserModelUpdateArgs<ExtArgs>>(
       args: SelectSubset<T, BIZUserModelUpdateArgs<ExtArgs>>
-    ): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
+    ): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
 
     /**
      * Delete zero or more BIZUserModels.
@@ -4770,7 +4768,7 @@ export namespace Prisma {
     **/
     upsert<T extends BIZUserModelUpsertArgs<ExtArgs>>(
       args: SelectSubset<T, BIZUserModelUpsertArgs<ExtArgs>>
-    ): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
+    ): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
 
     /**
      * Count the number of BIZUserModels.
@@ -4849,7 +4847,7 @@ export namespace Prisma {
         ? { orderBy: BIZUserModelGroupByArgs['orderBy'] }
         : { orderBy?: BIZUserModelGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends TupleToUnion<T['by']>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -4897,7 +4895,10 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, BIZUserModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBIZUserModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-
+  /**
+   * Fields of the BIZUserModel model
+   */
+  readonly fields: BIZUserModelFieldRefs;
   }
 
   /**
@@ -4921,15 +4922,15 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    base<T extends UserModelArgs<ExtArgs> = {}>(args?: Subset<T, UserModelArgs<ExtArgs>>): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+    base<T extends UserModelArgs<ExtArgs> = {}>(args?: Subset<T, UserModelArgs<ExtArgs>>): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
-    re_agent<T extends REAgentModelArgs<ExtArgs> = {}>(args?: Subset<T, REAgentModelArgs<ExtArgs>>): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+    re_agent<T extends BIZUserModel$re_agentArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModel$re_agentArgs<ExtArgs>>): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
-    hs_provider<T extends HSProviderModelArgs<ExtArgs> = {}>(args?: Subset<T, HSProviderModelArgs<ExtArgs>>): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+    hs_provider<T extends BIZUserModel$hs_providerArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModel$hs_providerArgs<ExtArgs>>): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
-    oauth_accounts<T extends BIZUserModel$oauth_accountsArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModel$oauth_accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findMany', never>| Null>;
+    oauth_accounts<T extends BIZUserModel$oauth_accountsArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModel$oauth_accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findMany'>| Null>;
 
-    biz_certification_images<T extends BIZUserModel$biz_certification_imagesArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModel$biz_certification_imagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'findMany', never>| Null>;
+    biz_certification_images<T extends BIZUserModel$biz_certification_imagesArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModel$biz_certification_imagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'findMany'>| Null>;
 
     private get _document();
     /**
@@ -4956,12 +4957,25 @@ export namespace Prisma {
 
 
 
+  /**
+   * Fields of the BIZUserModel model
+   */ 
+  interface BIZUserModelFieldRefs {
+    readonly id: FieldRef<"BIZUserModel", 'String'>
+    readonly is_verified: FieldRef<"BIZUserModel", 'Boolean'>
+    readonly introduction_title: FieldRef<"BIZUserModel", 'String'>
+    readonly introduction_content: FieldRef<"BIZUserModel", 'String'>
+    readonly phone: FieldRef<"BIZUserModel", 'String'>
+    readonly profile_image_url: FieldRef<"BIZUserModel", 'String'>
+  }
+    
+
   // Custom InputTypes
 
   /**
-   * BIZUserModel base type for findUnique actions
+   * BIZUserModel findUnique
    */
-  export type BIZUserModelFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type BIZUserModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the BIZUserModel
      */
@@ -4976,17 +4990,6 @@ export namespace Prisma {
     where: BIZUserModelWhereUniqueInput
   }
 
-  /**
-   * BIZUserModel findUnique
-   */
-  export interface BIZUserModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends BIZUserModelFindUniqueArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * BIZUserModel findUniqueOrThrow
@@ -5008,9 +5011,9 @@ export namespace Prisma {
 
 
   /**
-   * BIZUserModel base type for findFirst actions
+   * BIZUserModel findFirst
    */
-  export type BIZUserModelFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type BIZUserModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the BIZUserModel
      */
@@ -5028,7 +5031,7 @@ export namespace Prisma {
      * 
      * Determine the order of BIZUserModels to fetch.
      */
-    orderBy?: Enumerable<BIZUserModelOrderByWithRelationInput>
+    orderBy?: BIZUserModelOrderByWithRelationInput | BIZUserModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -5052,20 +5055,9 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of BIZUserModels.
      */
-    distinct?: Enumerable<BIZUserModelScalarFieldEnum>
+    distinct?: BIZUserModelScalarFieldEnum | BIZUserModelScalarFieldEnum[]
   }
 
-  /**
-   * BIZUserModel findFirst
-   */
-  export interface BIZUserModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends BIZUserModelFindFirstArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * BIZUserModel findFirstOrThrow
@@ -5088,7 +5080,7 @@ export namespace Prisma {
      * 
      * Determine the order of BIZUserModels to fetch.
      */
-    orderBy?: Enumerable<BIZUserModelOrderByWithRelationInput>
+    orderBy?: BIZUserModelOrderByWithRelationInput | BIZUserModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -5112,7 +5104,7 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of BIZUserModels.
      */
-    distinct?: Enumerable<BIZUserModelScalarFieldEnum>
+    distinct?: BIZUserModelScalarFieldEnum | BIZUserModelScalarFieldEnum[]
   }
 
 
@@ -5137,7 +5129,7 @@ export namespace Prisma {
      * 
      * Determine the order of BIZUserModels to fetch.
      */
-    orderBy?: Enumerable<BIZUserModelOrderByWithRelationInput>
+    orderBy?: BIZUserModelOrderByWithRelationInput | BIZUserModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -5156,7 +5148,7 @@ export namespace Prisma {
      * Skip the first `n` BIZUserModels.
      */
     skip?: number
-    distinct?: Enumerable<BIZUserModelScalarFieldEnum>
+    distinct?: BIZUserModelScalarFieldEnum | BIZUserModelScalarFieldEnum[]
   }
 
 
@@ -5186,7 +5178,7 @@ export namespace Prisma {
     /**
      * The data used to create many BIZUserModels.
      */
-    data: Enumerable<BIZUserModelCreateManyInput>
+    data: BIZUserModelCreateManyInput | BIZUserModelCreateManyInput[]
     skipDuplicates?: boolean
   }
 
@@ -5287,6 +5279,38 @@ export namespace Prisma {
 
 
   /**
+   * BIZUserModel.re_agent
+   */
+  export type BIZUserModel$re_agentArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the REAgentModel
+     */
+    select?: REAgentModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: REAgentModelInclude<ExtArgs> | null
+    where?: REAgentModelWhereInput
+  }
+
+
+  /**
+   * BIZUserModel.hs_provider
+   */
+  export type BIZUserModel$hs_providerArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HSProviderModel
+     */
+    select?: HSProviderModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: HSProviderModelInclude<ExtArgs> | null
+    where?: HSProviderModelWhereInput
+  }
+
+
+  /**
    * BIZUserModel.oauth_accounts
    */
   export type BIZUserModel$oauth_accountsArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
@@ -5299,11 +5323,11 @@ export namespace Prisma {
      */
     include?: OauthAccountModelInclude<ExtArgs> | null
     where?: OauthAccountModelWhereInput
-    orderBy?: Enumerable<OauthAccountModelOrderByWithRelationInput>
+    orderBy?: OauthAccountModelOrderByWithRelationInput | OauthAccountModelOrderByWithRelationInput[]
     cursor?: OauthAccountModelWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Enumerable<OauthAccountModelScalarFieldEnum>
+    distinct?: OauthAccountModelScalarFieldEnum | OauthAccountModelScalarFieldEnum[]
   }
 
 
@@ -5320,11 +5344,11 @@ export namespace Prisma {
      */
     include?: BIZCertificationImageModelInclude<ExtArgs> | null
     where?: BIZCertificationImageModelWhereInput
-    orderBy?: Enumerable<BIZCertificationImageModelOrderByWithRelationInput>
+    orderBy?: BIZCertificationImageModelOrderByWithRelationInput | BIZCertificationImageModelOrderByWithRelationInput[]
     cursor?: BIZCertificationImageModelWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Enumerable<BIZCertificationImageModelScalarFieldEnum>
+    distinct?: BIZCertificationImageModelScalarFieldEnum | BIZCertificationImageModelScalarFieldEnum[]
   }
 
 
@@ -5434,7 +5458,7 @@ export namespace Prisma {
      * 
      * Determine the order of BIZCertificationImageModels to fetch.
      */
-    orderBy?: Enumerable<BIZCertificationImageModelOrderByWithRelationInput>
+    orderBy?: BIZCertificationImageModelOrderByWithRelationInput | BIZCertificationImageModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -5486,8 +5510,8 @@ export namespace Prisma {
 
   export type BIZCertificationImageModelGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: BIZCertificationImageModelWhereInput
-    orderBy?: Enumerable<BIZCertificationImageModelOrderByWithAggregationInput>
-    by: BIZCertificationImageModelScalarFieldEnum[]
+    orderBy?: BIZCertificationImageModelOrderByWithAggregationInput | BIZCertificationImageModelOrderByWithAggregationInput[]
+    by: BIZCertificationImageModelScalarFieldEnum[] | BIZCertificationImageModelScalarFieldEnum
     having?: BIZCertificationImageModelScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -5513,7 +5537,7 @@ export namespace Prisma {
 
   type GetBIZCertificationImageModelGroupByPayload<T extends BIZCertificationImageModelGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<BIZCertificationImageModelGroupByOutputType, T['by']> &
+      PickEnumerable<BIZCertificationImageModelGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof BIZCertificationImageModelGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -5560,7 +5584,7 @@ export namespace Prisma {
       select?: BIZCertificationImageModelCountAggregateInputType | true
     }
 
-  export interface BIZCertificationImageModelDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+  export interface BIZCertificationImageModelDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BIZCertificationImageModel'], meta: { name: 'BIZCertificationImageModel' } }
     /**
      * Find zero or one BIZCertificationImageModel that matches the filter.
@@ -5573,9 +5597,9 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findUnique<T extends BIZCertificationImageModelFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findUnique<T extends BIZCertificationImageModelFindUniqueArgs<ExtArgs>>(
       args: SelectSubset<T, BIZCertificationImageModelFindUniqueArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'BIZCertificationImageModel'> extends True ? Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
+    ): Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
 
     /**
      * Find one BIZCertificationImageModel that matches the filter or throw an error  with `error.code='P2025'` 
@@ -5591,7 +5615,7 @@ export namespace Prisma {
     **/
     findUniqueOrThrow<T extends BIZCertificationImageModelFindUniqueOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, BIZCertificationImageModelFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
+    ): Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
 
     /**
      * Find the first BIZCertificationImageModel that matches the filter.
@@ -5606,13 +5630,13 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findFirst<T extends BIZCertificationImageModelFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findFirst<T extends BIZCertificationImageModelFindFirstArgs<ExtArgs>>(
       args?: SelectSubset<T, BIZCertificationImageModelFindFirstArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'BIZCertificationImageModel'> extends True ? Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
+    ): Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
 
     /**
      * Find the first BIZCertificationImageModel that matches the filter or
-     * throw `NotFoundError` if no matches were found.
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {BIZCertificationImageModelFindFirstOrThrowArgs} args - Arguments to find a BIZCertificationImageModel
@@ -5626,7 +5650,7 @@ export namespace Prisma {
     **/
     findFirstOrThrow<T extends BIZCertificationImageModelFindFirstOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, BIZCertificationImageModelFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
+    ): Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
 
     /**
      * Find zero or more BIZCertificationImageModels that matches the filter.
@@ -5646,7 +5670,7 @@ export namespace Prisma {
     **/
     findMany<T extends BIZCertificationImageModelFindManyArgs<ExtArgs>>(
       args?: SelectSubset<T, BIZCertificationImageModelFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'findMany', never>>
+    ): Prisma.PrismaPromise<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'findMany'>>
 
     /**
      * Create a BIZCertificationImageModel.
@@ -5662,7 +5686,7 @@ export namespace Prisma {
     **/
     create<T extends BIZCertificationImageModelCreateArgs<ExtArgs>>(
       args: SelectSubset<T, BIZCertificationImageModelCreateArgs<ExtArgs>>
-    ): Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
+    ): Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
 
     /**
      * Create many BIZCertificationImageModels.
@@ -5694,7 +5718,7 @@ export namespace Prisma {
     **/
     delete<T extends BIZCertificationImageModelDeleteArgs<ExtArgs>>(
       args: SelectSubset<T, BIZCertificationImageModelDeleteArgs<ExtArgs>>
-    ): Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
+    ): Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
 
     /**
      * Update one BIZCertificationImageModel.
@@ -5713,7 +5737,7 @@ export namespace Prisma {
     **/
     update<T extends BIZCertificationImageModelUpdateArgs<ExtArgs>>(
       args: SelectSubset<T, BIZCertificationImageModelUpdateArgs<ExtArgs>>
-    ): Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
+    ): Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
 
     /**
      * Delete zero or more BIZCertificationImageModels.
@@ -5771,7 +5795,7 @@ export namespace Prisma {
     **/
     upsert<T extends BIZCertificationImageModelUpsertArgs<ExtArgs>>(
       args: SelectSubset<T, BIZCertificationImageModelUpsertArgs<ExtArgs>>
-    ): Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
+    ): Prisma__BIZCertificationImageModelClient<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
 
     /**
      * Count the number of BIZCertificationImageModels.
@@ -5850,7 +5874,7 @@ export namespace Prisma {
         ? { orderBy: BIZCertificationImageModelGroupByArgs['orderBy'] }
         : { orderBy?: BIZCertificationImageModelGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends TupleToUnion<T['by']>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -5898,7 +5922,10 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, BIZCertificationImageModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBIZCertificationImageModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-
+  /**
+   * Fields of the BIZCertificationImageModel model
+   */
+  readonly fields: BIZCertificationImageModelFieldRefs;
   }
 
   /**
@@ -5922,7 +5949,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    biz_user<T extends BIZUserModelArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModelArgs<ExtArgs>>): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+    biz_user<T extends BIZUserModelArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModelArgs<ExtArgs>>): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
     private get _document();
     /**
@@ -5949,12 +5976,27 @@ export namespace Prisma {
 
 
 
+  /**
+   * Fields of the BIZCertificationImageModel model
+   */ 
+  interface BIZCertificationImageModelFieldRefs {
+    readonly id: FieldRef<"BIZCertificationImageModel", 'String'>
+    readonly created_at: FieldRef<"BIZCertificationImageModel", 'DateTime'>
+    readonly updated_at: FieldRef<"BIZCertificationImageModel", 'DateTime'>
+    readonly is_deleted: FieldRef<"BIZCertificationImageModel", 'Boolean'>
+    readonly deleted_at: FieldRef<"BIZCertificationImageModel", 'DateTime'>
+    readonly biz_user_id: FieldRef<"BIZCertificationImageModel", 'String'>
+    readonly url: FieldRef<"BIZCertificationImageModel", 'String'>
+    readonly access_type: FieldRef<"BIZCertificationImageModel", 'ImageAccessType'>
+  }
+    
+
   // Custom InputTypes
 
   /**
-   * BIZCertificationImageModel base type for findUnique actions
+   * BIZCertificationImageModel findUnique
    */
-  export type BIZCertificationImageModelFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type BIZCertificationImageModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the BIZCertificationImageModel
      */
@@ -5969,17 +6011,6 @@ export namespace Prisma {
     where: BIZCertificationImageModelWhereUniqueInput
   }
 
-  /**
-   * BIZCertificationImageModel findUnique
-   */
-  export interface BIZCertificationImageModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends BIZCertificationImageModelFindUniqueArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * BIZCertificationImageModel findUniqueOrThrow
@@ -6001,9 +6032,9 @@ export namespace Prisma {
 
 
   /**
-   * BIZCertificationImageModel base type for findFirst actions
+   * BIZCertificationImageModel findFirst
    */
-  export type BIZCertificationImageModelFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type BIZCertificationImageModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the BIZCertificationImageModel
      */
@@ -6021,7 +6052,7 @@ export namespace Prisma {
      * 
      * Determine the order of BIZCertificationImageModels to fetch.
      */
-    orderBy?: Enumerable<BIZCertificationImageModelOrderByWithRelationInput>
+    orderBy?: BIZCertificationImageModelOrderByWithRelationInput | BIZCertificationImageModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -6045,20 +6076,9 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of BIZCertificationImageModels.
      */
-    distinct?: Enumerable<BIZCertificationImageModelScalarFieldEnum>
+    distinct?: BIZCertificationImageModelScalarFieldEnum | BIZCertificationImageModelScalarFieldEnum[]
   }
 
-  /**
-   * BIZCertificationImageModel findFirst
-   */
-  export interface BIZCertificationImageModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends BIZCertificationImageModelFindFirstArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * BIZCertificationImageModel findFirstOrThrow
@@ -6081,7 +6101,7 @@ export namespace Prisma {
      * 
      * Determine the order of BIZCertificationImageModels to fetch.
      */
-    orderBy?: Enumerable<BIZCertificationImageModelOrderByWithRelationInput>
+    orderBy?: BIZCertificationImageModelOrderByWithRelationInput | BIZCertificationImageModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -6105,7 +6125,7 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of BIZCertificationImageModels.
      */
-    distinct?: Enumerable<BIZCertificationImageModelScalarFieldEnum>
+    distinct?: BIZCertificationImageModelScalarFieldEnum | BIZCertificationImageModelScalarFieldEnum[]
   }
 
 
@@ -6130,7 +6150,7 @@ export namespace Prisma {
      * 
      * Determine the order of BIZCertificationImageModels to fetch.
      */
-    orderBy?: Enumerable<BIZCertificationImageModelOrderByWithRelationInput>
+    orderBy?: BIZCertificationImageModelOrderByWithRelationInput | BIZCertificationImageModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -6149,7 +6169,7 @@ export namespace Prisma {
      * Skip the first `n` BIZCertificationImageModels.
      */
     skip?: number
-    distinct?: Enumerable<BIZCertificationImageModelScalarFieldEnum>
+    distinct?: BIZCertificationImageModelScalarFieldEnum | BIZCertificationImageModelScalarFieldEnum[]
   }
 
 
@@ -6179,7 +6199,7 @@ export namespace Prisma {
     /**
      * The data used to create many BIZCertificationImageModels.
      */
-    data: Enumerable<BIZCertificationImageModelCreateManyInput>
+    data: BIZCertificationImageModelCreateManyInput | BIZCertificationImageModelCreateManyInput[]
     skipDuplicates?: boolean
   }
 
@@ -6409,7 +6429,7 @@ export namespace Prisma {
      * 
      * Determine the order of REAgentModels to fetch.
      */
-    orderBy?: Enumerable<REAgentModelOrderByWithRelationInput>
+    orderBy?: REAgentModelOrderByWithRelationInput | REAgentModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -6461,8 +6481,8 @@ export namespace Prisma {
 
   export type REAgentModelGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: REAgentModelWhereInput
-    orderBy?: Enumerable<REAgentModelOrderByWithAggregationInput>
-    by: REAgentModelScalarFieldEnum[]
+    orderBy?: REAgentModelOrderByWithAggregationInput | REAgentModelOrderByWithAggregationInput[]
+    by: REAgentModelScalarFieldEnum[] | REAgentModelScalarFieldEnum
     having?: REAgentModelScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -6492,7 +6512,7 @@ export namespace Prisma {
 
   type GetREAgentModelGroupByPayload<T extends REAgentModelGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<REAgentModelGroupByOutputType, T['by']> &
+      PickEnumerable<REAgentModelGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof REAgentModelGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -6553,7 +6573,7 @@ export namespace Prisma {
       select?: REAgentModelCountAggregateInputType | true
     }
 
-  export interface REAgentModelDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+  export interface REAgentModelDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['REAgentModel'], meta: { name: 'REAgentModel' } }
     /**
      * Find zero or one REAgentModel that matches the filter.
@@ -6566,9 +6586,9 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findUnique<T extends REAgentModelFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findUnique<T extends REAgentModelFindUniqueArgs<ExtArgs>>(
       args: SelectSubset<T, REAgentModelFindUniqueArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'REAgentModel'> extends True ? Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
+    ): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
 
     /**
      * Find one REAgentModel that matches the filter or throw an error  with `error.code='P2025'` 
@@ -6584,7 +6604,7 @@ export namespace Prisma {
     **/
     findUniqueOrThrow<T extends REAgentModelFindUniqueOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, REAgentModelFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
+    ): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
 
     /**
      * Find the first REAgentModel that matches the filter.
@@ -6599,13 +6619,13 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findFirst<T extends REAgentModelFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findFirst<T extends REAgentModelFindFirstArgs<ExtArgs>>(
       args?: SelectSubset<T, REAgentModelFindFirstArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'REAgentModel'> extends True ? Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
+    ): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
 
     /**
      * Find the first REAgentModel that matches the filter or
-     * throw `NotFoundError` if no matches were found.
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {REAgentModelFindFirstOrThrowArgs} args - Arguments to find a REAgentModel
@@ -6619,7 +6639,7 @@ export namespace Prisma {
     **/
     findFirstOrThrow<T extends REAgentModelFindFirstOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, REAgentModelFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
+    ): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
 
     /**
      * Find zero or more REAgentModels that matches the filter.
@@ -6639,7 +6659,7 @@ export namespace Prisma {
     **/
     findMany<T extends REAgentModelFindManyArgs<ExtArgs>>(
       args?: SelectSubset<T, REAgentModelFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findMany', never>>
+    ): Prisma.PrismaPromise<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findMany'>>
 
     /**
      * Create a REAgentModel.
@@ -6655,7 +6675,7 @@ export namespace Prisma {
     **/
     create<T extends REAgentModelCreateArgs<ExtArgs>>(
       args: SelectSubset<T, REAgentModelCreateArgs<ExtArgs>>
-    ): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
+    ): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
 
     /**
      * Create many REAgentModels.
@@ -6687,7 +6707,7 @@ export namespace Prisma {
     **/
     delete<T extends REAgentModelDeleteArgs<ExtArgs>>(
       args: SelectSubset<T, REAgentModelDeleteArgs<ExtArgs>>
-    ): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
+    ): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
 
     /**
      * Update one REAgentModel.
@@ -6706,7 +6726,7 @@ export namespace Prisma {
     **/
     update<T extends REAgentModelUpdateArgs<ExtArgs>>(
       args: SelectSubset<T, REAgentModelUpdateArgs<ExtArgs>>
-    ): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
+    ): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
 
     /**
      * Delete zero or more REAgentModels.
@@ -6764,7 +6784,7 @@ export namespace Prisma {
     **/
     upsert<T extends REAgentModelUpsertArgs<ExtArgs>>(
       args: SelectSubset<T, REAgentModelUpsertArgs<ExtArgs>>
-    ): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
+    ): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
 
     /**
      * Count the number of REAgentModels.
@@ -6843,7 +6863,7 @@ export namespace Prisma {
         ? { orderBy: REAgentModelGroupByArgs['orderBy'] }
         : { orderBy?: REAgentModelGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends TupleToUnion<T['by']>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -6891,7 +6911,10 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, REAgentModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetREAgentModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-
+  /**
+   * Fields of the REAgentModel model
+   */
+  readonly fields: REAgentModelFieldRefs;
   }
 
   /**
@@ -6915,11 +6938,11 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    base<T extends BIZUserModelArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModelArgs<ExtArgs>>): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+    base<T extends BIZUserModelArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModelArgs<ExtArgs>>): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
-    expertise<T extends REExpertiseModelArgs<ExtArgs> = {}>(args?: Subset<T, REExpertiseModelArgs<ExtArgs>>): Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+    expertise<T extends REExpertiseModelArgs<ExtArgs> = {}>(args?: Subset<T, REExpertiseModelArgs<ExtArgs>>): Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
-    portfolios<T extends REAgentModel$portfoliosArgs<ExtArgs> = {}>(args?: Subset<T, REAgentModel$portfoliosArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'findMany', never>| Null>;
+    portfolios<T extends REAgentModel$portfoliosArgs<ExtArgs> = {}>(args?: Subset<T, REAgentModel$portfoliosArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'findMany'>| Null>;
 
     private get _document();
     /**
@@ -6946,12 +6969,31 @@ export namespace Prisma {
 
 
 
+  /**
+   * Fields of the REAgentModel model
+   */ 
+  interface REAgentModelFieldRefs {
+    readonly id: FieldRef<"REAgentModel", 'String'>
+    readonly is_licensed: FieldRef<"REAgentModel", 'Boolean'>
+    readonly expertise_id: FieldRef<"REAgentModel", 'String'>
+    readonly re_number: FieldRef<"REAgentModel", 'String'>
+    readonly re_name: FieldRef<"REAgentModel", 'String'>
+    readonly re_phone: FieldRef<"REAgentModel", 'String'>
+    readonly re_licensed_agent_name: FieldRef<"REAgentModel", 'String'>
+    readonly re_address_zone_code: FieldRef<"REAgentModel", 'String'>
+    readonly re_address_road: FieldRef<"REAgentModel", 'String'>
+    readonly re_address_detail: FieldRef<"REAgentModel", 'String'>
+    readonly re_address_extra: FieldRef<"REAgentModel", 'String'>
+    readonly biz_open_date: FieldRef<"REAgentModel", 'DateTime'>
+  }
+    
+
   // Custom InputTypes
 
   /**
-   * REAgentModel base type for findUnique actions
+   * REAgentModel findUnique
    */
-  export type REAgentModelFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type REAgentModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the REAgentModel
      */
@@ -6966,17 +7008,6 @@ export namespace Prisma {
     where: REAgentModelWhereUniqueInput
   }
 
-  /**
-   * REAgentModel findUnique
-   */
-  export interface REAgentModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends REAgentModelFindUniqueArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * REAgentModel findUniqueOrThrow
@@ -6998,9 +7029,9 @@ export namespace Prisma {
 
 
   /**
-   * REAgentModel base type for findFirst actions
+   * REAgentModel findFirst
    */
-  export type REAgentModelFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type REAgentModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the REAgentModel
      */
@@ -7018,7 +7049,7 @@ export namespace Prisma {
      * 
      * Determine the order of REAgentModels to fetch.
      */
-    orderBy?: Enumerable<REAgentModelOrderByWithRelationInput>
+    orderBy?: REAgentModelOrderByWithRelationInput | REAgentModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -7042,20 +7073,9 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of REAgentModels.
      */
-    distinct?: Enumerable<REAgentModelScalarFieldEnum>
+    distinct?: REAgentModelScalarFieldEnum | REAgentModelScalarFieldEnum[]
   }
 
-  /**
-   * REAgentModel findFirst
-   */
-  export interface REAgentModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends REAgentModelFindFirstArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * REAgentModel findFirstOrThrow
@@ -7078,7 +7098,7 @@ export namespace Prisma {
      * 
      * Determine the order of REAgentModels to fetch.
      */
-    orderBy?: Enumerable<REAgentModelOrderByWithRelationInput>
+    orderBy?: REAgentModelOrderByWithRelationInput | REAgentModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -7102,7 +7122,7 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of REAgentModels.
      */
-    distinct?: Enumerable<REAgentModelScalarFieldEnum>
+    distinct?: REAgentModelScalarFieldEnum | REAgentModelScalarFieldEnum[]
   }
 
 
@@ -7127,7 +7147,7 @@ export namespace Prisma {
      * 
      * Determine the order of REAgentModels to fetch.
      */
-    orderBy?: Enumerable<REAgentModelOrderByWithRelationInput>
+    orderBy?: REAgentModelOrderByWithRelationInput | REAgentModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -7146,7 +7166,7 @@ export namespace Prisma {
      * Skip the first `n` REAgentModels.
      */
     skip?: number
-    distinct?: Enumerable<REAgentModelScalarFieldEnum>
+    distinct?: REAgentModelScalarFieldEnum | REAgentModelScalarFieldEnum[]
   }
 
 
@@ -7176,7 +7196,7 @@ export namespace Prisma {
     /**
      * The data used to create many REAgentModels.
      */
-    data: Enumerable<REAgentModelCreateManyInput>
+    data: REAgentModelCreateManyInput | REAgentModelCreateManyInput[]
     skipDuplicates?: boolean
   }
 
@@ -7289,11 +7309,11 @@ export namespace Prisma {
      */
     include?: REPortfolioModelInclude<ExtArgs> | null
     where?: REPortfolioModelWhereInput
-    orderBy?: Enumerable<REPortfolioModelOrderByWithRelationInput>
+    orderBy?: REPortfolioModelOrderByWithRelationInput | REPortfolioModelOrderByWithRelationInput[]
     cursor?: REPortfolioModelWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Enumerable<REPortfolioModelScalarFieldEnum>
+    distinct?: REPortfolioModelScalarFieldEnum | REPortfolioModelScalarFieldEnum[]
   }
 
 
@@ -7391,7 +7411,7 @@ export namespace Prisma {
      * 
      * Determine the order of REExpertiseModels to fetch.
      */
-    orderBy?: Enumerable<REExpertiseModelOrderByWithRelationInput>
+    orderBy?: REExpertiseModelOrderByWithRelationInput | REExpertiseModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -7443,8 +7463,8 @@ export namespace Prisma {
 
   export type REExpertiseModelGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: REExpertiseModelWhereInput
-    orderBy?: Enumerable<REExpertiseModelOrderByWithAggregationInput>
-    by: REExpertiseModelScalarFieldEnum[]
+    orderBy?: REExpertiseModelOrderByWithAggregationInput | REExpertiseModelOrderByWithAggregationInput[]
+    by: REExpertiseModelScalarFieldEnum[] | REExpertiseModelScalarFieldEnum
     having?: REExpertiseModelScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -7468,7 +7488,7 @@ export namespace Prisma {
 
   type GetREExpertiseModelGroupByPayload<T extends REExpertiseModelGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<REExpertiseModelGroupByOutputType, T['by']> &
+      PickEnumerable<REExpertiseModelGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof REExpertiseModelGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -7513,7 +7533,7 @@ export namespace Prisma {
       select?: REExpertiseModelCountAggregateInputType | true
     }
 
-  export interface REExpertiseModelDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+  export interface REExpertiseModelDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['REExpertiseModel'], meta: { name: 'REExpertiseModel' } }
     /**
      * Find zero or one REExpertiseModel that matches the filter.
@@ -7526,9 +7546,9 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findUnique<T extends REExpertiseModelFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findUnique<T extends REExpertiseModelFindUniqueArgs<ExtArgs>>(
       args: SelectSubset<T, REExpertiseModelFindUniqueArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'REExpertiseModel'> extends True ? Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
+    ): Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
 
     /**
      * Find one REExpertiseModel that matches the filter or throw an error  with `error.code='P2025'` 
@@ -7544,7 +7564,7 @@ export namespace Prisma {
     **/
     findUniqueOrThrow<T extends REExpertiseModelFindUniqueOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, REExpertiseModelFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
+    ): Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
 
     /**
      * Find the first REExpertiseModel that matches the filter.
@@ -7559,13 +7579,13 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findFirst<T extends REExpertiseModelFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findFirst<T extends REExpertiseModelFindFirstArgs<ExtArgs>>(
       args?: SelectSubset<T, REExpertiseModelFindFirstArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'REExpertiseModel'> extends True ? Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
+    ): Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
 
     /**
      * Find the first REExpertiseModel that matches the filter or
-     * throw `NotFoundError` if no matches were found.
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {REExpertiseModelFindFirstOrThrowArgs} args - Arguments to find a REExpertiseModel
@@ -7579,7 +7599,7 @@ export namespace Prisma {
     **/
     findFirstOrThrow<T extends REExpertiseModelFindFirstOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, REExpertiseModelFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
+    ): Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
 
     /**
      * Find zero or more REExpertiseModels that matches the filter.
@@ -7599,7 +7619,7 @@ export namespace Prisma {
     **/
     findMany<T extends REExpertiseModelFindManyArgs<ExtArgs>>(
       args?: SelectSubset<T, REExpertiseModelFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'findMany', never>>
+    ): Prisma.PrismaPromise<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'findMany'>>
 
     /**
      * Create a REExpertiseModel.
@@ -7615,7 +7635,7 @@ export namespace Prisma {
     **/
     create<T extends REExpertiseModelCreateArgs<ExtArgs>>(
       args: SelectSubset<T, REExpertiseModelCreateArgs<ExtArgs>>
-    ): Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
+    ): Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
 
     /**
      * Create many REExpertiseModels.
@@ -7647,7 +7667,7 @@ export namespace Prisma {
     **/
     delete<T extends REExpertiseModelDeleteArgs<ExtArgs>>(
       args: SelectSubset<T, REExpertiseModelDeleteArgs<ExtArgs>>
-    ): Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
+    ): Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
 
     /**
      * Update one REExpertiseModel.
@@ -7666,7 +7686,7 @@ export namespace Prisma {
     **/
     update<T extends REExpertiseModelUpdateArgs<ExtArgs>>(
       args: SelectSubset<T, REExpertiseModelUpdateArgs<ExtArgs>>
-    ): Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
+    ): Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
 
     /**
      * Delete zero or more REExpertiseModels.
@@ -7724,7 +7744,7 @@ export namespace Prisma {
     **/
     upsert<T extends REExpertiseModelUpsertArgs<ExtArgs>>(
       args: SelectSubset<T, REExpertiseModelUpsertArgs<ExtArgs>>
-    ): Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
+    ): Prisma__REExpertiseModelClient<$Types.GetResult<REExpertiseModelPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
 
     /**
      * Count the number of REExpertiseModels.
@@ -7803,7 +7823,7 @@ export namespace Prisma {
         ? { orderBy: REExpertiseModelGroupByArgs['orderBy'] }
         : { orderBy?: REExpertiseModelGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends TupleToUnion<T['by']>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -7851,7 +7871,10 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, REExpertiseModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetREExpertiseModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-
+  /**
+   * Fields of the REExpertiseModel model
+   */
+  readonly fields: REExpertiseModelFieldRefs;
   }
 
   /**
@@ -7875,7 +7898,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    re_agents<T extends REExpertiseModel$re_agentsArgs<ExtArgs> = {}>(args?: Subset<T, REExpertiseModel$re_agentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findMany', never>| Null>;
+    re_agents<T extends REExpertiseModel$re_agentsArgs<ExtArgs> = {}>(args?: Subset<T, REExpertiseModel$re_agentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findMany'>| Null>;
 
     private get _document();
     /**
@@ -7902,12 +7925,25 @@ export namespace Prisma {
 
 
 
+  /**
+   * Fields of the REExpertiseModel model
+   */ 
+  interface REExpertiseModelFieldRefs {
+    readonly id: FieldRef<"REExpertiseModel", 'String'>
+    readonly created_at: FieldRef<"REExpertiseModel", 'DateTime'>
+    readonly updated_at: FieldRef<"REExpertiseModel", 'DateTime'>
+    readonly is_deleted: FieldRef<"REExpertiseModel", 'Boolean'>
+    readonly deleted_at: FieldRef<"REExpertiseModel", 'DateTime'>
+    readonly name: FieldRef<"REExpertiseModel", 'String'>
+  }
+    
+
   // Custom InputTypes
 
   /**
-   * REExpertiseModel base type for findUnique actions
+   * REExpertiseModel findUnique
    */
-  export type REExpertiseModelFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type REExpertiseModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the REExpertiseModel
      */
@@ -7922,17 +7958,6 @@ export namespace Prisma {
     where: REExpertiseModelWhereUniqueInput
   }
 
-  /**
-   * REExpertiseModel findUnique
-   */
-  export interface REExpertiseModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends REExpertiseModelFindUniqueArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * REExpertiseModel findUniqueOrThrow
@@ -7954,9 +7979,9 @@ export namespace Prisma {
 
 
   /**
-   * REExpertiseModel base type for findFirst actions
+   * REExpertiseModel findFirst
    */
-  export type REExpertiseModelFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type REExpertiseModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the REExpertiseModel
      */
@@ -7974,7 +7999,7 @@ export namespace Prisma {
      * 
      * Determine the order of REExpertiseModels to fetch.
      */
-    orderBy?: Enumerable<REExpertiseModelOrderByWithRelationInput>
+    orderBy?: REExpertiseModelOrderByWithRelationInput | REExpertiseModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -7998,20 +8023,9 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of REExpertiseModels.
      */
-    distinct?: Enumerable<REExpertiseModelScalarFieldEnum>
+    distinct?: REExpertiseModelScalarFieldEnum | REExpertiseModelScalarFieldEnum[]
   }
 
-  /**
-   * REExpertiseModel findFirst
-   */
-  export interface REExpertiseModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends REExpertiseModelFindFirstArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * REExpertiseModel findFirstOrThrow
@@ -8034,7 +8048,7 @@ export namespace Prisma {
      * 
      * Determine the order of REExpertiseModels to fetch.
      */
-    orderBy?: Enumerable<REExpertiseModelOrderByWithRelationInput>
+    orderBy?: REExpertiseModelOrderByWithRelationInput | REExpertiseModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -8058,7 +8072,7 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of REExpertiseModels.
      */
-    distinct?: Enumerable<REExpertiseModelScalarFieldEnum>
+    distinct?: REExpertiseModelScalarFieldEnum | REExpertiseModelScalarFieldEnum[]
   }
 
 
@@ -8083,7 +8097,7 @@ export namespace Prisma {
      * 
      * Determine the order of REExpertiseModels to fetch.
      */
-    orderBy?: Enumerable<REExpertiseModelOrderByWithRelationInput>
+    orderBy?: REExpertiseModelOrderByWithRelationInput | REExpertiseModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -8102,7 +8116,7 @@ export namespace Prisma {
      * Skip the first `n` REExpertiseModels.
      */
     skip?: number
-    distinct?: Enumerable<REExpertiseModelScalarFieldEnum>
+    distinct?: REExpertiseModelScalarFieldEnum | REExpertiseModelScalarFieldEnum[]
   }
 
 
@@ -8132,7 +8146,7 @@ export namespace Prisma {
     /**
      * The data used to create many REExpertiseModels.
      */
-    data: Enumerable<REExpertiseModelCreateManyInput>
+    data: REExpertiseModelCreateManyInput | REExpertiseModelCreateManyInput[]
     skipDuplicates?: boolean
   }
 
@@ -8245,11 +8259,11 @@ export namespace Prisma {
      */
     include?: REAgentModelInclude<ExtArgs> | null
     where?: REAgentModelWhereInput
-    orderBy?: Enumerable<REAgentModelOrderByWithRelationInput>
+    orderBy?: REAgentModelOrderByWithRelationInput | REAgentModelOrderByWithRelationInput[]
     cursor?: REAgentModelWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Enumerable<REAgentModelScalarFieldEnum>
+    distinct?: REAgentModelScalarFieldEnum | REAgentModelScalarFieldEnum[]
   }
 
 
@@ -8353,7 +8367,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSProviderModels to fetch.
      */
-    orderBy?: Enumerable<HSProviderModelOrderByWithRelationInput>
+    orderBy?: HSProviderModelOrderByWithRelationInput | HSProviderModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -8405,8 +8419,8 @@ export namespace Prisma {
 
   export type HSProviderModelGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: HSProviderModelWhereInput
-    orderBy?: Enumerable<HSProviderModelOrderByWithAggregationInput>
-    by: HSProviderModelScalarFieldEnum[]
+    orderBy?: HSProviderModelOrderByWithAggregationInput | HSProviderModelOrderByWithAggregationInput[]
+    by: HSProviderModelScalarFieldEnum[] | HSProviderModelScalarFieldEnum
     having?: HSProviderModelScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -8431,7 +8445,7 @@ export namespace Prisma {
 
   type GetHSProviderModelGroupByPayload<T extends HSProviderModelGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<HSProviderModelGroupByOutputType, T['by']> &
+      PickEnumerable<HSProviderModelGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof HSProviderModelGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -8482,7 +8496,7 @@ export namespace Prisma {
       select?: HSProviderModelCountAggregateInputType | true
     }
 
-  export interface HSProviderModelDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+  export interface HSProviderModelDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['HSProviderModel'], meta: { name: 'HSProviderModel' } }
     /**
      * Find zero or one HSProviderModel that matches the filter.
@@ -8495,9 +8509,9 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findUnique<T extends HSProviderModelFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findUnique<T extends HSProviderModelFindUniqueArgs<ExtArgs>>(
       args: SelectSubset<T, HSProviderModelFindUniqueArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'HSProviderModel'> extends True ? Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
+    ): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
 
     /**
      * Find one HSProviderModel that matches the filter or throw an error  with `error.code='P2025'` 
@@ -8513,7 +8527,7 @@ export namespace Prisma {
     **/
     findUniqueOrThrow<T extends HSProviderModelFindUniqueOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, HSProviderModelFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
+    ): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
 
     /**
      * Find the first HSProviderModel that matches the filter.
@@ -8528,13 +8542,13 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findFirst<T extends HSProviderModelFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findFirst<T extends HSProviderModelFindFirstArgs<ExtArgs>>(
       args?: SelectSubset<T, HSProviderModelFindFirstArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'HSProviderModel'> extends True ? Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
+    ): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
 
     /**
      * Find the first HSProviderModel that matches the filter or
-     * throw `NotFoundError` if no matches were found.
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {HSProviderModelFindFirstOrThrowArgs} args - Arguments to find a HSProviderModel
@@ -8548,7 +8562,7 @@ export namespace Prisma {
     **/
     findFirstOrThrow<T extends HSProviderModelFindFirstOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, HSProviderModelFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
+    ): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
 
     /**
      * Find zero or more HSProviderModels that matches the filter.
@@ -8568,7 +8582,7 @@ export namespace Prisma {
     **/
     findMany<T extends HSProviderModelFindManyArgs<ExtArgs>>(
       args?: SelectSubset<T, HSProviderModelFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findMany', never>>
+    ): Prisma.PrismaPromise<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findMany'>>
 
     /**
      * Create a HSProviderModel.
@@ -8584,7 +8598,7 @@ export namespace Prisma {
     **/
     create<T extends HSProviderModelCreateArgs<ExtArgs>>(
       args: SelectSubset<T, HSProviderModelCreateArgs<ExtArgs>>
-    ): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
+    ): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
 
     /**
      * Create many HSProviderModels.
@@ -8616,7 +8630,7 @@ export namespace Prisma {
     **/
     delete<T extends HSProviderModelDeleteArgs<ExtArgs>>(
       args: SelectSubset<T, HSProviderModelDeleteArgs<ExtArgs>>
-    ): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
+    ): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
 
     /**
      * Update one HSProviderModel.
@@ -8635,7 +8649,7 @@ export namespace Prisma {
     **/
     update<T extends HSProviderModelUpdateArgs<ExtArgs>>(
       args: SelectSubset<T, HSProviderModelUpdateArgs<ExtArgs>>
-    ): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
+    ): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
 
     /**
      * Delete zero or more HSProviderModels.
@@ -8693,7 +8707,7 @@ export namespace Prisma {
     **/
     upsert<T extends HSProviderModelUpsertArgs<ExtArgs>>(
       args: SelectSubset<T, HSProviderModelUpsertArgs<ExtArgs>>
-    ): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
+    ): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
 
     /**
      * Count the number of HSProviderModels.
@@ -8772,7 +8786,7 @@ export namespace Prisma {
         ? { orderBy: HSProviderModelGroupByArgs['orderBy'] }
         : { orderBy?: HSProviderModelGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends TupleToUnion<T['by']>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -8820,7 +8834,10 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, HSProviderModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHSProviderModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-
+  /**
+   * Fields of the HSProviderModel model
+   */
+  readonly fields: HSProviderModelFieldRefs;
   }
 
   /**
@@ -8844,11 +8861,11 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    base<T extends BIZUserModelArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModelArgs<ExtArgs>>): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+    base<T extends BIZUserModelArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModelArgs<ExtArgs>>): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
-    expertise_relation<T extends HSProviderModel$expertise_relationArgs<ExtArgs> = {}>(args?: Subset<T, HSProviderModel$expertise_relationArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'findMany', never>| Null>;
+    expertise_relation<T extends HSProviderModel$expertise_relationArgs<ExtArgs> = {}>(args?: Subset<T, HSProviderModel$expertise_relationArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'findMany'>| Null>;
 
-    portfolios<T extends HSProviderModel$portfoliosArgs<ExtArgs> = {}>(args?: Subset<T, HSProviderModel$portfoliosArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'findMany', never>| Null>;
+    portfolios<T extends HSProviderModel$portfoliosArgs<ExtArgs> = {}>(args?: Subset<T, HSProviderModel$portfoliosArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'findMany'>| Null>;
 
     private get _document();
     /**
@@ -8875,12 +8892,26 @@ export namespace Prisma {
 
 
 
+  /**
+   * Fields of the HSProviderModel model
+   */ 
+  interface HSProviderModelFieldRefs {
+    readonly id: FieldRef<"HSProviderModel", 'String'>
+    readonly biz_registration_number: FieldRef<"HSProviderModel", 'String'>
+    readonly address_zone_code: FieldRef<"HSProviderModel", 'String'>
+    readonly address_road: FieldRef<"HSProviderModel", 'String'>
+    readonly address_detail: FieldRef<"HSProviderModel", 'String'>
+    readonly address_extra: FieldRef<"HSProviderModel", 'String'>
+    readonly biz_open_date: FieldRef<"HSProviderModel", 'DateTime'>
+  }
+    
+
   // Custom InputTypes
 
   /**
-   * HSProviderModel base type for findUnique actions
+   * HSProviderModel findUnique
    */
-  export type HSProviderModelFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type HSProviderModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the HSProviderModel
      */
@@ -8895,17 +8926,6 @@ export namespace Prisma {
     where: HSProviderModelWhereUniqueInput
   }
 
-  /**
-   * HSProviderModel findUnique
-   */
-  export interface HSProviderModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends HSProviderModelFindUniqueArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * HSProviderModel findUniqueOrThrow
@@ -8927,9 +8947,9 @@ export namespace Prisma {
 
 
   /**
-   * HSProviderModel base type for findFirst actions
+   * HSProviderModel findFirst
    */
-  export type HSProviderModelFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type HSProviderModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the HSProviderModel
      */
@@ -8947,7 +8967,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSProviderModels to fetch.
      */
-    orderBy?: Enumerable<HSProviderModelOrderByWithRelationInput>
+    orderBy?: HSProviderModelOrderByWithRelationInput | HSProviderModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -8971,20 +8991,9 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of HSProviderModels.
      */
-    distinct?: Enumerable<HSProviderModelScalarFieldEnum>
+    distinct?: HSProviderModelScalarFieldEnum | HSProviderModelScalarFieldEnum[]
   }
 
-  /**
-   * HSProviderModel findFirst
-   */
-  export interface HSProviderModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends HSProviderModelFindFirstArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * HSProviderModel findFirstOrThrow
@@ -9007,7 +9016,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSProviderModels to fetch.
      */
-    orderBy?: Enumerable<HSProviderModelOrderByWithRelationInput>
+    orderBy?: HSProviderModelOrderByWithRelationInput | HSProviderModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -9031,7 +9040,7 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of HSProviderModels.
      */
-    distinct?: Enumerable<HSProviderModelScalarFieldEnum>
+    distinct?: HSProviderModelScalarFieldEnum | HSProviderModelScalarFieldEnum[]
   }
 
 
@@ -9056,7 +9065,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSProviderModels to fetch.
      */
-    orderBy?: Enumerable<HSProviderModelOrderByWithRelationInput>
+    orderBy?: HSProviderModelOrderByWithRelationInput | HSProviderModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -9075,7 +9084,7 @@ export namespace Prisma {
      * Skip the first `n` HSProviderModels.
      */
     skip?: number
-    distinct?: Enumerable<HSProviderModelScalarFieldEnum>
+    distinct?: HSProviderModelScalarFieldEnum | HSProviderModelScalarFieldEnum[]
   }
 
 
@@ -9105,7 +9114,7 @@ export namespace Prisma {
     /**
      * The data used to create many HSProviderModels.
      */
-    data: Enumerable<HSProviderModelCreateManyInput>
+    data: HSProviderModelCreateManyInput | HSProviderModelCreateManyInput[]
     skipDuplicates?: boolean
   }
 
@@ -9218,11 +9227,11 @@ export namespace Prisma {
      */
     include?: HSSubExpertiseRelationModelInclude<ExtArgs> | null
     where?: HSSubExpertiseRelationModelWhereInput
-    orderBy?: Enumerable<HSSubExpertiseRelationModelOrderByWithRelationInput>
+    orderBy?: HSSubExpertiseRelationModelOrderByWithRelationInput | HSSubExpertiseRelationModelOrderByWithRelationInput[]
     cursor?: HSSubExpertiseRelationModelWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Enumerable<HSSubExpertiseRelationModelScalarFieldEnum>
+    distinct?: HSSubExpertiseRelationModelScalarFieldEnum | HSSubExpertiseRelationModelScalarFieldEnum[]
   }
 
 
@@ -9239,11 +9248,11 @@ export namespace Prisma {
      */
     include?: HSPortfolioModelInclude<ExtArgs> | null
     where?: HSPortfolioModelWhereInput
-    orderBy?: Enumerable<HSPortfolioModelOrderByWithRelationInput>
+    orderBy?: HSPortfolioModelOrderByWithRelationInput | HSPortfolioModelOrderByWithRelationInput[]
     cursor?: HSPortfolioModelWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Enumerable<HSPortfolioModelScalarFieldEnum>
+    distinct?: HSPortfolioModelScalarFieldEnum | HSPortfolioModelScalarFieldEnum[]
   }
 
 
@@ -9347,7 +9356,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSSubExpertiseModels to fetch.
      */
-    orderBy?: Enumerable<HSSubExpertiseModelOrderByWithRelationInput>
+    orderBy?: HSSubExpertiseModelOrderByWithRelationInput | HSSubExpertiseModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -9399,8 +9408,8 @@ export namespace Prisma {
 
   export type HSSubExpertiseModelGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: HSSubExpertiseModelWhereInput
-    orderBy?: Enumerable<HSSubExpertiseModelOrderByWithAggregationInput>
-    by: HSSubExpertiseModelScalarFieldEnum[]
+    orderBy?: HSSubExpertiseModelOrderByWithAggregationInput | HSSubExpertiseModelOrderByWithAggregationInput[]
+    by: HSSubExpertiseModelScalarFieldEnum[] | HSSubExpertiseModelScalarFieldEnum
     having?: HSSubExpertiseModelScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -9425,7 +9434,7 @@ export namespace Prisma {
 
   type GetHSSubExpertiseModelGroupByPayload<T extends HSSubExpertiseModelGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<HSSubExpertiseModelGroupByOutputType, T['by']> &
+      PickEnumerable<HSSubExpertiseModelGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof HSSubExpertiseModelGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -9474,7 +9483,7 @@ export namespace Prisma {
       select?: HSSubExpertiseModelCountAggregateInputType | true
     }
 
-  export interface HSSubExpertiseModelDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+  export interface HSSubExpertiseModelDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['HSSubExpertiseModel'], meta: { name: 'HSSubExpertiseModel' } }
     /**
      * Find zero or one HSSubExpertiseModel that matches the filter.
@@ -9487,9 +9496,9 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findUnique<T extends HSSubExpertiseModelFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findUnique<T extends HSSubExpertiseModelFindUniqueArgs<ExtArgs>>(
       args: SelectSubset<T, HSSubExpertiseModelFindUniqueArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'HSSubExpertiseModel'> extends True ? Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
+    ): Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
 
     /**
      * Find one HSSubExpertiseModel that matches the filter or throw an error  with `error.code='P2025'` 
@@ -9505,7 +9514,7 @@ export namespace Prisma {
     **/
     findUniqueOrThrow<T extends HSSubExpertiseModelFindUniqueOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, HSSubExpertiseModelFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
+    ): Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
 
     /**
      * Find the first HSSubExpertiseModel that matches the filter.
@@ -9520,13 +9529,13 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findFirst<T extends HSSubExpertiseModelFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findFirst<T extends HSSubExpertiseModelFindFirstArgs<ExtArgs>>(
       args?: SelectSubset<T, HSSubExpertiseModelFindFirstArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'HSSubExpertiseModel'> extends True ? Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
+    ): Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
 
     /**
      * Find the first HSSubExpertiseModel that matches the filter or
-     * throw `NotFoundError` if no matches were found.
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {HSSubExpertiseModelFindFirstOrThrowArgs} args - Arguments to find a HSSubExpertiseModel
@@ -9540,7 +9549,7 @@ export namespace Prisma {
     **/
     findFirstOrThrow<T extends HSSubExpertiseModelFindFirstOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, HSSubExpertiseModelFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
+    ): Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
 
     /**
      * Find zero or more HSSubExpertiseModels that matches the filter.
@@ -9560,7 +9569,7 @@ export namespace Prisma {
     **/
     findMany<T extends HSSubExpertiseModelFindManyArgs<ExtArgs>>(
       args?: SelectSubset<T, HSSubExpertiseModelFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'findMany', never>>
+    ): Prisma.PrismaPromise<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'findMany'>>
 
     /**
      * Create a HSSubExpertiseModel.
@@ -9576,7 +9585,7 @@ export namespace Prisma {
     **/
     create<T extends HSSubExpertiseModelCreateArgs<ExtArgs>>(
       args: SelectSubset<T, HSSubExpertiseModelCreateArgs<ExtArgs>>
-    ): Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
+    ): Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
 
     /**
      * Create many HSSubExpertiseModels.
@@ -9608,7 +9617,7 @@ export namespace Prisma {
     **/
     delete<T extends HSSubExpertiseModelDeleteArgs<ExtArgs>>(
       args: SelectSubset<T, HSSubExpertiseModelDeleteArgs<ExtArgs>>
-    ): Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
+    ): Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
 
     /**
      * Update one HSSubExpertiseModel.
@@ -9627,7 +9636,7 @@ export namespace Prisma {
     **/
     update<T extends HSSubExpertiseModelUpdateArgs<ExtArgs>>(
       args: SelectSubset<T, HSSubExpertiseModelUpdateArgs<ExtArgs>>
-    ): Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
+    ): Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
 
     /**
      * Delete zero or more HSSubExpertiseModels.
@@ -9685,7 +9694,7 @@ export namespace Prisma {
     **/
     upsert<T extends HSSubExpertiseModelUpsertArgs<ExtArgs>>(
       args: SelectSubset<T, HSSubExpertiseModelUpsertArgs<ExtArgs>>
-    ): Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
+    ): Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
 
     /**
      * Count the number of HSSubExpertiseModels.
@@ -9764,7 +9773,7 @@ export namespace Prisma {
         ? { orderBy: HSSubExpertiseModelGroupByArgs['orderBy'] }
         : { orderBy?: HSSubExpertiseModelGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends TupleToUnion<T['by']>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -9812,7 +9821,10 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, HSSubExpertiseModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHSSubExpertiseModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-
+  /**
+   * Fields of the HSSubExpertiseModel model
+   */
+  readonly fields: HSSubExpertiseModelFieldRefs;
   }
 
   /**
@@ -9836,9 +9848,9 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    relations<T extends HSSubExpertiseModel$relationsArgs<ExtArgs> = {}>(args?: Subset<T, HSSubExpertiseModel$relationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'findMany', never>| Null>;
+    relations<T extends HSSubExpertiseModel$relationsArgs<ExtArgs> = {}>(args?: Subset<T, HSSubExpertiseModel$relationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'findMany'>| Null>;
 
-    super_expertise<T extends HSSuperExpertiseModelArgs<ExtArgs> = {}>(args?: Subset<T, HSSuperExpertiseModelArgs<ExtArgs>>): Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+    super_expertise<T extends HSSuperExpertiseModelArgs<ExtArgs> = {}>(args?: Subset<T, HSSuperExpertiseModelArgs<ExtArgs>>): Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
     private get _document();
     /**
@@ -9865,12 +9877,26 @@ export namespace Prisma {
 
 
 
+  /**
+   * Fields of the HSSubExpertiseModel model
+   */ 
+  interface HSSubExpertiseModelFieldRefs {
+    readonly id: FieldRef<"HSSubExpertiseModel", 'String'>
+    readonly created_at: FieldRef<"HSSubExpertiseModel", 'DateTime'>
+    readonly updated_at: FieldRef<"HSSubExpertiseModel", 'DateTime'>
+    readonly is_deleted: FieldRef<"HSSubExpertiseModel", 'Boolean'>
+    readonly deleted_at: FieldRef<"HSSubExpertiseModel", 'DateTime'>
+    readonly name: FieldRef<"HSSubExpertiseModel", 'String'>
+    readonly super_expertise_id: FieldRef<"HSSubExpertiseModel", 'String'>
+  }
+    
+
   // Custom InputTypes
 
   /**
-   * HSSubExpertiseModel base type for findUnique actions
+   * HSSubExpertiseModel findUnique
    */
-  export type HSSubExpertiseModelFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type HSSubExpertiseModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the HSSubExpertiseModel
      */
@@ -9885,17 +9911,6 @@ export namespace Prisma {
     where: HSSubExpertiseModelWhereUniqueInput
   }
 
-  /**
-   * HSSubExpertiseModel findUnique
-   */
-  export interface HSSubExpertiseModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends HSSubExpertiseModelFindUniqueArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * HSSubExpertiseModel findUniqueOrThrow
@@ -9917,9 +9932,9 @@ export namespace Prisma {
 
 
   /**
-   * HSSubExpertiseModel base type for findFirst actions
+   * HSSubExpertiseModel findFirst
    */
-  export type HSSubExpertiseModelFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type HSSubExpertiseModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the HSSubExpertiseModel
      */
@@ -9937,7 +9952,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSSubExpertiseModels to fetch.
      */
-    orderBy?: Enumerable<HSSubExpertiseModelOrderByWithRelationInput>
+    orderBy?: HSSubExpertiseModelOrderByWithRelationInput | HSSubExpertiseModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -9961,20 +9976,9 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of HSSubExpertiseModels.
      */
-    distinct?: Enumerable<HSSubExpertiseModelScalarFieldEnum>
+    distinct?: HSSubExpertiseModelScalarFieldEnum | HSSubExpertiseModelScalarFieldEnum[]
   }
 
-  /**
-   * HSSubExpertiseModel findFirst
-   */
-  export interface HSSubExpertiseModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends HSSubExpertiseModelFindFirstArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * HSSubExpertiseModel findFirstOrThrow
@@ -9997,7 +10001,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSSubExpertiseModels to fetch.
      */
-    orderBy?: Enumerable<HSSubExpertiseModelOrderByWithRelationInput>
+    orderBy?: HSSubExpertiseModelOrderByWithRelationInput | HSSubExpertiseModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -10021,7 +10025,7 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of HSSubExpertiseModels.
      */
-    distinct?: Enumerable<HSSubExpertiseModelScalarFieldEnum>
+    distinct?: HSSubExpertiseModelScalarFieldEnum | HSSubExpertiseModelScalarFieldEnum[]
   }
 
 
@@ -10046,7 +10050,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSSubExpertiseModels to fetch.
      */
-    orderBy?: Enumerable<HSSubExpertiseModelOrderByWithRelationInput>
+    orderBy?: HSSubExpertiseModelOrderByWithRelationInput | HSSubExpertiseModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -10065,7 +10069,7 @@ export namespace Prisma {
      * Skip the first `n` HSSubExpertiseModels.
      */
     skip?: number
-    distinct?: Enumerable<HSSubExpertiseModelScalarFieldEnum>
+    distinct?: HSSubExpertiseModelScalarFieldEnum | HSSubExpertiseModelScalarFieldEnum[]
   }
 
 
@@ -10095,7 +10099,7 @@ export namespace Prisma {
     /**
      * The data used to create many HSSubExpertiseModels.
      */
-    data: Enumerable<HSSubExpertiseModelCreateManyInput>
+    data: HSSubExpertiseModelCreateManyInput | HSSubExpertiseModelCreateManyInput[]
     skipDuplicates?: boolean
   }
 
@@ -10208,11 +10212,11 @@ export namespace Prisma {
      */
     include?: HSSubExpertiseRelationModelInclude<ExtArgs> | null
     where?: HSSubExpertiseRelationModelWhereInput
-    orderBy?: Enumerable<HSSubExpertiseRelationModelOrderByWithRelationInput>
+    orderBy?: HSSubExpertiseRelationModelOrderByWithRelationInput | HSSubExpertiseRelationModelOrderByWithRelationInput[]
     cursor?: HSSubExpertiseRelationModelWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Enumerable<HSSubExpertiseRelationModelScalarFieldEnum>
+    distinct?: HSSubExpertiseRelationModelScalarFieldEnum | HSSubExpertiseRelationModelScalarFieldEnum[]
   }
 
 
@@ -10310,7 +10314,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSSuperExpertiseModels to fetch.
      */
-    orderBy?: Enumerable<HSSuperExpertiseModelOrderByWithRelationInput>
+    orderBy?: HSSuperExpertiseModelOrderByWithRelationInput | HSSuperExpertiseModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -10362,8 +10366,8 @@ export namespace Prisma {
 
   export type HSSuperExpertiseModelGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: HSSuperExpertiseModelWhereInput
-    orderBy?: Enumerable<HSSuperExpertiseModelOrderByWithAggregationInput>
-    by: HSSuperExpertiseModelScalarFieldEnum[]
+    orderBy?: HSSuperExpertiseModelOrderByWithAggregationInput | HSSuperExpertiseModelOrderByWithAggregationInput[]
+    by: HSSuperExpertiseModelScalarFieldEnum[] | HSSuperExpertiseModelScalarFieldEnum
     having?: HSSuperExpertiseModelScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -10387,7 +10391,7 @@ export namespace Prisma {
 
   type GetHSSuperExpertiseModelGroupByPayload<T extends HSSuperExpertiseModelGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<HSSuperExpertiseModelGroupByOutputType, T['by']> &
+      PickEnumerable<HSSuperExpertiseModelGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof HSSuperExpertiseModelGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -10432,7 +10436,7 @@ export namespace Prisma {
       select?: HSSuperExpertiseModelCountAggregateInputType | true
     }
 
-  export interface HSSuperExpertiseModelDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+  export interface HSSuperExpertiseModelDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['HSSuperExpertiseModel'], meta: { name: 'HSSuperExpertiseModel' } }
     /**
      * Find zero or one HSSuperExpertiseModel that matches the filter.
@@ -10445,9 +10449,9 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findUnique<T extends HSSuperExpertiseModelFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findUnique<T extends HSSuperExpertiseModelFindUniqueArgs<ExtArgs>>(
       args: SelectSubset<T, HSSuperExpertiseModelFindUniqueArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'HSSuperExpertiseModel'> extends True ? Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
+    ): Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
 
     /**
      * Find one HSSuperExpertiseModel that matches the filter or throw an error  with `error.code='P2025'` 
@@ -10463,7 +10467,7 @@ export namespace Prisma {
     **/
     findUniqueOrThrow<T extends HSSuperExpertiseModelFindUniqueOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, HSSuperExpertiseModelFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
+    ): Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
 
     /**
      * Find the first HSSuperExpertiseModel that matches the filter.
@@ -10478,13 +10482,13 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findFirst<T extends HSSuperExpertiseModelFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findFirst<T extends HSSuperExpertiseModelFindFirstArgs<ExtArgs>>(
       args?: SelectSubset<T, HSSuperExpertiseModelFindFirstArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'HSSuperExpertiseModel'> extends True ? Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
+    ): Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
 
     /**
      * Find the first HSSuperExpertiseModel that matches the filter or
-     * throw `NotFoundError` if no matches were found.
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {HSSuperExpertiseModelFindFirstOrThrowArgs} args - Arguments to find a HSSuperExpertiseModel
@@ -10498,7 +10502,7 @@ export namespace Prisma {
     **/
     findFirstOrThrow<T extends HSSuperExpertiseModelFindFirstOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, HSSuperExpertiseModelFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
+    ): Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
 
     /**
      * Find zero or more HSSuperExpertiseModels that matches the filter.
@@ -10518,7 +10522,7 @@ export namespace Prisma {
     **/
     findMany<T extends HSSuperExpertiseModelFindManyArgs<ExtArgs>>(
       args?: SelectSubset<T, HSSuperExpertiseModelFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'findMany', never>>
+    ): Prisma.PrismaPromise<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'findMany'>>
 
     /**
      * Create a HSSuperExpertiseModel.
@@ -10534,7 +10538,7 @@ export namespace Prisma {
     **/
     create<T extends HSSuperExpertiseModelCreateArgs<ExtArgs>>(
       args: SelectSubset<T, HSSuperExpertiseModelCreateArgs<ExtArgs>>
-    ): Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
+    ): Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
 
     /**
      * Create many HSSuperExpertiseModels.
@@ -10566,7 +10570,7 @@ export namespace Prisma {
     **/
     delete<T extends HSSuperExpertiseModelDeleteArgs<ExtArgs>>(
       args: SelectSubset<T, HSSuperExpertiseModelDeleteArgs<ExtArgs>>
-    ): Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
+    ): Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
 
     /**
      * Update one HSSuperExpertiseModel.
@@ -10585,7 +10589,7 @@ export namespace Prisma {
     **/
     update<T extends HSSuperExpertiseModelUpdateArgs<ExtArgs>>(
       args: SelectSubset<T, HSSuperExpertiseModelUpdateArgs<ExtArgs>>
-    ): Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
+    ): Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
 
     /**
      * Delete zero or more HSSuperExpertiseModels.
@@ -10643,7 +10647,7 @@ export namespace Prisma {
     **/
     upsert<T extends HSSuperExpertiseModelUpsertArgs<ExtArgs>>(
       args: SelectSubset<T, HSSuperExpertiseModelUpsertArgs<ExtArgs>>
-    ): Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
+    ): Prisma__HSSuperExpertiseModelClient<$Types.GetResult<HSSuperExpertiseModelPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
 
     /**
      * Count the number of HSSuperExpertiseModels.
@@ -10722,7 +10726,7 @@ export namespace Prisma {
         ? { orderBy: HSSuperExpertiseModelGroupByArgs['orderBy'] }
         : { orderBy?: HSSuperExpertiseModelGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends TupleToUnion<T['by']>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -10770,7 +10774,10 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, HSSuperExpertiseModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHSSuperExpertiseModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-
+  /**
+   * Fields of the HSSuperExpertiseModel model
+   */
+  readonly fields: HSSuperExpertiseModelFieldRefs;
   }
 
   /**
@@ -10794,7 +10801,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    sub_expertises<T extends HSSuperExpertiseModel$sub_expertisesArgs<ExtArgs> = {}>(args?: Subset<T, HSSuperExpertiseModel$sub_expertisesArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'findMany', never>| Null>;
+    sub_expertises<T extends HSSuperExpertiseModel$sub_expertisesArgs<ExtArgs> = {}>(args?: Subset<T, HSSuperExpertiseModel$sub_expertisesArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'findMany'>| Null>;
 
     private get _document();
     /**
@@ -10821,12 +10828,25 @@ export namespace Prisma {
 
 
 
+  /**
+   * Fields of the HSSuperExpertiseModel model
+   */ 
+  interface HSSuperExpertiseModelFieldRefs {
+    readonly id: FieldRef<"HSSuperExpertiseModel", 'String'>
+    readonly created_at: FieldRef<"HSSuperExpertiseModel", 'DateTime'>
+    readonly updated_at: FieldRef<"HSSuperExpertiseModel", 'DateTime'>
+    readonly is_deleted: FieldRef<"HSSuperExpertiseModel", 'Boolean'>
+    readonly deleted_at: FieldRef<"HSSuperExpertiseModel", 'DateTime'>
+    readonly name: FieldRef<"HSSuperExpertiseModel", 'String'>
+  }
+    
+
   // Custom InputTypes
 
   /**
-   * HSSuperExpertiseModel base type for findUnique actions
+   * HSSuperExpertiseModel findUnique
    */
-  export type HSSuperExpertiseModelFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type HSSuperExpertiseModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the HSSuperExpertiseModel
      */
@@ -10841,17 +10861,6 @@ export namespace Prisma {
     where: HSSuperExpertiseModelWhereUniqueInput
   }
 
-  /**
-   * HSSuperExpertiseModel findUnique
-   */
-  export interface HSSuperExpertiseModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends HSSuperExpertiseModelFindUniqueArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * HSSuperExpertiseModel findUniqueOrThrow
@@ -10873,9 +10882,9 @@ export namespace Prisma {
 
 
   /**
-   * HSSuperExpertiseModel base type for findFirst actions
+   * HSSuperExpertiseModel findFirst
    */
-  export type HSSuperExpertiseModelFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type HSSuperExpertiseModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the HSSuperExpertiseModel
      */
@@ -10893,7 +10902,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSSuperExpertiseModels to fetch.
      */
-    orderBy?: Enumerable<HSSuperExpertiseModelOrderByWithRelationInput>
+    orderBy?: HSSuperExpertiseModelOrderByWithRelationInput | HSSuperExpertiseModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -10917,20 +10926,9 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of HSSuperExpertiseModels.
      */
-    distinct?: Enumerable<HSSuperExpertiseModelScalarFieldEnum>
+    distinct?: HSSuperExpertiseModelScalarFieldEnum | HSSuperExpertiseModelScalarFieldEnum[]
   }
 
-  /**
-   * HSSuperExpertiseModel findFirst
-   */
-  export interface HSSuperExpertiseModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends HSSuperExpertiseModelFindFirstArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * HSSuperExpertiseModel findFirstOrThrow
@@ -10953,7 +10951,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSSuperExpertiseModels to fetch.
      */
-    orderBy?: Enumerable<HSSuperExpertiseModelOrderByWithRelationInput>
+    orderBy?: HSSuperExpertiseModelOrderByWithRelationInput | HSSuperExpertiseModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -10977,7 +10975,7 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of HSSuperExpertiseModels.
      */
-    distinct?: Enumerable<HSSuperExpertiseModelScalarFieldEnum>
+    distinct?: HSSuperExpertiseModelScalarFieldEnum | HSSuperExpertiseModelScalarFieldEnum[]
   }
 
 
@@ -11002,7 +11000,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSSuperExpertiseModels to fetch.
      */
-    orderBy?: Enumerable<HSSuperExpertiseModelOrderByWithRelationInput>
+    orderBy?: HSSuperExpertiseModelOrderByWithRelationInput | HSSuperExpertiseModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -11021,7 +11019,7 @@ export namespace Prisma {
      * Skip the first `n` HSSuperExpertiseModels.
      */
     skip?: number
-    distinct?: Enumerable<HSSuperExpertiseModelScalarFieldEnum>
+    distinct?: HSSuperExpertiseModelScalarFieldEnum | HSSuperExpertiseModelScalarFieldEnum[]
   }
 
 
@@ -11051,7 +11049,7 @@ export namespace Prisma {
     /**
      * The data used to create many HSSuperExpertiseModels.
      */
-    data: Enumerable<HSSuperExpertiseModelCreateManyInput>
+    data: HSSuperExpertiseModelCreateManyInput | HSSuperExpertiseModelCreateManyInput[]
     skipDuplicates?: boolean
   }
 
@@ -11164,11 +11162,11 @@ export namespace Prisma {
      */
     include?: HSSubExpertiseModelInclude<ExtArgs> | null
     where?: HSSubExpertiseModelWhereInput
-    orderBy?: Enumerable<HSSubExpertiseModelOrderByWithRelationInput>
+    orderBy?: HSSubExpertiseModelOrderByWithRelationInput | HSSubExpertiseModelOrderByWithRelationInput[]
     cursor?: HSSubExpertiseModelWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Enumerable<HSSubExpertiseModelScalarFieldEnum>
+    distinct?: HSSubExpertiseModelScalarFieldEnum | HSSubExpertiseModelScalarFieldEnum[]
   }
 
 
@@ -11248,7 +11246,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSSubExpertiseRelationModels to fetch.
      */
-    orderBy?: Enumerable<HSSubExpertiseRelationModelOrderByWithRelationInput>
+    orderBy?: HSSubExpertiseRelationModelOrderByWithRelationInput | HSSubExpertiseRelationModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -11300,8 +11298,8 @@ export namespace Prisma {
 
   export type HSSubExpertiseRelationModelGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: HSSubExpertiseRelationModelWhereInput
-    orderBy?: Enumerable<HSSubExpertiseRelationModelOrderByWithAggregationInput>
-    by: HSSubExpertiseRelationModelScalarFieldEnum[]
+    orderBy?: HSSubExpertiseRelationModelOrderByWithAggregationInput | HSSubExpertiseRelationModelOrderByWithAggregationInput[]
+    by: HSSubExpertiseRelationModelScalarFieldEnum[] | HSSubExpertiseRelationModelScalarFieldEnum
     having?: HSSubExpertiseRelationModelScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -11322,7 +11320,7 @@ export namespace Prisma {
 
   type GetHSSubExpertiseRelationModelGroupByPayload<T extends HSSubExpertiseRelationModelGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<HSSubExpertiseRelationModelGroupByOutputType, T['by']> &
+      PickEnumerable<HSSubExpertiseRelationModelGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof HSSubExpertiseRelationModelGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -11361,7 +11359,7 @@ export namespace Prisma {
       select?: HSSubExpertiseRelationModelCountAggregateInputType | true
     }
 
-  export interface HSSubExpertiseRelationModelDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+  export interface HSSubExpertiseRelationModelDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['HSSubExpertiseRelationModel'], meta: { name: 'HSSubExpertiseRelationModel' } }
     /**
      * Find zero or one HSSubExpertiseRelationModel that matches the filter.
@@ -11374,9 +11372,9 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findUnique<T extends HSSubExpertiseRelationModelFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findUnique<T extends HSSubExpertiseRelationModelFindUniqueArgs<ExtArgs>>(
       args: SelectSubset<T, HSSubExpertiseRelationModelFindUniqueArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'HSSubExpertiseRelationModel'> extends True ? Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
+    ): Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
 
     /**
      * Find one HSSubExpertiseRelationModel that matches the filter or throw an error  with `error.code='P2025'` 
@@ -11392,7 +11390,7 @@ export namespace Prisma {
     **/
     findUniqueOrThrow<T extends HSSubExpertiseRelationModelFindUniqueOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, HSSubExpertiseRelationModelFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
+    ): Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
 
     /**
      * Find the first HSSubExpertiseRelationModel that matches the filter.
@@ -11407,13 +11405,13 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findFirst<T extends HSSubExpertiseRelationModelFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findFirst<T extends HSSubExpertiseRelationModelFindFirstArgs<ExtArgs>>(
       args?: SelectSubset<T, HSSubExpertiseRelationModelFindFirstArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'HSSubExpertiseRelationModel'> extends True ? Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
+    ): Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
 
     /**
      * Find the first HSSubExpertiseRelationModel that matches the filter or
-     * throw `NotFoundError` if no matches were found.
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {HSSubExpertiseRelationModelFindFirstOrThrowArgs} args - Arguments to find a HSSubExpertiseRelationModel
@@ -11427,7 +11425,7 @@ export namespace Prisma {
     **/
     findFirstOrThrow<T extends HSSubExpertiseRelationModelFindFirstOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, HSSubExpertiseRelationModelFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
+    ): Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
 
     /**
      * Find zero or more HSSubExpertiseRelationModels that matches the filter.
@@ -11447,7 +11445,7 @@ export namespace Prisma {
     **/
     findMany<T extends HSSubExpertiseRelationModelFindManyArgs<ExtArgs>>(
       args?: SelectSubset<T, HSSubExpertiseRelationModelFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'findMany', never>>
+    ): Prisma.PrismaPromise<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'findMany'>>
 
     /**
      * Create a HSSubExpertiseRelationModel.
@@ -11463,7 +11461,7 @@ export namespace Prisma {
     **/
     create<T extends HSSubExpertiseRelationModelCreateArgs<ExtArgs>>(
       args: SelectSubset<T, HSSubExpertiseRelationModelCreateArgs<ExtArgs>>
-    ): Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
+    ): Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
 
     /**
      * Create many HSSubExpertiseRelationModels.
@@ -11495,7 +11493,7 @@ export namespace Prisma {
     **/
     delete<T extends HSSubExpertiseRelationModelDeleteArgs<ExtArgs>>(
       args: SelectSubset<T, HSSubExpertiseRelationModelDeleteArgs<ExtArgs>>
-    ): Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
+    ): Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
 
     /**
      * Update one HSSubExpertiseRelationModel.
@@ -11514,7 +11512,7 @@ export namespace Prisma {
     **/
     update<T extends HSSubExpertiseRelationModelUpdateArgs<ExtArgs>>(
       args: SelectSubset<T, HSSubExpertiseRelationModelUpdateArgs<ExtArgs>>
-    ): Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
+    ): Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
 
     /**
      * Delete zero or more HSSubExpertiseRelationModels.
@@ -11572,7 +11570,7 @@ export namespace Prisma {
     **/
     upsert<T extends HSSubExpertiseRelationModelUpsertArgs<ExtArgs>>(
       args: SelectSubset<T, HSSubExpertiseRelationModelUpsertArgs<ExtArgs>>
-    ): Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
+    ): Prisma__HSSubExpertiseRelationModelClient<$Types.GetResult<HSSubExpertiseRelationModelPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
 
     /**
      * Count the number of HSSubExpertiseRelationModels.
@@ -11651,7 +11649,7 @@ export namespace Prisma {
         ? { orderBy: HSSubExpertiseRelationModelGroupByArgs['orderBy'] }
         : { orderBy?: HSSubExpertiseRelationModelGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends TupleToUnion<T['by']>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -11699,7 +11697,10 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, HSSubExpertiseRelationModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHSSubExpertiseRelationModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-
+  /**
+   * Fields of the HSSubExpertiseRelationModel model
+   */
+  readonly fields: HSSubExpertiseRelationModelFieldRefs;
   }
 
   /**
@@ -11723,9 +11724,9 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    hs_provider<T extends HSProviderModelArgs<ExtArgs> = {}>(args?: Subset<T, HSProviderModelArgs<ExtArgs>>): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+    hs_provider<T extends HSProviderModelArgs<ExtArgs> = {}>(args?: Subset<T, HSProviderModelArgs<ExtArgs>>): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
-    sub_expertise<T extends HSSubExpertiseModelArgs<ExtArgs> = {}>(args?: Subset<T, HSSubExpertiseModelArgs<ExtArgs>>): Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+    sub_expertise<T extends HSSubExpertiseModelArgs<ExtArgs> = {}>(args?: Subset<T, HSSubExpertiseModelArgs<ExtArgs>>): Prisma__HSSubExpertiseModelClient<$Types.GetResult<HSSubExpertiseModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
     private get _document();
     /**
@@ -11752,12 +11753,22 @@ export namespace Prisma {
 
 
 
+  /**
+   * Fields of the HSSubExpertiseRelationModel model
+   */ 
+  interface HSSubExpertiseRelationModelFieldRefs {
+    readonly id: FieldRef<"HSSubExpertiseRelationModel", 'String'>
+    readonly hs_provider_id: FieldRef<"HSSubExpertiseRelationModel", 'String'>
+    readonly sub_expertise_id: FieldRef<"HSSubExpertiseRelationModel", 'String'>
+  }
+    
+
   // Custom InputTypes
 
   /**
-   * HSSubExpertiseRelationModel base type for findUnique actions
+   * HSSubExpertiseRelationModel findUnique
    */
-  export type HSSubExpertiseRelationModelFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type HSSubExpertiseRelationModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the HSSubExpertiseRelationModel
      */
@@ -11772,17 +11783,6 @@ export namespace Prisma {
     where: HSSubExpertiseRelationModelWhereUniqueInput
   }
 
-  /**
-   * HSSubExpertiseRelationModel findUnique
-   */
-  export interface HSSubExpertiseRelationModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends HSSubExpertiseRelationModelFindUniqueArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * HSSubExpertiseRelationModel findUniqueOrThrow
@@ -11804,9 +11804,9 @@ export namespace Prisma {
 
 
   /**
-   * HSSubExpertiseRelationModel base type for findFirst actions
+   * HSSubExpertiseRelationModel findFirst
    */
-  export type HSSubExpertiseRelationModelFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type HSSubExpertiseRelationModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the HSSubExpertiseRelationModel
      */
@@ -11824,7 +11824,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSSubExpertiseRelationModels to fetch.
      */
-    orderBy?: Enumerable<HSSubExpertiseRelationModelOrderByWithRelationInput>
+    orderBy?: HSSubExpertiseRelationModelOrderByWithRelationInput | HSSubExpertiseRelationModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -11848,20 +11848,9 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of HSSubExpertiseRelationModels.
      */
-    distinct?: Enumerable<HSSubExpertiseRelationModelScalarFieldEnum>
+    distinct?: HSSubExpertiseRelationModelScalarFieldEnum | HSSubExpertiseRelationModelScalarFieldEnum[]
   }
 
-  /**
-   * HSSubExpertiseRelationModel findFirst
-   */
-  export interface HSSubExpertiseRelationModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends HSSubExpertiseRelationModelFindFirstArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * HSSubExpertiseRelationModel findFirstOrThrow
@@ -11884,7 +11873,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSSubExpertiseRelationModels to fetch.
      */
-    orderBy?: Enumerable<HSSubExpertiseRelationModelOrderByWithRelationInput>
+    orderBy?: HSSubExpertiseRelationModelOrderByWithRelationInput | HSSubExpertiseRelationModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -11908,7 +11897,7 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of HSSubExpertiseRelationModels.
      */
-    distinct?: Enumerable<HSSubExpertiseRelationModelScalarFieldEnum>
+    distinct?: HSSubExpertiseRelationModelScalarFieldEnum | HSSubExpertiseRelationModelScalarFieldEnum[]
   }
 
 
@@ -11933,7 +11922,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSSubExpertiseRelationModels to fetch.
      */
-    orderBy?: Enumerable<HSSubExpertiseRelationModelOrderByWithRelationInput>
+    orderBy?: HSSubExpertiseRelationModelOrderByWithRelationInput | HSSubExpertiseRelationModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -11952,7 +11941,7 @@ export namespace Prisma {
      * Skip the first `n` HSSubExpertiseRelationModels.
      */
     skip?: number
-    distinct?: Enumerable<HSSubExpertiseRelationModelScalarFieldEnum>
+    distinct?: HSSubExpertiseRelationModelScalarFieldEnum | HSSubExpertiseRelationModelScalarFieldEnum[]
   }
 
 
@@ -11982,7 +11971,7 @@ export namespace Prisma {
     /**
      * The data used to create many HSSubExpertiseRelationModels.
      */
-    data: Enumerable<HSSubExpertiseRelationModelCreateManyInput>
+    data: HSSubExpertiseRelationModelCreateManyInput | HSSubExpertiseRelationModelCreateManyInput[]
     skipDuplicates?: boolean
   }
 
@@ -12194,7 +12183,7 @@ export namespace Prisma {
      * 
      * Determine the order of REPortfolioModels to fetch.
      */
-    orderBy?: Enumerable<REPortfolioModelOrderByWithRelationInput>
+    orderBy?: REPortfolioModelOrderByWithRelationInput | REPortfolioModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -12246,8 +12235,8 @@ export namespace Prisma {
 
   export type REPortfolioModelGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: REPortfolioModelWhereInput
-    orderBy?: Enumerable<REPortfolioModelOrderByWithAggregationInput>
-    by: REPortfolioModelScalarFieldEnum[]
+    orderBy?: REPortfolioModelOrderByWithAggregationInput | REPortfolioModelOrderByWithAggregationInput[]
+    by: REPortfolioModelScalarFieldEnum[] | REPortfolioModelScalarFieldEnum
     having?: REPortfolioModelScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -12274,7 +12263,7 @@ export namespace Prisma {
 
   type GetREPortfolioModelGroupByPayload<T extends REPortfolioModelGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<REPortfolioModelGroupByOutputType, T['by']> &
+      PickEnumerable<REPortfolioModelGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof REPortfolioModelGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -12323,7 +12312,7 @@ export namespace Prisma {
       select?: REPortfolioModelCountAggregateInputType | true
     }
 
-  export interface REPortfolioModelDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+  export interface REPortfolioModelDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['REPortfolioModel'], meta: { name: 'REPortfolioModel' } }
     /**
      * Find zero or one REPortfolioModel that matches the filter.
@@ -12336,9 +12325,9 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findUnique<T extends REPortfolioModelFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findUnique<T extends REPortfolioModelFindUniqueArgs<ExtArgs>>(
       args: SelectSubset<T, REPortfolioModelFindUniqueArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'REPortfolioModel'> extends True ? Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
+    ): Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
 
     /**
      * Find one REPortfolioModel that matches the filter or throw an error  with `error.code='P2025'` 
@@ -12354,7 +12343,7 @@ export namespace Prisma {
     **/
     findUniqueOrThrow<T extends REPortfolioModelFindUniqueOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, REPortfolioModelFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
+    ): Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
 
     /**
      * Find the first REPortfolioModel that matches the filter.
@@ -12369,13 +12358,13 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findFirst<T extends REPortfolioModelFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findFirst<T extends REPortfolioModelFindFirstArgs<ExtArgs>>(
       args?: SelectSubset<T, REPortfolioModelFindFirstArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'REPortfolioModel'> extends True ? Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
+    ): Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
 
     /**
      * Find the first REPortfolioModel that matches the filter or
-     * throw `NotFoundError` if no matches were found.
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {REPortfolioModelFindFirstOrThrowArgs} args - Arguments to find a REPortfolioModel
@@ -12389,7 +12378,7 @@ export namespace Prisma {
     **/
     findFirstOrThrow<T extends REPortfolioModelFindFirstOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, REPortfolioModelFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
+    ): Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
 
     /**
      * Find zero or more REPortfolioModels that matches the filter.
@@ -12409,7 +12398,7 @@ export namespace Prisma {
     **/
     findMany<T extends REPortfolioModelFindManyArgs<ExtArgs>>(
       args?: SelectSubset<T, REPortfolioModelFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'findMany', never>>
+    ): Prisma.PrismaPromise<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'findMany'>>
 
     /**
      * Create a REPortfolioModel.
@@ -12425,7 +12414,7 @@ export namespace Prisma {
     **/
     create<T extends REPortfolioModelCreateArgs<ExtArgs>>(
       args: SelectSubset<T, REPortfolioModelCreateArgs<ExtArgs>>
-    ): Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
+    ): Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
 
     /**
      * Create many REPortfolioModels.
@@ -12457,7 +12446,7 @@ export namespace Prisma {
     **/
     delete<T extends REPortfolioModelDeleteArgs<ExtArgs>>(
       args: SelectSubset<T, REPortfolioModelDeleteArgs<ExtArgs>>
-    ): Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
+    ): Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
 
     /**
      * Update one REPortfolioModel.
@@ -12476,7 +12465,7 @@ export namespace Prisma {
     **/
     update<T extends REPortfolioModelUpdateArgs<ExtArgs>>(
       args: SelectSubset<T, REPortfolioModelUpdateArgs<ExtArgs>>
-    ): Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
+    ): Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
 
     /**
      * Delete zero or more REPortfolioModels.
@@ -12534,7 +12523,7 @@ export namespace Prisma {
     **/
     upsert<T extends REPortfolioModelUpsertArgs<ExtArgs>>(
       args: SelectSubset<T, REPortfolioModelUpsertArgs<ExtArgs>>
-    ): Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
+    ): Prisma__REPortfolioModelClient<$Types.GetResult<REPortfolioModelPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
 
     /**
      * Count the number of REPortfolioModels.
@@ -12613,7 +12602,7 @@ export namespace Prisma {
         ? { orderBy: REPortfolioModelGroupByArgs['orderBy'] }
         : { orderBy?: REPortfolioModelGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends TupleToUnion<T['by']>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -12661,7 +12650,10 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, REPortfolioModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetREPortfolioModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-
+  /**
+   * Fields of the REPortfolioModel model
+   */
+  readonly fields: REPortfolioModelFieldRefs;
   }
 
   /**
@@ -12685,7 +12677,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    re_agent<T extends REAgentModelArgs<ExtArgs> = {}>(args?: Subset<T, REAgentModelArgs<ExtArgs>>): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+    re_agent<T extends REAgentModelArgs<ExtArgs> = {}>(args?: Subset<T, REAgentModelArgs<ExtArgs>>): Prisma__REAgentModelClient<$Types.GetResult<REAgentModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
     private get _document();
     /**
@@ -12712,12 +12704,28 @@ export namespace Prisma {
 
 
 
+  /**
+   * Fields of the REPortfolioModel model
+   */ 
+  interface REPortfolioModelFieldRefs {
+    readonly id: FieldRef<"REPortfolioModel", 'String'>
+    readonly created_at: FieldRef<"REPortfolioModel", 'DateTime'>
+    readonly updated_at: FieldRef<"REPortfolioModel", 'DateTime'>
+    readonly is_deleted: FieldRef<"REPortfolioModel", 'Boolean'>
+    readonly deleted_at: FieldRef<"REPortfolioModel", 'DateTime'>
+    readonly re_agent_id: FieldRef<"REPortfolioModel", 'String'>
+    readonly title: FieldRef<"REPortfolioModel", 'String'>
+    readonly url: FieldRef<"REPortfolioModel", 'String'>
+    readonly is_visible: FieldRef<"REPortfolioModel", 'Boolean'>
+  }
+    
+
   // Custom InputTypes
 
   /**
-   * REPortfolioModel base type for findUnique actions
+   * REPortfolioModel findUnique
    */
-  export type REPortfolioModelFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type REPortfolioModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the REPortfolioModel
      */
@@ -12732,17 +12740,6 @@ export namespace Prisma {
     where: REPortfolioModelWhereUniqueInput
   }
 
-  /**
-   * REPortfolioModel findUnique
-   */
-  export interface REPortfolioModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends REPortfolioModelFindUniqueArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * REPortfolioModel findUniqueOrThrow
@@ -12764,9 +12761,9 @@ export namespace Prisma {
 
 
   /**
-   * REPortfolioModel base type for findFirst actions
+   * REPortfolioModel findFirst
    */
-  export type REPortfolioModelFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type REPortfolioModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the REPortfolioModel
      */
@@ -12784,7 +12781,7 @@ export namespace Prisma {
      * 
      * Determine the order of REPortfolioModels to fetch.
      */
-    orderBy?: Enumerable<REPortfolioModelOrderByWithRelationInput>
+    orderBy?: REPortfolioModelOrderByWithRelationInput | REPortfolioModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -12808,20 +12805,9 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of REPortfolioModels.
      */
-    distinct?: Enumerable<REPortfolioModelScalarFieldEnum>
+    distinct?: REPortfolioModelScalarFieldEnum | REPortfolioModelScalarFieldEnum[]
   }
 
-  /**
-   * REPortfolioModel findFirst
-   */
-  export interface REPortfolioModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends REPortfolioModelFindFirstArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * REPortfolioModel findFirstOrThrow
@@ -12844,7 +12830,7 @@ export namespace Prisma {
      * 
      * Determine the order of REPortfolioModels to fetch.
      */
-    orderBy?: Enumerable<REPortfolioModelOrderByWithRelationInput>
+    orderBy?: REPortfolioModelOrderByWithRelationInput | REPortfolioModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -12868,7 +12854,7 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of REPortfolioModels.
      */
-    distinct?: Enumerable<REPortfolioModelScalarFieldEnum>
+    distinct?: REPortfolioModelScalarFieldEnum | REPortfolioModelScalarFieldEnum[]
   }
 
 
@@ -12893,7 +12879,7 @@ export namespace Prisma {
      * 
      * Determine the order of REPortfolioModels to fetch.
      */
-    orderBy?: Enumerable<REPortfolioModelOrderByWithRelationInput>
+    orderBy?: REPortfolioModelOrderByWithRelationInput | REPortfolioModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -12912,7 +12898,7 @@ export namespace Prisma {
      * Skip the first `n` REPortfolioModels.
      */
     skip?: number
-    distinct?: Enumerable<REPortfolioModelScalarFieldEnum>
+    distinct?: REPortfolioModelScalarFieldEnum | REPortfolioModelScalarFieldEnum[]
   }
 
 
@@ -12942,7 +12928,7 @@ export namespace Prisma {
     /**
      * The data used to create many REPortfolioModels.
      */
-    data: Enumerable<REPortfolioModelCreateManyInput>
+    data: REPortfolioModelCreateManyInput | REPortfolioModelCreateManyInput[]
     skipDuplicates?: boolean
   }
 
@@ -13154,7 +13140,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSPortfolioModels to fetch.
      */
-    orderBy?: Enumerable<HSPortfolioModelOrderByWithRelationInput>
+    orderBy?: HSPortfolioModelOrderByWithRelationInput | HSPortfolioModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -13206,8 +13192,8 @@ export namespace Prisma {
 
   export type HSPortfolioModelGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: HSPortfolioModelWhereInput
-    orderBy?: Enumerable<HSPortfolioModelOrderByWithAggregationInput>
-    by: HSPortfolioModelScalarFieldEnum[]
+    orderBy?: HSPortfolioModelOrderByWithAggregationInput | HSPortfolioModelOrderByWithAggregationInput[]
+    by: HSPortfolioModelScalarFieldEnum[] | HSPortfolioModelScalarFieldEnum
     having?: HSPortfolioModelScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -13234,7 +13220,7 @@ export namespace Prisma {
 
   type GetHSPortfolioModelGroupByPayload<T extends HSPortfolioModelGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<HSPortfolioModelGroupByOutputType, T['by']> &
+      PickEnumerable<HSPortfolioModelGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof HSPortfolioModelGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -13283,7 +13269,7 @@ export namespace Prisma {
       select?: HSPortfolioModelCountAggregateInputType | true
     }
 
-  export interface HSPortfolioModelDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+  export interface HSPortfolioModelDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['HSPortfolioModel'], meta: { name: 'HSPortfolioModel' } }
     /**
      * Find zero or one HSPortfolioModel that matches the filter.
@@ -13296,9 +13282,9 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findUnique<T extends HSPortfolioModelFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findUnique<T extends HSPortfolioModelFindUniqueArgs<ExtArgs>>(
       args: SelectSubset<T, HSPortfolioModelFindUniqueArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'HSPortfolioModel'> extends True ? Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
+    ): Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
 
     /**
      * Find one HSPortfolioModel that matches the filter or throw an error  with `error.code='P2025'` 
@@ -13314,7 +13300,7 @@ export namespace Prisma {
     **/
     findUniqueOrThrow<T extends HSPortfolioModelFindUniqueOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, HSPortfolioModelFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
+    ): Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
 
     /**
      * Find the first HSPortfolioModel that matches the filter.
@@ -13329,13 +13315,13 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findFirst<T extends HSPortfolioModelFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findFirst<T extends HSPortfolioModelFindFirstArgs<ExtArgs>>(
       args?: SelectSubset<T, HSPortfolioModelFindFirstArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'HSPortfolioModel'> extends True ? Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
+    ): Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
 
     /**
      * Find the first HSPortfolioModel that matches the filter or
-     * throw `NotFoundError` if no matches were found.
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {HSPortfolioModelFindFirstOrThrowArgs} args - Arguments to find a HSPortfolioModel
@@ -13349,7 +13335,7 @@ export namespace Prisma {
     **/
     findFirstOrThrow<T extends HSPortfolioModelFindFirstOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, HSPortfolioModelFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
+    ): Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
 
     /**
      * Find zero or more HSPortfolioModels that matches the filter.
@@ -13369,7 +13355,7 @@ export namespace Prisma {
     **/
     findMany<T extends HSPortfolioModelFindManyArgs<ExtArgs>>(
       args?: SelectSubset<T, HSPortfolioModelFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'findMany', never>>
+    ): Prisma.PrismaPromise<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'findMany'>>
 
     /**
      * Create a HSPortfolioModel.
@@ -13385,7 +13371,7 @@ export namespace Prisma {
     **/
     create<T extends HSPortfolioModelCreateArgs<ExtArgs>>(
       args: SelectSubset<T, HSPortfolioModelCreateArgs<ExtArgs>>
-    ): Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
+    ): Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
 
     /**
      * Create many HSPortfolioModels.
@@ -13417,7 +13403,7 @@ export namespace Prisma {
     **/
     delete<T extends HSPortfolioModelDeleteArgs<ExtArgs>>(
       args: SelectSubset<T, HSPortfolioModelDeleteArgs<ExtArgs>>
-    ): Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
+    ): Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
 
     /**
      * Update one HSPortfolioModel.
@@ -13436,7 +13422,7 @@ export namespace Prisma {
     **/
     update<T extends HSPortfolioModelUpdateArgs<ExtArgs>>(
       args: SelectSubset<T, HSPortfolioModelUpdateArgs<ExtArgs>>
-    ): Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
+    ): Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
 
     /**
      * Delete zero or more HSPortfolioModels.
@@ -13494,7 +13480,7 @@ export namespace Prisma {
     **/
     upsert<T extends HSPortfolioModelUpsertArgs<ExtArgs>>(
       args: SelectSubset<T, HSPortfolioModelUpsertArgs<ExtArgs>>
-    ): Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
+    ): Prisma__HSPortfolioModelClient<$Types.GetResult<HSPortfolioModelPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
 
     /**
      * Count the number of HSPortfolioModels.
@@ -13573,7 +13559,7 @@ export namespace Prisma {
         ? { orderBy: HSPortfolioModelGroupByArgs['orderBy'] }
         : { orderBy?: HSPortfolioModelGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends TupleToUnion<T['by']>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -13621,7 +13607,10 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, HSPortfolioModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHSPortfolioModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-
+  /**
+   * Fields of the HSPortfolioModel model
+   */
+  readonly fields: HSPortfolioModelFieldRefs;
   }
 
   /**
@@ -13645,7 +13634,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    hs_provider<T extends HSProviderModelArgs<ExtArgs> = {}>(args?: Subset<T, HSProviderModelArgs<ExtArgs>>): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+    hs_provider<T extends HSProviderModelArgs<ExtArgs> = {}>(args?: Subset<T, HSProviderModelArgs<ExtArgs>>): Prisma__HSProviderModelClient<$Types.GetResult<HSProviderModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
     private get _document();
     /**
@@ -13672,12 +13661,28 @@ export namespace Prisma {
 
 
 
+  /**
+   * Fields of the HSPortfolioModel model
+   */ 
+  interface HSPortfolioModelFieldRefs {
+    readonly id: FieldRef<"HSPortfolioModel", 'String'>
+    readonly created_at: FieldRef<"HSPortfolioModel", 'DateTime'>
+    readonly updated_at: FieldRef<"HSPortfolioModel", 'DateTime'>
+    readonly is_deleted: FieldRef<"HSPortfolioModel", 'Boolean'>
+    readonly deleted_at: FieldRef<"HSPortfolioModel", 'DateTime'>
+    readonly hs_provider_id: FieldRef<"HSPortfolioModel", 'String'>
+    readonly title: FieldRef<"HSPortfolioModel", 'String'>
+    readonly url: FieldRef<"HSPortfolioModel", 'String'>
+    readonly is_visible: FieldRef<"HSPortfolioModel", 'Boolean'>
+  }
+    
+
   // Custom InputTypes
 
   /**
-   * HSPortfolioModel base type for findUnique actions
+   * HSPortfolioModel findUnique
    */
-  export type HSPortfolioModelFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type HSPortfolioModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the HSPortfolioModel
      */
@@ -13692,17 +13697,6 @@ export namespace Prisma {
     where: HSPortfolioModelWhereUniqueInput
   }
 
-  /**
-   * HSPortfolioModel findUnique
-   */
-  export interface HSPortfolioModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends HSPortfolioModelFindUniqueArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * HSPortfolioModel findUniqueOrThrow
@@ -13724,9 +13718,9 @@ export namespace Prisma {
 
 
   /**
-   * HSPortfolioModel base type for findFirst actions
+   * HSPortfolioModel findFirst
    */
-  export type HSPortfolioModelFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type HSPortfolioModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the HSPortfolioModel
      */
@@ -13744,7 +13738,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSPortfolioModels to fetch.
      */
-    orderBy?: Enumerable<HSPortfolioModelOrderByWithRelationInput>
+    orderBy?: HSPortfolioModelOrderByWithRelationInput | HSPortfolioModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -13768,20 +13762,9 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of HSPortfolioModels.
      */
-    distinct?: Enumerable<HSPortfolioModelScalarFieldEnum>
+    distinct?: HSPortfolioModelScalarFieldEnum | HSPortfolioModelScalarFieldEnum[]
   }
 
-  /**
-   * HSPortfolioModel findFirst
-   */
-  export interface HSPortfolioModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends HSPortfolioModelFindFirstArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * HSPortfolioModel findFirstOrThrow
@@ -13804,7 +13787,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSPortfolioModels to fetch.
      */
-    orderBy?: Enumerable<HSPortfolioModelOrderByWithRelationInput>
+    orderBy?: HSPortfolioModelOrderByWithRelationInput | HSPortfolioModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -13828,7 +13811,7 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of HSPortfolioModels.
      */
-    distinct?: Enumerable<HSPortfolioModelScalarFieldEnum>
+    distinct?: HSPortfolioModelScalarFieldEnum | HSPortfolioModelScalarFieldEnum[]
   }
 
 
@@ -13853,7 +13836,7 @@ export namespace Prisma {
      * 
      * Determine the order of HSPortfolioModels to fetch.
      */
-    orderBy?: Enumerable<HSPortfolioModelOrderByWithRelationInput>
+    orderBy?: HSPortfolioModelOrderByWithRelationInput | HSPortfolioModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -13872,7 +13855,7 @@ export namespace Prisma {
      * Skip the first `n` HSPortfolioModels.
      */
     skip?: number
-    distinct?: Enumerable<HSPortfolioModelScalarFieldEnum>
+    distinct?: HSPortfolioModelScalarFieldEnum | HSPortfolioModelScalarFieldEnum[]
   }
 
 
@@ -13902,7 +13885,7 @@ export namespace Prisma {
     /**
      * The data used to create many HSPortfolioModels.
      */
-    data: Enumerable<HSPortfolioModelCreateManyInput>
+    data: HSPortfolioModelCreateManyInput | HSPortfolioModelCreateManyInput[]
     skipDuplicates?: boolean
   }
 
@@ -14174,7 +14157,7 @@ export namespace Prisma {
      * 
      * Determine the order of OauthAccountModels to fetch.
      */
-    orderBy?: Enumerable<OauthAccountModelOrderByWithRelationInput>
+    orderBy?: OauthAccountModelOrderByWithRelationInput | OauthAccountModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -14226,8 +14209,8 @@ export namespace Prisma {
 
   export type OauthAccountModelGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: OauthAccountModelWhereInput
-    orderBy?: Enumerable<OauthAccountModelOrderByWithAggregationInput>
-    by: OauthAccountModelScalarFieldEnum[]
+    orderBy?: OauthAccountModelOrderByWithAggregationInput | OauthAccountModelOrderByWithAggregationInput[]
+    by: OauthAccountModelScalarFieldEnum[] | OauthAccountModelScalarFieldEnum
     having?: OauthAccountModelScalarWhereWithAggregatesInput
     take?: number
     skip?: number
@@ -14264,7 +14247,7 @@ export namespace Prisma {
 
   type GetOauthAccountModelGroupByPayload<T extends OauthAccountModelGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<OauthAccountModelGroupByOutputType, T['by']> &
+      PickEnumerable<OauthAccountModelGroupByOutputType, T['by']> &
         {
           [P in ((keyof T) & (keyof OauthAccountModelGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
@@ -14296,8 +14279,8 @@ export namespace Prisma {
     address_road?: boolean
     address_detail?: boolean
     address_extra?: boolean
-    client?: boolean | ClientModelArgs<ExtArgs>
-    biz_user?: boolean | BIZUserModelArgs<ExtArgs>
+    client?: boolean | OauthAccountModel$clientArgs<ExtArgs>
+    biz_user?: boolean | OauthAccountModel$biz_userArgs<ExtArgs>
   }, ExtArgs["result"]["oauthAccountModel"]>
 
   export type OauthAccountModelSelectScalar = {
@@ -14323,8 +14306,8 @@ export namespace Prisma {
   }
 
   export type OauthAccountModelInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    client?: boolean | ClientModelArgs<ExtArgs>
-    biz_user?: boolean | BIZUserModelArgs<ExtArgs>
+    client?: boolean | OauthAccountModel$clientArgs<ExtArgs>
+    biz_user?: boolean | OauthAccountModel$biz_userArgs<ExtArgs>
   }
 
 
@@ -14335,7 +14318,7 @@ export namespace Prisma {
       select?: OauthAccountModelCountAggregateInputType | true
     }
 
-  export interface OauthAccountModelDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+  export interface OauthAccountModelDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OauthAccountModel'], meta: { name: 'OauthAccountModel' } }
     /**
      * Find zero or one OauthAccountModel that matches the filter.
@@ -14348,9 +14331,9 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findUnique<T extends OauthAccountModelFindUniqueArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findUnique<T extends OauthAccountModelFindUniqueArgs<ExtArgs>>(
       args: SelectSubset<T, OauthAccountModelFindUniqueArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'OauthAccountModel'> extends True ? Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findUnique', never>, never, ExtArgs> : Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findUnique', never> | null, null, ExtArgs>
+    ): Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
 
     /**
      * Find one OauthAccountModel that matches the filter or throw an error  with `error.code='P2025'` 
@@ -14366,7 +14349,7 @@ export namespace Prisma {
     **/
     findUniqueOrThrow<T extends OauthAccountModelFindUniqueOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, OauthAccountModelFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findUniqueOrThrow', never>, never, ExtArgs>
+    ): Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
 
     /**
      * Find the first OauthAccountModel that matches the filter.
@@ -14381,13 +14364,13 @@ export namespace Prisma {
      *   }
      * })
     **/
-    findFirst<T extends OauthAccountModelFindFirstArgs<ExtArgs>, LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+    findFirst<T extends OauthAccountModelFindFirstArgs<ExtArgs>>(
       args?: SelectSubset<T, OauthAccountModelFindFirstArgs<ExtArgs>>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'OauthAccountModel'> extends True ? Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findFirst', never>, never, ExtArgs> : Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findFirst', never> | null, null, ExtArgs>
+    ): Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
 
     /**
      * Find the first OauthAccountModel that matches the filter or
-     * throw `NotFoundError` if no matches were found.
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
      * @param {OauthAccountModelFindFirstOrThrowArgs} args - Arguments to find a OauthAccountModel
@@ -14401,7 +14384,7 @@ export namespace Prisma {
     **/
     findFirstOrThrow<T extends OauthAccountModelFindFirstOrThrowArgs<ExtArgs>>(
       args?: SelectSubset<T, OauthAccountModelFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findFirstOrThrow', never>, never, ExtArgs>
+    ): Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
 
     /**
      * Find zero or more OauthAccountModels that matches the filter.
@@ -14421,7 +14404,7 @@ export namespace Prisma {
     **/
     findMany<T extends OauthAccountModelFindManyArgs<ExtArgs>>(
       args?: SelectSubset<T, OauthAccountModelFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findMany', never>>
+    ): Prisma.PrismaPromise<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findMany'>>
 
     /**
      * Create a OauthAccountModel.
@@ -14437,7 +14420,7 @@ export namespace Prisma {
     **/
     create<T extends OauthAccountModelCreateArgs<ExtArgs>>(
       args: SelectSubset<T, OauthAccountModelCreateArgs<ExtArgs>>
-    ): Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'create', never>, never, ExtArgs>
+    ): Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
 
     /**
      * Create many OauthAccountModels.
@@ -14469,7 +14452,7 @@ export namespace Prisma {
     **/
     delete<T extends OauthAccountModelDeleteArgs<ExtArgs>>(
       args: SelectSubset<T, OauthAccountModelDeleteArgs<ExtArgs>>
-    ): Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'delete', never>, never, ExtArgs>
+    ): Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
 
     /**
      * Update one OauthAccountModel.
@@ -14488,7 +14471,7 @@ export namespace Prisma {
     **/
     update<T extends OauthAccountModelUpdateArgs<ExtArgs>>(
       args: SelectSubset<T, OauthAccountModelUpdateArgs<ExtArgs>>
-    ): Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'update', never>, never, ExtArgs>
+    ): Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
 
     /**
      * Delete zero or more OauthAccountModels.
@@ -14546,7 +14529,7 @@ export namespace Prisma {
     **/
     upsert<T extends OauthAccountModelUpsertArgs<ExtArgs>>(
       args: SelectSubset<T, OauthAccountModelUpsertArgs<ExtArgs>>
-    ): Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'upsert', never>, never, ExtArgs>
+    ): Prisma__OauthAccountModelClient<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
 
     /**
      * Count the number of OauthAccountModels.
@@ -14625,7 +14608,7 @@ export namespace Prisma {
         ? { orderBy: OauthAccountModelGroupByArgs['orderBy'] }
         : { orderBy?: OauthAccountModelGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends TupleToUnion<T['by']>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
       HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
@@ -14673,7 +14656,10 @@ export namespace Prisma {
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
     >(args: SubsetIntersection<T, OauthAccountModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOauthAccountModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-
+  /**
+   * Fields of the OauthAccountModel model
+   */
+  readonly fields: OauthAccountModelFieldRefs;
   }
 
   /**
@@ -14697,9 +14683,9 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
     constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
 
-    client<T extends ClientModelArgs<ExtArgs> = {}>(args?: Subset<T, ClientModelArgs<ExtArgs>>): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+    client<T extends OauthAccountModel$clientArgs<ExtArgs> = {}>(args?: Subset<T, OauthAccountModel$clientArgs<ExtArgs>>): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
-    biz_user<T extends BIZUserModelArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModelArgs<ExtArgs>>): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findUnique', never> | Null, never, ExtArgs>;
+    biz_user<T extends OauthAccountModel$biz_userArgs<ExtArgs> = {}>(args?: Subset<T, OauthAccountModel$biz_userArgs<ExtArgs>>): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
     private get _document();
     /**
@@ -14726,12 +14712,38 @@ export namespace Prisma {
 
 
 
+  /**
+   * Fields of the OauthAccountModel model
+   */ 
+  interface OauthAccountModelFieldRefs {
+    readonly id: FieldRef<"OauthAccountModel", 'String'>
+    readonly created_at: FieldRef<"OauthAccountModel", 'DateTime'>
+    readonly updated_at: FieldRef<"OauthAccountModel", 'DateTime'>
+    readonly is_deleted: FieldRef<"OauthAccountModel", 'Boolean'>
+    readonly deleted_at: FieldRef<"OauthAccountModel", 'DateTime'>
+    readonly oauth_type: FieldRef<"OauthAccountModel", 'OauthType'>
+    readonly oauth_sub: FieldRef<"OauthAccountModel", 'String'>
+    readonly biz_user_id: FieldRef<"OauthAccountModel", 'String'>
+    readonly client_id: FieldRef<"OauthAccountModel", 'String'>
+    readonly name: FieldRef<"OauthAccountModel", 'String'>
+    readonly email: FieldRef<"OauthAccountModel", 'String'>
+    readonly phone: FieldRef<"OauthAccountModel", 'String'>
+    readonly profile_image_url: FieldRef<"OauthAccountModel", 'String'>
+    readonly birth: FieldRef<"OauthAccountModel", 'String'>
+    readonly gender: FieldRef<"OauthAccountModel", 'GenderType'>
+    readonly address_zone_code: FieldRef<"OauthAccountModel", 'String'>
+    readonly address_road: FieldRef<"OauthAccountModel", 'String'>
+    readonly address_detail: FieldRef<"OauthAccountModel", 'String'>
+    readonly address_extra: FieldRef<"OauthAccountModel", 'String'>
+  }
+    
+
   // Custom InputTypes
 
   /**
-   * OauthAccountModel base type for findUnique actions
+   * OauthAccountModel findUnique
    */
-  export type OauthAccountModelFindUniqueArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type OauthAccountModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the OauthAccountModel
      */
@@ -14746,17 +14758,6 @@ export namespace Prisma {
     where: OauthAccountModelWhereUniqueInput
   }
 
-  /**
-   * OauthAccountModel findUnique
-   */
-  export interface OauthAccountModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends OauthAccountModelFindUniqueArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * OauthAccountModel findUniqueOrThrow
@@ -14778,9 +14779,9 @@ export namespace Prisma {
 
 
   /**
-   * OauthAccountModel base type for findFirst actions
+   * OauthAccountModel findFirst
    */
-  export type OauthAccountModelFindFirstArgsBase<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type OauthAccountModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the OauthAccountModel
      */
@@ -14798,7 +14799,7 @@ export namespace Prisma {
      * 
      * Determine the order of OauthAccountModels to fetch.
      */
-    orderBy?: Enumerable<OauthAccountModelOrderByWithRelationInput>
+    orderBy?: OauthAccountModelOrderByWithRelationInput | OauthAccountModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -14822,20 +14823,9 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of OauthAccountModels.
      */
-    distinct?: Enumerable<OauthAccountModelScalarFieldEnum>
+    distinct?: OauthAccountModelScalarFieldEnum | OauthAccountModelScalarFieldEnum[]
   }
 
-  /**
-   * OauthAccountModel findFirst
-   */
-  export interface OauthAccountModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends OauthAccountModelFindFirstArgsBase<ExtArgs> {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
 
   /**
    * OauthAccountModel findFirstOrThrow
@@ -14858,7 +14848,7 @@ export namespace Prisma {
      * 
      * Determine the order of OauthAccountModels to fetch.
      */
-    orderBy?: Enumerable<OauthAccountModelOrderByWithRelationInput>
+    orderBy?: OauthAccountModelOrderByWithRelationInput | OauthAccountModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -14882,7 +14872,7 @@ export namespace Prisma {
      * 
      * Filter by unique combinations of OauthAccountModels.
      */
-    distinct?: Enumerable<OauthAccountModelScalarFieldEnum>
+    distinct?: OauthAccountModelScalarFieldEnum | OauthAccountModelScalarFieldEnum[]
   }
 
 
@@ -14907,7 +14897,7 @@ export namespace Prisma {
      * 
      * Determine the order of OauthAccountModels to fetch.
      */
-    orderBy?: Enumerable<OauthAccountModelOrderByWithRelationInput>
+    orderBy?: OauthAccountModelOrderByWithRelationInput | OauthAccountModelOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
@@ -14926,7 +14916,7 @@ export namespace Prisma {
      * Skip the first `n` OauthAccountModels.
      */
     skip?: number
-    distinct?: Enumerable<OauthAccountModelScalarFieldEnum>
+    distinct?: OauthAccountModelScalarFieldEnum | OauthAccountModelScalarFieldEnum[]
   }
 
 
@@ -14956,7 +14946,7 @@ export namespace Prisma {
     /**
      * The data used to create many OauthAccountModels.
      */
-    data: Enumerable<OauthAccountModelCreateManyInput>
+    data: OauthAccountModelCreateManyInput | OauthAccountModelCreateManyInput[]
     skipDuplicates?: boolean
   }
 
@@ -15053,6 +15043,38 @@ export namespace Prisma {
      * Filter which OauthAccountModels to delete
      */
     where?: OauthAccountModelWhereInput
+  }
+
+
+  /**
+   * OauthAccountModel.client
+   */
+  export type OauthAccountModel$clientArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClientModel
+     */
+    select?: ClientModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ClientModelInclude<ExtArgs> | null
+    where?: ClientModelWhereInput
+  }
+
+
+  /**
+   * OauthAccountModel.biz_user
+   */
+  export type OauthAccountModel$biz_userArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BIZUserModel
+     */
+    select?: BIZUserModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: BIZUserModelInclude<ExtArgs> | null
+    where?: BIZUserModelWhereInput
   }
 
 
@@ -15297,23 +15319,117 @@ export namespace Prisma {
 
 
   /**
+   * Field references 
+   */
+
+
+  /**
+   * Reference to a field of type 'String'
+   */
+  export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
+    
+
+
+  /**
+   * Reference to a field of type 'String[]'
+   */
+  export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime'
+   */
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime[]'
+   */
+  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'GenderType'
+   */
+  export type EnumGenderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GenderType'>
+    
+
+
+  /**
+   * Reference to a field of type 'GenderType[]'
+   */
+  export type ListEnumGenderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GenderType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ImageAccessType'
+   */
+  export type EnumImageAccessTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ImageAccessType'>
+    
+
+
+  /**
+   * Reference to a field of type 'ImageAccessType[]'
+   */
+  export type ListEnumImageAccessTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ImageAccessType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'OauthType'
+   */
+  export type EnumOauthTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OauthType'>
+    
+
+
+  /**
+   * Reference to a field of type 'OauthType[]'
+   */
+  export type ListEnumOauthTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OauthType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+  /**
    * Deep Input Types
    */
 
 
   export type UserModelWhereInput = {
-    AND?: Enumerable<UserModelWhereInput>
-    OR?: Enumerable<UserModelWhereInput>
-    NOT?: Enumerable<UserModelWhereInput>
-    id?: StringFilter | string
-    created_at?: DateTimeFilter | Date | string
-    updated_at?: DateTimeFilter | Date | string
-    is_deleted?: BoolFilter | boolean
-    deleted_at?: DateTimeNullableFilter | Date | string | null
-    name?: StringFilter | string
-    email?: StringNullableFilter | string | null
-    client?: XOR<ClientModelRelationFilter, ClientModelWhereInput> | null
-    biz_user?: XOR<BIZUserModelRelationFilter, BIZUserModelWhereInput> | null
+    AND?: UserModelWhereInput | UserModelWhereInput[]
+    OR?: UserModelWhereInput[]
+    NOT?: UserModelWhereInput | UserModelWhereInput[]
+    id?: StringFilter<"UserModel"> | string
+    created_at?: DateTimeFilter<"UserModel"> | Date | string
+    updated_at?: DateTimeFilter<"UserModel"> | Date | string
+    is_deleted?: BoolFilter<"UserModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"UserModel"> | Date | string | null
+    name?: StringFilter<"UserModel"> | string
+    email?: StringNullableFilter<"UserModel"> | string | null
+    client?: XOR<ClientModelNullableRelationFilter, ClientModelWhereInput> | null
+    biz_user?: XOR<BIZUserModelNullableRelationFilter, BIZUserModelWhereInput> | null
   }
 
   export type UserModelOrderByWithRelationInput = {
@@ -15328,9 +15444,20 @@ export namespace Prisma {
     biz_user?: BIZUserModelOrderByWithRelationInput
   }
 
-  export type UserModelWhereUniqueInput = {
+  export type UserModelWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-  }
+    AND?: UserModelWhereInput | UserModelWhereInput[]
+    OR?: UserModelWhereInput[]
+    NOT?: UserModelWhereInput | UserModelWhereInput[]
+    created_at?: DateTimeFilter<"UserModel"> | Date | string
+    updated_at?: DateTimeFilter<"UserModel"> | Date | string
+    is_deleted?: BoolFilter<"UserModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"UserModel"> | Date | string | null
+    name?: StringFilter<"UserModel"> | string
+    email?: StringNullableFilter<"UserModel"> | string | null
+    client?: XOR<ClientModelNullableRelationFilter, ClientModelWhereInput> | null
+    biz_user?: XOR<BIZUserModelNullableRelationFilter, BIZUserModelWhereInput> | null
+  }, "id">
 
   export type UserModelOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15346,31 +15473,31 @@ export namespace Prisma {
   }
 
   export type UserModelScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<UserModelScalarWhereWithAggregatesInput>
-    OR?: Enumerable<UserModelScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<UserModelScalarWhereWithAggregatesInput>
-    id?: StringWithAggregatesFilter | string
-    created_at?: DateTimeWithAggregatesFilter | Date | string
-    updated_at?: DateTimeWithAggregatesFilter | Date | string
-    is_deleted?: BoolWithAggregatesFilter | boolean
-    deleted_at?: DateTimeNullableWithAggregatesFilter | Date | string | null
-    name?: StringWithAggregatesFilter | string
-    email?: StringNullableWithAggregatesFilter | string | null
+    AND?: UserModelScalarWhereWithAggregatesInput | UserModelScalarWhereWithAggregatesInput[]
+    OR?: UserModelScalarWhereWithAggregatesInput[]
+    NOT?: UserModelScalarWhereWithAggregatesInput | UserModelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserModel"> | string
+    created_at?: DateTimeWithAggregatesFilter<"UserModel"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"UserModel"> | Date | string
+    is_deleted?: BoolWithAggregatesFilter<"UserModel"> | boolean
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"UserModel"> | Date | string | null
+    name?: StringWithAggregatesFilter<"UserModel"> | string
+    email?: StringNullableWithAggregatesFilter<"UserModel"> | string | null
   }
 
   export type ClientModelWhereInput = {
-    AND?: Enumerable<ClientModelWhereInput>
-    OR?: Enumerable<ClientModelWhereInput>
-    NOT?: Enumerable<ClientModelWhereInput>
-    id?: StringFilter | string
-    birth?: DateTimeNullableFilter | Date | string | null
-    gender?: EnumGenderTypeNullableFilter | GenderType | null
-    phone?: StringNullableFilter | string | null
-    address_zone_code?: StringNullableFilter | string | null
-    address_road?: StringNullableFilter | string | null
-    address_detail?: StringNullableFilter | string | null
-    address_extra?: StringNullableFilter | string | null
-    profile_image_url?: StringNullableFilter | string | null
+    AND?: ClientModelWhereInput | ClientModelWhereInput[]
+    OR?: ClientModelWhereInput[]
+    NOT?: ClientModelWhereInput | ClientModelWhereInput[]
+    id?: StringFilter<"ClientModel"> | string
+    birth?: DateTimeNullableFilter<"ClientModel"> | Date | string | null
+    gender?: EnumGenderTypeNullableFilter<"ClientModel"> | GenderType | null
+    phone?: StringNullableFilter<"ClientModel"> | string | null
+    address_zone_code?: StringNullableFilter<"ClientModel"> | string | null
+    address_road?: StringNullableFilter<"ClientModel"> | string | null
+    address_detail?: StringNullableFilter<"ClientModel"> | string | null
+    address_extra?: StringNullableFilter<"ClientModel"> | string | null
+    profile_image_url?: StringNullableFilter<"ClientModel"> | string | null
     base?: XOR<UserModelRelationFilter, UserModelWhereInput>
     oauth_accounts?: OauthAccountModelListRelationFilter
   }
@@ -15389,9 +15516,22 @@ export namespace Prisma {
     oauth_accounts?: OauthAccountModelOrderByRelationAggregateInput
   }
 
-  export type ClientModelWhereUniqueInput = {
+  export type ClientModelWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-  }
+    AND?: ClientModelWhereInput | ClientModelWhereInput[]
+    OR?: ClientModelWhereInput[]
+    NOT?: ClientModelWhereInput | ClientModelWhereInput[]
+    birth?: DateTimeNullableFilter<"ClientModel"> | Date | string | null
+    gender?: EnumGenderTypeNullableFilter<"ClientModel"> | GenderType | null
+    phone?: StringNullableFilter<"ClientModel"> | string | null
+    address_zone_code?: StringNullableFilter<"ClientModel"> | string | null
+    address_road?: StringNullableFilter<"ClientModel"> | string | null
+    address_detail?: StringNullableFilter<"ClientModel"> | string | null
+    address_extra?: StringNullableFilter<"ClientModel"> | string | null
+    profile_image_url?: StringNullableFilter<"ClientModel"> | string | null
+    base?: XOR<UserModelRelationFilter, UserModelWhereInput>
+    oauth_accounts?: OauthAccountModelListRelationFilter
+  }, "id">
 
   export type ClientModelOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15409,33 +15549,33 @@ export namespace Prisma {
   }
 
   export type ClientModelScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<ClientModelScalarWhereWithAggregatesInput>
-    OR?: Enumerable<ClientModelScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<ClientModelScalarWhereWithAggregatesInput>
-    id?: StringWithAggregatesFilter | string
-    birth?: DateTimeNullableWithAggregatesFilter | Date | string | null
-    gender?: EnumGenderTypeNullableWithAggregatesFilter | GenderType | null
-    phone?: StringNullableWithAggregatesFilter | string | null
-    address_zone_code?: StringNullableWithAggregatesFilter | string | null
-    address_road?: StringNullableWithAggregatesFilter | string | null
-    address_detail?: StringNullableWithAggregatesFilter | string | null
-    address_extra?: StringNullableWithAggregatesFilter | string | null
-    profile_image_url?: StringNullableWithAggregatesFilter | string | null
+    AND?: ClientModelScalarWhereWithAggregatesInput | ClientModelScalarWhereWithAggregatesInput[]
+    OR?: ClientModelScalarWhereWithAggregatesInput[]
+    NOT?: ClientModelScalarWhereWithAggregatesInput | ClientModelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ClientModel"> | string
+    birth?: DateTimeNullableWithAggregatesFilter<"ClientModel"> | Date | string | null
+    gender?: EnumGenderTypeNullableWithAggregatesFilter<"ClientModel"> | GenderType | null
+    phone?: StringNullableWithAggregatesFilter<"ClientModel"> | string | null
+    address_zone_code?: StringNullableWithAggregatesFilter<"ClientModel"> | string | null
+    address_road?: StringNullableWithAggregatesFilter<"ClientModel"> | string | null
+    address_detail?: StringNullableWithAggregatesFilter<"ClientModel"> | string | null
+    address_extra?: StringNullableWithAggregatesFilter<"ClientModel"> | string | null
+    profile_image_url?: StringNullableWithAggregatesFilter<"ClientModel"> | string | null
   }
 
   export type BIZUserModelWhereInput = {
-    AND?: Enumerable<BIZUserModelWhereInput>
-    OR?: Enumerable<BIZUserModelWhereInput>
-    NOT?: Enumerable<BIZUserModelWhereInput>
-    id?: StringFilter | string
-    is_verified?: BoolFilter | boolean
-    introduction_title?: StringFilter | string
-    introduction_content?: StringFilter | string
-    phone?: StringFilter | string
-    profile_image_url?: StringFilter | string
+    AND?: BIZUserModelWhereInput | BIZUserModelWhereInput[]
+    OR?: BIZUserModelWhereInput[]
+    NOT?: BIZUserModelWhereInput | BIZUserModelWhereInput[]
+    id?: StringFilter<"BIZUserModel"> | string
+    is_verified?: BoolFilter<"BIZUserModel"> | boolean
+    introduction_title?: StringFilter<"BIZUserModel"> | string
+    introduction_content?: StringFilter<"BIZUserModel"> | string
+    phone?: StringFilter<"BIZUserModel"> | string
+    profile_image_url?: StringFilter<"BIZUserModel"> | string
     base?: XOR<UserModelRelationFilter, UserModelWhereInput>
-    re_agent?: XOR<REAgentModelRelationFilter, REAgentModelWhereInput> | null
-    hs_provider?: XOR<HSProviderModelRelationFilter, HSProviderModelWhereInput> | null
+    re_agent?: XOR<REAgentModelNullableRelationFilter, REAgentModelWhereInput> | null
+    hs_provider?: XOR<HSProviderModelNullableRelationFilter, HSProviderModelWhereInput> | null
     oauth_accounts?: OauthAccountModelListRelationFilter
     biz_certification_images?: BIZCertificationImageModelListRelationFilter
   }
@@ -15454,9 +15594,22 @@ export namespace Prisma {
     biz_certification_images?: BIZCertificationImageModelOrderByRelationAggregateInput
   }
 
-  export type BIZUserModelWhereUniqueInput = {
+  export type BIZUserModelWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-  }
+    AND?: BIZUserModelWhereInput | BIZUserModelWhereInput[]
+    OR?: BIZUserModelWhereInput[]
+    NOT?: BIZUserModelWhereInput | BIZUserModelWhereInput[]
+    is_verified?: BoolFilter<"BIZUserModel"> | boolean
+    introduction_title?: StringFilter<"BIZUserModel"> | string
+    introduction_content?: StringFilter<"BIZUserModel"> | string
+    phone?: StringFilter<"BIZUserModel"> | string
+    profile_image_url?: StringFilter<"BIZUserModel"> | string
+    base?: XOR<UserModelRelationFilter, UserModelWhereInput>
+    re_agent?: XOR<REAgentModelNullableRelationFilter, REAgentModelWhereInput> | null
+    hs_provider?: XOR<HSProviderModelNullableRelationFilter, HSProviderModelWhereInput> | null
+    oauth_accounts?: OauthAccountModelListRelationFilter
+    biz_certification_images?: BIZCertificationImageModelListRelationFilter
+  }, "id">
 
   export type BIZUserModelOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15471,29 +15624,29 @@ export namespace Prisma {
   }
 
   export type BIZUserModelScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<BIZUserModelScalarWhereWithAggregatesInput>
-    OR?: Enumerable<BIZUserModelScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<BIZUserModelScalarWhereWithAggregatesInput>
-    id?: StringWithAggregatesFilter | string
-    is_verified?: BoolWithAggregatesFilter | boolean
-    introduction_title?: StringWithAggregatesFilter | string
-    introduction_content?: StringWithAggregatesFilter | string
-    phone?: StringWithAggregatesFilter | string
-    profile_image_url?: StringWithAggregatesFilter | string
+    AND?: BIZUserModelScalarWhereWithAggregatesInput | BIZUserModelScalarWhereWithAggregatesInput[]
+    OR?: BIZUserModelScalarWhereWithAggregatesInput[]
+    NOT?: BIZUserModelScalarWhereWithAggregatesInput | BIZUserModelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BIZUserModel"> | string
+    is_verified?: BoolWithAggregatesFilter<"BIZUserModel"> | boolean
+    introduction_title?: StringWithAggregatesFilter<"BIZUserModel"> | string
+    introduction_content?: StringWithAggregatesFilter<"BIZUserModel"> | string
+    phone?: StringWithAggregatesFilter<"BIZUserModel"> | string
+    profile_image_url?: StringWithAggregatesFilter<"BIZUserModel"> | string
   }
 
   export type BIZCertificationImageModelWhereInput = {
-    AND?: Enumerable<BIZCertificationImageModelWhereInput>
-    OR?: Enumerable<BIZCertificationImageModelWhereInput>
-    NOT?: Enumerable<BIZCertificationImageModelWhereInput>
-    id?: StringFilter | string
-    created_at?: DateTimeFilter | Date | string
-    updated_at?: DateTimeFilter | Date | string
-    is_deleted?: BoolFilter | boolean
-    deleted_at?: DateTimeNullableFilter | Date | string | null
-    biz_user_id?: StringFilter | string
-    url?: StringFilter | string
-    access_type?: EnumImageAccessTypeFilter | ImageAccessType
+    AND?: BIZCertificationImageModelWhereInput | BIZCertificationImageModelWhereInput[]
+    OR?: BIZCertificationImageModelWhereInput[]
+    NOT?: BIZCertificationImageModelWhereInput | BIZCertificationImageModelWhereInput[]
+    id?: StringFilter<"BIZCertificationImageModel"> | string
+    created_at?: DateTimeFilter<"BIZCertificationImageModel"> | Date | string
+    updated_at?: DateTimeFilter<"BIZCertificationImageModel"> | Date | string
+    is_deleted?: BoolFilter<"BIZCertificationImageModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"BIZCertificationImageModel"> | Date | string | null
+    biz_user_id?: StringFilter<"BIZCertificationImageModel"> | string
+    url?: StringFilter<"BIZCertificationImageModel"> | string
+    access_type?: EnumImageAccessTypeFilter<"BIZCertificationImageModel"> | ImageAccessType
     biz_user?: XOR<BIZUserModelRelationFilter, BIZUserModelWhereInput>
   }
 
@@ -15509,9 +15662,20 @@ export namespace Prisma {
     biz_user?: BIZUserModelOrderByWithRelationInput
   }
 
-  export type BIZCertificationImageModelWhereUniqueInput = {
+  export type BIZCertificationImageModelWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-  }
+    AND?: BIZCertificationImageModelWhereInput | BIZCertificationImageModelWhereInput[]
+    OR?: BIZCertificationImageModelWhereInput[]
+    NOT?: BIZCertificationImageModelWhereInput | BIZCertificationImageModelWhereInput[]
+    created_at?: DateTimeFilter<"BIZCertificationImageModel"> | Date | string
+    updated_at?: DateTimeFilter<"BIZCertificationImageModel"> | Date | string
+    is_deleted?: BoolFilter<"BIZCertificationImageModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"BIZCertificationImageModel"> | Date | string | null
+    biz_user_id?: StringFilter<"BIZCertificationImageModel"> | string
+    url?: StringFilter<"BIZCertificationImageModel"> | string
+    access_type?: EnumImageAccessTypeFilter<"BIZCertificationImageModel"> | ImageAccessType
+    biz_user?: XOR<BIZUserModelRelationFilter, BIZUserModelWhereInput>
+  }, "id">
 
   export type BIZCertificationImageModelOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15528,35 +15692,35 @@ export namespace Prisma {
   }
 
   export type BIZCertificationImageModelScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<BIZCertificationImageModelScalarWhereWithAggregatesInput>
-    OR?: Enumerable<BIZCertificationImageModelScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<BIZCertificationImageModelScalarWhereWithAggregatesInput>
-    id?: StringWithAggregatesFilter | string
-    created_at?: DateTimeWithAggregatesFilter | Date | string
-    updated_at?: DateTimeWithAggregatesFilter | Date | string
-    is_deleted?: BoolWithAggregatesFilter | boolean
-    deleted_at?: DateTimeNullableWithAggregatesFilter | Date | string | null
-    biz_user_id?: StringWithAggregatesFilter | string
-    url?: StringWithAggregatesFilter | string
-    access_type?: EnumImageAccessTypeWithAggregatesFilter | ImageAccessType
+    AND?: BIZCertificationImageModelScalarWhereWithAggregatesInput | BIZCertificationImageModelScalarWhereWithAggregatesInput[]
+    OR?: BIZCertificationImageModelScalarWhereWithAggregatesInput[]
+    NOT?: BIZCertificationImageModelScalarWhereWithAggregatesInput | BIZCertificationImageModelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BIZCertificationImageModel"> | string
+    created_at?: DateTimeWithAggregatesFilter<"BIZCertificationImageModel"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"BIZCertificationImageModel"> | Date | string
+    is_deleted?: BoolWithAggregatesFilter<"BIZCertificationImageModel"> | boolean
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"BIZCertificationImageModel"> | Date | string | null
+    biz_user_id?: StringWithAggregatesFilter<"BIZCertificationImageModel"> | string
+    url?: StringWithAggregatesFilter<"BIZCertificationImageModel"> | string
+    access_type?: EnumImageAccessTypeWithAggregatesFilter<"BIZCertificationImageModel"> | ImageAccessType
   }
 
   export type REAgentModelWhereInput = {
-    AND?: Enumerable<REAgentModelWhereInput>
-    OR?: Enumerable<REAgentModelWhereInput>
-    NOT?: Enumerable<REAgentModelWhereInput>
-    id?: StringFilter | string
-    is_licensed?: BoolFilter | boolean
-    expertise_id?: StringFilter | string
-    re_number?: StringFilter | string
-    re_name?: StringFilter | string
-    re_phone?: StringFilter | string
-    re_licensed_agent_name?: StringFilter | string
-    re_address_zone_code?: StringFilter | string
-    re_address_road?: StringFilter | string
-    re_address_detail?: StringNullableFilter | string | null
-    re_address_extra?: StringNullableFilter | string | null
-    biz_open_date?: DateTimeFilter | Date | string
+    AND?: REAgentModelWhereInput | REAgentModelWhereInput[]
+    OR?: REAgentModelWhereInput[]
+    NOT?: REAgentModelWhereInput | REAgentModelWhereInput[]
+    id?: StringFilter<"REAgentModel"> | string
+    is_licensed?: BoolFilter<"REAgentModel"> | boolean
+    expertise_id?: StringFilter<"REAgentModel"> | string
+    re_number?: StringFilter<"REAgentModel"> | string
+    re_name?: StringFilter<"REAgentModel"> | string
+    re_phone?: StringFilter<"REAgentModel"> | string
+    re_licensed_agent_name?: StringFilter<"REAgentModel"> | string
+    re_address_zone_code?: StringFilter<"REAgentModel"> | string
+    re_address_road?: StringFilter<"REAgentModel"> | string
+    re_address_detail?: StringNullableFilter<"REAgentModel"> | string | null
+    re_address_extra?: StringNullableFilter<"REAgentModel"> | string | null
+    biz_open_date?: DateTimeFilter<"REAgentModel"> | Date | string
     base?: XOR<BIZUserModelRelationFilter, BIZUserModelWhereInput>
     expertise?: XOR<REExpertiseModelRelationFilter, REExpertiseModelWhereInput>
     portfolios?: REPortfolioModelListRelationFilter
@@ -15580,9 +15744,26 @@ export namespace Prisma {
     portfolios?: REPortfolioModelOrderByRelationAggregateInput
   }
 
-  export type REAgentModelWhereUniqueInput = {
+  export type REAgentModelWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-  }
+    AND?: REAgentModelWhereInput | REAgentModelWhereInput[]
+    OR?: REAgentModelWhereInput[]
+    NOT?: REAgentModelWhereInput | REAgentModelWhereInput[]
+    is_licensed?: BoolFilter<"REAgentModel"> | boolean
+    expertise_id?: StringFilter<"REAgentModel"> | string
+    re_number?: StringFilter<"REAgentModel"> | string
+    re_name?: StringFilter<"REAgentModel"> | string
+    re_phone?: StringFilter<"REAgentModel"> | string
+    re_licensed_agent_name?: StringFilter<"REAgentModel"> | string
+    re_address_zone_code?: StringFilter<"REAgentModel"> | string
+    re_address_road?: StringFilter<"REAgentModel"> | string
+    re_address_detail?: StringNullableFilter<"REAgentModel"> | string | null
+    re_address_extra?: StringNullableFilter<"REAgentModel"> | string | null
+    biz_open_date?: DateTimeFilter<"REAgentModel"> | Date | string
+    base?: XOR<BIZUserModelRelationFilter, BIZUserModelWhereInput>
+    expertise?: XOR<REExpertiseModelRelationFilter, REExpertiseModelWhereInput>
+    portfolios?: REPortfolioModelListRelationFilter
+  }, "id">
 
   export type REAgentModelOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15603,33 +15784,33 @@ export namespace Prisma {
   }
 
   export type REAgentModelScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<REAgentModelScalarWhereWithAggregatesInput>
-    OR?: Enumerable<REAgentModelScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<REAgentModelScalarWhereWithAggregatesInput>
-    id?: StringWithAggregatesFilter | string
-    is_licensed?: BoolWithAggregatesFilter | boolean
-    expertise_id?: StringWithAggregatesFilter | string
-    re_number?: StringWithAggregatesFilter | string
-    re_name?: StringWithAggregatesFilter | string
-    re_phone?: StringWithAggregatesFilter | string
-    re_licensed_agent_name?: StringWithAggregatesFilter | string
-    re_address_zone_code?: StringWithAggregatesFilter | string
-    re_address_road?: StringWithAggregatesFilter | string
-    re_address_detail?: StringNullableWithAggregatesFilter | string | null
-    re_address_extra?: StringNullableWithAggregatesFilter | string | null
-    biz_open_date?: DateTimeWithAggregatesFilter | Date | string
+    AND?: REAgentModelScalarWhereWithAggregatesInput | REAgentModelScalarWhereWithAggregatesInput[]
+    OR?: REAgentModelScalarWhereWithAggregatesInput[]
+    NOT?: REAgentModelScalarWhereWithAggregatesInput | REAgentModelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"REAgentModel"> | string
+    is_licensed?: BoolWithAggregatesFilter<"REAgentModel"> | boolean
+    expertise_id?: StringWithAggregatesFilter<"REAgentModel"> | string
+    re_number?: StringWithAggregatesFilter<"REAgentModel"> | string
+    re_name?: StringWithAggregatesFilter<"REAgentModel"> | string
+    re_phone?: StringWithAggregatesFilter<"REAgentModel"> | string
+    re_licensed_agent_name?: StringWithAggregatesFilter<"REAgentModel"> | string
+    re_address_zone_code?: StringWithAggregatesFilter<"REAgentModel"> | string
+    re_address_road?: StringWithAggregatesFilter<"REAgentModel"> | string
+    re_address_detail?: StringNullableWithAggregatesFilter<"REAgentModel"> | string | null
+    re_address_extra?: StringNullableWithAggregatesFilter<"REAgentModel"> | string | null
+    biz_open_date?: DateTimeWithAggregatesFilter<"REAgentModel"> | Date | string
   }
 
   export type REExpertiseModelWhereInput = {
-    AND?: Enumerable<REExpertiseModelWhereInput>
-    OR?: Enumerable<REExpertiseModelWhereInput>
-    NOT?: Enumerable<REExpertiseModelWhereInput>
-    id?: StringFilter | string
-    created_at?: DateTimeFilter | Date | string
-    updated_at?: DateTimeFilter | Date | string
-    is_deleted?: BoolFilter | boolean
-    deleted_at?: DateTimeNullableFilter | Date | string | null
-    name?: StringFilter | string
+    AND?: REExpertiseModelWhereInput | REExpertiseModelWhereInput[]
+    OR?: REExpertiseModelWhereInput[]
+    NOT?: REExpertiseModelWhereInput | REExpertiseModelWhereInput[]
+    id?: StringFilter<"REExpertiseModel"> | string
+    created_at?: DateTimeFilter<"REExpertiseModel"> | Date | string
+    updated_at?: DateTimeFilter<"REExpertiseModel"> | Date | string
+    is_deleted?: BoolFilter<"REExpertiseModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"REExpertiseModel"> | Date | string | null
+    name?: StringFilter<"REExpertiseModel"> | string
     re_agents?: REAgentModelListRelationFilter
   }
 
@@ -15643,10 +15824,18 @@ export namespace Prisma {
     re_agents?: REAgentModelOrderByRelationAggregateInput
   }
 
-  export type REExpertiseModelWhereUniqueInput = {
+  export type REExpertiseModelWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     name?: string
-  }
+    AND?: REExpertiseModelWhereInput | REExpertiseModelWhereInput[]
+    OR?: REExpertiseModelWhereInput[]
+    NOT?: REExpertiseModelWhereInput | REExpertiseModelWhereInput[]
+    created_at?: DateTimeFilter<"REExpertiseModel"> | Date | string
+    updated_at?: DateTimeFilter<"REExpertiseModel"> | Date | string
+    is_deleted?: BoolFilter<"REExpertiseModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"REExpertiseModel"> | Date | string | null
+    re_agents?: REAgentModelListRelationFilter
+  }, "id" | "name">
 
   export type REExpertiseModelOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15661,28 +15850,28 @@ export namespace Prisma {
   }
 
   export type REExpertiseModelScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<REExpertiseModelScalarWhereWithAggregatesInput>
-    OR?: Enumerable<REExpertiseModelScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<REExpertiseModelScalarWhereWithAggregatesInput>
-    id?: StringWithAggregatesFilter | string
-    created_at?: DateTimeWithAggregatesFilter | Date | string
-    updated_at?: DateTimeWithAggregatesFilter | Date | string
-    is_deleted?: BoolWithAggregatesFilter | boolean
-    deleted_at?: DateTimeNullableWithAggregatesFilter | Date | string | null
-    name?: StringWithAggregatesFilter | string
+    AND?: REExpertiseModelScalarWhereWithAggregatesInput | REExpertiseModelScalarWhereWithAggregatesInput[]
+    OR?: REExpertiseModelScalarWhereWithAggregatesInput[]
+    NOT?: REExpertiseModelScalarWhereWithAggregatesInput | REExpertiseModelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"REExpertiseModel"> | string
+    created_at?: DateTimeWithAggregatesFilter<"REExpertiseModel"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"REExpertiseModel"> | Date | string
+    is_deleted?: BoolWithAggregatesFilter<"REExpertiseModel"> | boolean
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"REExpertiseModel"> | Date | string | null
+    name?: StringWithAggregatesFilter<"REExpertiseModel"> | string
   }
 
   export type HSProviderModelWhereInput = {
-    AND?: Enumerable<HSProviderModelWhereInput>
-    OR?: Enumerable<HSProviderModelWhereInput>
-    NOT?: Enumerable<HSProviderModelWhereInput>
-    id?: StringFilter | string
-    biz_registration_number?: StringFilter | string
-    address_zone_code?: StringFilter | string
-    address_road?: StringFilter | string
-    address_detail?: StringNullableFilter | string | null
-    address_extra?: StringNullableFilter | string | null
-    biz_open_date?: DateTimeFilter | Date | string
+    AND?: HSProviderModelWhereInput | HSProviderModelWhereInput[]
+    OR?: HSProviderModelWhereInput[]
+    NOT?: HSProviderModelWhereInput | HSProviderModelWhereInput[]
+    id?: StringFilter<"HSProviderModel"> | string
+    biz_registration_number?: StringFilter<"HSProviderModel"> | string
+    address_zone_code?: StringFilter<"HSProviderModel"> | string
+    address_road?: StringFilter<"HSProviderModel"> | string
+    address_detail?: StringNullableFilter<"HSProviderModel"> | string | null
+    address_extra?: StringNullableFilter<"HSProviderModel"> | string | null
+    biz_open_date?: DateTimeFilter<"HSProviderModel"> | Date | string
     base?: XOR<BIZUserModelRelationFilter, BIZUserModelWhereInput>
     expertise_relation?: HSSubExpertiseRelationModelListRelationFilter
     portfolios?: HSPortfolioModelListRelationFilter
@@ -15701,9 +15890,21 @@ export namespace Prisma {
     portfolios?: HSPortfolioModelOrderByRelationAggregateInput
   }
 
-  export type HSProviderModelWhereUniqueInput = {
+  export type HSProviderModelWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-  }
+    AND?: HSProviderModelWhereInput | HSProviderModelWhereInput[]
+    OR?: HSProviderModelWhereInput[]
+    NOT?: HSProviderModelWhereInput | HSProviderModelWhereInput[]
+    biz_registration_number?: StringFilter<"HSProviderModel"> | string
+    address_zone_code?: StringFilter<"HSProviderModel"> | string
+    address_road?: StringFilter<"HSProviderModel"> | string
+    address_detail?: StringNullableFilter<"HSProviderModel"> | string | null
+    address_extra?: StringNullableFilter<"HSProviderModel"> | string | null
+    biz_open_date?: DateTimeFilter<"HSProviderModel"> | Date | string
+    base?: XOR<BIZUserModelRelationFilter, BIZUserModelWhereInput>
+    expertise_relation?: HSSubExpertiseRelationModelListRelationFilter
+    portfolios?: HSPortfolioModelListRelationFilter
+  }, "id">
 
   export type HSProviderModelOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15719,29 +15920,29 @@ export namespace Prisma {
   }
 
   export type HSProviderModelScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<HSProviderModelScalarWhereWithAggregatesInput>
-    OR?: Enumerable<HSProviderModelScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<HSProviderModelScalarWhereWithAggregatesInput>
-    id?: StringWithAggregatesFilter | string
-    biz_registration_number?: StringWithAggregatesFilter | string
-    address_zone_code?: StringWithAggregatesFilter | string
-    address_road?: StringWithAggregatesFilter | string
-    address_detail?: StringNullableWithAggregatesFilter | string | null
-    address_extra?: StringNullableWithAggregatesFilter | string | null
-    biz_open_date?: DateTimeWithAggregatesFilter | Date | string
+    AND?: HSProviderModelScalarWhereWithAggregatesInput | HSProviderModelScalarWhereWithAggregatesInput[]
+    OR?: HSProviderModelScalarWhereWithAggregatesInput[]
+    NOT?: HSProviderModelScalarWhereWithAggregatesInput | HSProviderModelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"HSProviderModel"> | string
+    biz_registration_number?: StringWithAggregatesFilter<"HSProviderModel"> | string
+    address_zone_code?: StringWithAggregatesFilter<"HSProviderModel"> | string
+    address_road?: StringWithAggregatesFilter<"HSProviderModel"> | string
+    address_detail?: StringNullableWithAggregatesFilter<"HSProviderModel"> | string | null
+    address_extra?: StringNullableWithAggregatesFilter<"HSProviderModel"> | string | null
+    biz_open_date?: DateTimeWithAggregatesFilter<"HSProviderModel"> | Date | string
   }
 
   export type HSSubExpertiseModelWhereInput = {
-    AND?: Enumerable<HSSubExpertiseModelWhereInput>
-    OR?: Enumerable<HSSubExpertiseModelWhereInput>
-    NOT?: Enumerable<HSSubExpertiseModelWhereInput>
-    id?: StringFilter | string
-    created_at?: DateTimeFilter | Date | string
-    updated_at?: DateTimeFilter | Date | string
-    is_deleted?: BoolFilter | boolean
-    deleted_at?: DateTimeNullableFilter | Date | string | null
-    name?: StringFilter | string
-    super_expertise_id?: StringFilter | string
+    AND?: HSSubExpertiseModelWhereInput | HSSubExpertiseModelWhereInput[]
+    OR?: HSSubExpertiseModelWhereInput[]
+    NOT?: HSSubExpertiseModelWhereInput | HSSubExpertiseModelWhereInput[]
+    id?: StringFilter<"HSSubExpertiseModel"> | string
+    created_at?: DateTimeFilter<"HSSubExpertiseModel"> | Date | string
+    updated_at?: DateTimeFilter<"HSSubExpertiseModel"> | Date | string
+    is_deleted?: BoolFilter<"HSSubExpertiseModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"HSSubExpertiseModel"> | Date | string | null
+    name?: StringFilter<"HSSubExpertiseModel"> | string
+    super_expertise_id?: StringFilter<"HSSubExpertiseModel"> | string
     relations?: HSSubExpertiseRelationModelListRelationFilter
     super_expertise?: XOR<HSSuperExpertiseModelRelationFilter, HSSuperExpertiseModelWhereInput>
   }
@@ -15758,9 +15959,20 @@ export namespace Prisma {
     super_expertise?: HSSuperExpertiseModelOrderByWithRelationInput
   }
 
-  export type HSSubExpertiseModelWhereUniqueInput = {
+  export type HSSubExpertiseModelWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-  }
+    AND?: HSSubExpertiseModelWhereInput | HSSubExpertiseModelWhereInput[]
+    OR?: HSSubExpertiseModelWhereInput[]
+    NOT?: HSSubExpertiseModelWhereInput | HSSubExpertiseModelWhereInput[]
+    created_at?: DateTimeFilter<"HSSubExpertiseModel"> | Date | string
+    updated_at?: DateTimeFilter<"HSSubExpertiseModel"> | Date | string
+    is_deleted?: BoolFilter<"HSSubExpertiseModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"HSSubExpertiseModel"> | Date | string | null
+    name?: StringFilter<"HSSubExpertiseModel"> | string
+    super_expertise_id?: StringFilter<"HSSubExpertiseModel"> | string
+    relations?: HSSubExpertiseRelationModelListRelationFilter
+    super_expertise?: XOR<HSSuperExpertiseModelRelationFilter, HSSuperExpertiseModelWhereInput>
+  }, "id">
 
   export type HSSubExpertiseModelOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15776,28 +15988,28 @@ export namespace Prisma {
   }
 
   export type HSSubExpertiseModelScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<HSSubExpertiseModelScalarWhereWithAggregatesInput>
-    OR?: Enumerable<HSSubExpertiseModelScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<HSSubExpertiseModelScalarWhereWithAggregatesInput>
-    id?: StringWithAggregatesFilter | string
-    created_at?: DateTimeWithAggregatesFilter | Date | string
-    updated_at?: DateTimeWithAggregatesFilter | Date | string
-    is_deleted?: BoolWithAggregatesFilter | boolean
-    deleted_at?: DateTimeNullableWithAggregatesFilter | Date | string | null
-    name?: StringWithAggregatesFilter | string
-    super_expertise_id?: StringWithAggregatesFilter | string
+    AND?: HSSubExpertiseModelScalarWhereWithAggregatesInput | HSSubExpertiseModelScalarWhereWithAggregatesInput[]
+    OR?: HSSubExpertiseModelScalarWhereWithAggregatesInput[]
+    NOT?: HSSubExpertiseModelScalarWhereWithAggregatesInput | HSSubExpertiseModelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"HSSubExpertiseModel"> | string
+    created_at?: DateTimeWithAggregatesFilter<"HSSubExpertiseModel"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"HSSubExpertiseModel"> | Date | string
+    is_deleted?: BoolWithAggregatesFilter<"HSSubExpertiseModel"> | boolean
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"HSSubExpertiseModel"> | Date | string | null
+    name?: StringWithAggregatesFilter<"HSSubExpertiseModel"> | string
+    super_expertise_id?: StringWithAggregatesFilter<"HSSubExpertiseModel"> | string
   }
 
   export type HSSuperExpertiseModelWhereInput = {
-    AND?: Enumerable<HSSuperExpertiseModelWhereInput>
-    OR?: Enumerable<HSSuperExpertiseModelWhereInput>
-    NOT?: Enumerable<HSSuperExpertiseModelWhereInput>
-    id?: StringFilter | string
-    created_at?: DateTimeFilter | Date | string
-    updated_at?: DateTimeFilter | Date | string
-    is_deleted?: BoolFilter | boolean
-    deleted_at?: DateTimeNullableFilter | Date | string | null
-    name?: StringFilter | string
+    AND?: HSSuperExpertiseModelWhereInput | HSSuperExpertiseModelWhereInput[]
+    OR?: HSSuperExpertiseModelWhereInput[]
+    NOT?: HSSuperExpertiseModelWhereInput | HSSuperExpertiseModelWhereInput[]
+    id?: StringFilter<"HSSuperExpertiseModel"> | string
+    created_at?: DateTimeFilter<"HSSuperExpertiseModel"> | Date | string
+    updated_at?: DateTimeFilter<"HSSuperExpertiseModel"> | Date | string
+    is_deleted?: BoolFilter<"HSSuperExpertiseModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"HSSuperExpertiseModel"> | Date | string | null
+    name?: StringFilter<"HSSuperExpertiseModel"> | string
     sub_expertises?: HSSubExpertiseModelListRelationFilter
   }
 
@@ -15811,10 +16023,18 @@ export namespace Prisma {
     sub_expertises?: HSSubExpertiseModelOrderByRelationAggregateInput
   }
 
-  export type HSSuperExpertiseModelWhereUniqueInput = {
+  export type HSSuperExpertiseModelWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     name?: string
-  }
+    AND?: HSSuperExpertiseModelWhereInput | HSSuperExpertiseModelWhereInput[]
+    OR?: HSSuperExpertiseModelWhereInput[]
+    NOT?: HSSuperExpertiseModelWhereInput | HSSuperExpertiseModelWhereInput[]
+    created_at?: DateTimeFilter<"HSSuperExpertiseModel"> | Date | string
+    updated_at?: DateTimeFilter<"HSSuperExpertiseModel"> | Date | string
+    is_deleted?: BoolFilter<"HSSuperExpertiseModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"HSSuperExpertiseModel"> | Date | string | null
+    sub_expertises?: HSSubExpertiseModelListRelationFilter
+  }, "id" | "name">
 
   export type HSSuperExpertiseModelOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15829,24 +16049,24 @@ export namespace Prisma {
   }
 
   export type HSSuperExpertiseModelScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<HSSuperExpertiseModelScalarWhereWithAggregatesInput>
-    OR?: Enumerable<HSSuperExpertiseModelScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<HSSuperExpertiseModelScalarWhereWithAggregatesInput>
-    id?: StringWithAggregatesFilter | string
-    created_at?: DateTimeWithAggregatesFilter | Date | string
-    updated_at?: DateTimeWithAggregatesFilter | Date | string
-    is_deleted?: BoolWithAggregatesFilter | boolean
-    deleted_at?: DateTimeNullableWithAggregatesFilter | Date | string | null
-    name?: StringWithAggregatesFilter | string
+    AND?: HSSuperExpertiseModelScalarWhereWithAggregatesInput | HSSuperExpertiseModelScalarWhereWithAggregatesInput[]
+    OR?: HSSuperExpertiseModelScalarWhereWithAggregatesInput[]
+    NOT?: HSSuperExpertiseModelScalarWhereWithAggregatesInput | HSSuperExpertiseModelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"HSSuperExpertiseModel"> | string
+    created_at?: DateTimeWithAggregatesFilter<"HSSuperExpertiseModel"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"HSSuperExpertiseModel"> | Date | string
+    is_deleted?: BoolWithAggregatesFilter<"HSSuperExpertiseModel"> | boolean
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"HSSuperExpertiseModel"> | Date | string | null
+    name?: StringWithAggregatesFilter<"HSSuperExpertiseModel"> | string
   }
 
   export type HSSubExpertiseRelationModelWhereInput = {
-    AND?: Enumerable<HSSubExpertiseRelationModelWhereInput>
-    OR?: Enumerable<HSSubExpertiseRelationModelWhereInput>
-    NOT?: Enumerable<HSSubExpertiseRelationModelWhereInput>
-    id?: StringFilter | string
-    hs_provider_id?: StringFilter | string
-    sub_expertise_id?: StringFilter | string
+    AND?: HSSubExpertiseRelationModelWhereInput | HSSubExpertiseRelationModelWhereInput[]
+    OR?: HSSubExpertiseRelationModelWhereInput[]
+    NOT?: HSSubExpertiseRelationModelWhereInput | HSSubExpertiseRelationModelWhereInput[]
+    id?: StringFilter<"HSSubExpertiseRelationModel"> | string
+    hs_provider_id?: StringFilter<"HSSubExpertiseRelationModel"> | string
+    sub_expertise_id?: StringFilter<"HSSubExpertiseRelationModel"> | string
     hs_provider?: XOR<HSProviderModelRelationFilter, HSProviderModelWhereInput>
     sub_expertise?: XOR<HSSubExpertiseModelRelationFilter, HSSubExpertiseModelWhereInput>
   }
@@ -15859,10 +16079,17 @@ export namespace Prisma {
     sub_expertise?: HSSubExpertiseModelOrderByWithRelationInput
   }
 
-  export type HSSubExpertiseRelationModelWhereUniqueInput = {
+  export type HSSubExpertiseRelationModelWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     hs_provider_id_sub_expertise_id?: HSSubExpertiseRelationModelHs_provider_idSub_expertise_idCompoundUniqueInput
-  }
+    AND?: HSSubExpertiseRelationModelWhereInput | HSSubExpertiseRelationModelWhereInput[]
+    OR?: HSSubExpertiseRelationModelWhereInput[]
+    NOT?: HSSubExpertiseRelationModelWhereInput | HSSubExpertiseRelationModelWhereInput[]
+    hs_provider_id?: StringFilter<"HSSubExpertiseRelationModel"> | string
+    sub_expertise_id?: StringFilter<"HSSubExpertiseRelationModel"> | string
+    hs_provider?: XOR<HSProviderModelRelationFilter, HSProviderModelWhereInput>
+    sub_expertise?: XOR<HSSubExpertiseModelRelationFilter, HSSubExpertiseModelWhereInput>
+  }, "id" | "hs_provider_id_sub_expertise_id">
 
   export type HSSubExpertiseRelationModelOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15874,27 +16101,27 @@ export namespace Prisma {
   }
 
   export type HSSubExpertiseRelationModelScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<HSSubExpertiseRelationModelScalarWhereWithAggregatesInput>
-    OR?: Enumerable<HSSubExpertiseRelationModelScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<HSSubExpertiseRelationModelScalarWhereWithAggregatesInput>
-    id?: StringWithAggregatesFilter | string
-    hs_provider_id?: StringWithAggregatesFilter | string
-    sub_expertise_id?: StringWithAggregatesFilter | string
+    AND?: HSSubExpertiseRelationModelScalarWhereWithAggregatesInput | HSSubExpertiseRelationModelScalarWhereWithAggregatesInput[]
+    OR?: HSSubExpertiseRelationModelScalarWhereWithAggregatesInput[]
+    NOT?: HSSubExpertiseRelationModelScalarWhereWithAggregatesInput | HSSubExpertiseRelationModelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"HSSubExpertiseRelationModel"> | string
+    hs_provider_id?: StringWithAggregatesFilter<"HSSubExpertiseRelationModel"> | string
+    sub_expertise_id?: StringWithAggregatesFilter<"HSSubExpertiseRelationModel"> | string
   }
 
   export type REPortfolioModelWhereInput = {
-    AND?: Enumerable<REPortfolioModelWhereInput>
-    OR?: Enumerable<REPortfolioModelWhereInput>
-    NOT?: Enumerable<REPortfolioModelWhereInput>
-    id?: StringFilter | string
-    created_at?: DateTimeFilter | Date | string
-    updated_at?: DateTimeFilter | Date | string
-    is_deleted?: BoolFilter | boolean
-    deleted_at?: DateTimeNullableFilter | Date | string | null
-    re_agent_id?: StringFilter | string
-    title?: StringFilter | string
-    url?: StringFilter | string
-    is_visible?: BoolFilter | boolean
+    AND?: REPortfolioModelWhereInput | REPortfolioModelWhereInput[]
+    OR?: REPortfolioModelWhereInput[]
+    NOT?: REPortfolioModelWhereInput | REPortfolioModelWhereInput[]
+    id?: StringFilter<"REPortfolioModel"> | string
+    created_at?: DateTimeFilter<"REPortfolioModel"> | Date | string
+    updated_at?: DateTimeFilter<"REPortfolioModel"> | Date | string
+    is_deleted?: BoolFilter<"REPortfolioModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"REPortfolioModel"> | Date | string | null
+    re_agent_id?: StringFilter<"REPortfolioModel"> | string
+    title?: StringFilter<"REPortfolioModel"> | string
+    url?: StringFilter<"REPortfolioModel"> | string
+    is_visible?: BoolFilter<"REPortfolioModel"> | boolean
     re_agent?: XOR<REAgentModelRelationFilter, REAgentModelWhereInput>
   }
 
@@ -15911,9 +16138,21 @@ export namespace Prisma {
     re_agent?: REAgentModelOrderByWithRelationInput
   }
 
-  export type REPortfolioModelWhereUniqueInput = {
+  export type REPortfolioModelWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-  }
+    AND?: REPortfolioModelWhereInput | REPortfolioModelWhereInput[]
+    OR?: REPortfolioModelWhereInput[]
+    NOT?: REPortfolioModelWhereInput | REPortfolioModelWhereInput[]
+    created_at?: DateTimeFilter<"REPortfolioModel"> | Date | string
+    updated_at?: DateTimeFilter<"REPortfolioModel"> | Date | string
+    is_deleted?: BoolFilter<"REPortfolioModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"REPortfolioModel"> | Date | string | null
+    re_agent_id?: StringFilter<"REPortfolioModel"> | string
+    title?: StringFilter<"REPortfolioModel"> | string
+    url?: StringFilter<"REPortfolioModel"> | string
+    is_visible?: BoolFilter<"REPortfolioModel"> | boolean
+    re_agent?: XOR<REAgentModelRelationFilter, REAgentModelWhereInput>
+  }, "id">
 
   export type REPortfolioModelOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15931,33 +16170,33 @@ export namespace Prisma {
   }
 
   export type REPortfolioModelScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<REPortfolioModelScalarWhereWithAggregatesInput>
-    OR?: Enumerable<REPortfolioModelScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<REPortfolioModelScalarWhereWithAggregatesInput>
-    id?: StringWithAggregatesFilter | string
-    created_at?: DateTimeWithAggregatesFilter | Date | string
-    updated_at?: DateTimeWithAggregatesFilter | Date | string
-    is_deleted?: BoolWithAggregatesFilter | boolean
-    deleted_at?: DateTimeNullableWithAggregatesFilter | Date | string | null
-    re_agent_id?: StringWithAggregatesFilter | string
-    title?: StringWithAggregatesFilter | string
-    url?: StringWithAggregatesFilter | string
-    is_visible?: BoolWithAggregatesFilter | boolean
+    AND?: REPortfolioModelScalarWhereWithAggregatesInput | REPortfolioModelScalarWhereWithAggregatesInput[]
+    OR?: REPortfolioModelScalarWhereWithAggregatesInput[]
+    NOT?: REPortfolioModelScalarWhereWithAggregatesInput | REPortfolioModelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"REPortfolioModel"> | string
+    created_at?: DateTimeWithAggregatesFilter<"REPortfolioModel"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"REPortfolioModel"> | Date | string
+    is_deleted?: BoolWithAggregatesFilter<"REPortfolioModel"> | boolean
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"REPortfolioModel"> | Date | string | null
+    re_agent_id?: StringWithAggregatesFilter<"REPortfolioModel"> | string
+    title?: StringWithAggregatesFilter<"REPortfolioModel"> | string
+    url?: StringWithAggregatesFilter<"REPortfolioModel"> | string
+    is_visible?: BoolWithAggregatesFilter<"REPortfolioModel"> | boolean
   }
 
   export type HSPortfolioModelWhereInput = {
-    AND?: Enumerable<HSPortfolioModelWhereInput>
-    OR?: Enumerable<HSPortfolioModelWhereInput>
-    NOT?: Enumerable<HSPortfolioModelWhereInput>
-    id?: StringFilter | string
-    created_at?: DateTimeFilter | Date | string
-    updated_at?: DateTimeFilter | Date | string
-    is_deleted?: BoolFilter | boolean
-    deleted_at?: DateTimeNullableFilter | Date | string | null
-    hs_provider_id?: StringFilter | string
-    title?: StringFilter | string
-    url?: StringFilter | string
-    is_visible?: BoolFilter | boolean
+    AND?: HSPortfolioModelWhereInput | HSPortfolioModelWhereInput[]
+    OR?: HSPortfolioModelWhereInput[]
+    NOT?: HSPortfolioModelWhereInput | HSPortfolioModelWhereInput[]
+    id?: StringFilter<"HSPortfolioModel"> | string
+    created_at?: DateTimeFilter<"HSPortfolioModel"> | Date | string
+    updated_at?: DateTimeFilter<"HSPortfolioModel"> | Date | string
+    is_deleted?: BoolFilter<"HSPortfolioModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"HSPortfolioModel"> | Date | string | null
+    hs_provider_id?: StringFilter<"HSPortfolioModel"> | string
+    title?: StringFilter<"HSPortfolioModel"> | string
+    url?: StringFilter<"HSPortfolioModel"> | string
+    is_visible?: BoolFilter<"HSPortfolioModel"> | boolean
     hs_provider?: XOR<HSProviderModelRelationFilter, HSProviderModelWhereInput>
   }
 
@@ -15974,9 +16213,21 @@ export namespace Prisma {
     hs_provider?: HSProviderModelOrderByWithRelationInput
   }
 
-  export type HSPortfolioModelWhereUniqueInput = {
+  export type HSPortfolioModelWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-  }
+    AND?: HSPortfolioModelWhereInput | HSPortfolioModelWhereInput[]
+    OR?: HSPortfolioModelWhereInput[]
+    NOT?: HSPortfolioModelWhereInput | HSPortfolioModelWhereInput[]
+    created_at?: DateTimeFilter<"HSPortfolioModel"> | Date | string
+    updated_at?: DateTimeFilter<"HSPortfolioModel"> | Date | string
+    is_deleted?: BoolFilter<"HSPortfolioModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"HSPortfolioModel"> | Date | string | null
+    hs_provider_id?: StringFilter<"HSPortfolioModel"> | string
+    title?: StringFilter<"HSPortfolioModel"> | string
+    url?: StringFilter<"HSPortfolioModel"> | string
+    is_visible?: BoolFilter<"HSPortfolioModel"> | boolean
+    hs_provider?: XOR<HSProviderModelRelationFilter, HSProviderModelWhereInput>
+  }, "id">
 
   export type HSPortfolioModelOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15994,45 +16245,45 @@ export namespace Prisma {
   }
 
   export type HSPortfolioModelScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<HSPortfolioModelScalarWhereWithAggregatesInput>
-    OR?: Enumerable<HSPortfolioModelScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<HSPortfolioModelScalarWhereWithAggregatesInput>
-    id?: StringWithAggregatesFilter | string
-    created_at?: DateTimeWithAggregatesFilter | Date | string
-    updated_at?: DateTimeWithAggregatesFilter | Date | string
-    is_deleted?: BoolWithAggregatesFilter | boolean
-    deleted_at?: DateTimeNullableWithAggregatesFilter | Date | string | null
-    hs_provider_id?: StringWithAggregatesFilter | string
-    title?: StringWithAggregatesFilter | string
-    url?: StringWithAggregatesFilter | string
-    is_visible?: BoolWithAggregatesFilter | boolean
+    AND?: HSPortfolioModelScalarWhereWithAggregatesInput | HSPortfolioModelScalarWhereWithAggregatesInput[]
+    OR?: HSPortfolioModelScalarWhereWithAggregatesInput[]
+    NOT?: HSPortfolioModelScalarWhereWithAggregatesInput | HSPortfolioModelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"HSPortfolioModel"> | string
+    created_at?: DateTimeWithAggregatesFilter<"HSPortfolioModel"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"HSPortfolioModel"> | Date | string
+    is_deleted?: BoolWithAggregatesFilter<"HSPortfolioModel"> | boolean
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"HSPortfolioModel"> | Date | string | null
+    hs_provider_id?: StringWithAggregatesFilter<"HSPortfolioModel"> | string
+    title?: StringWithAggregatesFilter<"HSPortfolioModel"> | string
+    url?: StringWithAggregatesFilter<"HSPortfolioModel"> | string
+    is_visible?: BoolWithAggregatesFilter<"HSPortfolioModel"> | boolean
   }
 
   export type OauthAccountModelWhereInput = {
-    AND?: Enumerable<OauthAccountModelWhereInput>
-    OR?: Enumerable<OauthAccountModelWhereInput>
-    NOT?: Enumerable<OauthAccountModelWhereInput>
-    id?: StringFilter | string
-    created_at?: DateTimeFilter | Date | string
-    updated_at?: DateTimeFilter | Date | string
-    is_deleted?: BoolFilter | boolean
-    deleted_at?: DateTimeNullableFilter | Date | string | null
-    oauth_type?: EnumOauthTypeFilter | OauthType
-    oauth_sub?: StringFilter | string
-    biz_user_id?: StringNullableFilter | string | null
-    client_id?: StringNullableFilter | string | null
-    name?: StringNullableFilter | string | null
-    email?: StringNullableFilter | string | null
-    phone?: StringNullableFilter | string | null
-    profile_image_url?: StringNullableFilter | string | null
-    birth?: StringNullableFilter | string | null
-    gender?: EnumGenderTypeNullableFilter | GenderType | null
-    address_zone_code?: StringNullableFilter | string | null
-    address_road?: StringNullableFilter | string | null
-    address_detail?: StringNullableFilter | string | null
-    address_extra?: StringNullableFilter | string | null
-    client?: XOR<ClientModelRelationFilter, ClientModelWhereInput> | null
-    biz_user?: XOR<BIZUserModelRelationFilter, BIZUserModelWhereInput> | null
+    AND?: OauthAccountModelWhereInput | OauthAccountModelWhereInput[]
+    OR?: OauthAccountModelWhereInput[]
+    NOT?: OauthAccountModelWhereInput | OauthAccountModelWhereInput[]
+    id?: StringFilter<"OauthAccountModel"> | string
+    created_at?: DateTimeFilter<"OauthAccountModel"> | Date | string
+    updated_at?: DateTimeFilter<"OauthAccountModel"> | Date | string
+    is_deleted?: BoolFilter<"OauthAccountModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"OauthAccountModel"> | Date | string | null
+    oauth_type?: EnumOauthTypeFilter<"OauthAccountModel"> | OauthType
+    oauth_sub?: StringFilter<"OauthAccountModel"> | string
+    biz_user_id?: StringNullableFilter<"OauthAccountModel"> | string | null
+    client_id?: StringNullableFilter<"OauthAccountModel"> | string | null
+    name?: StringNullableFilter<"OauthAccountModel"> | string | null
+    email?: StringNullableFilter<"OauthAccountModel"> | string | null
+    phone?: StringNullableFilter<"OauthAccountModel"> | string | null
+    profile_image_url?: StringNullableFilter<"OauthAccountModel"> | string | null
+    birth?: StringNullableFilter<"OauthAccountModel"> | string | null
+    gender?: EnumGenderTypeNullableFilter<"OauthAccountModel"> | GenderType | null
+    address_zone_code?: StringNullableFilter<"OauthAccountModel"> | string | null
+    address_road?: StringNullableFilter<"OauthAccountModel"> | string | null
+    address_detail?: StringNullableFilter<"OauthAccountModel"> | string | null
+    address_extra?: StringNullableFilter<"OauthAccountModel"> | string | null
+    client?: XOR<ClientModelNullableRelationFilter, ClientModelWhereInput> | null
+    biz_user?: XOR<BIZUserModelNullableRelationFilter, BIZUserModelWhereInput> | null
   }
 
   export type OauthAccountModelOrderByWithRelationInput = {
@@ -16059,9 +16310,32 @@ export namespace Prisma {
     biz_user?: BIZUserModelOrderByWithRelationInput
   }
 
-  export type OauthAccountModelWhereUniqueInput = {
+  export type OauthAccountModelWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-  }
+    AND?: OauthAccountModelWhereInput | OauthAccountModelWhereInput[]
+    OR?: OauthAccountModelWhereInput[]
+    NOT?: OauthAccountModelWhereInput | OauthAccountModelWhereInput[]
+    created_at?: DateTimeFilter<"OauthAccountModel"> | Date | string
+    updated_at?: DateTimeFilter<"OauthAccountModel"> | Date | string
+    is_deleted?: BoolFilter<"OauthAccountModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"OauthAccountModel"> | Date | string | null
+    oauth_type?: EnumOauthTypeFilter<"OauthAccountModel"> | OauthType
+    oauth_sub?: StringFilter<"OauthAccountModel"> | string
+    biz_user_id?: StringNullableFilter<"OauthAccountModel"> | string | null
+    client_id?: StringNullableFilter<"OauthAccountModel"> | string | null
+    name?: StringNullableFilter<"OauthAccountModel"> | string | null
+    email?: StringNullableFilter<"OauthAccountModel"> | string | null
+    phone?: StringNullableFilter<"OauthAccountModel"> | string | null
+    profile_image_url?: StringNullableFilter<"OauthAccountModel"> | string | null
+    birth?: StringNullableFilter<"OauthAccountModel"> | string | null
+    gender?: EnumGenderTypeNullableFilter<"OauthAccountModel"> | GenderType | null
+    address_zone_code?: StringNullableFilter<"OauthAccountModel"> | string | null
+    address_road?: StringNullableFilter<"OauthAccountModel"> | string | null
+    address_detail?: StringNullableFilter<"OauthAccountModel"> | string | null
+    address_extra?: StringNullableFilter<"OauthAccountModel"> | string | null
+    client?: XOR<ClientModelNullableRelationFilter, ClientModelWhereInput> | null
+    biz_user?: XOR<BIZUserModelNullableRelationFilter, BIZUserModelWhereInput> | null
+  }, "id">
 
   export type OauthAccountModelOrderByWithAggregationInput = {
     id?: SortOrder
@@ -16089,28 +16363,28 @@ export namespace Prisma {
   }
 
   export type OauthAccountModelScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<OauthAccountModelScalarWhereWithAggregatesInput>
-    OR?: Enumerable<OauthAccountModelScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<OauthAccountModelScalarWhereWithAggregatesInput>
-    id?: StringWithAggregatesFilter | string
-    created_at?: DateTimeWithAggregatesFilter | Date | string
-    updated_at?: DateTimeWithAggregatesFilter | Date | string
-    is_deleted?: BoolWithAggregatesFilter | boolean
-    deleted_at?: DateTimeNullableWithAggregatesFilter | Date | string | null
-    oauth_type?: EnumOauthTypeWithAggregatesFilter | OauthType
-    oauth_sub?: StringWithAggregatesFilter | string
-    biz_user_id?: StringNullableWithAggregatesFilter | string | null
-    client_id?: StringNullableWithAggregatesFilter | string | null
-    name?: StringNullableWithAggregatesFilter | string | null
-    email?: StringNullableWithAggregatesFilter | string | null
-    phone?: StringNullableWithAggregatesFilter | string | null
-    profile_image_url?: StringNullableWithAggregatesFilter | string | null
-    birth?: StringNullableWithAggregatesFilter | string | null
-    gender?: EnumGenderTypeNullableWithAggregatesFilter | GenderType | null
-    address_zone_code?: StringNullableWithAggregatesFilter | string | null
-    address_road?: StringNullableWithAggregatesFilter | string | null
-    address_detail?: StringNullableWithAggregatesFilter | string | null
-    address_extra?: StringNullableWithAggregatesFilter | string | null
+    AND?: OauthAccountModelScalarWhereWithAggregatesInput | OauthAccountModelScalarWhereWithAggregatesInput[]
+    OR?: OauthAccountModelScalarWhereWithAggregatesInput[]
+    NOT?: OauthAccountModelScalarWhereWithAggregatesInput | OauthAccountModelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"OauthAccountModel"> | string
+    created_at?: DateTimeWithAggregatesFilter<"OauthAccountModel"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"OauthAccountModel"> | Date | string
+    is_deleted?: BoolWithAggregatesFilter<"OauthAccountModel"> | boolean
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"OauthAccountModel"> | Date | string | null
+    oauth_type?: EnumOauthTypeWithAggregatesFilter<"OauthAccountModel"> | OauthType
+    oauth_sub?: StringWithAggregatesFilter<"OauthAccountModel"> | string
+    biz_user_id?: StringNullableWithAggregatesFilter<"OauthAccountModel"> | string | null
+    client_id?: StringNullableWithAggregatesFilter<"OauthAccountModel"> | string | null
+    name?: StringNullableWithAggregatesFilter<"OauthAccountModel"> | string | null
+    email?: StringNullableWithAggregatesFilter<"OauthAccountModel"> | string | null
+    phone?: StringNullableWithAggregatesFilter<"OauthAccountModel"> | string | null
+    profile_image_url?: StringNullableWithAggregatesFilter<"OauthAccountModel"> | string | null
+    birth?: StringNullableWithAggregatesFilter<"OauthAccountModel"> | string | null
+    gender?: EnumGenderTypeNullableWithAggregatesFilter<"OauthAccountModel"> | GenderType | null
+    address_zone_code?: StringNullableWithAggregatesFilter<"OauthAccountModel"> | string | null
+    address_road?: StringNullableWithAggregatesFilter<"OauthAccountModel"> | string | null
+    address_detail?: StringNullableWithAggregatesFilter<"OauthAccountModel"> | string | null
+    address_extra?: StringNullableWithAggregatesFilter<"OauthAccountModel"> | string | null
   }
 
   export type UserModelCreateInput = {
@@ -17181,69 +17455,69 @@ export namespace Prisma {
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type StringFilter = {
-    equals?: string
-    in?: Enumerable<string> | string
-    notIn?: Enumerable<string> | string
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
+  export type StringFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
-    not?: NestedStringFilter | string
+    not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type DateTimeFilter = {
-    equals?: Date | string
-    in?: Enumerable<Date> | Enumerable<string> | Date | string
-    notIn?: Enumerable<Date> | Enumerable<string> | Date | string
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeFilter | Date | string
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type BoolFilter = {
-    equals?: boolean
-    not?: NestedBoolFilter | boolean
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type DateTimeNullableFilter = {
-    equals?: Date | string | null
-    in?: Enumerable<Date> | Enumerable<string> | Date | string | null
-    notIn?: Enumerable<Date> | Enumerable<string> | Date | string | null
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeNullableFilter | Date | string | null
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type StringNullableFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | string | null
-    notIn?: Enumerable<string> | string | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
-    not?: NestedStringNullableFilter | string | null
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type ClientModelRelationFilter = {
+  export type ClientModelNullableRelationFilter = {
     is?: ClientModelWhereInput | null
     isNot?: ClientModelWhereInput | null
   }
 
-  export type BIZUserModelRelationFilter = {
+  export type BIZUserModelNullableRelationFilter = {
     is?: BIZUserModelWhereInput | null
     isNot?: BIZUserModelWhereInput | null
   }
@@ -17283,88 +17557,88 @@ export namespace Prisma {
     email?: SortOrder
   }
 
-  export type StringWithAggregatesFilter = {
-    equals?: string
-    in?: Enumerable<string> | string
-    notIn?: Enumerable<string> | string
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
+  export type StringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
-    not?: NestedStringWithAggregatesFilter | string
-    _count?: NestedIntFilter
-    _min?: NestedStringFilter
-    _max?: NestedStringFilter
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
   }
 
-  export type DateTimeWithAggregatesFilter = {
-    equals?: Date | string
-    in?: Enumerable<Date> | Enumerable<string> | Date | string
-    notIn?: Enumerable<Date> | Enumerable<string> | Date | string
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeWithAggregatesFilter | Date | string
-    _count?: NestedIntFilter
-    _min?: NestedDateTimeFilter
-    _max?: NestedDateTimeFilter
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type BoolWithAggregatesFilter = {
-    equals?: boolean
-    not?: NestedBoolWithAggregatesFilter | boolean
-    _count?: NestedIntFilter
-    _min?: NestedBoolFilter
-    _max?: NestedBoolFilter
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type DateTimeNullableWithAggregatesFilter = {
-    equals?: Date | string | null
-    in?: Enumerable<Date> | Enumerable<string> | Date | string | null
-    notIn?: Enumerable<Date> | Enumerable<string> | Date | string | null
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeNullableWithAggregatesFilter | Date | string | null
-    _count?: NestedIntNullableFilter
-    _min?: NestedDateTimeNullableFilter
-    _max?: NestedDateTimeNullableFilter
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type StringNullableWithAggregatesFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | string | null
-    notIn?: Enumerable<string> | string | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter | string | null
-    _count?: NestedIntNullableFilter
-    _min?: NestedStringNullableFilter
-    _max?: NestedStringNullableFilter
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type EnumGenderTypeNullableFilter = {
-    equals?: GenderType | null
-    in?: Enumerable<GenderType> | null
-    notIn?: Enumerable<GenderType> | null
-    not?: NestedEnumGenderTypeNullableFilter | GenderType | null
+  export type EnumGenderTypeNullableFilter<$PrismaModel = never> = {
+    equals?: GenderType | EnumGenderTypeFieldRefInput<$PrismaModel> | null
+    in?: GenderType[] | ListEnumGenderTypeFieldRefInput<$PrismaModel> | null
+    notIn?: GenderType[] | ListEnumGenderTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderTypeNullableFilter<$PrismaModel> | GenderType | null
   }
 
   export type UserModelRelationFilter = {
-    is?: UserModelWhereInput | null
-    isNot?: UserModelWhereInput | null
+    is?: UserModelWhereInput
+    isNot?: UserModelWhereInput
   }
 
   export type OauthAccountModelListRelationFilter = {
@@ -17413,22 +17687,22 @@ export namespace Prisma {
     profile_image_url?: SortOrder
   }
 
-  export type EnumGenderTypeNullableWithAggregatesFilter = {
-    equals?: GenderType | null
-    in?: Enumerable<GenderType> | null
-    notIn?: Enumerable<GenderType> | null
-    not?: NestedEnumGenderTypeNullableWithAggregatesFilter | GenderType | null
-    _count?: NestedIntNullableFilter
-    _min?: NestedEnumGenderTypeNullableFilter
-    _max?: NestedEnumGenderTypeNullableFilter
+  export type EnumGenderTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: GenderType | EnumGenderTypeFieldRefInput<$PrismaModel> | null
+    in?: GenderType[] | ListEnumGenderTypeFieldRefInput<$PrismaModel> | null
+    notIn?: GenderType[] | ListEnumGenderTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderTypeNullableWithAggregatesFilter<$PrismaModel> | GenderType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumGenderTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumGenderTypeNullableFilter<$PrismaModel>
   }
 
-  export type REAgentModelRelationFilter = {
+  export type REAgentModelNullableRelationFilter = {
     is?: REAgentModelWhereInput | null
     isNot?: REAgentModelWhereInput | null
   }
 
-  export type HSProviderModelRelationFilter = {
+  export type HSProviderModelNullableRelationFilter = {
     is?: HSProviderModelWhereInput | null
     isNot?: HSProviderModelWhereInput | null
   }
@@ -17470,11 +17744,16 @@ export namespace Prisma {
     profile_image_url?: SortOrder
   }
 
-  export type EnumImageAccessTypeFilter = {
-    equals?: ImageAccessType
-    in?: Enumerable<ImageAccessType>
-    notIn?: Enumerable<ImageAccessType>
-    not?: NestedEnumImageAccessTypeFilter | ImageAccessType
+  export type EnumImageAccessTypeFilter<$PrismaModel = never> = {
+    equals?: ImageAccessType | EnumImageAccessTypeFieldRefInput<$PrismaModel>
+    in?: ImageAccessType[] | ListEnumImageAccessTypeFieldRefInput<$PrismaModel>
+    notIn?: ImageAccessType[] | ListEnumImageAccessTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumImageAccessTypeFilter<$PrismaModel> | ImageAccessType
+  }
+
+  export type BIZUserModelRelationFilter = {
+    is?: BIZUserModelWhereInput
+    isNot?: BIZUserModelWhereInput
   }
 
   export type BIZCertificationImageModelCountOrderByAggregateInput = {
@@ -17510,19 +17789,19 @@ export namespace Prisma {
     access_type?: SortOrder
   }
 
-  export type EnumImageAccessTypeWithAggregatesFilter = {
-    equals?: ImageAccessType
-    in?: Enumerable<ImageAccessType>
-    notIn?: Enumerable<ImageAccessType>
-    not?: NestedEnumImageAccessTypeWithAggregatesFilter | ImageAccessType
-    _count?: NestedIntFilter
-    _min?: NestedEnumImageAccessTypeFilter
-    _max?: NestedEnumImageAccessTypeFilter
+  export type EnumImageAccessTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: ImageAccessType | EnumImageAccessTypeFieldRefInput<$PrismaModel>
+    in?: ImageAccessType[] | ListEnumImageAccessTypeFieldRefInput<$PrismaModel>
+    notIn?: ImageAccessType[] | ListEnumImageAccessTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumImageAccessTypeWithAggregatesFilter<$PrismaModel> | ImageAccessType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumImageAccessTypeFilter<$PrismaModel>
+    _max?: NestedEnumImageAccessTypeFilter<$PrismaModel>
   }
 
   export type REExpertiseModelRelationFilter = {
-    is?: REExpertiseModelWhereInput | null
-    isNot?: REExpertiseModelWhereInput | null
+    is?: REExpertiseModelWhereInput
+    isNot?: REExpertiseModelWhereInput
   }
 
   export type REPortfolioModelListRelationFilter = {
@@ -17668,8 +17947,8 @@ export namespace Prisma {
   }
 
   export type HSSuperExpertiseModelRelationFilter = {
-    is?: HSSuperExpertiseModelWhereInput | null
-    isNot?: HSSuperExpertiseModelWhereInput | null
+    is?: HSSuperExpertiseModelWhereInput
+    isNot?: HSSuperExpertiseModelWhereInput
   }
 
   export type HSSubExpertiseModelCountOrderByAggregateInput = {
@@ -17739,9 +18018,14 @@ export namespace Prisma {
     name?: SortOrder
   }
 
+  export type HSProviderModelRelationFilter = {
+    is?: HSProviderModelWhereInput
+    isNot?: HSProviderModelWhereInput
+  }
+
   export type HSSubExpertiseModelRelationFilter = {
-    is?: HSSubExpertiseModelWhereInput | null
-    isNot?: HSSubExpertiseModelWhereInput | null
+    is?: HSSubExpertiseModelWhereInput
+    isNot?: HSSubExpertiseModelWhereInput
   }
 
   export type HSSubExpertiseRelationModelHs_provider_idSub_expertise_idCompoundUniqueInput = {
@@ -17765,6 +18049,11 @@ export namespace Prisma {
     id?: SortOrder
     hs_provider_id?: SortOrder
     sub_expertise_id?: SortOrder
+  }
+
+  export type REAgentModelRelationFilter = {
+    is?: REAgentModelWhereInput
+    isNot?: REAgentModelWhereInput
   }
 
   export type REPortfolioModelCountOrderByAggregateInput = {
@@ -17839,11 +18128,11 @@ export namespace Prisma {
     is_visible?: SortOrder
   }
 
-  export type EnumOauthTypeFilter = {
-    equals?: OauthType
-    in?: Enumerable<OauthType>
-    notIn?: Enumerable<OauthType>
-    not?: NestedEnumOauthTypeFilter | OauthType
+  export type EnumOauthTypeFilter<$PrismaModel = never> = {
+    equals?: OauthType | EnumOauthTypeFieldRefInput<$PrismaModel>
+    in?: OauthType[] | ListEnumOauthTypeFieldRefInput<$PrismaModel>
+    notIn?: OauthType[] | ListEnumOauthTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOauthTypeFilter<$PrismaModel> | OauthType
   }
 
   export type OauthAccountModelCountOrderByAggregateInput = {
@@ -17912,14 +18201,14 @@ export namespace Prisma {
     address_extra?: SortOrder
   }
 
-  export type EnumOauthTypeWithAggregatesFilter = {
-    equals?: OauthType
-    in?: Enumerable<OauthType>
-    notIn?: Enumerable<OauthType>
-    not?: NestedEnumOauthTypeWithAggregatesFilter | OauthType
-    _count?: NestedIntFilter
-    _min?: NestedEnumOauthTypeFilter
-    _max?: NestedEnumOauthTypeFilter
+  export type EnumOauthTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: OauthType | EnumOauthTypeFieldRefInput<$PrismaModel>
+    in?: OauthType[] | ListEnumOauthTypeFieldRefInput<$PrismaModel>
+    notIn?: OauthType[] | ListEnumOauthTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOauthTypeWithAggregatesFilter<$PrismaModel> | OauthType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOauthTypeFilter<$PrismaModel>
+    _max?: NestedEnumOauthTypeFilter<$PrismaModel>
   }
 
   export type ClientModelCreateNestedOneWithoutBaseInput = {
@@ -17970,40 +18259,40 @@ export namespace Prisma {
     create?: XOR<ClientModelCreateWithoutBaseInput, ClientModelUncheckedCreateWithoutBaseInput>
     connectOrCreate?: ClientModelCreateOrConnectWithoutBaseInput
     upsert?: ClientModelUpsertWithoutBaseInput
-    disconnect?: boolean
-    delete?: boolean
+    disconnect?: ClientModelWhereInput | boolean
+    delete?: ClientModelWhereInput | boolean
     connect?: ClientModelWhereUniqueInput
-    update?: XOR<ClientModelUpdateWithoutBaseInput, ClientModelUncheckedUpdateWithoutBaseInput>
+    update?: XOR<XOR<ClientModelUpdateToOneWithWhereWithoutBaseInput, ClientModelUpdateWithoutBaseInput>, ClientModelUncheckedUpdateWithoutBaseInput>
   }
 
   export type BIZUserModelUpdateOneWithoutBaseNestedInput = {
     create?: XOR<BIZUserModelCreateWithoutBaseInput, BIZUserModelUncheckedCreateWithoutBaseInput>
     connectOrCreate?: BIZUserModelCreateOrConnectWithoutBaseInput
     upsert?: BIZUserModelUpsertWithoutBaseInput
-    disconnect?: boolean
-    delete?: boolean
+    disconnect?: BIZUserModelWhereInput | boolean
+    delete?: BIZUserModelWhereInput | boolean
     connect?: BIZUserModelWhereUniqueInput
-    update?: XOR<BIZUserModelUpdateWithoutBaseInput, BIZUserModelUncheckedUpdateWithoutBaseInput>
+    update?: XOR<XOR<BIZUserModelUpdateToOneWithWhereWithoutBaseInput, BIZUserModelUpdateWithoutBaseInput>, BIZUserModelUncheckedUpdateWithoutBaseInput>
   }
 
   export type ClientModelUncheckedUpdateOneWithoutBaseNestedInput = {
     create?: XOR<ClientModelCreateWithoutBaseInput, ClientModelUncheckedCreateWithoutBaseInput>
     connectOrCreate?: ClientModelCreateOrConnectWithoutBaseInput
     upsert?: ClientModelUpsertWithoutBaseInput
-    disconnect?: boolean
-    delete?: boolean
+    disconnect?: ClientModelWhereInput | boolean
+    delete?: ClientModelWhereInput | boolean
     connect?: ClientModelWhereUniqueInput
-    update?: XOR<ClientModelUpdateWithoutBaseInput, ClientModelUncheckedUpdateWithoutBaseInput>
+    update?: XOR<XOR<ClientModelUpdateToOneWithWhereWithoutBaseInput, ClientModelUpdateWithoutBaseInput>, ClientModelUncheckedUpdateWithoutBaseInput>
   }
 
   export type BIZUserModelUncheckedUpdateOneWithoutBaseNestedInput = {
     create?: XOR<BIZUserModelCreateWithoutBaseInput, BIZUserModelUncheckedCreateWithoutBaseInput>
     connectOrCreate?: BIZUserModelCreateOrConnectWithoutBaseInput
     upsert?: BIZUserModelUpsertWithoutBaseInput
-    disconnect?: boolean
-    delete?: boolean
+    disconnect?: BIZUserModelWhereInput | boolean
+    delete?: BIZUserModelWhereInput | boolean
     connect?: BIZUserModelWhereUniqueInput
-    update?: XOR<BIZUserModelUpdateWithoutBaseInput, BIZUserModelUncheckedUpdateWithoutBaseInput>
+    update?: XOR<XOR<BIZUserModelUpdateToOneWithWhereWithoutBaseInput, BIZUserModelUpdateWithoutBaseInput>, BIZUserModelUncheckedUpdateWithoutBaseInput>
   }
 
   export type UserModelCreateNestedOneWithoutClientInput = {
@@ -18013,17 +18302,17 @@ export namespace Prisma {
   }
 
   export type OauthAccountModelCreateNestedManyWithoutClientInput = {
-    create?: XOR<Enumerable<OauthAccountModelCreateWithoutClientInput>, Enumerable<OauthAccountModelUncheckedCreateWithoutClientInput>>
-    connectOrCreate?: Enumerable<OauthAccountModelCreateOrConnectWithoutClientInput>
+    create?: XOR<OauthAccountModelCreateWithoutClientInput, OauthAccountModelUncheckedCreateWithoutClientInput> | OauthAccountModelCreateWithoutClientInput[] | OauthAccountModelUncheckedCreateWithoutClientInput[]
+    connectOrCreate?: OauthAccountModelCreateOrConnectWithoutClientInput | OauthAccountModelCreateOrConnectWithoutClientInput[]
     createMany?: OauthAccountModelCreateManyClientInputEnvelope
-    connect?: Enumerable<OauthAccountModelWhereUniqueInput>
+    connect?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
   }
 
   export type OauthAccountModelUncheckedCreateNestedManyWithoutClientInput = {
-    create?: XOR<Enumerable<OauthAccountModelCreateWithoutClientInput>, Enumerable<OauthAccountModelUncheckedCreateWithoutClientInput>>
-    connectOrCreate?: Enumerable<OauthAccountModelCreateOrConnectWithoutClientInput>
+    create?: XOR<OauthAccountModelCreateWithoutClientInput, OauthAccountModelUncheckedCreateWithoutClientInput> | OauthAccountModelCreateWithoutClientInput[] | OauthAccountModelUncheckedCreateWithoutClientInput[]
+    connectOrCreate?: OauthAccountModelCreateOrConnectWithoutClientInput | OauthAccountModelCreateOrConnectWithoutClientInput[]
     createMany?: OauthAccountModelCreateManyClientInputEnvelope
-    connect?: Enumerable<OauthAccountModelWhereUniqueInput>
+    connect?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
   }
 
   export type NullableEnumGenderTypeFieldUpdateOperationsInput = {
@@ -18035,35 +18324,35 @@ export namespace Prisma {
     connectOrCreate?: UserModelCreateOrConnectWithoutClientInput
     upsert?: UserModelUpsertWithoutClientInput
     connect?: UserModelWhereUniqueInput
-    update?: XOR<UserModelUpdateWithoutClientInput, UserModelUncheckedUpdateWithoutClientInput>
+    update?: XOR<XOR<UserModelUpdateToOneWithWhereWithoutClientInput, UserModelUpdateWithoutClientInput>, UserModelUncheckedUpdateWithoutClientInput>
   }
 
   export type OauthAccountModelUpdateManyWithoutClientNestedInput = {
-    create?: XOR<Enumerable<OauthAccountModelCreateWithoutClientInput>, Enumerable<OauthAccountModelUncheckedCreateWithoutClientInput>>
-    connectOrCreate?: Enumerable<OauthAccountModelCreateOrConnectWithoutClientInput>
-    upsert?: Enumerable<OauthAccountModelUpsertWithWhereUniqueWithoutClientInput>
+    create?: XOR<OauthAccountModelCreateWithoutClientInput, OauthAccountModelUncheckedCreateWithoutClientInput> | OauthAccountModelCreateWithoutClientInput[] | OauthAccountModelUncheckedCreateWithoutClientInput[]
+    connectOrCreate?: OauthAccountModelCreateOrConnectWithoutClientInput | OauthAccountModelCreateOrConnectWithoutClientInput[]
+    upsert?: OauthAccountModelUpsertWithWhereUniqueWithoutClientInput | OauthAccountModelUpsertWithWhereUniqueWithoutClientInput[]
     createMany?: OauthAccountModelCreateManyClientInputEnvelope
-    set?: Enumerable<OauthAccountModelWhereUniqueInput>
-    disconnect?: Enumerable<OauthAccountModelWhereUniqueInput>
-    delete?: Enumerable<OauthAccountModelWhereUniqueInput>
-    connect?: Enumerable<OauthAccountModelWhereUniqueInput>
-    update?: Enumerable<OauthAccountModelUpdateWithWhereUniqueWithoutClientInput>
-    updateMany?: Enumerable<OauthAccountModelUpdateManyWithWhereWithoutClientInput>
-    deleteMany?: Enumerable<OauthAccountModelScalarWhereInput>
+    set?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
+    disconnect?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
+    delete?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
+    connect?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
+    update?: OauthAccountModelUpdateWithWhereUniqueWithoutClientInput | OauthAccountModelUpdateWithWhereUniqueWithoutClientInput[]
+    updateMany?: OauthAccountModelUpdateManyWithWhereWithoutClientInput | OauthAccountModelUpdateManyWithWhereWithoutClientInput[]
+    deleteMany?: OauthAccountModelScalarWhereInput | OauthAccountModelScalarWhereInput[]
   }
 
   export type OauthAccountModelUncheckedUpdateManyWithoutClientNestedInput = {
-    create?: XOR<Enumerable<OauthAccountModelCreateWithoutClientInput>, Enumerable<OauthAccountModelUncheckedCreateWithoutClientInput>>
-    connectOrCreate?: Enumerable<OauthAccountModelCreateOrConnectWithoutClientInput>
-    upsert?: Enumerable<OauthAccountModelUpsertWithWhereUniqueWithoutClientInput>
+    create?: XOR<OauthAccountModelCreateWithoutClientInput, OauthAccountModelUncheckedCreateWithoutClientInput> | OauthAccountModelCreateWithoutClientInput[] | OauthAccountModelUncheckedCreateWithoutClientInput[]
+    connectOrCreate?: OauthAccountModelCreateOrConnectWithoutClientInput | OauthAccountModelCreateOrConnectWithoutClientInput[]
+    upsert?: OauthAccountModelUpsertWithWhereUniqueWithoutClientInput | OauthAccountModelUpsertWithWhereUniqueWithoutClientInput[]
     createMany?: OauthAccountModelCreateManyClientInputEnvelope
-    set?: Enumerable<OauthAccountModelWhereUniqueInput>
-    disconnect?: Enumerable<OauthAccountModelWhereUniqueInput>
-    delete?: Enumerable<OauthAccountModelWhereUniqueInput>
-    connect?: Enumerable<OauthAccountModelWhereUniqueInput>
-    update?: Enumerable<OauthAccountModelUpdateWithWhereUniqueWithoutClientInput>
-    updateMany?: Enumerable<OauthAccountModelUpdateManyWithWhereWithoutClientInput>
-    deleteMany?: Enumerable<OauthAccountModelScalarWhereInput>
+    set?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
+    disconnect?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
+    delete?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
+    connect?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
+    update?: OauthAccountModelUpdateWithWhereUniqueWithoutClientInput | OauthAccountModelUpdateWithWhereUniqueWithoutClientInput[]
+    updateMany?: OauthAccountModelUpdateManyWithWhereWithoutClientInput | OauthAccountModelUpdateManyWithWhereWithoutClientInput[]
+    deleteMany?: OauthAccountModelScalarWhereInput | OauthAccountModelScalarWhereInput[]
   }
 
   export type UserModelCreateNestedOneWithoutBiz_userInput = {
@@ -18085,17 +18374,17 @@ export namespace Prisma {
   }
 
   export type OauthAccountModelCreateNestedManyWithoutBiz_userInput = {
-    create?: XOR<Enumerable<OauthAccountModelCreateWithoutBiz_userInput>, Enumerable<OauthAccountModelUncheckedCreateWithoutBiz_userInput>>
-    connectOrCreate?: Enumerable<OauthAccountModelCreateOrConnectWithoutBiz_userInput>
+    create?: XOR<OauthAccountModelCreateWithoutBiz_userInput, OauthAccountModelUncheckedCreateWithoutBiz_userInput> | OauthAccountModelCreateWithoutBiz_userInput[] | OauthAccountModelUncheckedCreateWithoutBiz_userInput[]
+    connectOrCreate?: OauthAccountModelCreateOrConnectWithoutBiz_userInput | OauthAccountModelCreateOrConnectWithoutBiz_userInput[]
     createMany?: OauthAccountModelCreateManyBiz_userInputEnvelope
-    connect?: Enumerable<OauthAccountModelWhereUniqueInput>
+    connect?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
   }
 
   export type BIZCertificationImageModelCreateNestedManyWithoutBiz_userInput = {
-    create?: XOR<Enumerable<BIZCertificationImageModelCreateWithoutBiz_userInput>, Enumerable<BIZCertificationImageModelUncheckedCreateWithoutBiz_userInput>>
-    connectOrCreate?: Enumerable<BIZCertificationImageModelCreateOrConnectWithoutBiz_userInput>
+    create?: XOR<BIZCertificationImageModelCreateWithoutBiz_userInput, BIZCertificationImageModelUncheckedCreateWithoutBiz_userInput> | BIZCertificationImageModelCreateWithoutBiz_userInput[] | BIZCertificationImageModelUncheckedCreateWithoutBiz_userInput[]
+    connectOrCreate?: BIZCertificationImageModelCreateOrConnectWithoutBiz_userInput | BIZCertificationImageModelCreateOrConnectWithoutBiz_userInput[]
     createMany?: BIZCertificationImageModelCreateManyBiz_userInputEnvelope
-    connect?: Enumerable<BIZCertificationImageModelWhereUniqueInput>
+    connect?: BIZCertificationImageModelWhereUniqueInput | BIZCertificationImageModelWhereUniqueInput[]
   }
 
   export type REAgentModelUncheckedCreateNestedOneWithoutBaseInput = {
@@ -18111,17 +18400,17 @@ export namespace Prisma {
   }
 
   export type OauthAccountModelUncheckedCreateNestedManyWithoutBiz_userInput = {
-    create?: XOR<Enumerable<OauthAccountModelCreateWithoutBiz_userInput>, Enumerable<OauthAccountModelUncheckedCreateWithoutBiz_userInput>>
-    connectOrCreate?: Enumerable<OauthAccountModelCreateOrConnectWithoutBiz_userInput>
+    create?: XOR<OauthAccountModelCreateWithoutBiz_userInput, OauthAccountModelUncheckedCreateWithoutBiz_userInput> | OauthAccountModelCreateWithoutBiz_userInput[] | OauthAccountModelUncheckedCreateWithoutBiz_userInput[]
+    connectOrCreate?: OauthAccountModelCreateOrConnectWithoutBiz_userInput | OauthAccountModelCreateOrConnectWithoutBiz_userInput[]
     createMany?: OauthAccountModelCreateManyBiz_userInputEnvelope
-    connect?: Enumerable<OauthAccountModelWhereUniqueInput>
+    connect?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
   }
 
   export type BIZCertificationImageModelUncheckedCreateNestedManyWithoutBiz_userInput = {
-    create?: XOR<Enumerable<BIZCertificationImageModelCreateWithoutBiz_userInput>, Enumerable<BIZCertificationImageModelUncheckedCreateWithoutBiz_userInput>>
-    connectOrCreate?: Enumerable<BIZCertificationImageModelCreateOrConnectWithoutBiz_userInput>
+    create?: XOR<BIZCertificationImageModelCreateWithoutBiz_userInput, BIZCertificationImageModelUncheckedCreateWithoutBiz_userInput> | BIZCertificationImageModelCreateWithoutBiz_userInput[] | BIZCertificationImageModelUncheckedCreateWithoutBiz_userInput[]
+    connectOrCreate?: BIZCertificationImageModelCreateOrConnectWithoutBiz_userInput | BIZCertificationImageModelCreateOrConnectWithoutBiz_userInput[]
     createMany?: BIZCertificationImageModelCreateManyBiz_userInputEnvelope
-    connect?: Enumerable<BIZCertificationImageModelWhereUniqueInput>
+    connect?: BIZCertificationImageModelWhereUniqueInput | BIZCertificationImageModelWhereUniqueInput[]
   }
 
   export type UserModelUpdateOneRequiredWithoutBiz_userNestedInput = {
@@ -18129,103 +18418,103 @@ export namespace Prisma {
     connectOrCreate?: UserModelCreateOrConnectWithoutBiz_userInput
     upsert?: UserModelUpsertWithoutBiz_userInput
     connect?: UserModelWhereUniqueInput
-    update?: XOR<UserModelUpdateWithoutBiz_userInput, UserModelUncheckedUpdateWithoutBiz_userInput>
+    update?: XOR<XOR<UserModelUpdateToOneWithWhereWithoutBiz_userInput, UserModelUpdateWithoutBiz_userInput>, UserModelUncheckedUpdateWithoutBiz_userInput>
   }
 
   export type REAgentModelUpdateOneWithoutBaseNestedInput = {
     create?: XOR<REAgentModelCreateWithoutBaseInput, REAgentModelUncheckedCreateWithoutBaseInput>
     connectOrCreate?: REAgentModelCreateOrConnectWithoutBaseInput
     upsert?: REAgentModelUpsertWithoutBaseInput
-    disconnect?: boolean
-    delete?: boolean
+    disconnect?: REAgentModelWhereInput | boolean
+    delete?: REAgentModelWhereInput | boolean
     connect?: REAgentModelWhereUniqueInput
-    update?: XOR<REAgentModelUpdateWithoutBaseInput, REAgentModelUncheckedUpdateWithoutBaseInput>
+    update?: XOR<XOR<REAgentModelUpdateToOneWithWhereWithoutBaseInput, REAgentModelUpdateWithoutBaseInput>, REAgentModelUncheckedUpdateWithoutBaseInput>
   }
 
   export type HSProviderModelUpdateOneWithoutBaseNestedInput = {
     create?: XOR<HSProviderModelCreateWithoutBaseInput, HSProviderModelUncheckedCreateWithoutBaseInput>
     connectOrCreate?: HSProviderModelCreateOrConnectWithoutBaseInput
     upsert?: HSProviderModelUpsertWithoutBaseInput
-    disconnect?: boolean
-    delete?: boolean
+    disconnect?: HSProviderModelWhereInput | boolean
+    delete?: HSProviderModelWhereInput | boolean
     connect?: HSProviderModelWhereUniqueInput
-    update?: XOR<HSProviderModelUpdateWithoutBaseInput, HSProviderModelUncheckedUpdateWithoutBaseInput>
+    update?: XOR<XOR<HSProviderModelUpdateToOneWithWhereWithoutBaseInput, HSProviderModelUpdateWithoutBaseInput>, HSProviderModelUncheckedUpdateWithoutBaseInput>
   }
 
   export type OauthAccountModelUpdateManyWithoutBiz_userNestedInput = {
-    create?: XOR<Enumerable<OauthAccountModelCreateWithoutBiz_userInput>, Enumerable<OauthAccountModelUncheckedCreateWithoutBiz_userInput>>
-    connectOrCreate?: Enumerable<OauthAccountModelCreateOrConnectWithoutBiz_userInput>
-    upsert?: Enumerable<OauthAccountModelUpsertWithWhereUniqueWithoutBiz_userInput>
+    create?: XOR<OauthAccountModelCreateWithoutBiz_userInput, OauthAccountModelUncheckedCreateWithoutBiz_userInput> | OauthAccountModelCreateWithoutBiz_userInput[] | OauthAccountModelUncheckedCreateWithoutBiz_userInput[]
+    connectOrCreate?: OauthAccountModelCreateOrConnectWithoutBiz_userInput | OauthAccountModelCreateOrConnectWithoutBiz_userInput[]
+    upsert?: OauthAccountModelUpsertWithWhereUniqueWithoutBiz_userInput | OauthAccountModelUpsertWithWhereUniqueWithoutBiz_userInput[]
     createMany?: OauthAccountModelCreateManyBiz_userInputEnvelope
-    set?: Enumerable<OauthAccountModelWhereUniqueInput>
-    disconnect?: Enumerable<OauthAccountModelWhereUniqueInput>
-    delete?: Enumerable<OauthAccountModelWhereUniqueInput>
-    connect?: Enumerable<OauthAccountModelWhereUniqueInput>
-    update?: Enumerable<OauthAccountModelUpdateWithWhereUniqueWithoutBiz_userInput>
-    updateMany?: Enumerable<OauthAccountModelUpdateManyWithWhereWithoutBiz_userInput>
-    deleteMany?: Enumerable<OauthAccountModelScalarWhereInput>
+    set?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
+    disconnect?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
+    delete?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
+    connect?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
+    update?: OauthAccountModelUpdateWithWhereUniqueWithoutBiz_userInput | OauthAccountModelUpdateWithWhereUniqueWithoutBiz_userInput[]
+    updateMany?: OauthAccountModelUpdateManyWithWhereWithoutBiz_userInput | OauthAccountModelUpdateManyWithWhereWithoutBiz_userInput[]
+    deleteMany?: OauthAccountModelScalarWhereInput | OauthAccountModelScalarWhereInput[]
   }
 
   export type BIZCertificationImageModelUpdateManyWithoutBiz_userNestedInput = {
-    create?: XOR<Enumerable<BIZCertificationImageModelCreateWithoutBiz_userInput>, Enumerable<BIZCertificationImageModelUncheckedCreateWithoutBiz_userInput>>
-    connectOrCreate?: Enumerable<BIZCertificationImageModelCreateOrConnectWithoutBiz_userInput>
-    upsert?: Enumerable<BIZCertificationImageModelUpsertWithWhereUniqueWithoutBiz_userInput>
+    create?: XOR<BIZCertificationImageModelCreateWithoutBiz_userInput, BIZCertificationImageModelUncheckedCreateWithoutBiz_userInput> | BIZCertificationImageModelCreateWithoutBiz_userInput[] | BIZCertificationImageModelUncheckedCreateWithoutBiz_userInput[]
+    connectOrCreate?: BIZCertificationImageModelCreateOrConnectWithoutBiz_userInput | BIZCertificationImageModelCreateOrConnectWithoutBiz_userInput[]
+    upsert?: BIZCertificationImageModelUpsertWithWhereUniqueWithoutBiz_userInput | BIZCertificationImageModelUpsertWithWhereUniqueWithoutBiz_userInput[]
     createMany?: BIZCertificationImageModelCreateManyBiz_userInputEnvelope
-    set?: Enumerable<BIZCertificationImageModelWhereUniqueInput>
-    disconnect?: Enumerable<BIZCertificationImageModelWhereUniqueInput>
-    delete?: Enumerable<BIZCertificationImageModelWhereUniqueInput>
-    connect?: Enumerable<BIZCertificationImageModelWhereUniqueInput>
-    update?: Enumerable<BIZCertificationImageModelUpdateWithWhereUniqueWithoutBiz_userInput>
-    updateMany?: Enumerable<BIZCertificationImageModelUpdateManyWithWhereWithoutBiz_userInput>
-    deleteMany?: Enumerable<BIZCertificationImageModelScalarWhereInput>
+    set?: BIZCertificationImageModelWhereUniqueInput | BIZCertificationImageModelWhereUniqueInput[]
+    disconnect?: BIZCertificationImageModelWhereUniqueInput | BIZCertificationImageModelWhereUniqueInput[]
+    delete?: BIZCertificationImageModelWhereUniqueInput | BIZCertificationImageModelWhereUniqueInput[]
+    connect?: BIZCertificationImageModelWhereUniqueInput | BIZCertificationImageModelWhereUniqueInput[]
+    update?: BIZCertificationImageModelUpdateWithWhereUniqueWithoutBiz_userInput | BIZCertificationImageModelUpdateWithWhereUniqueWithoutBiz_userInput[]
+    updateMany?: BIZCertificationImageModelUpdateManyWithWhereWithoutBiz_userInput | BIZCertificationImageModelUpdateManyWithWhereWithoutBiz_userInput[]
+    deleteMany?: BIZCertificationImageModelScalarWhereInput | BIZCertificationImageModelScalarWhereInput[]
   }
 
   export type REAgentModelUncheckedUpdateOneWithoutBaseNestedInput = {
     create?: XOR<REAgentModelCreateWithoutBaseInput, REAgentModelUncheckedCreateWithoutBaseInput>
     connectOrCreate?: REAgentModelCreateOrConnectWithoutBaseInput
     upsert?: REAgentModelUpsertWithoutBaseInput
-    disconnect?: boolean
-    delete?: boolean
+    disconnect?: REAgentModelWhereInput | boolean
+    delete?: REAgentModelWhereInput | boolean
     connect?: REAgentModelWhereUniqueInput
-    update?: XOR<REAgentModelUpdateWithoutBaseInput, REAgentModelUncheckedUpdateWithoutBaseInput>
+    update?: XOR<XOR<REAgentModelUpdateToOneWithWhereWithoutBaseInput, REAgentModelUpdateWithoutBaseInput>, REAgentModelUncheckedUpdateWithoutBaseInput>
   }
 
   export type HSProviderModelUncheckedUpdateOneWithoutBaseNestedInput = {
     create?: XOR<HSProviderModelCreateWithoutBaseInput, HSProviderModelUncheckedCreateWithoutBaseInput>
     connectOrCreate?: HSProviderModelCreateOrConnectWithoutBaseInput
     upsert?: HSProviderModelUpsertWithoutBaseInput
-    disconnect?: boolean
-    delete?: boolean
+    disconnect?: HSProviderModelWhereInput | boolean
+    delete?: HSProviderModelWhereInput | boolean
     connect?: HSProviderModelWhereUniqueInput
-    update?: XOR<HSProviderModelUpdateWithoutBaseInput, HSProviderModelUncheckedUpdateWithoutBaseInput>
+    update?: XOR<XOR<HSProviderModelUpdateToOneWithWhereWithoutBaseInput, HSProviderModelUpdateWithoutBaseInput>, HSProviderModelUncheckedUpdateWithoutBaseInput>
   }
 
   export type OauthAccountModelUncheckedUpdateManyWithoutBiz_userNestedInput = {
-    create?: XOR<Enumerable<OauthAccountModelCreateWithoutBiz_userInput>, Enumerable<OauthAccountModelUncheckedCreateWithoutBiz_userInput>>
-    connectOrCreate?: Enumerable<OauthAccountModelCreateOrConnectWithoutBiz_userInput>
-    upsert?: Enumerable<OauthAccountModelUpsertWithWhereUniqueWithoutBiz_userInput>
+    create?: XOR<OauthAccountModelCreateWithoutBiz_userInput, OauthAccountModelUncheckedCreateWithoutBiz_userInput> | OauthAccountModelCreateWithoutBiz_userInput[] | OauthAccountModelUncheckedCreateWithoutBiz_userInput[]
+    connectOrCreate?: OauthAccountModelCreateOrConnectWithoutBiz_userInput | OauthAccountModelCreateOrConnectWithoutBiz_userInput[]
+    upsert?: OauthAccountModelUpsertWithWhereUniqueWithoutBiz_userInput | OauthAccountModelUpsertWithWhereUniqueWithoutBiz_userInput[]
     createMany?: OauthAccountModelCreateManyBiz_userInputEnvelope
-    set?: Enumerable<OauthAccountModelWhereUniqueInput>
-    disconnect?: Enumerable<OauthAccountModelWhereUniqueInput>
-    delete?: Enumerable<OauthAccountModelWhereUniqueInput>
-    connect?: Enumerable<OauthAccountModelWhereUniqueInput>
-    update?: Enumerable<OauthAccountModelUpdateWithWhereUniqueWithoutBiz_userInput>
-    updateMany?: Enumerable<OauthAccountModelUpdateManyWithWhereWithoutBiz_userInput>
-    deleteMany?: Enumerable<OauthAccountModelScalarWhereInput>
+    set?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
+    disconnect?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
+    delete?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
+    connect?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
+    update?: OauthAccountModelUpdateWithWhereUniqueWithoutBiz_userInput | OauthAccountModelUpdateWithWhereUniqueWithoutBiz_userInput[]
+    updateMany?: OauthAccountModelUpdateManyWithWhereWithoutBiz_userInput | OauthAccountModelUpdateManyWithWhereWithoutBiz_userInput[]
+    deleteMany?: OauthAccountModelScalarWhereInput | OauthAccountModelScalarWhereInput[]
   }
 
   export type BIZCertificationImageModelUncheckedUpdateManyWithoutBiz_userNestedInput = {
-    create?: XOR<Enumerable<BIZCertificationImageModelCreateWithoutBiz_userInput>, Enumerable<BIZCertificationImageModelUncheckedCreateWithoutBiz_userInput>>
-    connectOrCreate?: Enumerable<BIZCertificationImageModelCreateOrConnectWithoutBiz_userInput>
-    upsert?: Enumerable<BIZCertificationImageModelUpsertWithWhereUniqueWithoutBiz_userInput>
+    create?: XOR<BIZCertificationImageModelCreateWithoutBiz_userInput, BIZCertificationImageModelUncheckedCreateWithoutBiz_userInput> | BIZCertificationImageModelCreateWithoutBiz_userInput[] | BIZCertificationImageModelUncheckedCreateWithoutBiz_userInput[]
+    connectOrCreate?: BIZCertificationImageModelCreateOrConnectWithoutBiz_userInput | BIZCertificationImageModelCreateOrConnectWithoutBiz_userInput[]
+    upsert?: BIZCertificationImageModelUpsertWithWhereUniqueWithoutBiz_userInput | BIZCertificationImageModelUpsertWithWhereUniqueWithoutBiz_userInput[]
     createMany?: BIZCertificationImageModelCreateManyBiz_userInputEnvelope
-    set?: Enumerable<BIZCertificationImageModelWhereUniqueInput>
-    disconnect?: Enumerable<BIZCertificationImageModelWhereUniqueInput>
-    delete?: Enumerable<BIZCertificationImageModelWhereUniqueInput>
-    connect?: Enumerable<BIZCertificationImageModelWhereUniqueInput>
-    update?: Enumerable<BIZCertificationImageModelUpdateWithWhereUniqueWithoutBiz_userInput>
-    updateMany?: Enumerable<BIZCertificationImageModelUpdateManyWithWhereWithoutBiz_userInput>
-    deleteMany?: Enumerable<BIZCertificationImageModelScalarWhereInput>
+    set?: BIZCertificationImageModelWhereUniqueInput | BIZCertificationImageModelWhereUniqueInput[]
+    disconnect?: BIZCertificationImageModelWhereUniqueInput | BIZCertificationImageModelWhereUniqueInput[]
+    delete?: BIZCertificationImageModelWhereUniqueInput | BIZCertificationImageModelWhereUniqueInput[]
+    connect?: BIZCertificationImageModelWhereUniqueInput | BIZCertificationImageModelWhereUniqueInput[]
+    update?: BIZCertificationImageModelUpdateWithWhereUniqueWithoutBiz_userInput | BIZCertificationImageModelUpdateWithWhereUniqueWithoutBiz_userInput[]
+    updateMany?: BIZCertificationImageModelUpdateManyWithWhereWithoutBiz_userInput | BIZCertificationImageModelUpdateManyWithWhereWithoutBiz_userInput[]
+    deleteMany?: BIZCertificationImageModelScalarWhereInput | BIZCertificationImageModelScalarWhereInput[]
   }
 
   export type BIZUserModelCreateNestedOneWithoutBiz_certification_imagesInput = {
@@ -18243,7 +18532,7 @@ export namespace Prisma {
     connectOrCreate?: BIZUserModelCreateOrConnectWithoutBiz_certification_imagesInput
     upsert?: BIZUserModelUpsertWithoutBiz_certification_imagesInput
     connect?: BIZUserModelWhereUniqueInput
-    update?: XOR<BIZUserModelUpdateWithoutBiz_certification_imagesInput, BIZUserModelUncheckedUpdateWithoutBiz_certification_imagesInput>
+    update?: XOR<XOR<BIZUserModelUpdateToOneWithWhereWithoutBiz_certification_imagesInput, BIZUserModelUpdateWithoutBiz_certification_imagesInput>, BIZUserModelUncheckedUpdateWithoutBiz_certification_imagesInput>
   }
 
   export type BIZUserModelCreateNestedOneWithoutRe_agentInput = {
@@ -18259,17 +18548,17 @@ export namespace Prisma {
   }
 
   export type REPortfolioModelCreateNestedManyWithoutRe_agentInput = {
-    create?: XOR<Enumerable<REPortfolioModelCreateWithoutRe_agentInput>, Enumerable<REPortfolioModelUncheckedCreateWithoutRe_agentInput>>
-    connectOrCreate?: Enumerable<REPortfolioModelCreateOrConnectWithoutRe_agentInput>
+    create?: XOR<REPortfolioModelCreateWithoutRe_agentInput, REPortfolioModelUncheckedCreateWithoutRe_agentInput> | REPortfolioModelCreateWithoutRe_agentInput[] | REPortfolioModelUncheckedCreateWithoutRe_agentInput[]
+    connectOrCreate?: REPortfolioModelCreateOrConnectWithoutRe_agentInput | REPortfolioModelCreateOrConnectWithoutRe_agentInput[]
     createMany?: REPortfolioModelCreateManyRe_agentInputEnvelope
-    connect?: Enumerable<REPortfolioModelWhereUniqueInput>
+    connect?: REPortfolioModelWhereUniqueInput | REPortfolioModelWhereUniqueInput[]
   }
 
   export type REPortfolioModelUncheckedCreateNestedManyWithoutRe_agentInput = {
-    create?: XOR<Enumerable<REPortfolioModelCreateWithoutRe_agentInput>, Enumerable<REPortfolioModelUncheckedCreateWithoutRe_agentInput>>
-    connectOrCreate?: Enumerable<REPortfolioModelCreateOrConnectWithoutRe_agentInput>
+    create?: XOR<REPortfolioModelCreateWithoutRe_agentInput, REPortfolioModelUncheckedCreateWithoutRe_agentInput> | REPortfolioModelCreateWithoutRe_agentInput[] | REPortfolioModelUncheckedCreateWithoutRe_agentInput[]
+    connectOrCreate?: REPortfolioModelCreateOrConnectWithoutRe_agentInput | REPortfolioModelCreateOrConnectWithoutRe_agentInput[]
     createMany?: REPortfolioModelCreateManyRe_agentInputEnvelope
-    connect?: Enumerable<REPortfolioModelWhereUniqueInput>
+    connect?: REPortfolioModelWhereUniqueInput | REPortfolioModelWhereUniqueInput[]
   }
 
   export type BIZUserModelUpdateOneRequiredWithoutRe_agentNestedInput = {
@@ -18277,7 +18566,7 @@ export namespace Prisma {
     connectOrCreate?: BIZUserModelCreateOrConnectWithoutRe_agentInput
     upsert?: BIZUserModelUpsertWithoutRe_agentInput
     connect?: BIZUserModelWhereUniqueInput
-    update?: XOR<BIZUserModelUpdateWithoutRe_agentInput, BIZUserModelUncheckedUpdateWithoutRe_agentInput>
+    update?: XOR<XOR<BIZUserModelUpdateToOneWithWhereWithoutRe_agentInput, BIZUserModelUpdateWithoutRe_agentInput>, BIZUserModelUncheckedUpdateWithoutRe_agentInput>
   }
 
   export type REExpertiseModelUpdateOneRequiredWithoutRe_agentsNestedInput = {
@@ -18285,77 +18574,77 @@ export namespace Prisma {
     connectOrCreate?: REExpertiseModelCreateOrConnectWithoutRe_agentsInput
     upsert?: REExpertiseModelUpsertWithoutRe_agentsInput
     connect?: REExpertiseModelWhereUniqueInput
-    update?: XOR<REExpertiseModelUpdateWithoutRe_agentsInput, REExpertiseModelUncheckedUpdateWithoutRe_agentsInput>
+    update?: XOR<XOR<REExpertiseModelUpdateToOneWithWhereWithoutRe_agentsInput, REExpertiseModelUpdateWithoutRe_agentsInput>, REExpertiseModelUncheckedUpdateWithoutRe_agentsInput>
   }
 
   export type REPortfolioModelUpdateManyWithoutRe_agentNestedInput = {
-    create?: XOR<Enumerable<REPortfolioModelCreateWithoutRe_agentInput>, Enumerable<REPortfolioModelUncheckedCreateWithoutRe_agentInput>>
-    connectOrCreate?: Enumerable<REPortfolioModelCreateOrConnectWithoutRe_agentInput>
-    upsert?: Enumerable<REPortfolioModelUpsertWithWhereUniqueWithoutRe_agentInput>
+    create?: XOR<REPortfolioModelCreateWithoutRe_agentInput, REPortfolioModelUncheckedCreateWithoutRe_agentInput> | REPortfolioModelCreateWithoutRe_agentInput[] | REPortfolioModelUncheckedCreateWithoutRe_agentInput[]
+    connectOrCreate?: REPortfolioModelCreateOrConnectWithoutRe_agentInput | REPortfolioModelCreateOrConnectWithoutRe_agentInput[]
+    upsert?: REPortfolioModelUpsertWithWhereUniqueWithoutRe_agentInput | REPortfolioModelUpsertWithWhereUniqueWithoutRe_agentInput[]
     createMany?: REPortfolioModelCreateManyRe_agentInputEnvelope
-    set?: Enumerable<REPortfolioModelWhereUniqueInput>
-    disconnect?: Enumerable<REPortfolioModelWhereUniqueInput>
-    delete?: Enumerable<REPortfolioModelWhereUniqueInput>
-    connect?: Enumerable<REPortfolioModelWhereUniqueInput>
-    update?: Enumerable<REPortfolioModelUpdateWithWhereUniqueWithoutRe_agentInput>
-    updateMany?: Enumerable<REPortfolioModelUpdateManyWithWhereWithoutRe_agentInput>
-    deleteMany?: Enumerable<REPortfolioModelScalarWhereInput>
+    set?: REPortfolioModelWhereUniqueInput | REPortfolioModelWhereUniqueInput[]
+    disconnect?: REPortfolioModelWhereUniqueInput | REPortfolioModelWhereUniqueInput[]
+    delete?: REPortfolioModelWhereUniqueInput | REPortfolioModelWhereUniqueInput[]
+    connect?: REPortfolioModelWhereUniqueInput | REPortfolioModelWhereUniqueInput[]
+    update?: REPortfolioModelUpdateWithWhereUniqueWithoutRe_agentInput | REPortfolioModelUpdateWithWhereUniqueWithoutRe_agentInput[]
+    updateMany?: REPortfolioModelUpdateManyWithWhereWithoutRe_agentInput | REPortfolioModelUpdateManyWithWhereWithoutRe_agentInput[]
+    deleteMany?: REPortfolioModelScalarWhereInput | REPortfolioModelScalarWhereInput[]
   }
 
   export type REPortfolioModelUncheckedUpdateManyWithoutRe_agentNestedInput = {
-    create?: XOR<Enumerable<REPortfolioModelCreateWithoutRe_agentInput>, Enumerable<REPortfolioModelUncheckedCreateWithoutRe_agentInput>>
-    connectOrCreate?: Enumerable<REPortfolioModelCreateOrConnectWithoutRe_agentInput>
-    upsert?: Enumerable<REPortfolioModelUpsertWithWhereUniqueWithoutRe_agentInput>
+    create?: XOR<REPortfolioModelCreateWithoutRe_agentInput, REPortfolioModelUncheckedCreateWithoutRe_agentInput> | REPortfolioModelCreateWithoutRe_agentInput[] | REPortfolioModelUncheckedCreateWithoutRe_agentInput[]
+    connectOrCreate?: REPortfolioModelCreateOrConnectWithoutRe_agentInput | REPortfolioModelCreateOrConnectWithoutRe_agentInput[]
+    upsert?: REPortfolioModelUpsertWithWhereUniqueWithoutRe_agentInput | REPortfolioModelUpsertWithWhereUniqueWithoutRe_agentInput[]
     createMany?: REPortfolioModelCreateManyRe_agentInputEnvelope
-    set?: Enumerable<REPortfolioModelWhereUniqueInput>
-    disconnect?: Enumerable<REPortfolioModelWhereUniqueInput>
-    delete?: Enumerable<REPortfolioModelWhereUniqueInput>
-    connect?: Enumerable<REPortfolioModelWhereUniqueInput>
-    update?: Enumerable<REPortfolioModelUpdateWithWhereUniqueWithoutRe_agentInput>
-    updateMany?: Enumerable<REPortfolioModelUpdateManyWithWhereWithoutRe_agentInput>
-    deleteMany?: Enumerable<REPortfolioModelScalarWhereInput>
+    set?: REPortfolioModelWhereUniqueInput | REPortfolioModelWhereUniqueInput[]
+    disconnect?: REPortfolioModelWhereUniqueInput | REPortfolioModelWhereUniqueInput[]
+    delete?: REPortfolioModelWhereUniqueInput | REPortfolioModelWhereUniqueInput[]
+    connect?: REPortfolioModelWhereUniqueInput | REPortfolioModelWhereUniqueInput[]
+    update?: REPortfolioModelUpdateWithWhereUniqueWithoutRe_agentInput | REPortfolioModelUpdateWithWhereUniqueWithoutRe_agentInput[]
+    updateMany?: REPortfolioModelUpdateManyWithWhereWithoutRe_agentInput | REPortfolioModelUpdateManyWithWhereWithoutRe_agentInput[]
+    deleteMany?: REPortfolioModelScalarWhereInput | REPortfolioModelScalarWhereInput[]
   }
 
   export type REAgentModelCreateNestedManyWithoutExpertiseInput = {
-    create?: XOR<Enumerable<REAgentModelCreateWithoutExpertiseInput>, Enumerable<REAgentModelUncheckedCreateWithoutExpertiseInput>>
-    connectOrCreate?: Enumerable<REAgentModelCreateOrConnectWithoutExpertiseInput>
+    create?: XOR<REAgentModelCreateWithoutExpertiseInput, REAgentModelUncheckedCreateWithoutExpertiseInput> | REAgentModelCreateWithoutExpertiseInput[] | REAgentModelUncheckedCreateWithoutExpertiseInput[]
+    connectOrCreate?: REAgentModelCreateOrConnectWithoutExpertiseInput | REAgentModelCreateOrConnectWithoutExpertiseInput[]
     createMany?: REAgentModelCreateManyExpertiseInputEnvelope
-    connect?: Enumerable<REAgentModelWhereUniqueInput>
+    connect?: REAgentModelWhereUniqueInput | REAgentModelWhereUniqueInput[]
   }
 
   export type REAgentModelUncheckedCreateNestedManyWithoutExpertiseInput = {
-    create?: XOR<Enumerable<REAgentModelCreateWithoutExpertiseInput>, Enumerable<REAgentModelUncheckedCreateWithoutExpertiseInput>>
-    connectOrCreate?: Enumerable<REAgentModelCreateOrConnectWithoutExpertiseInput>
+    create?: XOR<REAgentModelCreateWithoutExpertiseInput, REAgentModelUncheckedCreateWithoutExpertiseInput> | REAgentModelCreateWithoutExpertiseInput[] | REAgentModelUncheckedCreateWithoutExpertiseInput[]
+    connectOrCreate?: REAgentModelCreateOrConnectWithoutExpertiseInput | REAgentModelCreateOrConnectWithoutExpertiseInput[]
     createMany?: REAgentModelCreateManyExpertiseInputEnvelope
-    connect?: Enumerable<REAgentModelWhereUniqueInput>
+    connect?: REAgentModelWhereUniqueInput | REAgentModelWhereUniqueInput[]
   }
 
   export type REAgentModelUpdateManyWithoutExpertiseNestedInput = {
-    create?: XOR<Enumerable<REAgentModelCreateWithoutExpertiseInput>, Enumerable<REAgentModelUncheckedCreateWithoutExpertiseInput>>
-    connectOrCreate?: Enumerable<REAgentModelCreateOrConnectWithoutExpertiseInput>
-    upsert?: Enumerable<REAgentModelUpsertWithWhereUniqueWithoutExpertiseInput>
+    create?: XOR<REAgentModelCreateWithoutExpertiseInput, REAgentModelUncheckedCreateWithoutExpertiseInput> | REAgentModelCreateWithoutExpertiseInput[] | REAgentModelUncheckedCreateWithoutExpertiseInput[]
+    connectOrCreate?: REAgentModelCreateOrConnectWithoutExpertiseInput | REAgentModelCreateOrConnectWithoutExpertiseInput[]
+    upsert?: REAgentModelUpsertWithWhereUniqueWithoutExpertiseInput | REAgentModelUpsertWithWhereUniqueWithoutExpertiseInput[]
     createMany?: REAgentModelCreateManyExpertiseInputEnvelope
-    set?: Enumerable<REAgentModelWhereUniqueInput>
-    disconnect?: Enumerable<REAgentModelWhereUniqueInput>
-    delete?: Enumerable<REAgentModelWhereUniqueInput>
-    connect?: Enumerable<REAgentModelWhereUniqueInput>
-    update?: Enumerable<REAgentModelUpdateWithWhereUniqueWithoutExpertiseInput>
-    updateMany?: Enumerable<REAgentModelUpdateManyWithWhereWithoutExpertiseInput>
-    deleteMany?: Enumerable<REAgentModelScalarWhereInput>
+    set?: REAgentModelWhereUniqueInput | REAgentModelWhereUniqueInput[]
+    disconnect?: REAgentModelWhereUniqueInput | REAgentModelWhereUniqueInput[]
+    delete?: REAgentModelWhereUniqueInput | REAgentModelWhereUniqueInput[]
+    connect?: REAgentModelWhereUniqueInput | REAgentModelWhereUniqueInput[]
+    update?: REAgentModelUpdateWithWhereUniqueWithoutExpertiseInput | REAgentModelUpdateWithWhereUniqueWithoutExpertiseInput[]
+    updateMany?: REAgentModelUpdateManyWithWhereWithoutExpertiseInput | REAgentModelUpdateManyWithWhereWithoutExpertiseInput[]
+    deleteMany?: REAgentModelScalarWhereInput | REAgentModelScalarWhereInput[]
   }
 
   export type REAgentModelUncheckedUpdateManyWithoutExpertiseNestedInput = {
-    create?: XOR<Enumerable<REAgentModelCreateWithoutExpertiseInput>, Enumerable<REAgentModelUncheckedCreateWithoutExpertiseInput>>
-    connectOrCreate?: Enumerable<REAgentModelCreateOrConnectWithoutExpertiseInput>
-    upsert?: Enumerable<REAgentModelUpsertWithWhereUniqueWithoutExpertiseInput>
+    create?: XOR<REAgentModelCreateWithoutExpertiseInput, REAgentModelUncheckedCreateWithoutExpertiseInput> | REAgentModelCreateWithoutExpertiseInput[] | REAgentModelUncheckedCreateWithoutExpertiseInput[]
+    connectOrCreate?: REAgentModelCreateOrConnectWithoutExpertiseInput | REAgentModelCreateOrConnectWithoutExpertiseInput[]
+    upsert?: REAgentModelUpsertWithWhereUniqueWithoutExpertiseInput | REAgentModelUpsertWithWhereUniqueWithoutExpertiseInput[]
     createMany?: REAgentModelCreateManyExpertiseInputEnvelope
-    set?: Enumerable<REAgentModelWhereUniqueInput>
-    disconnect?: Enumerable<REAgentModelWhereUniqueInput>
-    delete?: Enumerable<REAgentModelWhereUniqueInput>
-    connect?: Enumerable<REAgentModelWhereUniqueInput>
-    update?: Enumerable<REAgentModelUpdateWithWhereUniqueWithoutExpertiseInput>
-    updateMany?: Enumerable<REAgentModelUpdateManyWithWhereWithoutExpertiseInput>
-    deleteMany?: Enumerable<REAgentModelScalarWhereInput>
+    set?: REAgentModelWhereUniqueInput | REAgentModelWhereUniqueInput[]
+    disconnect?: REAgentModelWhereUniqueInput | REAgentModelWhereUniqueInput[]
+    delete?: REAgentModelWhereUniqueInput | REAgentModelWhereUniqueInput[]
+    connect?: REAgentModelWhereUniqueInput | REAgentModelWhereUniqueInput[]
+    update?: REAgentModelUpdateWithWhereUniqueWithoutExpertiseInput | REAgentModelUpdateWithWhereUniqueWithoutExpertiseInput[]
+    updateMany?: REAgentModelUpdateManyWithWhereWithoutExpertiseInput | REAgentModelUpdateManyWithWhereWithoutExpertiseInput[]
+    deleteMany?: REAgentModelScalarWhereInput | REAgentModelScalarWhereInput[]
   }
 
   export type BIZUserModelCreateNestedOneWithoutHs_providerInput = {
@@ -18365,31 +18654,31 @@ export namespace Prisma {
   }
 
   export type HSSubExpertiseRelationModelCreateNestedManyWithoutHs_providerInput = {
-    create?: XOR<Enumerable<HSSubExpertiseRelationModelCreateWithoutHs_providerInput>, Enumerable<HSSubExpertiseRelationModelUncheckedCreateWithoutHs_providerInput>>
-    connectOrCreate?: Enumerable<HSSubExpertiseRelationModelCreateOrConnectWithoutHs_providerInput>
+    create?: XOR<HSSubExpertiseRelationModelCreateWithoutHs_providerInput, HSSubExpertiseRelationModelUncheckedCreateWithoutHs_providerInput> | HSSubExpertiseRelationModelCreateWithoutHs_providerInput[] | HSSubExpertiseRelationModelUncheckedCreateWithoutHs_providerInput[]
+    connectOrCreate?: HSSubExpertiseRelationModelCreateOrConnectWithoutHs_providerInput | HSSubExpertiseRelationModelCreateOrConnectWithoutHs_providerInput[]
     createMany?: HSSubExpertiseRelationModelCreateManyHs_providerInputEnvelope
-    connect?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
+    connect?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
   }
 
   export type HSPortfolioModelCreateNestedManyWithoutHs_providerInput = {
-    create?: XOR<Enumerable<HSPortfolioModelCreateWithoutHs_providerInput>, Enumerable<HSPortfolioModelUncheckedCreateWithoutHs_providerInput>>
-    connectOrCreate?: Enumerable<HSPortfolioModelCreateOrConnectWithoutHs_providerInput>
+    create?: XOR<HSPortfolioModelCreateWithoutHs_providerInput, HSPortfolioModelUncheckedCreateWithoutHs_providerInput> | HSPortfolioModelCreateWithoutHs_providerInput[] | HSPortfolioModelUncheckedCreateWithoutHs_providerInput[]
+    connectOrCreate?: HSPortfolioModelCreateOrConnectWithoutHs_providerInput | HSPortfolioModelCreateOrConnectWithoutHs_providerInput[]
     createMany?: HSPortfolioModelCreateManyHs_providerInputEnvelope
-    connect?: Enumerable<HSPortfolioModelWhereUniqueInput>
+    connect?: HSPortfolioModelWhereUniqueInput | HSPortfolioModelWhereUniqueInput[]
   }
 
   export type HSSubExpertiseRelationModelUncheckedCreateNestedManyWithoutHs_providerInput = {
-    create?: XOR<Enumerable<HSSubExpertiseRelationModelCreateWithoutHs_providerInput>, Enumerable<HSSubExpertiseRelationModelUncheckedCreateWithoutHs_providerInput>>
-    connectOrCreate?: Enumerable<HSSubExpertiseRelationModelCreateOrConnectWithoutHs_providerInput>
+    create?: XOR<HSSubExpertiseRelationModelCreateWithoutHs_providerInput, HSSubExpertiseRelationModelUncheckedCreateWithoutHs_providerInput> | HSSubExpertiseRelationModelCreateWithoutHs_providerInput[] | HSSubExpertiseRelationModelUncheckedCreateWithoutHs_providerInput[]
+    connectOrCreate?: HSSubExpertiseRelationModelCreateOrConnectWithoutHs_providerInput | HSSubExpertiseRelationModelCreateOrConnectWithoutHs_providerInput[]
     createMany?: HSSubExpertiseRelationModelCreateManyHs_providerInputEnvelope
-    connect?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
+    connect?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
   }
 
   export type HSPortfolioModelUncheckedCreateNestedManyWithoutHs_providerInput = {
-    create?: XOR<Enumerable<HSPortfolioModelCreateWithoutHs_providerInput>, Enumerable<HSPortfolioModelUncheckedCreateWithoutHs_providerInput>>
-    connectOrCreate?: Enumerable<HSPortfolioModelCreateOrConnectWithoutHs_providerInput>
+    create?: XOR<HSPortfolioModelCreateWithoutHs_providerInput, HSPortfolioModelUncheckedCreateWithoutHs_providerInput> | HSPortfolioModelCreateWithoutHs_providerInput[] | HSPortfolioModelUncheckedCreateWithoutHs_providerInput[]
+    connectOrCreate?: HSPortfolioModelCreateOrConnectWithoutHs_providerInput | HSPortfolioModelCreateOrConnectWithoutHs_providerInput[]
     createMany?: HSPortfolioModelCreateManyHs_providerInputEnvelope
-    connect?: Enumerable<HSPortfolioModelWhereUniqueInput>
+    connect?: HSPortfolioModelWhereUniqueInput | HSPortfolioModelWhereUniqueInput[]
   }
 
   export type BIZUserModelUpdateOneRequiredWithoutHs_providerNestedInput = {
@@ -18397,70 +18686,70 @@ export namespace Prisma {
     connectOrCreate?: BIZUserModelCreateOrConnectWithoutHs_providerInput
     upsert?: BIZUserModelUpsertWithoutHs_providerInput
     connect?: BIZUserModelWhereUniqueInput
-    update?: XOR<BIZUserModelUpdateWithoutHs_providerInput, BIZUserModelUncheckedUpdateWithoutHs_providerInput>
+    update?: XOR<XOR<BIZUserModelUpdateToOneWithWhereWithoutHs_providerInput, BIZUserModelUpdateWithoutHs_providerInput>, BIZUserModelUncheckedUpdateWithoutHs_providerInput>
   }
 
   export type HSSubExpertiseRelationModelUpdateManyWithoutHs_providerNestedInput = {
-    create?: XOR<Enumerable<HSSubExpertiseRelationModelCreateWithoutHs_providerInput>, Enumerable<HSSubExpertiseRelationModelUncheckedCreateWithoutHs_providerInput>>
-    connectOrCreate?: Enumerable<HSSubExpertiseRelationModelCreateOrConnectWithoutHs_providerInput>
-    upsert?: Enumerable<HSSubExpertiseRelationModelUpsertWithWhereUniqueWithoutHs_providerInput>
+    create?: XOR<HSSubExpertiseRelationModelCreateWithoutHs_providerInput, HSSubExpertiseRelationModelUncheckedCreateWithoutHs_providerInput> | HSSubExpertiseRelationModelCreateWithoutHs_providerInput[] | HSSubExpertiseRelationModelUncheckedCreateWithoutHs_providerInput[]
+    connectOrCreate?: HSSubExpertiseRelationModelCreateOrConnectWithoutHs_providerInput | HSSubExpertiseRelationModelCreateOrConnectWithoutHs_providerInput[]
+    upsert?: HSSubExpertiseRelationModelUpsertWithWhereUniqueWithoutHs_providerInput | HSSubExpertiseRelationModelUpsertWithWhereUniqueWithoutHs_providerInput[]
     createMany?: HSSubExpertiseRelationModelCreateManyHs_providerInputEnvelope
-    set?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
-    disconnect?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
-    delete?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
-    connect?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
-    update?: Enumerable<HSSubExpertiseRelationModelUpdateWithWhereUniqueWithoutHs_providerInput>
-    updateMany?: Enumerable<HSSubExpertiseRelationModelUpdateManyWithWhereWithoutHs_providerInput>
-    deleteMany?: Enumerable<HSSubExpertiseRelationModelScalarWhereInput>
+    set?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
+    disconnect?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
+    delete?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
+    connect?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
+    update?: HSSubExpertiseRelationModelUpdateWithWhereUniqueWithoutHs_providerInput | HSSubExpertiseRelationModelUpdateWithWhereUniqueWithoutHs_providerInput[]
+    updateMany?: HSSubExpertiseRelationModelUpdateManyWithWhereWithoutHs_providerInput | HSSubExpertiseRelationModelUpdateManyWithWhereWithoutHs_providerInput[]
+    deleteMany?: HSSubExpertiseRelationModelScalarWhereInput | HSSubExpertiseRelationModelScalarWhereInput[]
   }
 
   export type HSPortfolioModelUpdateManyWithoutHs_providerNestedInput = {
-    create?: XOR<Enumerable<HSPortfolioModelCreateWithoutHs_providerInput>, Enumerable<HSPortfolioModelUncheckedCreateWithoutHs_providerInput>>
-    connectOrCreate?: Enumerable<HSPortfolioModelCreateOrConnectWithoutHs_providerInput>
-    upsert?: Enumerable<HSPortfolioModelUpsertWithWhereUniqueWithoutHs_providerInput>
+    create?: XOR<HSPortfolioModelCreateWithoutHs_providerInput, HSPortfolioModelUncheckedCreateWithoutHs_providerInput> | HSPortfolioModelCreateWithoutHs_providerInput[] | HSPortfolioModelUncheckedCreateWithoutHs_providerInput[]
+    connectOrCreate?: HSPortfolioModelCreateOrConnectWithoutHs_providerInput | HSPortfolioModelCreateOrConnectWithoutHs_providerInput[]
+    upsert?: HSPortfolioModelUpsertWithWhereUniqueWithoutHs_providerInput | HSPortfolioModelUpsertWithWhereUniqueWithoutHs_providerInput[]
     createMany?: HSPortfolioModelCreateManyHs_providerInputEnvelope
-    set?: Enumerable<HSPortfolioModelWhereUniqueInput>
-    disconnect?: Enumerable<HSPortfolioModelWhereUniqueInput>
-    delete?: Enumerable<HSPortfolioModelWhereUniqueInput>
-    connect?: Enumerable<HSPortfolioModelWhereUniqueInput>
-    update?: Enumerable<HSPortfolioModelUpdateWithWhereUniqueWithoutHs_providerInput>
-    updateMany?: Enumerable<HSPortfolioModelUpdateManyWithWhereWithoutHs_providerInput>
-    deleteMany?: Enumerable<HSPortfolioModelScalarWhereInput>
+    set?: HSPortfolioModelWhereUniqueInput | HSPortfolioModelWhereUniqueInput[]
+    disconnect?: HSPortfolioModelWhereUniqueInput | HSPortfolioModelWhereUniqueInput[]
+    delete?: HSPortfolioModelWhereUniqueInput | HSPortfolioModelWhereUniqueInput[]
+    connect?: HSPortfolioModelWhereUniqueInput | HSPortfolioModelWhereUniqueInput[]
+    update?: HSPortfolioModelUpdateWithWhereUniqueWithoutHs_providerInput | HSPortfolioModelUpdateWithWhereUniqueWithoutHs_providerInput[]
+    updateMany?: HSPortfolioModelUpdateManyWithWhereWithoutHs_providerInput | HSPortfolioModelUpdateManyWithWhereWithoutHs_providerInput[]
+    deleteMany?: HSPortfolioModelScalarWhereInput | HSPortfolioModelScalarWhereInput[]
   }
 
   export type HSSubExpertiseRelationModelUncheckedUpdateManyWithoutHs_providerNestedInput = {
-    create?: XOR<Enumerable<HSSubExpertiseRelationModelCreateWithoutHs_providerInput>, Enumerable<HSSubExpertiseRelationModelUncheckedCreateWithoutHs_providerInput>>
-    connectOrCreate?: Enumerable<HSSubExpertiseRelationModelCreateOrConnectWithoutHs_providerInput>
-    upsert?: Enumerable<HSSubExpertiseRelationModelUpsertWithWhereUniqueWithoutHs_providerInput>
+    create?: XOR<HSSubExpertiseRelationModelCreateWithoutHs_providerInput, HSSubExpertiseRelationModelUncheckedCreateWithoutHs_providerInput> | HSSubExpertiseRelationModelCreateWithoutHs_providerInput[] | HSSubExpertiseRelationModelUncheckedCreateWithoutHs_providerInput[]
+    connectOrCreate?: HSSubExpertiseRelationModelCreateOrConnectWithoutHs_providerInput | HSSubExpertiseRelationModelCreateOrConnectWithoutHs_providerInput[]
+    upsert?: HSSubExpertiseRelationModelUpsertWithWhereUniqueWithoutHs_providerInput | HSSubExpertiseRelationModelUpsertWithWhereUniqueWithoutHs_providerInput[]
     createMany?: HSSubExpertiseRelationModelCreateManyHs_providerInputEnvelope
-    set?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
-    disconnect?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
-    delete?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
-    connect?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
-    update?: Enumerable<HSSubExpertiseRelationModelUpdateWithWhereUniqueWithoutHs_providerInput>
-    updateMany?: Enumerable<HSSubExpertiseRelationModelUpdateManyWithWhereWithoutHs_providerInput>
-    deleteMany?: Enumerable<HSSubExpertiseRelationModelScalarWhereInput>
+    set?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
+    disconnect?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
+    delete?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
+    connect?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
+    update?: HSSubExpertiseRelationModelUpdateWithWhereUniqueWithoutHs_providerInput | HSSubExpertiseRelationModelUpdateWithWhereUniqueWithoutHs_providerInput[]
+    updateMany?: HSSubExpertiseRelationModelUpdateManyWithWhereWithoutHs_providerInput | HSSubExpertiseRelationModelUpdateManyWithWhereWithoutHs_providerInput[]
+    deleteMany?: HSSubExpertiseRelationModelScalarWhereInput | HSSubExpertiseRelationModelScalarWhereInput[]
   }
 
   export type HSPortfolioModelUncheckedUpdateManyWithoutHs_providerNestedInput = {
-    create?: XOR<Enumerable<HSPortfolioModelCreateWithoutHs_providerInput>, Enumerable<HSPortfolioModelUncheckedCreateWithoutHs_providerInput>>
-    connectOrCreate?: Enumerable<HSPortfolioModelCreateOrConnectWithoutHs_providerInput>
-    upsert?: Enumerable<HSPortfolioModelUpsertWithWhereUniqueWithoutHs_providerInput>
+    create?: XOR<HSPortfolioModelCreateWithoutHs_providerInput, HSPortfolioModelUncheckedCreateWithoutHs_providerInput> | HSPortfolioModelCreateWithoutHs_providerInput[] | HSPortfolioModelUncheckedCreateWithoutHs_providerInput[]
+    connectOrCreate?: HSPortfolioModelCreateOrConnectWithoutHs_providerInput | HSPortfolioModelCreateOrConnectWithoutHs_providerInput[]
+    upsert?: HSPortfolioModelUpsertWithWhereUniqueWithoutHs_providerInput | HSPortfolioModelUpsertWithWhereUniqueWithoutHs_providerInput[]
     createMany?: HSPortfolioModelCreateManyHs_providerInputEnvelope
-    set?: Enumerable<HSPortfolioModelWhereUniqueInput>
-    disconnect?: Enumerable<HSPortfolioModelWhereUniqueInput>
-    delete?: Enumerable<HSPortfolioModelWhereUniqueInput>
-    connect?: Enumerable<HSPortfolioModelWhereUniqueInput>
-    update?: Enumerable<HSPortfolioModelUpdateWithWhereUniqueWithoutHs_providerInput>
-    updateMany?: Enumerable<HSPortfolioModelUpdateManyWithWhereWithoutHs_providerInput>
-    deleteMany?: Enumerable<HSPortfolioModelScalarWhereInput>
+    set?: HSPortfolioModelWhereUniqueInput | HSPortfolioModelWhereUniqueInput[]
+    disconnect?: HSPortfolioModelWhereUniqueInput | HSPortfolioModelWhereUniqueInput[]
+    delete?: HSPortfolioModelWhereUniqueInput | HSPortfolioModelWhereUniqueInput[]
+    connect?: HSPortfolioModelWhereUniqueInput | HSPortfolioModelWhereUniqueInput[]
+    update?: HSPortfolioModelUpdateWithWhereUniqueWithoutHs_providerInput | HSPortfolioModelUpdateWithWhereUniqueWithoutHs_providerInput[]
+    updateMany?: HSPortfolioModelUpdateManyWithWhereWithoutHs_providerInput | HSPortfolioModelUpdateManyWithWhereWithoutHs_providerInput[]
+    deleteMany?: HSPortfolioModelScalarWhereInput | HSPortfolioModelScalarWhereInput[]
   }
 
   export type HSSubExpertiseRelationModelCreateNestedManyWithoutSub_expertiseInput = {
-    create?: XOR<Enumerable<HSSubExpertiseRelationModelCreateWithoutSub_expertiseInput>, Enumerable<HSSubExpertiseRelationModelUncheckedCreateWithoutSub_expertiseInput>>
-    connectOrCreate?: Enumerable<HSSubExpertiseRelationModelCreateOrConnectWithoutSub_expertiseInput>
+    create?: XOR<HSSubExpertiseRelationModelCreateWithoutSub_expertiseInput, HSSubExpertiseRelationModelUncheckedCreateWithoutSub_expertiseInput> | HSSubExpertiseRelationModelCreateWithoutSub_expertiseInput[] | HSSubExpertiseRelationModelUncheckedCreateWithoutSub_expertiseInput[]
+    connectOrCreate?: HSSubExpertiseRelationModelCreateOrConnectWithoutSub_expertiseInput | HSSubExpertiseRelationModelCreateOrConnectWithoutSub_expertiseInput[]
     createMany?: HSSubExpertiseRelationModelCreateManySub_expertiseInputEnvelope
-    connect?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
+    connect?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
   }
 
   export type HSSuperExpertiseModelCreateNestedOneWithoutSub_expertisesInput = {
@@ -18470,24 +18759,24 @@ export namespace Prisma {
   }
 
   export type HSSubExpertiseRelationModelUncheckedCreateNestedManyWithoutSub_expertiseInput = {
-    create?: XOR<Enumerable<HSSubExpertiseRelationModelCreateWithoutSub_expertiseInput>, Enumerable<HSSubExpertiseRelationModelUncheckedCreateWithoutSub_expertiseInput>>
-    connectOrCreate?: Enumerable<HSSubExpertiseRelationModelCreateOrConnectWithoutSub_expertiseInput>
+    create?: XOR<HSSubExpertiseRelationModelCreateWithoutSub_expertiseInput, HSSubExpertiseRelationModelUncheckedCreateWithoutSub_expertiseInput> | HSSubExpertiseRelationModelCreateWithoutSub_expertiseInput[] | HSSubExpertiseRelationModelUncheckedCreateWithoutSub_expertiseInput[]
+    connectOrCreate?: HSSubExpertiseRelationModelCreateOrConnectWithoutSub_expertiseInput | HSSubExpertiseRelationModelCreateOrConnectWithoutSub_expertiseInput[]
     createMany?: HSSubExpertiseRelationModelCreateManySub_expertiseInputEnvelope
-    connect?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
+    connect?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
   }
 
   export type HSSubExpertiseRelationModelUpdateManyWithoutSub_expertiseNestedInput = {
-    create?: XOR<Enumerable<HSSubExpertiseRelationModelCreateWithoutSub_expertiseInput>, Enumerable<HSSubExpertiseRelationModelUncheckedCreateWithoutSub_expertiseInput>>
-    connectOrCreate?: Enumerable<HSSubExpertiseRelationModelCreateOrConnectWithoutSub_expertiseInput>
-    upsert?: Enumerable<HSSubExpertiseRelationModelUpsertWithWhereUniqueWithoutSub_expertiseInput>
+    create?: XOR<HSSubExpertiseRelationModelCreateWithoutSub_expertiseInput, HSSubExpertiseRelationModelUncheckedCreateWithoutSub_expertiseInput> | HSSubExpertiseRelationModelCreateWithoutSub_expertiseInput[] | HSSubExpertiseRelationModelUncheckedCreateWithoutSub_expertiseInput[]
+    connectOrCreate?: HSSubExpertiseRelationModelCreateOrConnectWithoutSub_expertiseInput | HSSubExpertiseRelationModelCreateOrConnectWithoutSub_expertiseInput[]
+    upsert?: HSSubExpertiseRelationModelUpsertWithWhereUniqueWithoutSub_expertiseInput | HSSubExpertiseRelationModelUpsertWithWhereUniqueWithoutSub_expertiseInput[]
     createMany?: HSSubExpertiseRelationModelCreateManySub_expertiseInputEnvelope
-    set?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
-    disconnect?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
-    delete?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
-    connect?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
-    update?: Enumerable<HSSubExpertiseRelationModelUpdateWithWhereUniqueWithoutSub_expertiseInput>
-    updateMany?: Enumerable<HSSubExpertiseRelationModelUpdateManyWithWhereWithoutSub_expertiseInput>
-    deleteMany?: Enumerable<HSSubExpertiseRelationModelScalarWhereInput>
+    set?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
+    disconnect?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
+    delete?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
+    connect?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
+    update?: HSSubExpertiseRelationModelUpdateWithWhereUniqueWithoutSub_expertiseInput | HSSubExpertiseRelationModelUpdateWithWhereUniqueWithoutSub_expertiseInput[]
+    updateMany?: HSSubExpertiseRelationModelUpdateManyWithWhereWithoutSub_expertiseInput | HSSubExpertiseRelationModelUpdateManyWithWhereWithoutSub_expertiseInput[]
+    deleteMany?: HSSubExpertiseRelationModelScalarWhereInput | HSSubExpertiseRelationModelScalarWhereInput[]
   }
 
   export type HSSuperExpertiseModelUpdateOneRequiredWithoutSub_expertisesNestedInput = {
@@ -18495,63 +18784,63 @@ export namespace Prisma {
     connectOrCreate?: HSSuperExpertiseModelCreateOrConnectWithoutSub_expertisesInput
     upsert?: HSSuperExpertiseModelUpsertWithoutSub_expertisesInput
     connect?: HSSuperExpertiseModelWhereUniqueInput
-    update?: XOR<HSSuperExpertiseModelUpdateWithoutSub_expertisesInput, HSSuperExpertiseModelUncheckedUpdateWithoutSub_expertisesInput>
+    update?: XOR<XOR<HSSuperExpertiseModelUpdateToOneWithWhereWithoutSub_expertisesInput, HSSuperExpertiseModelUpdateWithoutSub_expertisesInput>, HSSuperExpertiseModelUncheckedUpdateWithoutSub_expertisesInput>
   }
 
   export type HSSubExpertiseRelationModelUncheckedUpdateManyWithoutSub_expertiseNestedInput = {
-    create?: XOR<Enumerable<HSSubExpertiseRelationModelCreateWithoutSub_expertiseInput>, Enumerable<HSSubExpertiseRelationModelUncheckedCreateWithoutSub_expertiseInput>>
-    connectOrCreate?: Enumerable<HSSubExpertiseRelationModelCreateOrConnectWithoutSub_expertiseInput>
-    upsert?: Enumerable<HSSubExpertiseRelationModelUpsertWithWhereUniqueWithoutSub_expertiseInput>
+    create?: XOR<HSSubExpertiseRelationModelCreateWithoutSub_expertiseInput, HSSubExpertiseRelationModelUncheckedCreateWithoutSub_expertiseInput> | HSSubExpertiseRelationModelCreateWithoutSub_expertiseInput[] | HSSubExpertiseRelationModelUncheckedCreateWithoutSub_expertiseInput[]
+    connectOrCreate?: HSSubExpertiseRelationModelCreateOrConnectWithoutSub_expertiseInput | HSSubExpertiseRelationModelCreateOrConnectWithoutSub_expertiseInput[]
+    upsert?: HSSubExpertiseRelationModelUpsertWithWhereUniqueWithoutSub_expertiseInput | HSSubExpertiseRelationModelUpsertWithWhereUniqueWithoutSub_expertiseInput[]
     createMany?: HSSubExpertiseRelationModelCreateManySub_expertiseInputEnvelope
-    set?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
-    disconnect?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
-    delete?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
-    connect?: Enumerable<HSSubExpertiseRelationModelWhereUniqueInput>
-    update?: Enumerable<HSSubExpertiseRelationModelUpdateWithWhereUniqueWithoutSub_expertiseInput>
-    updateMany?: Enumerable<HSSubExpertiseRelationModelUpdateManyWithWhereWithoutSub_expertiseInput>
-    deleteMany?: Enumerable<HSSubExpertiseRelationModelScalarWhereInput>
+    set?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
+    disconnect?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
+    delete?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
+    connect?: HSSubExpertiseRelationModelWhereUniqueInput | HSSubExpertiseRelationModelWhereUniqueInput[]
+    update?: HSSubExpertiseRelationModelUpdateWithWhereUniqueWithoutSub_expertiseInput | HSSubExpertiseRelationModelUpdateWithWhereUniqueWithoutSub_expertiseInput[]
+    updateMany?: HSSubExpertiseRelationModelUpdateManyWithWhereWithoutSub_expertiseInput | HSSubExpertiseRelationModelUpdateManyWithWhereWithoutSub_expertiseInput[]
+    deleteMany?: HSSubExpertiseRelationModelScalarWhereInput | HSSubExpertiseRelationModelScalarWhereInput[]
   }
 
   export type HSSubExpertiseModelCreateNestedManyWithoutSuper_expertiseInput = {
-    create?: XOR<Enumerable<HSSubExpertiseModelCreateWithoutSuper_expertiseInput>, Enumerable<HSSubExpertiseModelUncheckedCreateWithoutSuper_expertiseInput>>
-    connectOrCreate?: Enumerable<HSSubExpertiseModelCreateOrConnectWithoutSuper_expertiseInput>
+    create?: XOR<HSSubExpertiseModelCreateWithoutSuper_expertiseInput, HSSubExpertiseModelUncheckedCreateWithoutSuper_expertiseInput> | HSSubExpertiseModelCreateWithoutSuper_expertiseInput[] | HSSubExpertiseModelUncheckedCreateWithoutSuper_expertiseInput[]
+    connectOrCreate?: HSSubExpertiseModelCreateOrConnectWithoutSuper_expertiseInput | HSSubExpertiseModelCreateOrConnectWithoutSuper_expertiseInput[]
     createMany?: HSSubExpertiseModelCreateManySuper_expertiseInputEnvelope
-    connect?: Enumerable<HSSubExpertiseModelWhereUniqueInput>
+    connect?: HSSubExpertiseModelWhereUniqueInput | HSSubExpertiseModelWhereUniqueInput[]
   }
 
   export type HSSubExpertiseModelUncheckedCreateNestedManyWithoutSuper_expertiseInput = {
-    create?: XOR<Enumerable<HSSubExpertiseModelCreateWithoutSuper_expertiseInput>, Enumerable<HSSubExpertiseModelUncheckedCreateWithoutSuper_expertiseInput>>
-    connectOrCreate?: Enumerable<HSSubExpertiseModelCreateOrConnectWithoutSuper_expertiseInput>
+    create?: XOR<HSSubExpertiseModelCreateWithoutSuper_expertiseInput, HSSubExpertiseModelUncheckedCreateWithoutSuper_expertiseInput> | HSSubExpertiseModelCreateWithoutSuper_expertiseInput[] | HSSubExpertiseModelUncheckedCreateWithoutSuper_expertiseInput[]
+    connectOrCreate?: HSSubExpertiseModelCreateOrConnectWithoutSuper_expertiseInput | HSSubExpertiseModelCreateOrConnectWithoutSuper_expertiseInput[]
     createMany?: HSSubExpertiseModelCreateManySuper_expertiseInputEnvelope
-    connect?: Enumerable<HSSubExpertiseModelWhereUniqueInput>
+    connect?: HSSubExpertiseModelWhereUniqueInput | HSSubExpertiseModelWhereUniqueInput[]
   }
 
   export type HSSubExpertiseModelUpdateManyWithoutSuper_expertiseNestedInput = {
-    create?: XOR<Enumerable<HSSubExpertiseModelCreateWithoutSuper_expertiseInput>, Enumerable<HSSubExpertiseModelUncheckedCreateWithoutSuper_expertiseInput>>
-    connectOrCreate?: Enumerable<HSSubExpertiseModelCreateOrConnectWithoutSuper_expertiseInput>
-    upsert?: Enumerable<HSSubExpertiseModelUpsertWithWhereUniqueWithoutSuper_expertiseInput>
+    create?: XOR<HSSubExpertiseModelCreateWithoutSuper_expertiseInput, HSSubExpertiseModelUncheckedCreateWithoutSuper_expertiseInput> | HSSubExpertiseModelCreateWithoutSuper_expertiseInput[] | HSSubExpertiseModelUncheckedCreateWithoutSuper_expertiseInput[]
+    connectOrCreate?: HSSubExpertiseModelCreateOrConnectWithoutSuper_expertiseInput | HSSubExpertiseModelCreateOrConnectWithoutSuper_expertiseInput[]
+    upsert?: HSSubExpertiseModelUpsertWithWhereUniqueWithoutSuper_expertiseInput | HSSubExpertiseModelUpsertWithWhereUniqueWithoutSuper_expertiseInput[]
     createMany?: HSSubExpertiseModelCreateManySuper_expertiseInputEnvelope
-    set?: Enumerable<HSSubExpertiseModelWhereUniqueInput>
-    disconnect?: Enumerable<HSSubExpertiseModelWhereUniqueInput>
-    delete?: Enumerable<HSSubExpertiseModelWhereUniqueInput>
-    connect?: Enumerable<HSSubExpertiseModelWhereUniqueInput>
-    update?: Enumerable<HSSubExpertiseModelUpdateWithWhereUniqueWithoutSuper_expertiseInput>
-    updateMany?: Enumerable<HSSubExpertiseModelUpdateManyWithWhereWithoutSuper_expertiseInput>
-    deleteMany?: Enumerable<HSSubExpertiseModelScalarWhereInput>
+    set?: HSSubExpertiseModelWhereUniqueInput | HSSubExpertiseModelWhereUniqueInput[]
+    disconnect?: HSSubExpertiseModelWhereUniqueInput | HSSubExpertiseModelWhereUniqueInput[]
+    delete?: HSSubExpertiseModelWhereUniqueInput | HSSubExpertiseModelWhereUniqueInput[]
+    connect?: HSSubExpertiseModelWhereUniqueInput | HSSubExpertiseModelWhereUniqueInput[]
+    update?: HSSubExpertiseModelUpdateWithWhereUniqueWithoutSuper_expertiseInput | HSSubExpertiseModelUpdateWithWhereUniqueWithoutSuper_expertiseInput[]
+    updateMany?: HSSubExpertiseModelUpdateManyWithWhereWithoutSuper_expertiseInput | HSSubExpertiseModelUpdateManyWithWhereWithoutSuper_expertiseInput[]
+    deleteMany?: HSSubExpertiseModelScalarWhereInput | HSSubExpertiseModelScalarWhereInput[]
   }
 
   export type HSSubExpertiseModelUncheckedUpdateManyWithoutSuper_expertiseNestedInput = {
-    create?: XOR<Enumerable<HSSubExpertiseModelCreateWithoutSuper_expertiseInput>, Enumerable<HSSubExpertiseModelUncheckedCreateWithoutSuper_expertiseInput>>
-    connectOrCreate?: Enumerable<HSSubExpertiseModelCreateOrConnectWithoutSuper_expertiseInput>
-    upsert?: Enumerable<HSSubExpertiseModelUpsertWithWhereUniqueWithoutSuper_expertiseInput>
+    create?: XOR<HSSubExpertiseModelCreateWithoutSuper_expertiseInput, HSSubExpertiseModelUncheckedCreateWithoutSuper_expertiseInput> | HSSubExpertiseModelCreateWithoutSuper_expertiseInput[] | HSSubExpertiseModelUncheckedCreateWithoutSuper_expertiseInput[]
+    connectOrCreate?: HSSubExpertiseModelCreateOrConnectWithoutSuper_expertiseInput | HSSubExpertiseModelCreateOrConnectWithoutSuper_expertiseInput[]
+    upsert?: HSSubExpertiseModelUpsertWithWhereUniqueWithoutSuper_expertiseInput | HSSubExpertiseModelUpsertWithWhereUniqueWithoutSuper_expertiseInput[]
     createMany?: HSSubExpertiseModelCreateManySuper_expertiseInputEnvelope
-    set?: Enumerable<HSSubExpertiseModelWhereUniqueInput>
-    disconnect?: Enumerable<HSSubExpertiseModelWhereUniqueInput>
-    delete?: Enumerable<HSSubExpertiseModelWhereUniqueInput>
-    connect?: Enumerable<HSSubExpertiseModelWhereUniqueInput>
-    update?: Enumerable<HSSubExpertiseModelUpdateWithWhereUniqueWithoutSuper_expertiseInput>
-    updateMany?: Enumerable<HSSubExpertiseModelUpdateManyWithWhereWithoutSuper_expertiseInput>
-    deleteMany?: Enumerable<HSSubExpertiseModelScalarWhereInput>
+    set?: HSSubExpertiseModelWhereUniqueInput | HSSubExpertiseModelWhereUniqueInput[]
+    disconnect?: HSSubExpertiseModelWhereUniqueInput | HSSubExpertiseModelWhereUniqueInput[]
+    delete?: HSSubExpertiseModelWhereUniqueInput | HSSubExpertiseModelWhereUniqueInput[]
+    connect?: HSSubExpertiseModelWhereUniqueInput | HSSubExpertiseModelWhereUniqueInput[]
+    update?: HSSubExpertiseModelUpdateWithWhereUniqueWithoutSuper_expertiseInput | HSSubExpertiseModelUpdateWithWhereUniqueWithoutSuper_expertiseInput[]
+    updateMany?: HSSubExpertiseModelUpdateManyWithWhereWithoutSuper_expertiseInput | HSSubExpertiseModelUpdateManyWithWhereWithoutSuper_expertiseInput[]
+    deleteMany?: HSSubExpertiseModelScalarWhereInput | HSSubExpertiseModelScalarWhereInput[]
   }
 
   export type HSProviderModelCreateNestedOneWithoutExpertise_relationInput = {
@@ -18571,7 +18860,7 @@ export namespace Prisma {
     connectOrCreate?: HSProviderModelCreateOrConnectWithoutExpertise_relationInput
     upsert?: HSProviderModelUpsertWithoutExpertise_relationInput
     connect?: HSProviderModelWhereUniqueInput
-    update?: XOR<HSProviderModelUpdateWithoutExpertise_relationInput, HSProviderModelUncheckedUpdateWithoutExpertise_relationInput>
+    update?: XOR<XOR<HSProviderModelUpdateToOneWithWhereWithoutExpertise_relationInput, HSProviderModelUpdateWithoutExpertise_relationInput>, HSProviderModelUncheckedUpdateWithoutExpertise_relationInput>
   }
 
   export type HSSubExpertiseModelUpdateOneRequiredWithoutRelationsNestedInput = {
@@ -18579,7 +18868,7 @@ export namespace Prisma {
     connectOrCreate?: HSSubExpertiseModelCreateOrConnectWithoutRelationsInput
     upsert?: HSSubExpertiseModelUpsertWithoutRelationsInput
     connect?: HSSubExpertiseModelWhereUniqueInput
-    update?: XOR<HSSubExpertiseModelUpdateWithoutRelationsInput, HSSubExpertiseModelUncheckedUpdateWithoutRelationsInput>
+    update?: XOR<XOR<HSSubExpertiseModelUpdateToOneWithWhereWithoutRelationsInput, HSSubExpertiseModelUpdateWithoutRelationsInput>, HSSubExpertiseModelUncheckedUpdateWithoutRelationsInput>
   }
 
   export type REAgentModelCreateNestedOneWithoutPortfoliosInput = {
@@ -18593,7 +18882,7 @@ export namespace Prisma {
     connectOrCreate?: REAgentModelCreateOrConnectWithoutPortfoliosInput
     upsert?: REAgentModelUpsertWithoutPortfoliosInput
     connect?: REAgentModelWhereUniqueInput
-    update?: XOR<REAgentModelUpdateWithoutPortfoliosInput, REAgentModelUncheckedUpdateWithoutPortfoliosInput>
+    update?: XOR<XOR<REAgentModelUpdateToOneWithWhereWithoutPortfoliosInput, REAgentModelUpdateWithoutPortfoliosInput>, REAgentModelUncheckedUpdateWithoutPortfoliosInput>
   }
 
   export type HSProviderModelCreateNestedOneWithoutPortfoliosInput = {
@@ -18607,7 +18896,7 @@ export namespace Prisma {
     connectOrCreate?: HSProviderModelCreateOrConnectWithoutPortfoliosInput
     upsert?: HSProviderModelUpsertWithoutPortfoliosInput
     connect?: HSProviderModelWhereUniqueInput
-    update?: XOR<HSProviderModelUpdateWithoutPortfoliosInput, HSProviderModelUncheckedUpdateWithoutPortfoliosInput>
+    update?: XOR<XOR<HSProviderModelUpdateToOneWithWhereWithoutPortfoliosInput, HSProviderModelUpdateWithoutPortfoliosInput>, HSProviderModelUncheckedUpdateWithoutPortfoliosInput>
   }
 
   export type ClientModelCreateNestedOneWithoutOauth_accountsInput = {
@@ -18630,218 +18919,218 @@ export namespace Prisma {
     create?: XOR<ClientModelCreateWithoutOauth_accountsInput, ClientModelUncheckedCreateWithoutOauth_accountsInput>
     connectOrCreate?: ClientModelCreateOrConnectWithoutOauth_accountsInput
     upsert?: ClientModelUpsertWithoutOauth_accountsInput
-    disconnect?: boolean
-    delete?: boolean
+    disconnect?: ClientModelWhereInput | boolean
+    delete?: ClientModelWhereInput | boolean
     connect?: ClientModelWhereUniqueInput
-    update?: XOR<ClientModelUpdateWithoutOauth_accountsInput, ClientModelUncheckedUpdateWithoutOauth_accountsInput>
+    update?: XOR<XOR<ClientModelUpdateToOneWithWhereWithoutOauth_accountsInput, ClientModelUpdateWithoutOauth_accountsInput>, ClientModelUncheckedUpdateWithoutOauth_accountsInput>
   }
 
   export type BIZUserModelUpdateOneWithoutOauth_accountsNestedInput = {
     create?: XOR<BIZUserModelCreateWithoutOauth_accountsInput, BIZUserModelUncheckedCreateWithoutOauth_accountsInput>
     connectOrCreate?: BIZUserModelCreateOrConnectWithoutOauth_accountsInput
     upsert?: BIZUserModelUpsertWithoutOauth_accountsInput
-    disconnect?: boolean
-    delete?: boolean
+    disconnect?: BIZUserModelWhereInput | boolean
+    delete?: BIZUserModelWhereInput | boolean
     connect?: BIZUserModelWhereUniqueInput
-    update?: XOR<BIZUserModelUpdateWithoutOauth_accountsInput, BIZUserModelUncheckedUpdateWithoutOauth_accountsInput>
+    update?: XOR<XOR<BIZUserModelUpdateToOneWithWhereWithoutOauth_accountsInput, BIZUserModelUpdateWithoutOauth_accountsInput>, BIZUserModelUncheckedUpdateWithoutOauth_accountsInput>
   }
 
-  export type NestedStringFilter = {
-    equals?: string
-    in?: Enumerable<string> | string
-    notIn?: Enumerable<string> | string
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    not?: NestedStringFilter | string
+  export type NestedStringFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type NestedDateTimeFilter = {
-    equals?: Date | string
-    in?: Enumerable<Date> | Enumerable<string> | Date | string
-    notIn?: Enumerable<Date> | Enumerable<string> | Date | string
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeFilter | Date | string
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type NestedBoolFilter = {
-    equals?: boolean
-    not?: NestedBoolFilter | boolean
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type NestedDateTimeNullableFilter = {
-    equals?: Date | string | null
-    in?: Enumerable<Date> | Enumerable<string> | Date | string | null
-    notIn?: Enumerable<Date> | Enumerable<string> | Date | string | null
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeNullableFilter | Date | string | null
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type NestedStringNullableFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | string | null
-    notIn?: Enumerable<string> | string | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    not?: NestedStringNullableFilter | string | null
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedStringWithAggregatesFilter = {
-    equals?: string
-    in?: Enumerable<string> | string
-    notIn?: Enumerable<string> | string
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    not?: NestedStringWithAggregatesFilter | string
-    _count?: NestedIntFilter
-    _min?: NestedStringFilter
-    _max?: NestedStringFilter
+  export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
   }
 
-  export type NestedIntFilter = {
-    equals?: number
-    in?: Enumerable<number> | number
-    notIn?: Enumerable<number> | number
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntFilter | number
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type NestedDateTimeWithAggregatesFilter = {
-    equals?: Date | string
-    in?: Enumerable<Date> | Enumerable<string> | Date | string
-    notIn?: Enumerable<Date> | Enumerable<string> | Date | string
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeWithAggregatesFilter | Date | string
-    _count?: NestedIntFilter
-    _min?: NestedDateTimeFilter
-    _max?: NestedDateTimeFilter
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedBoolWithAggregatesFilter = {
-    equals?: boolean
-    not?: NestedBoolWithAggregatesFilter | boolean
-    _count?: NestedIntFilter
-    _min?: NestedBoolFilter
-    _max?: NestedBoolFilter
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeNullableWithAggregatesFilter = {
-    equals?: Date | string | null
-    in?: Enumerable<Date> | Enumerable<string> | Date | string | null
-    notIn?: Enumerable<Date> | Enumerable<string> | Date | string | null
-    lt?: Date | string
-    lte?: Date | string
-    gt?: Date | string
-    gte?: Date | string
-    not?: NestedDateTimeNullableWithAggregatesFilter | Date | string | null
-    _count?: NestedIntNullableFilter
-    _min?: NestedDateTimeNullableFilter
-    _max?: NestedDateTimeNullableFilter
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter = {
-    equals?: number | null
-    in?: Enumerable<number> | number | null
-    notIn?: Enumerable<number> | number | null
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntNullableFilter | number | null
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedStringNullableWithAggregatesFilter = {
-    equals?: string | null
-    in?: Enumerable<string> | string | null
-    notIn?: Enumerable<string> | string | null
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    not?: NestedStringNullableWithAggregatesFilter | string | null
-    _count?: NestedIntNullableFilter
-    _min?: NestedStringNullableFilter
-    _max?: NestedStringNullableFilter
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumGenderTypeNullableFilter = {
-    equals?: GenderType | null
-    in?: Enumerable<GenderType> | null
-    notIn?: Enumerable<GenderType> | null
-    not?: NestedEnumGenderTypeNullableFilter | GenderType | null
+  export type NestedEnumGenderTypeNullableFilter<$PrismaModel = never> = {
+    equals?: GenderType | EnumGenderTypeFieldRefInput<$PrismaModel> | null
+    in?: GenderType[] | ListEnumGenderTypeFieldRefInput<$PrismaModel> | null
+    notIn?: GenderType[] | ListEnumGenderTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderTypeNullableFilter<$PrismaModel> | GenderType | null
   }
 
-  export type NestedEnumGenderTypeNullableWithAggregatesFilter = {
-    equals?: GenderType | null
-    in?: Enumerable<GenderType> | null
-    notIn?: Enumerable<GenderType> | null
-    not?: NestedEnumGenderTypeNullableWithAggregatesFilter | GenderType | null
-    _count?: NestedIntNullableFilter
-    _min?: NestedEnumGenderTypeNullableFilter
-    _max?: NestedEnumGenderTypeNullableFilter
+  export type NestedEnumGenderTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: GenderType | EnumGenderTypeFieldRefInput<$PrismaModel> | null
+    in?: GenderType[] | ListEnumGenderTypeFieldRefInput<$PrismaModel> | null
+    notIn?: GenderType[] | ListEnumGenderTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderTypeNullableWithAggregatesFilter<$PrismaModel> | GenderType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumGenderTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumGenderTypeNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumImageAccessTypeFilter = {
-    equals?: ImageAccessType
-    in?: Enumerable<ImageAccessType>
-    notIn?: Enumerable<ImageAccessType>
-    not?: NestedEnumImageAccessTypeFilter | ImageAccessType
+  export type NestedEnumImageAccessTypeFilter<$PrismaModel = never> = {
+    equals?: ImageAccessType | EnumImageAccessTypeFieldRefInput<$PrismaModel>
+    in?: ImageAccessType[] | ListEnumImageAccessTypeFieldRefInput<$PrismaModel>
+    notIn?: ImageAccessType[] | ListEnumImageAccessTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumImageAccessTypeFilter<$PrismaModel> | ImageAccessType
   }
 
-  export type NestedEnumImageAccessTypeWithAggregatesFilter = {
-    equals?: ImageAccessType
-    in?: Enumerable<ImageAccessType>
-    notIn?: Enumerable<ImageAccessType>
-    not?: NestedEnumImageAccessTypeWithAggregatesFilter | ImageAccessType
-    _count?: NestedIntFilter
-    _min?: NestedEnumImageAccessTypeFilter
-    _max?: NestedEnumImageAccessTypeFilter
+  export type NestedEnumImageAccessTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: ImageAccessType | EnumImageAccessTypeFieldRefInput<$PrismaModel>
+    in?: ImageAccessType[] | ListEnumImageAccessTypeFieldRefInput<$PrismaModel>
+    notIn?: ImageAccessType[] | ListEnumImageAccessTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumImageAccessTypeWithAggregatesFilter<$PrismaModel> | ImageAccessType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumImageAccessTypeFilter<$PrismaModel>
+    _max?: NestedEnumImageAccessTypeFilter<$PrismaModel>
   }
 
-  export type NestedEnumOauthTypeFilter = {
-    equals?: OauthType
-    in?: Enumerable<OauthType>
-    notIn?: Enumerable<OauthType>
-    not?: NestedEnumOauthTypeFilter | OauthType
+  export type NestedEnumOauthTypeFilter<$PrismaModel = never> = {
+    equals?: OauthType | EnumOauthTypeFieldRefInput<$PrismaModel>
+    in?: OauthType[] | ListEnumOauthTypeFieldRefInput<$PrismaModel>
+    notIn?: OauthType[] | ListEnumOauthTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOauthTypeFilter<$PrismaModel> | OauthType
   }
 
-  export type NestedEnumOauthTypeWithAggregatesFilter = {
-    equals?: OauthType
-    in?: Enumerable<OauthType>
-    notIn?: Enumerable<OauthType>
-    not?: NestedEnumOauthTypeWithAggregatesFilter | OauthType
-    _count?: NestedIntFilter
-    _min?: NestedEnumOauthTypeFilter
-    _max?: NestedEnumOauthTypeFilter
+  export type NestedEnumOauthTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: OauthType | EnumOauthTypeFieldRefInput<$PrismaModel>
+    in?: OauthType[] | ListEnumOauthTypeFieldRefInput<$PrismaModel>
+    notIn?: OauthType[] | ListEnumOauthTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOauthTypeWithAggregatesFilter<$PrismaModel> | OauthType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOauthTypeFilter<$PrismaModel>
+    _max?: NestedEnumOauthTypeFilter<$PrismaModel>
   }
 
   export type ClientModelCreateWithoutBaseInput = {
@@ -18905,6 +19194,12 @@ export namespace Prisma {
   export type ClientModelUpsertWithoutBaseInput = {
     update: XOR<ClientModelUpdateWithoutBaseInput, ClientModelUncheckedUpdateWithoutBaseInput>
     create: XOR<ClientModelCreateWithoutBaseInput, ClientModelUncheckedCreateWithoutBaseInput>
+    where?: ClientModelWhereInput
+  }
+
+  export type ClientModelUpdateToOneWithWhereWithoutBaseInput = {
+    where?: ClientModelWhereInput
+    data: XOR<ClientModelUpdateWithoutBaseInput, ClientModelUncheckedUpdateWithoutBaseInput>
   }
 
   export type ClientModelUpdateWithoutBaseInput = {
@@ -18934,6 +19229,12 @@ export namespace Prisma {
   export type BIZUserModelUpsertWithoutBaseInput = {
     update: XOR<BIZUserModelUpdateWithoutBaseInput, BIZUserModelUncheckedUpdateWithoutBaseInput>
     create: XOR<BIZUserModelCreateWithoutBaseInput, BIZUserModelUncheckedCreateWithoutBaseInput>
+    where?: BIZUserModelWhereInput
+  }
+
+  export type BIZUserModelUpdateToOneWithWhereWithoutBaseInput = {
+    where?: BIZUserModelWhereInput
+    data: XOR<BIZUserModelUpdateWithoutBaseInput, BIZUserModelUncheckedUpdateWithoutBaseInput>
   }
 
   export type BIZUserModelUpdateWithoutBaseInput = {
@@ -19035,13 +19336,19 @@ export namespace Prisma {
   }
 
   export type OauthAccountModelCreateManyClientInputEnvelope = {
-    data: Enumerable<OauthAccountModelCreateManyClientInput>
+    data: OauthAccountModelCreateManyClientInput | OauthAccountModelCreateManyClientInput[]
     skipDuplicates?: boolean
   }
 
   export type UserModelUpsertWithoutClientInput = {
     update: XOR<UserModelUpdateWithoutClientInput, UserModelUncheckedUpdateWithoutClientInput>
     create: XOR<UserModelCreateWithoutClientInput, UserModelUncheckedCreateWithoutClientInput>
+    where?: UserModelWhereInput
+  }
+
+  export type UserModelUpdateToOneWithWhereWithoutClientInput = {
+    where?: UserModelWhereInput
+    data: XOR<UserModelUpdateWithoutClientInput, UserModelUncheckedUpdateWithoutClientInput>
   }
 
   export type UserModelUpdateWithoutClientInput = {
@@ -19079,32 +19386,32 @@ export namespace Prisma {
 
   export type OauthAccountModelUpdateManyWithWhereWithoutClientInput = {
     where: OauthAccountModelScalarWhereInput
-    data: XOR<OauthAccountModelUpdateManyMutationInput, OauthAccountModelUncheckedUpdateManyWithoutOauth_accountsInput>
+    data: XOR<OauthAccountModelUpdateManyMutationInput, OauthAccountModelUncheckedUpdateManyWithoutClientInput>
   }
 
   export type OauthAccountModelScalarWhereInput = {
-    AND?: Enumerable<OauthAccountModelScalarWhereInput>
-    OR?: Enumerable<OauthAccountModelScalarWhereInput>
-    NOT?: Enumerable<OauthAccountModelScalarWhereInput>
-    id?: StringFilter | string
-    created_at?: DateTimeFilter | Date | string
-    updated_at?: DateTimeFilter | Date | string
-    is_deleted?: BoolFilter | boolean
-    deleted_at?: DateTimeNullableFilter | Date | string | null
-    oauth_type?: EnumOauthTypeFilter | OauthType
-    oauth_sub?: StringFilter | string
-    biz_user_id?: StringNullableFilter | string | null
-    client_id?: StringNullableFilter | string | null
-    name?: StringNullableFilter | string | null
-    email?: StringNullableFilter | string | null
-    phone?: StringNullableFilter | string | null
-    profile_image_url?: StringNullableFilter | string | null
-    birth?: StringNullableFilter | string | null
-    gender?: EnumGenderTypeNullableFilter | GenderType | null
-    address_zone_code?: StringNullableFilter | string | null
-    address_road?: StringNullableFilter | string | null
-    address_detail?: StringNullableFilter | string | null
-    address_extra?: StringNullableFilter | string | null
+    AND?: OauthAccountModelScalarWhereInput | OauthAccountModelScalarWhereInput[]
+    OR?: OauthAccountModelScalarWhereInput[]
+    NOT?: OauthAccountModelScalarWhereInput | OauthAccountModelScalarWhereInput[]
+    id?: StringFilter<"OauthAccountModel"> | string
+    created_at?: DateTimeFilter<"OauthAccountModel"> | Date | string
+    updated_at?: DateTimeFilter<"OauthAccountModel"> | Date | string
+    is_deleted?: BoolFilter<"OauthAccountModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"OauthAccountModel"> | Date | string | null
+    oauth_type?: EnumOauthTypeFilter<"OauthAccountModel"> | OauthType
+    oauth_sub?: StringFilter<"OauthAccountModel"> | string
+    biz_user_id?: StringNullableFilter<"OauthAccountModel"> | string | null
+    client_id?: StringNullableFilter<"OauthAccountModel"> | string | null
+    name?: StringNullableFilter<"OauthAccountModel"> | string | null
+    email?: StringNullableFilter<"OauthAccountModel"> | string | null
+    phone?: StringNullableFilter<"OauthAccountModel"> | string | null
+    profile_image_url?: StringNullableFilter<"OauthAccountModel"> | string | null
+    birth?: StringNullableFilter<"OauthAccountModel"> | string | null
+    gender?: EnumGenderTypeNullableFilter<"OauthAccountModel"> | GenderType | null
+    address_zone_code?: StringNullableFilter<"OauthAccountModel"> | string | null
+    address_road?: StringNullableFilter<"OauthAccountModel"> | string | null
+    address_detail?: StringNullableFilter<"OauthAccountModel"> | string | null
+    address_extra?: StringNullableFilter<"OauthAccountModel"> | string | null
   }
 
   export type UserModelCreateWithoutBiz_userInput = {
@@ -19244,7 +19551,7 @@ export namespace Prisma {
   }
 
   export type OauthAccountModelCreateManyBiz_userInputEnvelope = {
-    data: Enumerable<OauthAccountModelCreateManyBiz_userInput>
+    data: OauthAccountModelCreateManyBiz_userInput | OauthAccountModelCreateManyBiz_userInput[]
     skipDuplicates?: boolean
   }
 
@@ -19274,13 +19581,19 @@ export namespace Prisma {
   }
 
   export type BIZCertificationImageModelCreateManyBiz_userInputEnvelope = {
-    data: Enumerable<BIZCertificationImageModelCreateManyBiz_userInput>
+    data: BIZCertificationImageModelCreateManyBiz_userInput | BIZCertificationImageModelCreateManyBiz_userInput[]
     skipDuplicates?: boolean
   }
 
   export type UserModelUpsertWithoutBiz_userInput = {
     update: XOR<UserModelUpdateWithoutBiz_userInput, UserModelUncheckedUpdateWithoutBiz_userInput>
     create: XOR<UserModelCreateWithoutBiz_userInput, UserModelUncheckedCreateWithoutBiz_userInput>
+    where?: UserModelWhereInput
+  }
+
+  export type UserModelUpdateToOneWithWhereWithoutBiz_userInput = {
+    where?: UserModelWhereInput
+    data: XOR<UserModelUpdateWithoutBiz_userInput, UserModelUncheckedUpdateWithoutBiz_userInput>
   }
 
   export type UserModelUpdateWithoutBiz_userInput = {
@@ -19308,6 +19621,12 @@ export namespace Prisma {
   export type REAgentModelUpsertWithoutBaseInput = {
     update: XOR<REAgentModelUpdateWithoutBaseInput, REAgentModelUncheckedUpdateWithoutBaseInput>
     create: XOR<REAgentModelCreateWithoutBaseInput, REAgentModelUncheckedCreateWithoutBaseInput>
+    where?: REAgentModelWhereInput
+  }
+
+  export type REAgentModelUpdateToOneWithWhereWithoutBaseInput = {
+    where?: REAgentModelWhereInput
+    data: XOR<REAgentModelUpdateWithoutBaseInput, REAgentModelUncheckedUpdateWithoutBaseInput>
   }
 
   export type REAgentModelUpdateWithoutBaseInput = {
@@ -19343,6 +19662,12 @@ export namespace Prisma {
   export type HSProviderModelUpsertWithoutBaseInput = {
     update: XOR<HSProviderModelUpdateWithoutBaseInput, HSProviderModelUncheckedUpdateWithoutBaseInput>
     create: XOR<HSProviderModelCreateWithoutBaseInput, HSProviderModelUncheckedCreateWithoutBaseInput>
+    where?: HSProviderModelWhereInput
+  }
+
+  export type HSProviderModelUpdateToOneWithWhereWithoutBaseInput = {
+    where?: HSProviderModelWhereInput
+    data: XOR<HSProviderModelUpdateWithoutBaseInput, HSProviderModelUncheckedUpdateWithoutBaseInput>
   }
 
   export type HSProviderModelUpdateWithoutBaseInput = {
@@ -19380,7 +19705,7 @@ export namespace Prisma {
 
   export type OauthAccountModelUpdateManyWithWhereWithoutBiz_userInput = {
     where: OauthAccountModelScalarWhereInput
-    data: XOR<OauthAccountModelUpdateManyMutationInput, OauthAccountModelUncheckedUpdateManyWithoutOauth_accountsInput>
+    data: XOR<OauthAccountModelUpdateManyMutationInput, OauthAccountModelUncheckedUpdateManyWithoutBiz_userInput>
   }
 
   export type BIZCertificationImageModelUpsertWithWhereUniqueWithoutBiz_userInput = {
@@ -19396,21 +19721,21 @@ export namespace Prisma {
 
   export type BIZCertificationImageModelUpdateManyWithWhereWithoutBiz_userInput = {
     where: BIZCertificationImageModelScalarWhereInput
-    data: XOR<BIZCertificationImageModelUpdateManyMutationInput, BIZCertificationImageModelUncheckedUpdateManyWithoutBiz_certification_imagesInput>
+    data: XOR<BIZCertificationImageModelUpdateManyMutationInput, BIZCertificationImageModelUncheckedUpdateManyWithoutBiz_userInput>
   }
 
   export type BIZCertificationImageModelScalarWhereInput = {
-    AND?: Enumerable<BIZCertificationImageModelScalarWhereInput>
-    OR?: Enumerable<BIZCertificationImageModelScalarWhereInput>
-    NOT?: Enumerable<BIZCertificationImageModelScalarWhereInput>
-    id?: StringFilter | string
-    created_at?: DateTimeFilter | Date | string
-    updated_at?: DateTimeFilter | Date | string
-    is_deleted?: BoolFilter | boolean
-    deleted_at?: DateTimeNullableFilter | Date | string | null
-    biz_user_id?: StringFilter | string
-    url?: StringFilter | string
-    access_type?: EnumImageAccessTypeFilter | ImageAccessType
+    AND?: BIZCertificationImageModelScalarWhereInput | BIZCertificationImageModelScalarWhereInput[]
+    OR?: BIZCertificationImageModelScalarWhereInput[]
+    NOT?: BIZCertificationImageModelScalarWhereInput | BIZCertificationImageModelScalarWhereInput[]
+    id?: StringFilter<"BIZCertificationImageModel"> | string
+    created_at?: DateTimeFilter<"BIZCertificationImageModel"> | Date | string
+    updated_at?: DateTimeFilter<"BIZCertificationImageModel"> | Date | string
+    is_deleted?: BoolFilter<"BIZCertificationImageModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"BIZCertificationImageModel"> | Date | string | null
+    biz_user_id?: StringFilter<"BIZCertificationImageModel"> | string
+    url?: StringFilter<"BIZCertificationImageModel"> | string
+    access_type?: EnumImageAccessTypeFilter<"BIZCertificationImageModel"> | ImageAccessType
   }
 
   export type BIZUserModelCreateWithoutBiz_certification_imagesInput = {
@@ -19445,6 +19770,12 @@ export namespace Prisma {
   export type BIZUserModelUpsertWithoutBiz_certification_imagesInput = {
     update: XOR<BIZUserModelUpdateWithoutBiz_certification_imagesInput, BIZUserModelUncheckedUpdateWithoutBiz_certification_imagesInput>
     create: XOR<BIZUserModelCreateWithoutBiz_certification_imagesInput, BIZUserModelUncheckedCreateWithoutBiz_certification_imagesInput>
+    where?: BIZUserModelWhereInput
+  }
+
+  export type BIZUserModelUpdateToOneWithWhereWithoutBiz_certification_imagesInput = {
+    where?: BIZUserModelWhereInput
+    data: XOR<BIZUserModelUpdateWithoutBiz_certification_imagesInput, BIZUserModelUncheckedUpdateWithoutBiz_certification_imagesInput>
   }
 
   export type BIZUserModelUpdateWithoutBiz_certification_imagesInput = {
@@ -19551,13 +19882,19 @@ export namespace Prisma {
   }
 
   export type REPortfolioModelCreateManyRe_agentInputEnvelope = {
-    data: Enumerable<REPortfolioModelCreateManyRe_agentInput>
+    data: REPortfolioModelCreateManyRe_agentInput | REPortfolioModelCreateManyRe_agentInput[]
     skipDuplicates?: boolean
   }
 
   export type BIZUserModelUpsertWithoutRe_agentInput = {
     update: XOR<BIZUserModelUpdateWithoutRe_agentInput, BIZUserModelUncheckedUpdateWithoutRe_agentInput>
     create: XOR<BIZUserModelCreateWithoutRe_agentInput, BIZUserModelUncheckedCreateWithoutRe_agentInput>
+    where?: BIZUserModelWhereInput
+  }
+
+  export type BIZUserModelUpdateToOneWithWhereWithoutRe_agentInput = {
+    where?: BIZUserModelWhereInput
+    data: XOR<BIZUserModelUpdateWithoutRe_agentInput, BIZUserModelUncheckedUpdateWithoutRe_agentInput>
   }
 
   export type BIZUserModelUpdateWithoutRe_agentInput = {
@@ -19587,6 +19924,12 @@ export namespace Prisma {
   export type REExpertiseModelUpsertWithoutRe_agentsInput = {
     update: XOR<REExpertiseModelUpdateWithoutRe_agentsInput, REExpertiseModelUncheckedUpdateWithoutRe_agentsInput>
     create: XOR<REExpertiseModelCreateWithoutRe_agentsInput, REExpertiseModelUncheckedCreateWithoutRe_agentsInput>
+    where?: REExpertiseModelWhereInput
+  }
+
+  export type REExpertiseModelUpdateToOneWithWhereWithoutRe_agentsInput = {
+    where?: REExpertiseModelWhereInput
+    data: XOR<REExpertiseModelUpdateWithoutRe_agentsInput, REExpertiseModelUncheckedUpdateWithoutRe_agentsInput>
   }
 
   export type REExpertiseModelUpdateWithoutRe_agentsInput = {
@@ -19620,22 +19963,22 @@ export namespace Prisma {
 
   export type REPortfolioModelUpdateManyWithWhereWithoutRe_agentInput = {
     where: REPortfolioModelScalarWhereInput
-    data: XOR<REPortfolioModelUpdateManyMutationInput, REPortfolioModelUncheckedUpdateManyWithoutPortfoliosInput>
+    data: XOR<REPortfolioModelUpdateManyMutationInput, REPortfolioModelUncheckedUpdateManyWithoutRe_agentInput>
   }
 
   export type REPortfolioModelScalarWhereInput = {
-    AND?: Enumerable<REPortfolioModelScalarWhereInput>
-    OR?: Enumerable<REPortfolioModelScalarWhereInput>
-    NOT?: Enumerable<REPortfolioModelScalarWhereInput>
-    id?: StringFilter | string
-    created_at?: DateTimeFilter | Date | string
-    updated_at?: DateTimeFilter | Date | string
-    is_deleted?: BoolFilter | boolean
-    deleted_at?: DateTimeNullableFilter | Date | string | null
-    re_agent_id?: StringFilter | string
-    title?: StringFilter | string
-    url?: StringFilter | string
-    is_visible?: BoolFilter | boolean
+    AND?: REPortfolioModelScalarWhereInput | REPortfolioModelScalarWhereInput[]
+    OR?: REPortfolioModelScalarWhereInput[]
+    NOT?: REPortfolioModelScalarWhereInput | REPortfolioModelScalarWhereInput[]
+    id?: StringFilter<"REPortfolioModel"> | string
+    created_at?: DateTimeFilter<"REPortfolioModel"> | Date | string
+    updated_at?: DateTimeFilter<"REPortfolioModel"> | Date | string
+    is_deleted?: BoolFilter<"REPortfolioModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"REPortfolioModel"> | Date | string | null
+    re_agent_id?: StringFilter<"REPortfolioModel"> | string
+    title?: StringFilter<"REPortfolioModel"> | string
+    url?: StringFilter<"REPortfolioModel"> | string
+    is_visible?: BoolFilter<"REPortfolioModel"> | boolean
   }
 
   export type REAgentModelCreateWithoutExpertiseInput = {
@@ -19674,7 +20017,7 @@ export namespace Prisma {
   }
 
   export type REAgentModelCreateManyExpertiseInputEnvelope = {
-    data: Enumerable<REAgentModelCreateManyExpertiseInput>
+    data: REAgentModelCreateManyExpertiseInput | REAgentModelCreateManyExpertiseInput[]
     skipDuplicates?: boolean
   }
 
@@ -19691,25 +20034,25 @@ export namespace Prisma {
 
   export type REAgentModelUpdateManyWithWhereWithoutExpertiseInput = {
     where: REAgentModelScalarWhereInput
-    data: XOR<REAgentModelUpdateManyMutationInput, REAgentModelUncheckedUpdateManyWithoutRe_agentsInput>
+    data: XOR<REAgentModelUpdateManyMutationInput, REAgentModelUncheckedUpdateManyWithoutExpertiseInput>
   }
 
   export type REAgentModelScalarWhereInput = {
-    AND?: Enumerable<REAgentModelScalarWhereInput>
-    OR?: Enumerable<REAgentModelScalarWhereInput>
-    NOT?: Enumerable<REAgentModelScalarWhereInput>
-    id?: StringFilter | string
-    is_licensed?: BoolFilter | boolean
-    expertise_id?: StringFilter | string
-    re_number?: StringFilter | string
-    re_name?: StringFilter | string
-    re_phone?: StringFilter | string
-    re_licensed_agent_name?: StringFilter | string
-    re_address_zone_code?: StringFilter | string
-    re_address_road?: StringFilter | string
-    re_address_detail?: StringNullableFilter | string | null
-    re_address_extra?: StringNullableFilter | string | null
-    biz_open_date?: DateTimeFilter | Date | string
+    AND?: REAgentModelScalarWhereInput | REAgentModelScalarWhereInput[]
+    OR?: REAgentModelScalarWhereInput[]
+    NOT?: REAgentModelScalarWhereInput | REAgentModelScalarWhereInput[]
+    id?: StringFilter<"REAgentModel"> | string
+    is_licensed?: BoolFilter<"REAgentModel"> | boolean
+    expertise_id?: StringFilter<"REAgentModel"> | string
+    re_number?: StringFilter<"REAgentModel"> | string
+    re_name?: StringFilter<"REAgentModel"> | string
+    re_phone?: StringFilter<"REAgentModel"> | string
+    re_licensed_agent_name?: StringFilter<"REAgentModel"> | string
+    re_address_zone_code?: StringFilter<"REAgentModel"> | string
+    re_address_road?: StringFilter<"REAgentModel"> | string
+    re_address_detail?: StringNullableFilter<"REAgentModel"> | string | null
+    re_address_extra?: StringNullableFilter<"REAgentModel"> | string | null
+    biz_open_date?: DateTimeFilter<"REAgentModel"> | Date | string
   }
 
   export type BIZUserModelCreateWithoutHs_providerInput = {
@@ -19757,7 +20100,7 @@ export namespace Prisma {
   }
 
   export type HSSubExpertiseRelationModelCreateManyHs_providerInputEnvelope = {
-    data: Enumerable<HSSubExpertiseRelationModelCreateManyHs_providerInput>
+    data: HSSubExpertiseRelationModelCreateManyHs_providerInput | HSSubExpertiseRelationModelCreateManyHs_providerInput[]
     skipDuplicates?: boolean
   }
 
@@ -19789,13 +20132,19 @@ export namespace Prisma {
   }
 
   export type HSPortfolioModelCreateManyHs_providerInputEnvelope = {
-    data: Enumerable<HSPortfolioModelCreateManyHs_providerInput>
+    data: HSPortfolioModelCreateManyHs_providerInput | HSPortfolioModelCreateManyHs_providerInput[]
     skipDuplicates?: boolean
   }
 
   export type BIZUserModelUpsertWithoutHs_providerInput = {
     update: XOR<BIZUserModelUpdateWithoutHs_providerInput, BIZUserModelUncheckedUpdateWithoutHs_providerInput>
     create: XOR<BIZUserModelCreateWithoutHs_providerInput, BIZUserModelUncheckedCreateWithoutHs_providerInput>
+    where?: BIZUserModelWhereInput
+  }
+
+  export type BIZUserModelUpdateToOneWithWhereWithoutHs_providerInput = {
+    where?: BIZUserModelWhereInput
+    data: XOR<BIZUserModelUpdateWithoutHs_providerInput, BIZUserModelUncheckedUpdateWithoutHs_providerInput>
   }
 
   export type BIZUserModelUpdateWithoutHs_providerInput = {
@@ -19835,16 +20184,16 @@ export namespace Prisma {
 
   export type HSSubExpertiseRelationModelUpdateManyWithWhereWithoutHs_providerInput = {
     where: HSSubExpertiseRelationModelScalarWhereInput
-    data: XOR<HSSubExpertiseRelationModelUpdateManyMutationInput, HSSubExpertiseRelationModelUncheckedUpdateManyWithoutExpertise_relationInput>
+    data: XOR<HSSubExpertiseRelationModelUpdateManyMutationInput, HSSubExpertiseRelationModelUncheckedUpdateManyWithoutHs_providerInput>
   }
 
   export type HSSubExpertiseRelationModelScalarWhereInput = {
-    AND?: Enumerable<HSSubExpertiseRelationModelScalarWhereInput>
-    OR?: Enumerable<HSSubExpertiseRelationModelScalarWhereInput>
-    NOT?: Enumerable<HSSubExpertiseRelationModelScalarWhereInput>
-    id?: StringFilter | string
-    hs_provider_id?: StringFilter | string
-    sub_expertise_id?: StringFilter | string
+    AND?: HSSubExpertiseRelationModelScalarWhereInput | HSSubExpertiseRelationModelScalarWhereInput[]
+    OR?: HSSubExpertiseRelationModelScalarWhereInput[]
+    NOT?: HSSubExpertiseRelationModelScalarWhereInput | HSSubExpertiseRelationModelScalarWhereInput[]
+    id?: StringFilter<"HSSubExpertiseRelationModel"> | string
+    hs_provider_id?: StringFilter<"HSSubExpertiseRelationModel"> | string
+    sub_expertise_id?: StringFilter<"HSSubExpertiseRelationModel"> | string
   }
 
   export type HSPortfolioModelUpsertWithWhereUniqueWithoutHs_providerInput = {
@@ -19860,22 +20209,22 @@ export namespace Prisma {
 
   export type HSPortfolioModelUpdateManyWithWhereWithoutHs_providerInput = {
     where: HSPortfolioModelScalarWhereInput
-    data: XOR<HSPortfolioModelUpdateManyMutationInput, HSPortfolioModelUncheckedUpdateManyWithoutPortfoliosInput>
+    data: XOR<HSPortfolioModelUpdateManyMutationInput, HSPortfolioModelUncheckedUpdateManyWithoutHs_providerInput>
   }
 
   export type HSPortfolioModelScalarWhereInput = {
-    AND?: Enumerable<HSPortfolioModelScalarWhereInput>
-    OR?: Enumerable<HSPortfolioModelScalarWhereInput>
-    NOT?: Enumerable<HSPortfolioModelScalarWhereInput>
-    id?: StringFilter | string
-    created_at?: DateTimeFilter | Date | string
-    updated_at?: DateTimeFilter | Date | string
-    is_deleted?: BoolFilter | boolean
-    deleted_at?: DateTimeNullableFilter | Date | string | null
-    hs_provider_id?: StringFilter | string
-    title?: StringFilter | string
-    url?: StringFilter | string
-    is_visible?: BoolFilter | boolean
+    AND?: HSPortfolioModelScalarWhereInput | HSPortfolioModelScalarWhereInput[]
+    OR?: HSPortfolioModelScalarWhereInput[]
+    NOT?: HSPortfolioModelScalarWhereInput | HSPortfolioModelScalarWhereInput[]
+    id?: StringFilter<"HSPortfolioModel"> | string
+    created_at?: DateTimeFilter<"HSPortfolioModel"> | Date | string
+    updated_at?: DateTimeFilter<"HSPortfolioModel"> | Date | string
+    is_deleted?: BoolFilter<"HSPortfolioModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"HSPortfolioModel"> | Date | string | null
+    hs_provider_id?: StringFilter<"HSPortfolioModel"> | string
+    title?: StringFilter<"HSPortfolioModel"> | string
+    url?: StringFilter<"HSPortfolioModel"> | string
+    is_visible?: BoolFilter<"HSPortfolioModel"> | boolean
   }
 
   export type HSSubExpertiseRelationModelCreateWithoutSub_expertiseInput = {
@@ -19894,7 +20243,7 @@ export namespace Prisma {
   }
 
   export type HSSubExpertiseRelationModelCreateManySub_expertiseInputEnvelope = {
-    data: Enumerable<HSSubExpertiseRelationModelCreateManySub_expertiseInput>
+    data: HSSubExpertiseRelationModelCreateManySub_expertiseInput | HSSubExpertiseRelationModelCreateManySub_expertiseInput[]
     skipDuplicates?: boolean
   }
 
@@ -19934,12 +20283,18 @@ export namespace Prisma {
 
   export type HSSubExpertiseRelationModelUpdateManyWithWhereWithoutSub_expertiseInput = {
     where: HSSubExpertiseRelationModelScalarWhereInput
-    data: XOR<HSSubExpertiseRelationModelUpdateManyMutationInput, HSSubExpertiseRelationModelUncheckedUpdateManyWithoutRelationsInput>
+    data: XOR<HSSubExpertiseRelationModelUpdateManyMutationInput, HSSubExpertiseRelationModelUncheckedUpdateManyWithoutSub_expertiseInput>
   }
 
   export type HSSuperExpertiseModelUpsertWithoutSub_expertisesInput = {
     update: XOR<HSSuperExpertiseModelUpdateWithoutSub_expertisesInput, HSSuperExpertiseModelUncheckedUpdateWithoutSub_expertisesInput>
     create: XOR<HSSuperExpertiseModelCreateWithoutSub_expertisesInput, HSSuperExpertiseModelUncheckedCreateWithoutSub_expertisesInput>
+    where?: HSSuperExpertiseModelWhereInput
+  }
+
+  export type HSSuperExpertiseModelUpdateToOneWithWhereWithoutSub_expertisesInput = {
+    where?: HSSuperExpertiseModelWhereInput
+    data: XOR<HSSuperExpertiseModelUpdateWithoutSub_expertisesInput, HSSuperExpertiseModelUncheckedUpdateWithoutSub_expertisesInput>
   }
 
   export type HSSuperExpertiseModelUpdateWithoutSub_expertisesInput = {
@@ -19986,7 +20341,7 @@ export namespace Prisma {
   }
 
   export type HSSubExpertiseModelCreateManySuper_expertiseInputEnvelope = {
-    data: Enumerable<HSSubExpertiseModelCreateManySuper_expertiseInput>
+    data: HSSubExpertiseModelCreateManySuper_expertiseInput | HSSubExpertiseModelCreateManySuper_expertiseInput[]
     skipDuplicates?: boolean
   }
 
@@ -20003,20 +20358,20 @@ export namespace Prisma {
 
   export type HSSubExpertiseModelUpdateManyWithWhereWithoutSuper_expertiseInput = {
     where: HSSubExpertiseModelScalarWhereInput
-    data: XOR<HSSubExpertiseModelUpdateManyMutationInput, HSSubExpertiseModelUncheckedUpdateManyWithoutSub_expertisesInput>
+    data: XOR<HSSubExpertiseModelUpdateManyMutationInput, HSSubExpertiseModelUncheckedUpdateManyWithoutSuper_expertiseInput>
   }
 
   export type HSSubExpertiseModelScalarWhereInput = {
-    AND?: Enumerable<HSSubExpertiseModelScalarWhereInput>
-    OR?: Enumerable<HSSubExpertiseModelScalarWhereInput>
-    NOT?: Enumerable<HSSubExpertiseModelScalarWhereInput>
-    id?: StringFilter | string
-    created_at?: DateTimeFilter | Date | string
-    updated_at?: DateTimeFilter | Date | string
-    is_deleted?: BoolFilter | boolean
-    deleted_at?: DateTimeNullableFilter | Date | string | null
-    name?: StringFilter | string
-    super_expertise_id?: StringFilter | string
+    AND?: HSSubExpertiseModelScalarWhereInput | HSSubExpertiseModelScalarWhereInput[]
+    OR?: HSSubExpertiseModelScalarWhereInput[]
+    NOT?: HSSubExpertiseModelScalarWhereInput | HSSubExpertiseModelScalarWhereInput[]
+    id?: StringFilter<"HSSubExpertiseModel"> | string
+    created_at?: DateTimeFilter<"HSSubExpertiseModel"> | Date | string
+    updated_at?: DateTimeFilter<"HSSubExpertiseModel"> | Date | string
+    is_deleted?: BoolFilter<"HSSubExpertiseModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"HSSubExpertiseModel"> | Date | string | null
+    name?: StringFilter<"HSSubExpertiseModel"> | string
+    super_expertise_id?: StringFilter<"HSSubExpertiseModel"> | string
   }
 
   export type HSProviderModelCreateWithoutExpertise_relationInput = {
@@ -20074,6 +20429,12 @@ export namespace Prisma {
   export type HSProviderModelUpsertWithoutExpertise_relationInput = {
     update: XOR<HSProviderModelUpdateWithoutExpertise_relationInput, HSProviderModelUncheckedUpdateWithoutExpertise_relationInput>
     create: XOR<HSProviderModelCreateWithoutExpertise_relationInput, HSProviderModelUncheckedCreateWithoutExpertise_relationInput>
+    where?: HSProviderModelWhereInput
+  }
+
+  export type HSProviderModelUpdateToOneWithWhereWithoutExpertise_relationInput = {
+    where?: HSProviderModelWhereInput
+    data: XOR<HSProviderModelUpdateWithoutExpertise_relationInput, HSProviderModelUncheckedUpdateWithoutExpertise_relationInput>
   }
 
   export type HSProviderModelUpdateWithoutExpertise_relationInput = {
@@ -20101,6 +20462,12 @@ export namespace Prisma {
   export type HSSubExpertiseModelUpsertWithoutRelationsInput = {
     update: XOR<HSSubExpertiseModelUpdateWithoutRelationsInput, HSSubExpertiseModelUncheckedUpdateWithoutRelationsInput>
     create: XOR<HSSubExpertiseModelCreateWithoutRelationsInput, HSSubExpertiseModelUncheckedCreateWithoutRelationsInput>
+    where?: HSSubExpertiseModelWhereInput
+  }
+
+  export type HSSubExpertiseModelUpdateToOneWithWhereWithoutRelationsInput = {
+    where?: HSSubExpertiseModelWhereInput
+    data: XOR<HSSubExpertiseModelUpdateWithoutRelationsInput, HSSubExpertiseModelUncheckedUpdateWithoutRelationsInput>
   }
 
   export type HSSubExpertiseModelUpdateWithoutRelationsInput = {
@@ -20161,6 +20528,12 @@ export namespace Prisma {
   export type REAgentModelUpsertWithoutPortfoliosInput = {
     update: XOR<REAgentModelUpdateWithoutPortfoliosInput, REAgentModelUncheckedUpdateWithoutPortfoliosInput>
     create: XOR<REAgentModelCreateWithoutPortfoliosInput, REAgentModelUncheckedCreateWithoutPortfoliosInput>
+    where?: REAgentModelWhereInput
+  }
+
+  export type REAgentModelUpdateToOneWithWhereWithoutPortfoliosInput = {
+    where?: REAgentModelWhereInput
+    data: XOR<REAgentModelUpdateWithoutPortfoliosInput, REAgentModelUncheckedUpdateWithoutPortfoliosInput>
   }
 
   export type REAgentModelUpdateWithoutPortfoliosInput = {
@@ -20223,6 +20596,12 @@ export namespace Prisma {
   export type HSProviderModelUpsertWithoutPortfoliosInput = {
     update: XOR<HSProviderModelUpdateWithoutPortfoliosInput, HSProviderModelUncheckedUpdateWithoutPortfoliosInput>
     create: XOR<HSProviderModelCreateWithoutPortfoliosInput, HSProviderModelUncheckedCreateWithoutPortfoliosInput>
+    where?: HSProviderModelWhereInput
+  }
+
+  export type HSProviderModelUpdateToOneWithWhereWithoutPortfoliosInput = {
+    where?: HSProviderModelWhereInput
+    data: XOR<HSProviderModelUpdateWithoutPortfoliosInput, HSProviderModelUncheckedUpdateWithoutPortfoliosInput>
   }
 
   export type HSProviderModelUpdateWithoutPortfoliosInput = {
@@ -20308,6 +20687,12 @@ export namespace Prisma {
   export type ClientModelUpsertWithoutOauth_accountsInput = {
     update: XOR<ClientModelUpdateWithoutOauth_accountsInput, ClientModelUncheckedUpdateWithoutOauth_accountsInput>
     create: XOR<ClientModelCreateWithoutOauth_accountsInput, ClientModelUncheckedCreateWithoutOauth_accountsInput>
+    where?: ClientModelWhereInput
+  }
+
+  export type ClientModelUpdateToOneWithWhereWithoutOauth_accountsInput = {
+    where?: ClientModelWhereInput
+    data: XOR<ClientModelUpdateWithoutOauth_accountsInput, ClientModelUncheckedUpdateWithoutOauth_accountsInput>
   }
 
   export type ClientModelUpdateWithoutOauth_accountsInput = {
@@ -20337,6 +20722,12 @@ export namespace Prisma {
   export type BIZUserModelUpsertWithoutOauth_accountsInput = {
     update: XOR<BIZUserModelUpdateWithoutOauth_accountsInput, BIZUserModelUncheckedUpdateWithoutOauth_accountsInput>
     create: XOR<BIZUserModelCreateWithoutOauth_accountsInput, BIZUserModelUncheckedCreateWithoutOauth_accountsInput>
+    where?: BIZUserModelWhereInput
+  }
+
+  export type BIZUserModelUpdateToOneWithWhereWithoutOauth_accountsInput = {
+    where?: BIZUserModelWhereInput
+    data: XOR<BIZUserModelUpdateWithoutOauth_accountsInput, BIZUserModelUncheckedUpdateWithoutOauth_accountsInput>
   }
 
   export type BIZUserModelUpdateWithoutOauth_accountsInput = {
@@ -20426,7 +20817,7 @@ export namespace Prisma {
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type OauthAccountModelUncheckedUpdateManyWithoutOauth_accountsInput = {
+  export type OauthAccountModelUncheckedUpdateManyWithoutClientInput = {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20520,6 +20911,27 @@ export namespace Prisma {
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type OauthAccountModelUncheckedUpdateManyWithoutBiz_userInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    oauth_type?: EnumOauthTypeFieldUpdateOperationsInput | OauthType
+    oauth_sub?: StringFieldUpdateOperationsInput | string
+    client_id?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    birth?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderTypeFieldUpdateOperationsInput | GenderType | null
+    address_zone_code?: NullableStringFieldUpdateOperationsInput | string | null
+    address_road?: NullableStringFieldUpdateOperationsInput | string | null
+    address_detail?: NullableStringFieldUpdateOperationsInput | string | null
+    address_extra?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type BIZCertificationImageModelUpdateWithoutBiz_userInput = {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20540,7 +20952,7 @@ export namespace Prisma {
     access_type?: EnumImageAccessTypeFieldUpdateOperationsInput | ImageAccessType
   }
 
-  export type BIZCertificationImageModelUncheckedUpdateManyWithoutBiz_certification_imagesInput = {
+  export type BIZCertificationImageModelUncheckedUpdateManyWithoutBiz_userInput = {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20583,7 +20995,7 @@ export namespace Prisma {
     is_visible?: BoolFieldUpdateOperationsInput | boolean
   }
 
-  export type REPortfolioModelUncheckedUpdateManyWithoutPortfoliosInput = {
+  export type REPortfolioModelUncheckedUpdateManyWithoutRe_agentInput = {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20638,7 +21050,7 @@ export namespace Prisma {
     portfolios?: REPortfolioModelUncheckedUpdateManyWithoutRe_agentNestedInput
   }
 
-  export type REAgentModelUncheckedUpdateManyWithoutRe_agentsInput = {
+  export type REAgentModelUncheckedUpdateManyWithoutExpertiseInput = {
     id?: StringFieldUpdateOperationsInput | string
     is_licensed?: BoolFieldUpdateOperationsInput | boolean
     re_number?: StringFieldUpdateOperationsInput | string
@@ -20678,7 +21090,7 @@ export namespace Prisma {
     sub_expertise_id?: StringFieldUpdateOperationsInput | string
   }
 
-  export type HSSubExpertiseRelationModelUncheckedUpdateManyWithoutExpertise_relationInput = {
+  export type HSSubExpertiseRelationModelUncheckedUpdateManyWithoutHs_providerInput = {
     id?: StringFieldUpdateOperationsInput | string
     sub_expertise_id?: StringFieldUpdateOperationsInput | string
   }
@@ -20705,7 +21117,7 @@ export namespace Prisma {
     is_visible?: BoolFieldUpdateOperationsInput | boolean
   }
 
-  export type HSPortfolioModelUncheckedUpdateManyWithoutPortfoliosInput = {
+  export type HSPortfolioModelUncheckedUpdateManyWithoutHs_providerInput = {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20731,7 +21143,7 @@ export namespace Prisma {
     hs_provider_id?: StringFieldUpdateOperationsInput | string
   }
 
-  export type HSSubExpertiseRelationModelUncheckedUpdateManyWithoutRelationsInput = {
+  export type HSSubExpertiseRelationModelUncheckedUpdateManyWithoutSub_expertiseInput = {
     id?: StringFieldUpdateOperationsInput | string
     hs_provider_id?: StringFieldUpdateOperationsInput | string
   }
@@ -20765,7 +21177,7 @@ export namespace Prisma {
     relations?: HSSubExpertiseRelationModelUncheckedUpdateManyWithoutSub_expertiseNestedInput
   }
 
-  export type HSSubExpertiseModelUncheckedUpdateManyWithoutSub_expertisesInput = {
+  export type HSSubExpertiseModelUncheckedUpdateManyWithoutSuper_expertiseInput = {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string

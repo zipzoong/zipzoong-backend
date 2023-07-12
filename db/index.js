@@ -8,7 +8,6 @@ const {
   PrismaClientInitializationError,
   PrismaClientValidationError,
   NotFoundError,
-  decompressFromBase64,
   getPrismaClient,
   sqltag,
   empty,
@@ -30,12 +29,12 @@ const Prisma = {}
 exports.Prisma = Prisma
 
 /**
- * Prisma Client JS version: 4.16.2
- * Query Engine version: 4bc8b6e1b66cb932731fb1bdbbc550d1e010de81
+ * Prisma Client JS version: 5.0.0
+ * Query Engine version: 6b0aef69b7cdfc787f822ecd7cdc76d5f1991584
  */
 Prisma.prismaVersion = {
-  client: "4.16.2",
-  engine: "4bc8b6e1b66cb932731fb1bdbbc550d1e010de81"
+  client: "5.0.0",
+  engine: "6b0aef69b7cdfc787f822ecd7cdc76d5f1991584"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -312,8 +311,8 @@ const config = {
     "schemaEnvPath": "../.env"
   },
   "relativePath": "../prisma",
-  "clientVersion": "4.16.2",
-  "engineVersion": "4bc8b6e1b66cb932731fb1bdbbc550d1e010de81",
+  "clientVersion": "5.0.0",
+  "engineVersion": "6b0aef69b7cdfc787f822ecd7cdc76d5f1991584",
   "datasourceNames": [
     "database"
   ],
@@ -342,7 +341,6 @@ warnEnvConflicts({
     rootEnvPath: config.relativeEnvPaths.rootEnvPath && path.resolve(config.dirname, config.relativeEnvPaths.rootEnvPath),
     schemaEnvPath: config.relativeEnvPaths.schemaEnvPath && path.resolve(config.dirname, config.relativeEnvPaths.schemaEnvPath)
 })
-
 
 const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
