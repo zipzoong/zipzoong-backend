@@ -6,3 +6,4 @@
 //================================================================
 export * as sign_in from "./sign_in";
 export * as sign_up from "./sign_up";
+export * as profile from "./profile";

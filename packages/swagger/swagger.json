@@ -175,6 +175,59 @@
           }
         ]
       }
+    },
+    "/auth/profile": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "계정 프로필 정보",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IAuthentication.IAccountProfile"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "계정 프로필 조회",
+        "description": "계정 프로필 정보를 불러옵니다. 소셜 계정을 통해 얻은 정보입니다.\n\n사용자 정보를 생성할 때, 기본값으로 사용될 수 있습니다.\n\n에러 코드\n- ACCOUNT_NOT_FOUND : 집중 서버에 계정 정보가 없는 경우\n- ACCOUNT_INACTIVE : 비활성화된 계정인 경우\n- TOKEN_EXPIRED : 계정 토큰이 만료된 경우\n- TOKEN_INVALID : 계정 토큰이 유효하지 않은 경우\n\n@summary 계정 프로필 조회\n\n@tag authentication\n\n@return 계정 프로필 정보",
+        "x-nestia-namespace": "auth.profile.get",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "계정 프로필 조회",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "authentication",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "return",
+            "text": [
+              {
+                "text": "계정 프로필 정보",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -317,6 +370,165 @@
           "account_token"
         ],
         "description": "회원 가입시 발급된다.\n\n다음과 같은 작업을 할 수 있다.\n- 사용자 정보 생성\n- 소셜 계정 프로필 조회",
+        "x-typia-jsDocTags": []
+      },
+      "IAuthentication.IAccountProfile": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "본명",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "description": "@format email",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "email"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "email",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "email",
+            "nullable": true
+          },
+          "phone": {
+            "description": "전화번호\n\n- `+`로 시작하고 `공백`으로 국가코드를 구분한다.\n- 전화번호는 `숫자`와 `-`로만 이루어진다.\n- 조회시 `마킹`된 형태로 표기된다.\n\ne.g) +82 10-1234-5678, +82 10-1***-5\n@pattern ^\\+\\d+\\s\\d+(?:-\\d+)*$",
+            "x-typia-metaTags": [
+              {
+                "kind": "pattern",
+                "value": "^\\+\\d+\\s\\d+(?:-\\d+)*$"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "pattern",
+                "text": [
+                  {
+                    "text": "^\\+\\d+\\s\\d+(?:-\\d+)*$",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "pattern": "^\\+\\d+\\s\\d+(?:-\\d+)*$",
+            "nullable": true
+          },
+          "profile_image_url": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "nullable": true
+          },
+          "birth": {
+            "description": "생일(양력)\nYYYY-MM-DD\n@format date",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "date"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "date",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "gender": {
+            "description": "성별",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "female",
+              "male"
+            ],
+            "nullable": true
+          },
+          "address": {
+            "$ref": "#/components/schemas/IAddress.Nullable"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "name",
+          "email",
+          "phone",
+          "profile_image_url",
+          "birth",
+          "gender",
+          "address"
+        ],
+        "description": "사용자 주소",
+        "x-typia-jsDocTags": []
+      },
+      "IAddress.Nullable": {
+        "type": "object",
+        "properties": {
+          "road": {
+            "description": "도로명 주소",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "zone_code": {
+            "description": "우편 번호",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "detail": {
+            "description": "상세 주소",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "nullable": true
+          },
+          "extra": {
+            "description": "참고 사항",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": true,
+        "required": [
+          "road",
+          "zone_code",
+          "detail",
+          "extra"
+        ],
+        "description": "참고 사항",
         "x-typia-jsDocTags": []
       }
     },

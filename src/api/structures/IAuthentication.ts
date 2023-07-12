@@ -114,5 +114,11 @@ export namespace IAuthentication {
             | "USER_NOT_FOUND";
 
         export type SignUp = "OAUTH_FAIL" | "ACCOUNT_INACTIVE";
+
+        export type GetProfile =
+            | "TOKEN_EXPIRED"
+            | "TOKEN_INVALID"
+            | "ACCOUNT_NOT_FOUND"
+            | "ACCOUNT_INACTIVE";
     }
 }

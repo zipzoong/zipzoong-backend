@@ -13,7 +13,7 @@ const validate_token_type = (type: IToken.Type) => (input: string) =>
 
 const extract_token = (input: RegExpMatchArray) => input[0].split(/\s+/)[1];
 
-export const Token = (token_type: IToken.Type) =>
+export const Authorization = (token_type: IToken.Type) =>
     createParamDecorator((type: IToken.Type, ctx: ExecutionContext) =>
         pipe(
             ctx,

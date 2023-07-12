@@ -1,4 +1,4 @@
-import { isNull, negate, pipe } from "@fxts/core";
+import { isNull, isString, negate, pipe } from "@fxts/core";
 import { IAuthentication } from "@APP/api/structures/IAuthentication";
 import { Oauth } from "@APP/externals/oauth";
 import {
@@ -105,6 +105,10 @@ export namespace Service {
             },
         );
 
+    /**
+     * @throw 401 OAUTH_FAIL
+     * @throw 403 ACCOUNT_INACTIVE
+     */
     export const signUp = (
         input: IAuthentication.ISignUp,
     ): Promise<IAuthentication.IResponse.ISignUp> =>
@@ -168,6 +172,94 @@ export namespace Service {
 
             (account_token) => ({
                 account_token,
+            }),
+        );
+
+    /**
+     * @throw 403 TOKEN_EXPIRED
+     * @throw 403 TOKEN_INVALID
+     * @throw 403 ACCOUNT_INACTIVE
+     * @throw 404 ACCOUNT_NOT_FOUND
+     */
+    export const getProfile = (
+        token: string,
+    ): Promise<IAuthentication.IAccountProfile> =>
+        pipe(
+            token,
+
+            Token.Account.verify,
+
+            skip(Result.Ok.is, (error) => {
+                const code = Result.Error.flatten(error);
+                if (code === "Token Expired")
+                    Failure.throwFailure<IAuthentication.FailureCode.GetProfile>(
+                        {
+                            cause: "TOKEN_EXPIRED",
+                            message: "토큰이 만료되었습니다.",
+                            statusCode: HttpStatus.FORBIDDEN,
+                        },
+                    );
+                if (code === "Token Invalid")
+                    Failure.throwFailure<IAuthentication.FailureCode.GetProfile>(
+                        {
+                            cause: "TOKEN_INVALID",
+                            message: "유효하지 않은 토큰입니다.",
+                            statusCode: HttpStatus.FORBIDDEN,
+                        },
+                    );
+
+                throw Error("계정 토큰 검증 실패");
+            }),
+
+            Result.Ok.flatten,
+
+            pick("account_id"),
+
+            async (id) => prisma.oauthAccountModel.findFirst({ where: { id } }),
+
+            skip(negate(isNull), () =>
+                Failure.throwFailure<IAuthentication.FailureCode.GetProfile>({
+                    cause: "ACCOUNT_NOT_FOUND",
+                    message: "존재하지 않는 계정입니다.",
+                    statusCode: HttpStatus.NOT_FOUND,
+                }),
+            ),
+
+            skip(isActive, () =>
+                Failure.throwFailure<IAuthentication.FailureCode.GetProfile>({
+                    cause: "ACCOUNT_INACTIVE",
+                    message: "비활성화된 계정입니다.",
+                    statusCode: HttpStatus.FORBIDDEN,
+                }),
+            ),
+
+            ({
+                name,
+                email,
+                phone,
+                profile_image_url,
+                birth,
+                gender,
+                address_zone_code,
+                address_road,
+                address_detail,
+                address_extra,
+            }) => ({
+                name,
+                email,
+                phone,
+                profile_image_url,
+                birth,
+                gender,
+                address:
+                    isString(address_road) && isString(address_zone_code)
+                        ? {
+                              road: address_road,
+                              zone_code: address_zone_code,
+                              detail: address_detail,
+                              extra: address_extra,
+                          }
+                        : null,
             }),
         );
 }
