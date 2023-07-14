@@ -232,7 +232,6 @@
     "/auth/user": {
       "post": {
         "tags": [
-          "authentication",
           "users"
         ],
         "parameters": [],
@@ -262,7 +261,7 @@
           }
         },
         "summary": "사용자 정보 생성",
-        "description": "계정 토큰을 사용하여 사용자 정보를 생성한다.\n\n이메일, 휴대전화는 verification_id를 null로 하면 계정 프로필에 저장된 정보가 기본으로 적용된다.\n\n그 외 정보는 null을 전송할 경우, null을 저장한다.\n\n@summary 사용자 정보 생성\n\n@tag authentication\n\n@tag users\n\n@return 사용자 토큰(access token)",
+        "description": "계정 토큰을 사용하여 사용자 정보를 생성한다.\n\n이메일, 휴대전화는 verification_id를 null로 하면 계정 프로필에 저장된 정보가 기본으로 적용된다.\n\n그 외 정보는 null을 전송할 경우, null을 저장한다.\n\n{@link IAuthentication.FailureCode.CreateUser 에러 코드 타입}\n- `TOKEN_EXPIRED` : 계정 토큰이 만료된 경우\n- `TOKEN_INVALID` : 계정 토큰이 유효하지 않은 경우\n- `ACCOUNT_NOT_FOUND` : 집중 서버에 계정 정보가 없는 경우\n- `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우\n- `USER_ALREADY_EXIST` : 이미 연동된 해당 유형의 사용자 정보가 있는 경우\n- `PHONE_REQUIRED` : 사용가능한 휴대전화 정보가 없는 경우 (사업자 유형은 전화번호가 필수)\n- `EXPERTISE_INVALID` : 사업자 전문분야 정보가 유효하지 않은 경우\n- `TERMS_INSUFFICIENT` : 필수 약관 동의가 불충분한 경우\n- `TERMS_INVALID` : 약관 정보가 유효하지 않은 경우\n\n@summary 사용자 정보 생성\n\n@tag users\n\n@return 사용자 토큰(access token)",
         "x-nestia-namespace": "auth.user.create",
         "x-nestia-jsDocTags": [
           {
@@ -270,15 +269,6 @@
             "text": [
               {
                 "text": "사용자 정보 생성",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "authentication",
                 "kind": "text"
               }
             ]
@@ -297,6 +287,626 @@
             "text": [
               {
                 "text": "사용자 토큰(access token)",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/users/hs-providers": {
+      "get": {
+        "tags": [
+          "hs-providers"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "필터링, 정렬 기준",
+            "schema": {
+              "$ref": "#/components/schemas/IHSProvider.ISearch"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "생활서비스 전문가 간단 정보 목록",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IHSProvider.IPaginatedSummary"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "생활서비스 전문가 목록 검색",
+        "description": "검색기준에 맞는 인증된 생활서비스 전문가 간단 정보 목록을 확안할 수 있다.\n\n@summary 생활서비스 전문가 목록 검색\n\n@tag hs-providers\n\n@param query 필터링, 정렬 기준\n\n@return 생활서비스 전문가 간단 정보 목록",
+        "x-nestia-namespace": "users.hs-providers.getList",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "생활서비스 전문가 목록 검색",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "hs-providers",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "query",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "필터링, 정렬 기준",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "return",
+            "text": [
+              {
+                "text": "생활서비스 전문가 간단 정보 목록",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/users/hs-providers/me": {
+      "get": {
+        "tags": [
+          "hs-providers"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "생활서비스 전문가 프로필 정보",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IHSProvider.IPrivate"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "생활서비스 전문가 내정보 조회",
+        "description": "생활서비스 전문가 개인정보를 요청한다.\n\n이메일, 휴대전화 등의 개인 정보는 마킹처리되어 전달된다.\n\n@summary 생활서비스 전문가 내정보 조회\n\n@tag hs-providers\n\n@param access_token 생활서비스 전문가 권한을 갖은 액세스 토큰\n\n@return 생활서비스 전문가 프로필 정보",
+        "x-nestia-namespace": "users.hs-providers.me.get",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "생활서비스 전문가 내정보 조회",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "hs-providers",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "access_token",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "생활서비스 전문가 권한을 갖은 액세스 토큰",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "return",
+            "text": [
+              {
+                "text": "생활서비스 전문가 프로필 정보",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/users/hs-providers/{provider_id}": {
+      "get": {
+        "tags": [
+          "hs-providers"
+        ],
+        "parameters": [
+          {
+            "name": "provider_id",
+            "in": "path",
+            "description": "생활서비스 전문가 id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "생활서비스 전문가 공개정보",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IHSProvider.IPublic"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "생활서비스 전문가 공개 프로필 정보 조회",
+        "description": "생활서비스 전문가의 공개 정보를 요청한다.\n\n@summary 생활서비스 전문가 공개 프로필 정보 조회\n\n@tag hs-providers\n\n@param provider_id 생활서비스 전문가 id\n\n@return 생활서비스 전문가 공개정보",
+        "x-nestia-namespace": "users.hs-providers.getOne",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "생활서비스 전문가 공개 프로필 정보 조회",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "hs-providers",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "provider_id",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "생활서비스 전문가 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "return",
+            "text": [
+              {
+                "text": "생활서비스 전문가 공개정보",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/users/hs-providers/{provider_id}/contact": {
+      "get": {
+        "tags": [
+          "hs-providers"
+        ],
+        "parameters": [
+          {
+            "name": "provider_id",
+            "in": "path",
+            "description": "생활서비스 전문가 id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "생활서비스 전문가 연락처 정보",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IHSProvider.IContact"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "생활서비스 전문가 연락처 정보 조회",
+        "description": "생활서비스 전문가 연락처 정보를 요청한다.\n\n@summary 생활서비스 전문가 연락처 정보 조회\n\n@tag hs-providers\n\n@param provider_id 생활서비스 전문가 id\n\n@return 생활서비스 전문가 연락처 정보",
+        "x-nestia-namespace": "users.hs-providers.contact.getContact",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "생활서비스 전문가 연락처 정보 조회",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "hs-providers",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "provider_id",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "생활서비스 전문가 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "return",
+            "text": [
+              {
+                "text": "생활서비스 전문가 연락처 정보",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/users/re-agents": {
+      "get": {
+        "tags": [
+          "re-agents"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "필터링, 정렬 기준",
+            "schema": {
+              "$ref": "#/components/schemas/IREAgent.ISearch"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "공인중개사 간단 정보 목록",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IREAgent.IPaginatedSummary"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "공인중개사 목록 검색",
+        "description": "검색기준에 맞는 인증된 공인중개사 간단 정보 목록을 확안할 수 있다.\n\n@summary 공인중개사 목록 검색\n\n@tag re-agents\n\n@param query 필터링, 정렬 기준\n\n@return 공인중개사 간단 정보 목록",
+        "x-nestia-namespace": "users.re-agents.getList",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "공인중개사 목록 검색",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "re-agents",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "query",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "필터링, 정렬 기준",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "return",
+            "text": [
+              {
+                "text": "공인중개사 간단 정보 목록",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/users/re-agents/me": {
+      "get": {
+        "tags": [
+          "re-agents"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "공인중개사 프로필 정보",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IREAgent.IPrivate"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "공인중개사 내정보 조회",
+        "description": "공인중개사 개인정보를 요청한다.\n\n이메일, 휴대전화 등의 개인 정보는 마킹처리되어 전달된다.\n\n@summary 공인중개사 내정보 조회\n\n@tag re-agents\n\n@param access_token 공인중개사 권한을 갖은 액세스 토큰\n\n@return 공인중개사 프로필 정보",
+        "x-nestia-namespace": "users.re-agents.me.get",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "공인중개사 내정보 조회",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "re-agents",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "access_token",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "공인중개사 권한을 갖은 액세스 토큰",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "return",
+            "text": [
+              {
+                "text": "공인중개사 프로필 정보",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/users/re-agents/{agent_id}": {
+      "get": {
+        "tags": [
+          "re-agents"
+        ],
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "description": "공인중개사 id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "공인중개사 공개정보",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IREAgent.IPublic"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "공인중개사 공개 프로필 정보 조회",
+        "description": "공인중개사의 공개 정보를 요청한다.\n\n@summary 공인중개사 공개 프로필 정보 조회\n\n@tag re-agents\n\n@param agent_id 공인중개사 id\n\n@return 공인중개사 공개정보",
+        "x-nestia-namespace": "users.re-agents.getOne",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "공인중개사 공개 프로필 정보 조회",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "re-agents",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "agent_id",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "공인중개사 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "return",
+            "text": [
+              {
+                "text": "공인중개사 공개정보",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/users/re-agents/{agent_id}/contact": {
+      "get": {
+        "tags": [
+          "re-agents"
+        ],
+        "parameters": [
+          {
+            "name": "agent_id",
+            "in": "path",
+            "description": "공인중개사 id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "공인중개사 연락처 정보",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IREAgent.IContact"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "공인중개사 연락처 정보 조회",
+        "description": "공인중개사 연락처 정보를 요청한다.\n\n@summary 공인중개사 연락처 정보 조회\n\n@tag re-agents\n\n@param agent_id 공인중개사 id\n\n@return 공인중개사 연락처 정보",
+        "x-nestia-namespace": "users.re-agents.contact.getContact",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "공인중개사 연락처 정보 조회",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "re-agents",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "agent_id",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "공인중개사 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "return",
+            "text": [
+              {
+                "text": "공인중개사 연락처 정보",
                 "kind": "text"
               }
             ]
@@ -630,7 +1240,7 @@
               "client"
             ]
           },
-          "acceptant_agreement_ids": {
+          "agreed_terms_ids": {
             "description": "동의 약관 id 목록",
             "x-typia-required": true,
             "x-typia-optional": false,
@@ -687,6 +1297,9 @@
             "format": "url",
             "nullable": true
           },
+          "address": {
+            "$ref": "#/components/schemas/IAddress.Nullable"
+          },
           "gender": {
             "description": "성별",
             "x-typia-required": true,
@@ -722,22 +1335,19 @@
             "type": "string",
             "format": "date",
             "nullable": true
-          },
-          "address": {
-            "$ref": "#/components/schemas/IAddress.Nullable"
           }
         },
         "nullable": false,
         "required": [
           "type",
-          "acceptant_agreement_ids",
+          "agreed_terms_ids",
           "phone_verification_id",
           "email_verification_id",
           "name",
           "profile_image_url",
+          "address",
           "gender",
-          "birth",
-          "address"
+          "birth"
         ],
         "description": "이메일 인증 정보 id\n- 아직 미구현, null 입력할 것",
         "x-typia-jsDocTags": []
@@ -753,7 +1363,7 @@
               "real estate agent"
             ]
           },
-          "acceptant_agreement_ids": {
+          "agreed_terms_ids": {
             "description": "동의 약관 id 목록",
             "x-typia-required": true,
             "x-typia-optional": false,
@@ -827,20 +1437,20 @@
             "x-typia-optional": false,
             "type": "boolean"
           },
+          "real_estate": {
+            "$ref": "#/components/schemas/IREAgent.IRealEstate"
+          },
           "expertise_id": {
             "description": "전문 분야 id",
             "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string"
-          },
-          "real_estate": {
-            "$ref": "#/components/schemas/IREAgent.IRealEstate"
           }
         },
         "nullable": false,
         "required": [
           "type",
-          "acceptant_agreement_ids",
+          "agreed_terms_ids",
           "phone_verification_id",
           "email_verification_id",
           "biz_certification_images",
@@ -848,8 +1458,8 @@
           "profile_image_url",
           "introduction",
           "is_licensed",
-          "expertise_id",
-          "real_estate"
+          "real_estate",
+          "expertise_id"
         ],
         "description": "사업자 증명 서류 사진 목록",
         "x-typia-jsDocTags": []
@@ -1078,7 +1688,7 @@
               "home service provider"
             ]
           },
-          "acceptant_agreement_ids": {
+          "agreed_terms_ids": {
             "description": "동의 약관 id 목록",
             "x-typia-required": true,
             "x-typia-optional": false,
@@ -1143,11 +1753,20 @@
             "type": "string",
             "format": "url"
           },
-          "address": {
-            "$ref": "#/components/schemas/IAddress"
-          },
           "introduction": {
             "$ref": "#/components/schemas/IBIZUser.IIntroduction"
+          },
+          "registration_number": {
+            "description": "사업자 등록번호",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "biz_phone": {
+            "description": "업체 대표 전화번호",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
           },
           "open_date": {
             "description": "개업일(신고일자)\n\nYYYY-MM-DD\n@format date",
@@ -1173,17 +1792,8 @@
             "type": "string",
             "format": "date"
           },
-          "biz_phone": {
-            "description": "업체 대표 전화번호",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
-          },
-          "registration_number": {
-            "description": "사업자 등록번호",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
+          "address": {
+            "$ref": "#/components/schemas/IAddress"
           },
           "sub_expertise_ids": {
             "description": "하위 전문 분야 id 목록\n- 최소 하나 이상의 전문 분야 id가 존재해야 한다.\n- 목록 안에 모든 id는 동일한 상위 전문 분야에 속해야 한다.\n@minItems 1",
@@ -1236,20 +1846,1288 @@
         "nullable": false,
         "required": [
           "type",
-          "acceptant_agreement_ids",
+          "agreed_terms_ids",
           "phone_verification_id",
           "email_verification_id",
           "biz_certification_images",
           "name",
           "profile_image_url",
-          "address",
           "introduction",
-          "open_date",
-          "biz_phone",
           "registration_number",
+          "biz_phone",
+          "open_date",
+          "address",
           "sub_expertise_ids"
         ],
         "description": "사업자 증명 서류 사진 목록",
+        "x-typia-jsDocTags": []
+      },
+      "IHSProvider.ISearch": {
+        "type": "object",
+        "properties": {
+          "super_expertise_name": {
+            "description": "상위 전문 분야명(필터링 기준)",
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "string"
+          },
+          "sub_expertise_name": {
+            "description": "하위 전문 분야명\n\n- 상위 전문분야가 적용되어야 하위 전문분야를 적용할 수 있다.",
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "string"
+          },
+          "page": {
+            "description": "@type uint\n@minimum 1\n@default 1",
+            "x-typia-metaTags": [
+              {
+                "kind": "type",
+                "value": "uint"
+              },
+              {
+                "kind": "minimum",
+                "value": 1
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "type",
+                "text": [
+                  {
+                    "text": "uint",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "minimum",
+                "text": [
+                  {
+                    "text": "1",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "default",
+                "text": [
+                  {
+                    "text": "1",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "integer",
+            "minimum": 1,
+            "default": 1
+          }
+        },
+        "nullable": false,
+        "description": "하위 전문 분야명\n\n- 상위 전문분야가 적용되어야 하위 전문분야를 적용할 수 있다.",
+        "x-typia-jsDocTags": []
+      },
+      "IHSProvider.IPaginatedSummary": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IHSProvider.ISummary"
+            }
+          },
+          "page": {
+            "description": "@type uint\n@minimum 1",
+            "x-typia-metaTags": [
+              {
+                "kind": "type",
+                "value": "uint"
+              },
+              {
+                "kind": "minimum",
+                "value": 1
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "type",
+                "text": [
+                  {
+                    "text": "uint",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "minimum",
+                "text": [
+                  {
+                    "text": "1",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "nullable": false,
+        "required": [
+          "data",
+          "page"
+        ],
+        "description": "@type uint\n@minimum 1",
+        "x-typia-jsDocTags": []
+      },
+      "IHSProvider.ISummary": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "사용자 분류\n- client: 일반 회원\n- real estate: 공인중개사\n- home service: 생활서비스 전문가",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "home service provider"
+            ]
+          },
+          "id": {
+            "description": "사용자 고유 id",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "name": {
+            "description": "사용자명\n- 사용자가 home service provider인 경우, 업체 상호명이다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "profile_image_url": {
+            "description": "프로필 이미지\n- 업체 대표의 얼굴 이미지를 등록해야 한다.\n@format url",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "url"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "url",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "url"
+          },
+          "introduction": {
+            "$ref": "#/components/schemas/IBIZUser.IIntroduction"
+          },
+          "expertise": {
+            "description": "전문 분야\n- 자신이 속한 상위 전문 분야와 하위 전문 분야 정보\n- 하위 전문 분야는 복수 정보다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IHSProvider.ISuperExpertise"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "id",
+          "name",
+          "profile_image_url",
+          "introduction",
+          "expertise"
+        ],
+        "x-typia-jsDocTags": []
+      },
+      "IHSProvider.ISuperExpertise": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "상위 전문 분야 고유 id",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "name": {
+            "description": "상위 전문 분야 이름",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "sub_expertises": {
+            "description": "하위 전문 분야 목록",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IHSProvider.ISubExpertise"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "name",
+          "sub_expertises"
+        ],
+        "description": "하위 전문 분야 목록",
+        "x-typia-jsDocTags": []
+      },
+      "IHSProvider.ISubExpertise": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "하위 전문 분야 고유 id",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "name": {
+            "description": "하위 전문 분야 이름",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "name"
+        ],
+        "description": "하위 전문 분야 이름",
+        "x-typia-jsDocTags": []
+      },
+      "IHSProvider.IPrivate": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "description": "사업자 전화번호\n\n- `+`로 시작하고 `공백`으로 국가코드를 구분한다.\n- 전화번호는 `숫자`와 `-`로만 이루어진다.\n- 조회시 `마킹`된 형태로 표기된다.\n\ne.g) +82 10-1***-5\n\n@pattern ^\\+\\d+\\s\\d+(?:-\\d\\**)*$",
+            "x-typia-metaTags": [
+              {
+                "kind": "pattern",
+                "value": "^\\+\\d+\\s\\d+(?:-\\d\\**)*$"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "pattern",
+                "text": [
+                  {
+                    "text": "^\\+\\d+\\s\\d+(?:-\\d\\**)*$",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "pattern": "^\\+\\d+\\s\\d+(?:-\\d\\**)*$"
+          },
+          "email": {
+            "description": "사용자 이메일\n\n조회시 마킹된 형태로 표기됩니다.\n\ne.g) b****@n****.com\n\n@pattern ^\\w\\w\\*+@\\w\\*+(.\\w+)+$",
+            "x-typia-metaTags": [
+              {
+                "kind": "pattern",
+                "value": "^\\w\\w\\*+@\\w\\*+(.\\w+)+$"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "pattern",
+                "text": [
+                  {
+                    "text": "^\\w\\w\\*+@\\w\\*+(.\\w+)+$",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "pattern": "^\\w\\w\\*+@\\w\\*+(.\\w+)+$",
+            "nullable": true
+          },
+          "is_verified": {
+            "description": "업체 승인 여부",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "boolean"
+          },
+          "introduction": {
+            "$ref": "#/components/schemas/IBIZUser.IIntroduction"
+          },
+          "profile_image_url": {
+            "description": "프로필 이미지\n- 업체 대표의 얼굴 이미지를 등록해야 한다.\n@format url",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "url"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "url",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "url"
+          },
+          "registration_number": {
+            "description": "사업자 등록번호",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/IAddress"
+          },
+          "biz_phone": {
+            "description": "업체 대표 전화번호",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "open_date": {
+            "description": "개업일(신고일자)\n\nYYYY-MM-DD\n@format date",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "date"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "date",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "date"
+          },
+          "expertise": {
+            "description": "전문 분야\n- 자신이 속한 상위 전문 분야와 하위 전문 분야 정보\n- 하위 전문 분야는 복수 정보다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IHSProvider.ISuperExpertise"
+            }
+          },
+          "type": {
+            "description": "사용자 분류\n- client: 일반 회원\n- real estate: 공인중개사\n- home service: 생활서비스 전문가",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "home service provider"
+            ]
+          },
+          "id": {
+            "description": "사용자 고유 id",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "name": {
+            "description": "사용자명\n- 사용자가 home service provider인 경우, 업체 상호명이다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "created_at": {
+            "description": "사용자 정보 생성일\n@format date-time",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "datetime"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "date-time",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "description": "최근 수정일\n@format date-time",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "datetime"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "date-time",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "phone",
+          "email",
+          "is_verified",
+          "introduction",
+          "profile_image_url",
+          "registration_number",
+          "address",
+          "biz_phone",
+          "open_date",
+          "expertise",
+          "type",
+          "id",
+          "name",
+          "created_at",
+          "updated_at"
+        ],
+        "description": "사용자 이메일\n\n조회시 마킹된 형태로 표기됩니다.\n\ne.g) b****@n****.com\n\n@pattern ^\\w\\w\\*+@\\w\\*+(.\\w+)+$",
+        "x-typia-jsDocTags": []
+      },
+      "IHSProvider.IPublic": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "사용자 분류\n- client: 일반 회원\n- real estate: 공인중개사\n- home service: 생활서비스 전문가",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "home service provider"
+            ]
+          },
+          "id": {
+            "description": "사용자 고유 id",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "name": {
+            "description": "사용자명\n- 사용자가 home service provider인 경우, 업체 상호명이다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "profile_image_url": {
+            "description": "프로필 이미지\n- 업체 대표의 얼굴 이미지를 등록해야 한다.\n@format url",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "url"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "url",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "url"
+          },
+          "introduction": {
+            "$ref": "#/components/schemas/IBIZUser.IIntroduction"
+          },
+          "expertise": {
+            "description": "전문 분야\n- 자신이 속한 상위 전문 분야와 하위 전문 분야 정보\n- 하위 전문 분야는 복수 정보다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IHSProvider.ISuperExpertise"
+            }
+          },
+          "registration_number": {
+            "description": "사업자 등록번호",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "biz_phone": {
+            "description": "업체 대표 전화번호",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "open_date": {
+            "description": "개업일(신고일자)\n\nYYYY-MM-DD\n@format date",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "date"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "date",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "date"
+          },
+          "address": {
+            "$ref": "#/components/schemas/IAddress"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "id",
+          "name",
+          "profile_image_url",
+          "introduction",
+          "expertise",
+          "registration_number",
+          "biz_phone",
+          "open_date",
+          "address"
+        ],
+        "x-typia-jsDocTags": []
+      },
+      "IHSProvider.IContact": {
+        "type": "object",
+        "properties": {
+          "biz_phone": {
+            "description": "업체 대표 전화번호",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/IAddress"
+          },
+          "phone": {
+            "description": "대표자(계정 관리자) 전화번호\n\n계정 담당자의 연락처로서 사용자 고유 식별과 마케팅, 주요 약관 변경 등의 고지에 사용한다.\n- `+`로 시작하고 `공백`으로 국가코드를 구분한다.\n- 전화번호는 `숫자`와 `-`로만 이루어진다.\n- 조회시 `마킹`된 형태로 표기된다.\n\ne.g) +82 10-1234-5678, +82 10-1***-5\n@pattern ^\\+\\d+\\s\\d+(?:-\\d+)*$",
+            "x-typia-metaTags": [
+              {
+                "kind": "pattern",
+                "value": "^\\+\\d+\\s\\d+(?:-\\d+)*$"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "pattern",
+                "text": [
+                  {
+                    "text": "^\\+\\d+\\s\\d+(?:-\\d+)*$",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "pattern": "^\\+\\d+\\s\\d+(?:-\\d+)*$"
+          },
+          "email": {
+            "description": "사용자 이메일\n\n조회시 마킹된 형태로 표기됩니다.\n\ne.g) b****@naver.com\n@format email",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "email"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "email",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "email",
+            "nullable": true
+          }
+        },
+        "nullable": false,
+        "required": [
+          "biz_phone",
+          "address",
+          "phone",
+          "email"
+        ],
+        "x-typia-jsDocTags": []
+      },
+      "IREAgent.ISearch": {
+        "type": "object",
+        "properties": {
+          "expertise_name": {
+            "description": "공인중개사 전문분야명(필터링 기준)",
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "string"
+          },
+          "page": {
+            "description": "@type uint\n@minimum 1\n@default 1",
+            "x-typia-metaTags": [
+              {
+                "kind": "type",
+                "value": "uint"
+              },
+              {
+                "kind": "minimum",
+                "value": 1
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "type",
+                "text": [
+                  {
+                    "text": "uint",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "minimum",
+                "text": [
+                  {
+                    "text": "1",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "default",
+                "text": [
+                  {
+                    "text": "1",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "integer",
+            "minimum": 1,
+            "default": 1
+          }
+        },
+        "nullable": false,
+        "description": "공인중개사 전문분야명(필터링 기준)",
+        "x-typia-jsDocTags": []
+      },
+      "IREAgent.IPaginatedSummary": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IREAgent.ISummary"
+            }
+          },
+          "page": {
+            "description": "@type uint\n@minimum 1",
+            "x-typia-metaTags": [
+              {
+                "kind": "type",
+                "value": "uint"
+              },
+              {
+                "kind": "minimum",
+                "value": 1
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "type",
+                "text": [
+                  {
+                    "text": "uint",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "minimum",
+                "text": [
+                  {
+                    "text": "1",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "nullable": false,
+        "required": [
+          "data",
+          "page"
+        ],
+        "description": "@type uint\n@minimum 1",
+        "x-typia-jsDocTags": []
+      },
+      "IREAgent.ISummary": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "사용자 분류\n- client: 일반 회원\n- real estate: 공인중개사\n- home service: 생활서비스 전문가",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "real estate agent"
+            ]
+          },
+          "id": {
+            "description": "사용자 고유 id",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "name": {
+            "description": "사용자명\n- 사용자가 home service provider인 경우, 업체 상호명이다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "profile_image_url": {
+            "description": "프로필 이미지\n- 사업자는 반드시 본인 인물 사진을 프로필 이미지로 등록해야 한다.\n@format url",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "url"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "url",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "url"
+          },
+          "introduction": {
+            "$ref": "#/components/schemas/IBIZUser.IIntroduction"
+          },
+          "expertise": {
+            "$ref": "#/components/schemas/IREAgent.IExpertise"
+          },
+          "is_licensed": {
+            "description": "개업/소속 분류\n\ntrue인 경우, 개업 공인중개사에 해당한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "boolean"
+          },
+          "real_estate": {
+            "$ref": "#/components/schemas/IREAgent.IRealEstate"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "id",
+          "name",
+          "profile_image_url",
+          "introduction",
+          "expertise",
+          "is_licensed",
+          "real_estate"
+        ],
+        "x-typia-jsDocTags": []
+      },
+      "IREAgent.IExpertise": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "전문분야 카테고리 id",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "name": {
+            "description": "전문 분야 카테고리명",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "name"
+        ],
+        "description": "전문 분야 카테고리명",
+        "x-typia-jsDocTags": []
+      },
+      "IREAgent.IPrivate": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "description": "사업자 전화번호\n\n- `+`로 시작하고 `공백`으로 국가코드를 구분한다.\n- 전화번호는 `숫자`와 `-`로만 이루어진다.\n- 조회시 `마킹`된 형태로 표기된다.\n\ne.g) +82 10-1***-5\n\n@pattern ^\\+\\d+\\s\\d+(?:-\\d\\**)*$",
+            "x-typia-metaTags": [
+              {
+                "kind": "pattern",
+                "value": "^\\+\\d+\\s\\d+(?:-\\d\\**)*$"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "pattern",
+                "text": [
+                  {
+                    "text": "^\\+\\d+\\s\\d+(?:-\\d\\**)*$",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "pattern": "^\\+\\d+\\s\\d+(?:-\\d\\**)*$"
+          },
+          "email": {
+            "description": "사용자 이메일\n\n조회시 마킹된 형태로 표기됩니다.\n\ne.g) b****@n****.com\n\n@pattern ^\\w\\w\\*+@\\w\\*+(.\\w+)+$",
+            "x-typia-metaTags": [
+              {
+                "kind": "pattern",
+                "value": "^\\w\\w\\*+@\\w\\*+(.\\w+)+$"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "pattern",
+                "text": [
+                  {
+                    "text": "^\\w\\w\\*+@\\w\\*+(.\\w+)+$",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "pattern": "^\\w\\w\\*+@\\w\\*+(.\\w+)+$",
+            "nullable": true
+          },
+          "is_verified": {
+            "description": "사업자 승인 여부",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "boolean"
+          },
+          "introduction": {
+            "$ref": "#/components/schemas/IBIZUser.IIntroduction"
+          },
+          "profile_image_url": {
+            "description": "프로필 이미지\n- 사업자는 반드시 본인 인물 사진을 프로필 이미지로 등록해야 한다.\n@format url",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "url"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "url",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "url"
+          },
+          "is_licensed": {
+            "description": "개업/소속 분류\n\ntrue인 경우, 개업 공인중개사에 해당한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "boolean"
+          },
+          "real_estate": {
+            "$ref": "#/components/schemas/IREAgent.IRealEstate"
+          },
+          "expertise": {
+            "$ref": "#/components/schemas/IREAgent.IExpertise"
+          },
+          "type": {
+            "description": "사용자 분류\n- client: 일반 회원\n- real estate: 공인중개사\n- home service: 생활서비스 전문가",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "real estate agent"
+            ]
+          },
+          "id": {
+            "description": "사용자 고유 id",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "name": {
+            "description": "사용자명\n- 사용자가 home service provider인 경우, 업체 상호명이다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "created_at": {
+            "description": "사용자 정보 생성일\n@format date-time",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "datetime"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "date-time",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "description": "최근 수정일\n@format date-time",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "datetime"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "date-time",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "phone",
+          "email",
+          "is_verified",
+          "introduction",
+          "profile_image_url",
+          "is_licensed",
+          "real_estate",
+          "expertise",
+          "type",
+          "id",
+          "name",
+          "created_at",
+          "updated_at"
+        ],
+        "description": "사용자 이메일\n\n조회시 마킹된 형태로 표기됩니다.\n\ne.g) b****@n****.com\n\n@pattern ^\\w\\w\\*+@\\w\\*+(.\\w+)+$",
+        "x-typia-jsDocTags": []
+      },
+      "IREAgent.IPublic": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "사용자 분류\n- client: 일반 회원\n- real estate: 공인중개사\n- home service: 생활서비스 전문가",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "real estate agent"
+            ]
+          },
+          "id": {
+            "description": "사용자 고유 id",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "name": {
+            "description": "사용자명\n- 사용자가 home service provider인 경우, 업체 상호명이다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "profile_image_url": {
+            "description": "프로필 이미지\n- 사업자는 반드시 본인 인물 사진을 프로필 이미지로 등록해야 한다.\n@format url",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "url"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "url",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "url"
+          },
+          "introduction": {
+            "$ref": "#/components/schemas/IBIZUser.IIntroduction"
+          },
+          "expertise": {
+            "$ref": "#/components/schemas/IREAgent.IExpertise"
+          },
+          "is_licensed": {
+            "description": "개업/소속 분류\n\ntrue인 경우, 개업 공인중개사에 해당한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "boolean"
+          },
+          "real_estate": {
+            "$ref": "#/components/schemas/IREAgent.IRealEstate"
+          },
+          "created_at": {
+            "description": "사용자 정보 생성일\n@format date-time",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "datetime"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "date-time",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "description": "최근 수정일\n@format date-time",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "datetime"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "date-time",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "id",
+          "name",
+          "profile_image_url",
+          "introduction",
+          "expertise",
+          "is_licensed",
+          "real_estate",
+          "created_at",
+          "updated_at"
+        ],
+        "x-typia-jsDocTags": []
+      },
+      "IREAgent.IContact": {
+        "type": "object",
+        "properties": {
+          "real_estate_phone": {
+            "description": "부동산 연락처",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "real_estate_address": {
+            "$ref": "#/components/schemas/IAddress"
+          },
+          "phone": {
+            "description": "사업자 전화번호\n\n- `+`로 시작하고 `공백`으로 국가코드를 구분한다.\n- 전화번호는 `숫자`와 `-`로만 이루어진다.\n- 조회시 `마킹`된 형태로 표기된다.\n\ne.g) +82 10-1234-5678, +82 10-1***-5\n@pattern ^\\+\\d+\\s\\d+(?:-\\d+)*$",
+            "x-typia-metaTags": [
+              {
+                "kind": "pattern",
+                "value": "^\\+\\d+\\s\\d+(?:-\\d+)*$"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "pattern",
+                "text": [
+                  {
+                    "text": "^\\+\\d+\\s\\d+(?:-\\d+)*$",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "pattern": "^\\+\\d+\\s\\d+(?:-\\d+)*$"
+          },
+          "email": {
+            "description": "사용자 이메일\n\n조회시 마킹된 형태로 표기됩니다.\n\ne.g) b****@naver.com\n@format email",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "email"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "email",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "email",
+            "nullable": true
+          }
+        },
+        "nullable": false,
+        "required": [
+          "real_estate_phone",
+          "real_estate_address",
+          "phone",
+          "email"
+        ],
+        "description": "부동산 주소",
         "x-typia-jsDocTags": []
       }
     },

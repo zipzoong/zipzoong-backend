@@ -1,5 +1,5 @@
 import { Mutable } from "@APP/api/types";
-import { IAddress } from "../common";
+import { IAddress, IPage, IPaginatedResponse } from "../common";
 import { IBIZUser } from "./IBIZUser";
 import { IUser } from "./IUser";
 
@@ -143,4 +143,47 @@ export namespace IHSProvider {
         | "open_date"
         | "address"
     >;
+
+    export interface IPrivate extends IHSProvider {
+        /**
+         * 사업자 전화번호
+         *
+         * - `+`로 시작하고 `공백`으로 국가코드를 구분한다.
+         * - 전화번호는 `숫자`와 `-`로만 이루어진다.
+         * - 조회시 `마킹`된 형태로 표기된다.
+         *
+         * e.g) +82 10-1***-5***
+         *
+         * @pattern ^\+\d+\s\d+(?:-\d\**)*$
+         */
+        readonly phone: string;
+        /**
+         * 사용자 이메일
+         *
+         * 조회시 마킹된 형태로 표기됩니다.
+         *
+         * e.g) b****@n****.com
+         *
+         * @pattern ^\w\w\*+@\w\*+(.\w+)+$
+         */
+        readonly email: null | string;
+    }
+
+    export type IContact = Pick<
+        IHSProvider,
+        "phone" | "email" | "address" | "biz_phone"
+    >;
+
+    export interface ISearch extends IPage {
+        /** 상위 전문 분야명(필터링 기준) */
+        super_expertise_name?: string;
+        /**
+         * 하위 전문 분야명
+         *
+         * - 상위 전문분야가 적용되어야 하위 전문분야를 적용할 수 있다.
+         */
+        sub_expertise_name?: string;
+    }
+
+    export type IPaginatedSummary = IPaginatedResponse<ISummary>;
 }

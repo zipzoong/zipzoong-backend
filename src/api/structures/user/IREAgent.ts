@@ -1,5 +1,5 @@
 import { Mutable } from "@APP/api/types";
-import { IAddress } from "../common";
+import { IAddress, IPage, IPaginatedResponse } from "../common";
 import { IBIZUser } from "./IBIZUser";
 import { IUser } from "./IUser";
 
@@ -153,4 +153,47 @@ export namespace IREAgent {
         | "created_at"
         | "updated_at"
     >;
+
+    export interface IPrivate extends IREAgent {
+        /**
+         * 사업자 전화번호
+         *
+         * - `+`로 시작하고 `공백`으로 국가코드를 구분한다.
+         * - 전화번호는 `숫자`와 `-`로만 이루어진다.
+         * - 조회시 `마킹`된 형태로 표기된다.
+         *
+         * e.g) +82 10-1***-5***
+         *
+         * @pattern ^\+\d+\s\d+(?:-\d\**)*$
+         */
+        readonly phone: string;
+        /**
+         * 사용자 이메일
+         *
+         * 조회시 마킹된 형태로 표기됩니다.
+         *
+         * e.g) b****@n****.com
+         *
+         * @pattern ^\w\w\*+@\w\*+(.\w+)+$
+         */
+        readonly email: null | string;
+    }
+
+    export interface IContact extends Pick<IREAgent, "phone" | "email"> {
+        /**
+         * 부동산 연락처
+         */
+        readonly real_estate_phone: string;
+        /**
+         * 부동산 주소
+         */
+        readonly real_estate_address: IAddress;
+    }
+
+    export interface ISearch extends IPage {
+        /** 공인중개사 전문분야명(필터링 기준) */
+        expertise_name?: string;
+    }
+
+    export type IPaginatedSummary = IPaginatedResponse<ISummary>;
 }
