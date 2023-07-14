@@ -18,10 +18,15 @@ export const throwError =
         throw err(input);
     };
 
-export const isActive = <T extends { is_deleted: boolean }>(
+export const isActive = <
+    T extends { is_deleted: boolean; deleted_at: string | Date | null },
+>(
     input: T,
-): input is T & { is_deleted: false } => !input.is_deleted;
+): input is T & { is_deleted: false; deleted_at: null } => !input.is_deleted;
 
-export const isInActive = <T extends { is_deleted: boolean }>(
+export const isInActive = <
+    T extends { is_deleted: boolean; deleted_at: string | Date | null },
+>(
     input: T,
-): input is T & { is_deleted: true } => !isActive(input);
+): input is T & { is_deleted: true; deleted_at: string | Date } =>
+    !isActive(input);

@@ -15,11 +15,11 @@ import type { IAuthentication } from "./../../../structures/IAuthentication";
  * 
  * 사용자 정보를 생성할 때, 기본값으로 사용될 수 있습니다.
  * 
- * 에러 코드
- * - ACCOUNT_NOT_FOUND : 집중 서버에 계정 정보가 없는 경우
- * - ACCOUNT_INACTIVE : 비활성화된 계정인 경우
- * - TOKEN_EXPIRED : 계정 토큰이 만료된 경우
- * - TOKEN_INVALID : 계정 토큰이 유효하지 않은 경우
+ * {@link IAuthentication.FailureCode.GetProfile 에러 코드 타입}
+ * - `ACCOUNT_NOT_FOUND` : 집중 서버에 계정 정보가 없는 경우
+ * - `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우
+ * - `TOKEN_EXPIRED` : 계정 토큰이 만료된 경우
+ * - `TOKEN_INVALID` : 계정 토큰이 유효하지 않은 경우
  * 
  * @summary 계정 프로필 조회
  * 

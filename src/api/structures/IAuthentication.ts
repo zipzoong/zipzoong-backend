@@ -107,18 +107,17 @@ export namespace IAuthentication {
     }
 
     export namespace FailureCode {
-        export type SignIn =
-            | "OAUTH_FAIL"
-            | "ACCOUNT_NOT_FOUND"
-            | "ACCOUNT_INACTIVE"
-            | "USER_NOT_FOUND";
-
+        export type TokenVerify = "TOKEN_EXPIRED" | "TOKEN_INVALID";
+        export type AccountVerify = "ACCOUNT_NOT_FOUND" | "ACCOUNT_INACTIVE";
+        export type SignIn = AccountVerify | "OAUTH_FAIL" | "USER_NOT_FOUND";
         export type SignUp = "OAUTH_FAIL" | "ACCOUNT_INACTIVE";
-
-        export type GetProfile =
-            | "TOKEN_EXPIRED"
-            | "TOKEN_INVALID"
-            | "ACCOUNT_NOT_FOUND"
-            | "ACCOUNT_INACTIVE";
+        export type GetProfile = TokenVerify | AccountVerify;
+        export type CreateUser =
+            | GetProfile
+            | "USER_ALREADY_EXIST"
+            | "PHONE_REQUIRED"
+            | "EXPERTISE_INVALID"
+            | "TERMS_INSUFFICIENT"
+            | "TERMS_INVALID";
     }
 }

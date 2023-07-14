@@ -12,7 +12,7 @@ export const ServiceType = createEnum("ServiceType", (Enum) => {
     Enum.addValue("HS").addValue("RE");
 });
 
-export const AgreementTargetType = createEnum("AgreementTargetType", (Enum) => {
+export const TermsType = createEnum("TermsType", (Enum) => {
     Enum.addValue("all")
         .addValue("CL")
         .addValue("BIZ")

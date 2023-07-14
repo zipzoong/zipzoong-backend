@@ -7,7 +7,9 @@ import { Response } from "express";
 export class AuthOauthController {
     /**
      * 카카오 로그인 페이지 리다이렉트 api
+     *
      * @summary redirect kakao oauth login page
+     *
      * @tag authentication
      */
     @HttpCode(HttpStatus.FOUND)

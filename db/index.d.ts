@@ -12,11 +12,60 @@ import $Extensions = runtime.Types.Extensions
 export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
+export type TermsModelPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  name: "TermsModel"
+  objects: {
+    agreements: TermsAgreementModelPayload<ExtArgs>[]
+  }
+  scalars: $Extensions.GetResult<{
+    id: string
+    created_at: Date
+    updated_at: Date
+    is_deleted: boolean
+    deleted_at: Date | null
+    title: string
+    version: string
+    url: string
+    is_required: boolean
+    type: TermsType
+  }, ExtArgs["result"]["termsModel"]>
+  composites: {}
+}
+
+/**
+ * Model TermsModel
+ * 
+ */
+export type TermsModel = runtime.Types.DefaultSelection<TermsModelPayload>
+export type TermsAgreementModelPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  name: "TermsAgreementModel"
+  objects: {
+    terms: TermsModelPayload<ExtArgs>
+    user: UserModelPayload<ExtArgs>
+  }
+  scalars: $Extensions.GetResult<{
+    id: string
+    created_at: Date
+    updated_at: Date
+    is_deleted: boolean
+    deleted_at: Date | null
+    terms_id: string
+    user_id: string
+  }, ExtArgs["result"]["termsAgreementModel"]>
+  composites: {}
+}
+
+/**
+ * Model TermsAgreementModel
+ * 
+ */
+export type TermsAgreementModel = runtime.Types.DefaultSelection<TermsAgreementModelPayload>
 export type UserModelPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
   name: "UserModel"
   objects: {
     client: ClientModelPayload<ExtArgs> | null
     biz_user: BIZUserModelPayload<ExtArgs> | null
+    terms_agreements: TermsAgreementModelPayload<ExtArgs>[]
   }
   scalars: $Extensions.GetResult<{
     id: string
@@ -167,11 +216,12 @@ export type HSProviderModelPayload<ExtArgs extends $Extensions.Args = $Extension
   }
   scalars: $Extensions.GetResult<{
     id: string
-    biz_registration_number: string
     address_zone_code: string
     address_road: string
     address_detail: string | null
     address_extra: string | null
+    biz_phone: string
+    biz_registration_number: string
     biz_open_date: Date
   }, ExtArgs["result"]["hSProviderModel"]>
   composites: {}
@@ -234,6 +284,10 @@ export type HSSubExpertiseRelationModelPayload<ExtArgs extends $Extensions.Args 
   }
   scalars: $Extensions.GetResult<{
     id: string
+    created_at: Date
+    updated_at: Date
+    is_deleted: boolean
+    deleted_at: Date | null
     hs_provider_id: string
     sub_expertise_id: string
   }, ExtArgs["result"]["hSSubExpertiseRelationModel"]>
@@ -333,6 +387,17 @@ export type OauthAccountModel = runtime.Types.DefaultSelection<OauthAccountModel
  * Enums
  */
 
+export const TermsType: {
+  all: 'all',
+  CL: 'CL',
+  BIZ: 'BIZ',
+  HS: 'HS',
+  RE: 'RE'
+};
+
+export type TermsType = (typeof TermsType)[keyof typeof TermsType]
+
+
 export const GenderType: {
   female: 'female',
   male: 'male'
@@ -365,8 +430,8 @@ export type OauthType = (typeof OauthType)[keyof typeof OauthType]
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more UserModels
- * const userModels = await prisma.userModel.findMany()
+ * // Fetch zero or more TermsModels
+ * const termsModels = await prisma.termsModel.findMany()
  * ```
  *
  * 
@@ -386,8 +451,8 @@ export class PrismaClient<
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more UserModels
-   * const userModels = await prisma.userModel.findMany()
+   * // Fetch zero or more TermsModels
+   * const termsModels = await prisma.termsModel.findMany()
    * ```
    *
    * 
@@ -481,6 +546,26 @@ export class PrismaClient<
   $extends: $Extensions.ExtendsHook<'extends', Prisma.TypeMapCb, ExtArgs>
 
       /**
+   * `prisma.termsModel`: Exposes CRUD operations for the **TermsModel** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TermsModels
+    * const termsModels = await prisma.termsModel.findMany()
+    * ```
+    */
+  get termsModel(): Prisma.TermsModelDelegate<ExtArgs>;
+
+  /**
+   * `prisma.termsAgreementModel`: Exposes CRUD operations for the **TermsAgreementModel** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TermsAgreementModels
+    * const termsAgreementModels = await prisma.termsAgreementModel.findMany()
+    * ```
+    */
+  get termsAgreementModel(): Prisma.TermsAgreementModelDelegate<ExtArgs>;
+
+  /**
    * `prisma.userModel`: Exposes CRUD operations for the **UserModel** model.
     * Example usage:
     * ```ts
@@ -1092,6 +1177,8 @@ export namespace Prisma {
 
 
   export const ModelName: {
+    TermsModel: 'TermsModel',
+    TermsAgreementModel: 'TermsAgreementModel',
     UserModel: 'UserModel',
     ClientModel: 'ClientModel',
     BIZUserModel: 'BIZUserModel',
@@ -1121,10 +1208,142 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'userModel' | 'clientModel' | 'bIZUserModel' | 'bIZCertificationImageModel' | 'rEAgentModel' | 'rEExpertiseModel' | 'hSProviderModel' | 'hSSubExpertiseModel' | 'hSSuperExpertiseModel' | 'hSSubExpertiseRelationModel' | 'rEPortfolioModel' | 'hSPortfolioModel' | 'oauthAccountModel'
+      modelProps: 'termsModel' | 'termsAgreementModel' | 'userModel' | 'clientModel' | 'bIZUserModel' | 'bIZCertificationImageModel' | 'rEAgentModel' | 'rEExpertiseModel' | 'hSProviderModel' | 'hSSubExpertiseModel' | 'hSSuperExpertiseModel' | 'hSSubExpertiseRelationModel' | 'rEPortfolioModel' | 'hSPortfolioModel' | 'oauthAccountModel'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     },
     model: {
+      TermsModel: {
+        payload: TermsModelPayload<ExtArgs>
+        fields: Prisma.TermsModelFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TermsModelFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsModelPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TermsModelFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsModelPayload>
+          }
+          findFirst: {
+            args: Prisma.TermsModelFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsModelPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TermsModelFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsModelPayload>
+          }
+          findMany: {
+            args: Prisma.TermsModelFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsModelPayload>[]
+          }
+          create: {
+            args: Prisma.TermsModelCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsModelPayload>
+          }
+          createMany: {
+            args: Prisma.TermsModelCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.TermsModelDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsModelPayload>
+          }
+          update: {
+            args: Prisma.TermsModelUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsModelPayload>
+          }
+          deleteMany: {
+            args: Prisma.TermsModelDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TermsModelUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.TermsModelUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsModelPayload>
+          }
+          aggregate: {
+            args: Prisma.TermsModelAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateTermsModel>
+          }
+          groupBy: {
+            args: Prisma.TermsModelGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<TermsModelGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TermsModelCountArgs<ExtArgs>,
+            result: $Utils.Optional<TermsModelCountAggregateOutputType> | number
+          }
+        }
+      }
+      TermsAgreementModel: {
+        payload: TermsAgreementModelPayload<ExtArgs>
+        fields: Prisma.TermsAgreementModelFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TermsAgreementModelFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsAgreementModelPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TermsAgreementModelFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsAgreementModelPayload>
+          }
+          findFirst: {
+            args: Prisma.TermsAgreementModelFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsAgreementModelPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TermsAgreementModelFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsAgreementModelPayload>
+          }
+          findMany: {
+            args: Prisma.TermsAgreementModelFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsAgreementModelPayload>[]
+          }
+          create: {
+            args: Prisma.TermsAgreementModelCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsAgreementModelPayload>
+          }
+          createMany: {
+            args: Prisma.TermsAgreementModelCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.TermsAgreementModelDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsAgreementModelPayload>
+          }
+          update: {
+            args: Prisma.TermsAgreementModelUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsAgreementModelPayload>
+          }
+          deleteMany: {
+            args: Prisma.TermsAgreementModelDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TermsAgreementModelUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.TermsAgreementModelUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<TermsAgreementModelPayload>
+          }
+          aggregate: {
+            args: Prisma.TermsAgreementModelAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateTermsAgreementModel>
+          }
+          groupBy: {
+            args: Prisma.TermsAgreementModelGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<TermsAgreementModelGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TermsAgreementModelCountArgs<ExtArgs>,
+            result: $Utils.Optional<TermsAgreementModelCountAggregateOutputType> | number
+          }
+        }
+      }
       UserModel: {
         payload: UserModelPayload<ExtArgs>
         fields: Prisma.UserModelFieldRefs
@@ -2124,6 +2343,76 @@ export namespace Prisma {
 
 
   /**
+   * Count Type TermsModelCountOutputType
+   */
+
+
+  export type TermsModelCountOutputType = {
+    agreements: number
+  }
+
+  export type TermsModelCountOutputTypeSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    agreements?: boolean | TermsModelCountOutputTypeCountAgreementsArgs
+  }
+
+  // Custom InputTypes
+
+  /**
+   * TermsModelCountOutputType without action
+   */
+  export type TermsModelCountOutputTypeArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsModelCountOutputType
+     */
+    select?: TermsModelCountOutputTypeSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * TermsModelCountOutputType without action
+   */
+  export type TermsModelCountOutputTypeCountAgreementsArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    where?: TermsAgreementModelWhereInput
+  }
+
+
+
+  /**
+   * Count Type UserModelCountOutputType
+   */
+
+
+  export type UserModelCountOutputType = {
+    terms_agreements: number
+  }
+
+  export type UserModelCountOutputTypeSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    terms_agreements?: boolean | UserModelCountOutputTypeCountTerms_agreementsArgs
+  }
+
+  // Custom InputTypes
+
+  /**
+   * UserModelCountOutputType without action
+   */
+  export type UserModelCountOutputTypeArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserModelCountOutputType
+     */
+    select?: UserModelCountOutputTypeSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * UserModelCountOutputType without action
+   */
+  export type UserModelCountOutputTypeCountTerms_agreementsArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    where?: TermsAgreementModelWhereInput
+  }
+
+
+
+  /**
    * Count Type ClientModelCountOutputType
    */
 
@@ -2393,6 +2682,1937 @@ export namespace Prisma {
    */
 
   /**
+   * Model TermsModel
+   */
+
+
+  export type AggregateTermsModel = {
+    _count: TermsModelCountAggregateOutputType | null
+    _min: TermsModelMinAggregateOutputType | null
+    _max: TermsModelMaxAggregateOutputType | null
+  }
+
+  export type TermsModelMinAggregateOutputType = {
+    id: string | null
+    created_at: Date | null
+    updated_at: Date | null
+    is_deleted: boolean | null
+    deleted_at: Date | null
+    title: string | null
+    version: string | null
+    url: string | null
+    is_required: boolean | null
+    type: TermsType | null
+  }
+
+  export type TermsModelMaxAggregateOutputType = {
+    id: string | null
+    created_at: Date | null
+    updated_at: Date | null
+    is_deleted: boolean | null
+    deleted_at: Date | null
+    title: string | null
+    version: string | null
+    url: string | null
+    is_required: boolean | null
+    type: TermsType | null
+  }
+
+  export type TermsModelCountAggregateOutputType = {
+    id: number
+    created_at: number
+    updated_at: number
+    is_deleted: number
+    deleted_at: number
+    title: number
+    version: number
+    url: number
+    is_required: number
+    type: number
+    _all: number
+  }
+
+
+  export type TermsModelMinAggregateInputType = {
+    id?: true
+    created_at?: true
+    updated_at?: true
+    is_deleted?: true
+    deleted_at?: true
+    title?: true
+    version?: true
+    url?: true
+    is_required?: true
+    type?: true
+  }
+
+  export type TermsModelMaxAggregateInputType = {
+    id?: true
+    created_at?: true
+    updated_at?: true
+    is_deleted?: true
+    deleted_at?: true
+    title?: true
+    version?: true
+    url?: true
+    is_required?: true
+    type?: true
+  }
+
+  export type TermsModelCountAggregateInputType = {
+    id?: true
+    created_at?: true
+    updated_at?: true
+    is_deleted?: true
+    deleted_at?: true
+    title?: true
+    version?: true
+    url?: true
+    is_required?: true
+    type?: true
+    _all?: true
+  }
+
+  export type TermsModelAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TermsModel to aggregate.
+     */
+    where?: TermsModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TermsModels to fetch.
+     */
+    orderBy?: TermsModelOrderByWithRelationInput | TermsModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TermsModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TermsModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TermsModels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TermsModels
+    **/
+    _count?: true | TermsModelCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TermsModelMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TermsModelMaxAggregateInputType
+  }
+
+  export type GetTermsModelAggregateType<T extends TermsModelAggregateArgs> = {
+        [P in keyof T & keyof AggregateTermsModel]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTermsModel[P]>
+      : GetScalarType<T[P], AggregateTermsModel[P]>
+  }
+
+
+
+
+  export type TermsModelGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    where?: TermsModelWhereInput
+    orderBy?: TermsModelOrderByWithAggregationInput | TermsModelOrderByWithAggregationInput[]
+    by: TermsModelScalarFieldEnum[] | TermsModelScalarFieldEnum
+    having?: TermsModelScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TermsModelCountAggregateInputType | true
+    _min?: TermsModelMinAggregateInputType
+    _max?: TermsModelMaxAggregateInputType
+  }
+
+
+  export type TermsModelGroupByOutputType = {
+    id: string
+    created_at: Date
+    updated_at: Date
+    is_deleted: boolean
+    deleted_at: Date | null
+    title: string
+    version: string
+    url: string
+    is_required: boolean
+    type: TermsType
+    _count: TermsModelCountAggregateOutputType | null
+    _min: TermsModelMinAggregateOutputType | null
+    _max: TermsModelMaxAggregateOutputType | null
+  }
+
+  type GetTermsModelGroupByPayload<T extends TermsModelGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TermsModelGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TermsModelGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TermsModelGroupByOutputType[P]>
+            : GetScalarType<T[P], TermsModelGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TermsModelSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    is_deleted?: boolean
+    deleted_at?: boolean
+    title?: boolean
+    version?: boolean
+    url?: boolean
+    is_required?: boolean
+    type?: boolean
+    agreements?: boolean | TermsModel$agreementsArgs<ExtArgs>
+    _count?: boolean | TermsModelCountOutputTypeArgs<ExtArgs>
+  }, ExtArgs["result"]["termsModel"]>
+
+  export type TermsModelSelectScalar = {
+    id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    is_deleted?: boolean
+    deleted_at?: boolean
+    title?: boolean
+    version?: boolean
+    url?: boolean
+    is_required?: boolean
+    type?: boolean
+  }
+
+  export type TermsModelInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    agreements?: boolean | TermsModel$agreementsArgs<ExtArgs>
+    _count?: boolean | TermsModelCountOutputTypeArgs<ExtArgs>
+  }
+
+
+  type TermsModelGetPayload<S extends boolean | null | undefined | TermsModelArgs> = $Types.GetResult<TermsModelPayload, S>
+
+  type TermsModelCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
+    Omit<TermsModelFindManyArgs, 'select' | 'include'> & {
+      select?: TermsModelCountAggregateInputType | true
+    }
+
+  export interface TermsModelDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TermsModel'], meta: { name: 'TermsModel' } }
+    /**
+     * Find zero or one TermsModel that matches the filter.
+     * @param {TermsModelFindUniqueArgs} args - Arguments to find a TermsModel
+     * @example
+     * // Get one TermsModel
+     * const termsModel = await prisma.termsModel.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends TermsModelFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, TermsModelFindUniqueArgs<ExtArgs>>
+    ): Prisma__TermsModelClient<$Types.GetResult<TermsModelPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one TermsModel that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {TermsModelFindUniqueOrThrowArgs} args - Arguments to find a TermsModel
+     * @example
+     * // Get one TermsModel
+     * const termsModel = await prisma.termsModel.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends TermsModelFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, TermsModelFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__TermsModelClient<$Types.GetResult<TermsModelPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first TermsModel that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsModelFindFirstArgs} args - Arguments to find a TermsModel
+     * @example
+     * // Get one TermsModel
+     * const termsModel = await prisma.termsModel.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends TermsModelFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, TermsModelFindFirstArgs<ExtArgs>>
+    ): Prisma__TermsModelClient<$Types.GetResult<TermsModelPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first TermsModel that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsModelFindFirstOrThrowArgs} args - Arguments to find a TermsModel
+     * @example
+     * // Get one TermsModel
+     * const termsModel = await prisma.termsModel.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends TermsModelFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, TermsModelFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__TermsModelClient<$Types.GetResult<TermsModelPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more TermsModels that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsModelFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TermsModels
+     * const termsModels = await prisma.termsModel.findMany()
+     * 
+     * // Get first 10 TermsModels
+     * const termsModels = await prisma.termsModel.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const termsModelWithIdOnly = await prisma.termsModel.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends TermsModelFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TermsModelFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Types.GetResult<TermsModelPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a TermsModel.
+     * @param {TermsModelCreateArgs} args - Arguments to create a TermsModel.
+     * @example
+     * // Create one TermsModel
+     * const TermsModel = await prisma.termsModel.create({
+     *   data: {
+     *     // ... data to create a TermsModel
+     *   }
+     * })
+     * 
+    **/
+    create<T extends TermsModelCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, TermsModelCreateArgs<ExtArgs>>
+    ): Prisma__TermsModelClient<$Types.GetResult<TermsModelPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many TermsModels.
+     *     @param {TermsModelCreateManyArgs} args - Arguments to create many TermsModels.
+     *     @example
+     *     // Create many TermsModels
+     *     const termsModel = await prisma.termsModel.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends TermsModelCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TermsModelCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a TermsModel.
+     * @param {TermsModelDeleteArgs} args - Arguments to delete one TermsModel.
+     * @example
+     * // Delete one TermsModel
+     * const TermsModel = await prisma.termsModel.delete({
+     *   where: {
+     *     // ... filter to delete one TermsModel
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends TermsModelDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, TermsModelDeleteArgs<ExtArgs>>
+    ): Prisma__TermsModelClient<$Types.GetResult<TermsModelPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one TermsModel.
+     * @param {TermsModelUpdateArgs} args - Arguments to update one TermsModel.
+     * @example
+     * // Update one TermsModel
+     * const termsModel = await prisma.termsModel.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends TermsModelUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, TermsModelUpdateArgs<ExtArgs>>
+    ): Prisma__TermsModelClient<$Types.GetResult<TermsModelPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more TermsModels.
+     * @param {TermsModelDeleteManyArgs} args - Arguments to filter TermsModels to delete.
+     * @example
+     * // Delete a few TermsModels
+     * const { count } = await prisma.termsModel.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends TermsModelDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TermsModelDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TermsModels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsModelUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TermsModels
+     * const termsModel = await prisma.termsModel.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends TermsModelUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, TermsModelUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one TermsModel.
+     * @param {TermsModelUpsertArgs} args - Arguments to update or create a TermsModel.
+     * @example
+     * // Update or create a TermsModel
+     * const termsModel = await prisma.termsModel.upsert({
+     *   create: {
+     *     // ... data to create a TermsModel
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TermsModel we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends TermsModelUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, TermsModelUpsertArgs<ExtArgs>>
+    ): Prisma__TermsModelClient<$Types.GetResult<TermsModelPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of TermsModels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsModelCountArgs} args - Arguments to filter TermsModels to count.
+     * @example
+     * // Count the number of TermsModels
+     * const count = await prisma.termsModel.count({
+     *   where: {
+     *     // ... the filter for the TermsModels we want to count
+     *   }
+     * })
+    **/
+    count<T extends TermsModelCountArgs>(
+      args?: Subset<T, TermsModelCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TermsModelCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TermsModel.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsModelAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TermsModelAggregateArgs>(args: Subset<T, TermsModelAggregateArgs>): Prisma.PrismaPromise<GetTermsModelAggregateType<T>>
+
+    /**
+     * Group by TermsModel.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsModelGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TermsModelGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TermsModelGroupByArgs['orderBy'] }
+        : { orderBy?: TermsModelGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TermsModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTermsModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TermsModel model
+   */
+  readonly fields: TermsModelFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TermsModel.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__TermsModelClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    agreements<T extends TermsModel$agreementsArgs<ExtArgs> = {}>(args?: Subset<T, TermsModel$agreementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<TermsAgreementModelPayload<ExtArgs>, T, 'findMany'>| Null>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  /**
+   * Fields of the TermsModel model
+   */ 
+  interface TermsModelFieldRefs {
+    readonly id: FieldRef<"TermsModel", 'String'>
+    readonly created_at: FieldRef<"TermsModel", 'DateTime'>
+    readonly updated_at: FieldRef<"TermsModel", 'DateTime'>
+    readonly is_deleted: FieldRef<"TermsModel", 'Boolean'>
+    readonly deleted_at: FieldRef<"TermsModel", 'DateTime'>
+    readonly title: FieldRef<"TermsModel", 'String'>
+    readonly version: FieldRef<"TermsModel", 'String'>
+    readonly url: FieldRef<"TermsModel", 'String'>
+    readonly is_required: FieldRef<"TermsModel", 'Boolean'>
+    readonly type: FieldRef<"TermsModel", 'TermsType'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * TermsModel findUnique
+   */
+  export type TermsModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsModel
+     */
+    select?: TermsModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsModelInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsModel to fetch.
+     */
+    where: TermsModelWhereUniqueInput
+  }
+
+
+  /**
+   * TermsModel findUniqueOrThrow
+   */
+  export type TermsModelFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsModel
+     */
+    select?: TermsModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsModelInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsModel to fetch.
+     */
+    where: TermsModelWhereUniqueInput
+  }
+
+
+  /**
+   * TermsModel findFirst
+   */
+  export type TermsModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsModel
+     */
+    select?: TermsModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsModelInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsModel to fetch.
+     */
+    where?: TermsModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TermsModels to fetch.
+     */
+    orderBy?: TermsModelOrderByWithRelationInput | TermsModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TermsModels.
+     */
+    cursor?: TermsModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TermsModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TermsModels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TermsModels.
+     */
+    distinct?: TermsModelScalarFieldEnum | TermsModelScalarFieldEnum[]
+  }
+
+
+  /**
+   * TermsModel findFirstOrThrow
+   */
+  export type TermsModelFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsModel
+     */
+    select?: TermsModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsModelInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsModel to fetch.
+     */
+    where?: TermsModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TermsModels to fetch.
+     */
+    orderBy?: TermsModelOrderByWithRelationInput | TermsModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TermsModels.
+     */
+    cursor?: TermsModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TermsModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TermsModels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TermsModels.
+     */
+    distinct?: TermsModelScalarFieldEnum | TermsModelScalarFieldEnum[]
+  }
+
+
+  /**
+   * TermsModel findMany
+   */
+  export type TermsModelFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsModel
+     */
+    select?: TermsModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsModelInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsModels to fetch.
+     */
+    where?: TermsModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TermsModels to fetch.
+     */
+    orderBy?: TermsModelOrderByWithRelationInput | TermsModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TermsModels.
+     */
+    cursor?: TermsModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TermsModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TermsModels.
+     */
+    skip?: number
+    distinct?: TermsModelScalarFieldEnum | TermsModelScalarFieldEnum[]
+  }
+
+
+  /**
+   * TermsModel create
+   */
+  export type TermsModelCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsModel
+     */
+    select?: TermsModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsModelInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TermsModel.
+     */
+    data: XOR<TermsModelCreateInput, TermsModelUncheckedCreateInput>
+  }
+
+
+  /**
+   * TermsModel createMany
+   */
+  export type TermsModelCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TermsModels.
+     */
+    data: TermsModelCreateManyInput | TermsModelCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * TermsModel update
+   */
+  export type TermsModelUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsModel
+     */
+    select?: TermsModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsModelInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TermsModel.
+     */
+    data: XOR<TermsModelUpdateInput, TermsModelUncheckedUpdateInput>
+    /**
+     * Choose, which TermsModel to update.
+     */
+    where: TermsModelWhereUniqueInput
+  }
+
+
+  /**
+   * TermsModel updateMany
+   */
+  export type TermsModelUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TermsModels.
+     */
+    data: XOR<TermsModelUpdateManyMutationInput, TermsModelUncheckedUpdateManyInput>
+    /**
+     * Filter which TermsModels to update
+     */
+    where?: TermsModelWhereInput
+  }
+
+
+  /**
+   * TermsModel upsert
+   */
+  export type TermsModelUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsModel
+     */
+    select?: TermsModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsModelInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TermsModel to update in case it exists.
+     */
+    where: TermsModelWhereUniqueInput
+    /**
+     * In case the TermsModel found by the `where` argument doesn't exist, create a new TermsModel with this data.
+     */
+    create: XOR<TermsModelCreateInput, TermsModelUncheckedCreateInput>
+    /**
+     * In case the TermsModel was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TermsModelUpdateInput, TermsModelUncheckedUpdateInput>
+  }
+
+
+  /**
+   * TermsModel delete
+   */
+  export type TermsModelDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsModel
+     */
+    select?: TermsModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsModelInclude<ExtArgs> | null
+    /**
+     * Filter which TermsModel to delete.
+     */
+    where: TermsModelWhereUniqueInput
+  }
+
+
+  /**
+   * TermsModel deleteMany
+   */
+  export type TermsModelDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TermsModels to delete
+     */
+    where?: TermsModelWhereInput
+  }
+
+
+  /**
+   * TermsModel.agreements
+   */
+  export type TermsModel$agreementsArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsAgreementModel
+     */
+    select?: TermsAgreementModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsAgreementModelInclude<ExtArgs> | null
+    where?: TermsAgreementModelWhereInput
+    orderBy?: TermsAgreementModelOrderByWithRelationInput | TermsAgreementModelOrderByWithRelationInput[]
+    cursor?: TermsAgreementModelWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TermsAgreementModelScalarFieldEnum | TermsAgreementModelScalarFieldEnum[]
+  }
+
+
+  /**
+   * TermsModel without action
+   */
+  export type TermsModelArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsModel
+     */
+    select?: TermsModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsModelInclude<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model TermsAgreementModel
+   */
+
+
+  export type AggregateTermsAgreementModel = {
+    _count: TermsAgreementModelCountAggregateOutputType | null
+    _min: TermsAgreementModelMinAggregateOutputType | null
+    _max: TermsAgreementModelMaxAggregateOutputType | null
+  }
+
+  export type TermsAgreementModelMinAggregateOutputType = {
+    id: string | null
+    created_at: Date | null
+    updated_at: Date | null
+    is_deleted: boolean | null
+    deleted_at: Date | null
+    terms_id: string | null
+    user_id: string | null
+  }
+
+  export type TermsAgreementModelMaxAggregateOutputType = {
+    id: string | null
+    created_at: Date | null
+    updated_at: Date | null
+    is_deleted: boolean | null
+    deleted_at: Date | null
+    terms_id: string | null
+    user_id: string | null
+  }
+
+  export type TermsAgreementModelCountAggregateOutputType = {
+    id: number
+    created_at: number
+    updated_at: number
+    is_deleted: number
+    deleted_at: number
+    terms_id: number
+    user_id: number
+    _all: number
+  }
+
+
+  export type TermsAgreementModelMinAggregateInputType = {
+    id?: true
+    created_at?: true
+    updated_at?: true
+    is_deleted?: true
+    deleted_at?: true
+    terms_id?: true
+    user_id?: true
+  }
+
+  export type TermsAgreementModelMaxAggregateInputType = {
+    id?: true
+    created_at?: true
+    updated_at?: true
+    is_deleted?: true
+    deleted_at?: true
+    terms_id?: true
+    user_id?: true
+  }
+
+  export type TermsAgreementModelCountAggregateInputType = {
+    id?: true
+    created_at?: true
+    updated_at?: true
+    is_deleted?: true
+    deleted_at?: true
+    terms_id?: true
+    user_id?: true
+    _all?: true
+  }
+
+  export type TermsAgreementModelAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TermsAgreementModel to aggregate.
+     */
+    where?: TermsAgreementModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TermsAgreementModels to fetch.
+     */
+    orderBy?: TermsAgreementModelOrderByWithRelationInput | TermsAgreementModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TermsAgreementModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TermsAgreementModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TermsAgreementModels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TermsAgreementModels
+    **/
+    _count?: true | TermsAgreementModelCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TermsAgreementModelMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TermsAgreementModelMaxAggregateInputType
+  }
+
+  export type GetTermsAgreementModelAggregateType<T extends TermsAgreementModelAggregateArgs> = {
+        [P in keyof T & keyof AggregateTermsAgreementModel]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTermsAgreementModel[P]>
+      : GetScalarType<T[P], AggregateTermsAgreementModel[P]>
+  }
+
+
+
+
+  export type TermsAgreementModelGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    where?: TermsAgreementModelWhereInput
+    orderBy?: TermsAgreementModelOrderByWithAggregationInput | TermsAgreementModelOrderByWithAggregationInput[]
+    by: TermsAgreementModelScalarFieldEnum[] | TermsAgreementModelScalarFieldEnum
+    having?: TermsAgreementModelScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TermsAgreementModelCountAggregateInputType | true
+    _min?: TermsAgreementModelMinAggregateInputType
+    _max?: TermsAgreementModelMaxAggregateInputType
+  }
+
+
+  export type TermsAgreementModelGroupByOutputType = {
+    id: string
+    created_at: Date
+    updated_at: Date
+    is_deleted: boolean
+    deleted_at: Date | null
+    terms_id: string
+    user_id: string
+    _count: TermsAgreementModelCountAggregateOutputType | null
+    _min: TermsAgreementModelMinAggregateOutputType | null
+    _max: TermsAgreementModelMaxAggregateOutputType | null
+  }
+
+  type GetTermsAgreementModelGroupByPayload<T extends TermsAgreementModelGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TermsAgreementModelGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TermsAgreementModelGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TermsAgreementModelGroupByOutputType[P]>
+            : GetScalarType<T[P], TermsAgreementModelGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TermsAgreementModelSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    is_deleted?: boolean
+    deleted_at?: boolean
+    terms_id?: boolean
+    user_id?: boolean
+    terms?: boolean | TermsModelArgs<ExtArgs>
+    user?: boolean | UserModelArgs<ExtArgs>
+  }, ExtArgs["result"]["termsAgreementModel"]>
+
+  export type TermsAgreementModelSelectScalar = {
+    id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    is_deleted?: boolean
+    deleted_at?: boolean
+    terms_id?: boolean
+    user_id?: boolean
+  }
+
+  export type TermsAgreementModelInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    terms?: boolean | TermsModelArgs<ExtArgs>
+    user?: boolean | UserModelArgs<ExtArgs>
+  }
+
+
+  type TermsAgreementModelGetPayload<S extends boolean | null | undefined | TermsAgreementModelArgs> = $Types.GetResult<TermsAgreementModelPayload, S>
+
+  type TermsAgreementModelCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
+    Omit<TermsAgreementModelFindManyArgs, 'select' | 'include'> & {
+      select?: TermsAgreementModelCountAggregateInputType | true
+    }
+
+  export interface TermsAgreementModelDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TermsAgreementModel'], meta: { name: 'TermsAgreementModel' } }
+    /**
+     * Find zero or one TermsAgreementModel that matches the filter.
+     * @param {TermsAgreementModelFindUniqueArgs} args - Arguments to find a TermsAgreementModel
+     * @example
+     * // Get one TermsAgreementModel
+     * const termsAgreementModel = await prisma.termsAgreementModel.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends TermsAgreementModelFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, TermsAgreementModelFindUniqueArgs<ExtArgs>>
+    ): Prisma__TermsAgreementModelClient<$Types.GetResult<TermsAgreementModelPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one TermsAgreementModel that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {TermsAgreementModelFindUniqueOrThrowArgs} args - Arguments to find a TermsAgreementModel
+     * @example
+     * // Get one TermsAgreementModel
+     * const termsAgreementModel = await prisma.termsAgreementModel.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends TermsAgreementModelFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, TermsAgreementModelFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__TermsAgreementModelClient<$Types.GetResult<TermsAgreementModelPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first TermsAgreementModel that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsAgreementModelFindFirstArgs} args - Arguments to find a TermsAgreementModel
+     * @example
+     * // Get one TermsAgreementModel
+     * const termsAgreementModel = await prisma.termsAgreementModel.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends TermsAgreementModelFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, TermsAgreementModelFindFirstArgs<ExtArgs>>
+    ): Prisma__TermsAgreementModelClient<$Types.GetResult<TermsAgreementModelPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first TermsAgreementModel that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsAgreementModelFindFirstOrThrowArgs} args - Arguments to find a TermsAgreementModel
+     * @example
+     * // Get one TermsAgreementModel
+     * const termsAgreementModel = await prisma.termsAgreementModel.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends TermsAgreementModelFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, TermsAgreementModelFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__TermsAgreementModelClient<$Types.GetResult<TermsAgreementModelPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more TermsAgreementModels that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsAgreementModelFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TermsAgreementModels
+     * const termsAgreementModels = await prisma.termsAgreementModel.findMany()
+     * 
+     * // Get first 10 TermsAgreementModels
+     * const termsAgreementModels = await prisma.termsAgreementModel.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const termsAgreementModelWithIdOnly = await prisma.termsAgreementModel.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends TermsAgreementModelFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TermsAgreementModelFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Types.GetResult<TermsAgreementModelPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a TermsAgreementModel.
+     * @param {TermsAgreementModelCreateArgs} args - Arguments to create a TermsAgreementModel.
+     * @example
+     * // Create one TermsAgreementModel
+     * const TermsAgreementModel = await prisma.termsAgreementModel.create({
+     *   data: {
+     *     // ... data to create a TermsAgreementModel
+     *   }
+     * })
+     * 
+    **/
+    create<T extends TermsAgreementModelCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, TermsAgreementModelCreateArgs<ExtArgs>>
+    ): Prisma__TermsAgreementModelClient<$Types.GetResult<TermsAgreementModelPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many TermsAgreementModels.
+     *     @param {TermsAgreementModelCreateManyArgs} args - Arguments to create many TermsAgreementModels.
+     *     @example
+     *     // Create many TermsAgreementModels
+     *     const termsAgreementModel = await prisma.termsAgreementModel.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends TermsAgreementModelCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TermsAgreementModelCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a TermsAgreementModel.
+     * @param {TermsAgreementModelDeleteArgs} args - Arguments to delete one TermsAgreementModel.
+     * @example
+     * // Delete one TermsAgreementModel
+     * const TermsAgreementModel = await prisma.termsAgreementModel.delete({
+     *   where: {
+     *     // ... filter to delete one TermsAgreementModel
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends TermsAgreementModelDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, TermsAgreementModelDeleteArgs<ExtArgs>>
+    ): Prisma__TermsAgreementModelClient<$Types.GetResult<TermsAgreementModelPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one TermsAgreementModel.
+     * @param {TermsAgreementModelUpdateArgs} args - Arguments to update one TermsAgreementModel.
+     * @example
+     * // Update one TermsAgreementModel
+     * const termsAgreementModel = await prisma.termsAgreementModel.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends TermsAgreementModelUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, TermsAgreementModelUpdateArgs<ExtArgs>>
+    ): Prisma__TermsAgreementModelClient<$Types.GetResult<TermsAgreementModelPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more TermsAgreementModels.
+     * @param {TermsAgreementModelDeleteManyArgs} args - Arguments to filter TermsAgreementModels to delete.
+     * @example
+     * // Delete a few TermsAgreementModels
+     * const { count } = await prisma.termsAgreementModel.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends TermsAgreementModelDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TermsAgreementModelDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TermsAgreementModels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsAgreementModelUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TermsAgreementModels
+     * const termsAgreementModel = await prisma.termsAgreementModel.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends TermsAgreementModelUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, TermsAgreementModelUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one TermsAgreementModel.
+     * @param {TermsAgreementModelUpsertArgs} args - Arguments to update or create a TermsAgreementModel.
+     * @example
+     * // Update or create a TermsAgreementModel
+     * const termsAgreementModel = await prisma.termsAgreementModel.upsert({
+     *   create: {
+     *     // ... data to create a TermsAgreementModel
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TermsAgreementModel we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends TermsAgreementModelUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, TermsAgreementModelUpsertArgs<ExtArgs>>
+    ): Prisma__TermsAgreementModelClient<$Types.GetResult<TermsAgreementModelPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of TermsAgreementModels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsAgreementModelCountArgs} args - Arguments to filter TermsAgreementModels to count.
+     * @example
+     * // Count the number of TermsAgreementModels
+     * const count = await prisma.termsAgreementModel.count({
+     *   where: {
+     *     // ... the filter for the TermsAgreementModels we want to count
+     *   }
+     * })
+    **/
+    count<T extends TermsAgreementModelCountArgs>(
+      args?: Subset<T, TermsAgreementModelCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TermsAgreementModelCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TermsAgreementModel.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsAgreementModelAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TermsAgreementModelAggregateArgs>(args: Subset<T, TermsAgreementModelAggregateArgs>): Prisma.PrismaPromise<GetTermsAgreementModelAggregateType<T>>
+
+    /**
+     * Group by TermsAgreementModel.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TermsAgreementModelGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TermsAgreementModelGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TermsAgreementModelGroupByArgs['orderBy'] }
+        : { orderBy?: TermsAgreementModelGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TermsAgreementModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTermsAgreementModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TermsAgreementModel model
+   */
+  readonly fields: TermsAgreementModelFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TermsAgreementModel.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__TermsAgreementModelClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    terms<T extends TermsModelArgs<ExtArgs> = {}>(args?: Subset<T, TermsModelArgs<ExtArgs>>): Prisma__TermsModelClient<$Types.GetResult<TermsModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
+
+    user<T extends UserModelArgs<ExtArgs> = {}>(args?: Subset<T, UserModelArgs<ExtArgs>>): Prisma__UserModelClient<$Types.GetResult<UserModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  /**
+   * Fields of the TermsAgreementModel model
+   */ 
+  interface TermsAgreementModelFieldRefs {
+    readonly id: FieldRef<"TermsAgreementModel", 'String'>
+    readonly created_at: FieldRef<"TermsAgreementModel", 'DateTime'>
+    readonly updated_at: FieldRef<"TermsAgreementModel", 'DateTime'>
+    readonly is_deleted: FieldRef<"TermsAgreementModel", 'Boolean'>
+    readonly deleted_at: FieldRef<"TermsAgreementModel", 'DateTime'>
+    readonly terms_id: FieldRef<"TermsAgreementModel", 'String'>
+    readonly user_id: FieldRef<"TermsAgreementModel", 'String'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * TermsAgreementModel findUnique
+   */
+  export type TermsAgreementModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsAgreementModel
+     */
+    select?: TermsAgreementModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsAgreementModelInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsAgreementModel to fetch.
+     */
+    where: TermsAgreementModelWhereUniqueInput
+  }
+
+
+  /**
+   * TermsAgreementModel findUniqueOrThrow
+   */
+  export type TermsAgreementModelFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsAgreementModel
+     */
+    select?: TermsAgreementModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsAgreementModelInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsAgreementModel to fetch.
+     */
+    where: TermsAgreementModelWhereUniqueInput
+  }
+
+
+  /**
+   * TermsAgreementModel findFirst
+   */
+  export type TermsAgreementModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsAgreementModel
+     */
+    select?: TermsAgreementModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsAgreementModelInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsAgreementModel to fetch.
+     */
+    where?: TermsAgreementModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TermsAgreementModels to fetch.
+     */
+    orderBy?: TermsAgreementModelOrderByWithRelationInput | TermsAgreementModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TermsAgreementModels.
+     */
+    cursor?: TermsAgreementModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TermsAgreementModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TermsAgreementModels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TermsAgreementModels.
+     */
+    distinct?: TermsAgreementModelScalarFieldEnum | TermsAgreementModelScalarFieldEnum[]
+  }
+
+
+  /**
+   * TermsAgreementModel findFirstOrThrow
+   */
+  export type TermsAgreementModelFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsAgreementModel
+     */
+    select?: TermsAgreementModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsAgreementModelInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsAgreementModel to fetch.
+     */
+    where?: TermsAgreementModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TermsAgreementModels to fetch.
+     */
+    orderBy?: TermsAgreementModelOrderByWithRelationInput | TermsAgreementModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TermsAgreementModels.
+     */
+    cursor?: TermsAgreementModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TermsAgreementModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TermsAgreementModels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TermsAgreementModels.
+     */
+    distinct?: TermsAgreementModelScalarFieldEnum | TermsAgreementModelScalarFieldEnum[]
+  }
+
+
+  /**
+   * TermsAgreementModel findMany
+   */
+  export type TermsAgreementModelFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsAgreementModel
+     */
+    select?: TermsAgreementModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsAgreementModelInclude<ExtArgs> | null
+    /**
+     * Filter, which TermsAgreementModels to fetch.
+     */
+    where?: TermsAgreementModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TermsAgreementModels to fetch.
+     */
+    orderBy?: TermsAgreementModelOrderByWithRelationInput | TermsAgreementModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TermsAgreementModels.
+     */
+    cursor?: TermsAgreementModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TermsAgreementModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TermsAgreementModels.
+     */
+    skip?: number
+    distinct?: TermsAgreementModelScalarFieldEnum | TermsAgreementModelScalarFieldEnum[]
+  }
+
+
+  /**
+   * TermsAgreementModel create
+   */
+  export type TermsAgreementModelCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsAgreementModel
+     */
+    select?: TermsAgreementModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsAgreementModelInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TermsAgreementModel.
+     */
+    data: XOR<TermsAgreementModelCreateInput, TermsAgreementModelUncheckedCreateInput>
+  }
+
+
+  /**
+   * TermsAgreementModel createMany
+   */
+  export type TermsAgreementModelCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TermsAgreementModels.
+     */
+    data: TermsAgreementModelCreateManyInput | TermsAgreementModelCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * TermsAgreementModel update
+   */
+  export type TermsAgreementModelUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsAgreementModel
+     */
+    select?: TermsAgreementModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsAgreementModelInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TermsAgreementModel.
+     */
+    data: XOR<TermsAgreementModelUpdateInput, TermsAgreementModelUncheckedUpdateInput>
+    /**
+     * Choose, which TermsAgreementModel to update.
+     */
+    where: TermsAgreementModelWhereUniqueInput
+  }
+
+
+  /**
+   * TermsAgreementModel updateMany
+   */
+  export type TermsAgreementModelUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TermsAgreementModels.
+     */
+    data: XOR<TermsAgreementModelUpdateManyMutationInput, TermsAgreementModelUncheckedUpdateManyInput>
+    /**
+     * Filter which TermsAgreementModels to update
+     */
+    where?: TermsAgreementModelWhereInput
+  }
+
+
+  /**
+   * TermsAgreementModel upsert
+   */
+  export type TermsAgreementModelUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsAgreementModel
+     */
+    select?: TermsAgreementModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsAgreementModelInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TermsAgreementModel to update in case it exists.
+     */
+    where: TermsAgreementModelWhereUniqueInput
+    /**
+     * In case the TermsAgreementModel found by the `where` argument doesn't exist, create a new TermsAgreementModel with this data.
+     */
+    create: XOR<TermsAgreementModelCreateInput, TermsAgreementModelUncheckedCreateInput>
+    /**
+     * In case the TermsAgreementModel was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TermsAgreementModelUpdateInput, TermsAgreementModelUncheckedUpdateInput>
+  }
+
+
+  /**
+   * TermsAgreementModel delete
+   */
+  export type TermsAgreementModelDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsAgreementModel
+     */
+    select?: TermsAgreementModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsAgreementModelInclude<ExtArgs> | null
+    /**
+     * Filter which TermsAgreementModel to delete.
+     */
+    where: TermsAgreementModelWhereUniqueInput
+  }
+
+
+  /**
+   * TermsAgreementModel deleteMany
+   */
+  export type TermsAgreementModelDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TermsAgreementModels to delete
+     */
+    where?: TermsAgreementModelWhereInput
+  }
+
+
+  /**
+   * TermsAgreementModel without action
+   */
+  export type TermsAgreementModelArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsAgreementModel
+     */
+    select?: TermsAgreementModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsAgreementModelInclude<ExtArgs> | null
+  }
+
+
+
+  /**
    * Model UserModel
    */
 
@@ -2576,6 +4796,8 @@ export namespace Prisma {
     email?: boolean
     client?: boolean | UserModel$clientArgs<ExtArgs>
     biz_user?: boolean | UserModel$biz_userArgs<ExtArgs>
+    terms_agreements?: boolean | UserModel$terms_agreementsArgs<ExtArgs>
+    _count?: boolean | UserModelCountOutputTypeArgs<ExtArgs>
   }, ExtArgs["result"]["userModel"]>
 
   export type UserModelSelectScalar = {
@@ -2591,6 +4813,8 @@ export namespace Prisma {
   export type UserModelInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     client?: boolean | UserModel$clientArgs<ExtArgs>
     biz_user?: boolean | UserModel$biz_userArgs<ExtArgs>
+    terms_agreements?: boolean | UserModel$terms_agreementsArgs<ExtArgs>
+    _count?: boolean | UserModelCountOutputTypeArgs<ExtArgs>
   }
 
 
@@ -2970,6 +5194,8 @@ export namespace Prisma {
 
     biz_user<T extends UserModel$biz_userArgs<ExtArgs> = {}>(args?: Subset<T, UserModel$biz_userArgs<ExtArgs>>): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
 
+    terms_agreements<T extends UserModel$terms_agreementsArgs<ExtArgs> = {}>(args?: Subset<T, UserModel$terms_agreementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<TermsAgreementModelPayload<ExtArgs>, T, 'findMany'>| Null>;
+
     private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3346,6 +5572,27 @@ export namespace Prisma {
      */
     include?: BIZUserModelInclude<ExtArgs> | null
     where?: BIZUserModelWhereInput
+  }
+
+
+  /**
+   * UserModel.terms_agreements
+   */
+  export type UserModel$terms_agreementsArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TermsAgreementModel
+     */
+    select?: TermsAgreementModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TermsAgreementModelInclude<ExtArgs> | null
+    where?: TermsAgreementModelWhereInput
+    orderBy?: TermsAgreementModelOrderByWithRelationInput | TermsAgreementModelOrderByWithRelationInput[]
+    cursor?: TermsAgreementModelWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TermsAgreementModelScalarFieldEnum | TermsAgreementModelScalarFieldEnum[]
   }
 
 
@@ -8296,31 +10543,34 @@ export namespace Prisma {
 
   export type HSProviderModelMinAggregateOutputType = {
     id: string | null
-    biz_registration_number: string | null
     address_zone_code: string | null
     address_road: string | null
     address_detail: string | null
     address_extra: string | null
+    biz_phone: string | null
+    biz_registration_number: string | null
     biz_open_date: Date | null
   }
 
   export type HSProviderModelMaxAggregateOutputType = {
     id: string | null
-    biz_registration_number: string | null
     address_zone_code: string | null
     address_road: string | null
     address_detail: string | null
     address_extra: string | null
+    biz_phone: string | null
+    biz_registration_number: string | null
     biz_open_date: Date | null
   }
 
   export type HSProviderModelCountAggregateOutputType = {
     id: number
-    biz_registration_number: number
     address_zone_code: number
     address_road: number
     address_detail: number
     address_extra: number
+    biz_phone: number
+    biz_registration_number: number
     biz_open_date: number
     _all: number
   }
@@ -8328,31 +10578,34 @@ export namespace Prisma {
 
   export type HSProviderModelMinAggregateInputType = {
     id?: true
-    biz_registration_number?: true
     address_zone_code?: true
     address_road?: true
     address_detail?: true
     address_extra?: true
+    biz_phone?: true
+    biz_registration_number?: true
     biz_open_date?: true
   }
 
   export type HSProviderModelMaxAggregateInputType = {
     id?: true
-    biz_registration_number?: true
     address_zone_code?: true
     address_road?: true
     address_detail?: true
     address_extra?: true
+    biz_phone?: true
+    biz_registration_number?: true
     biz_open_date?: true
   }
 
   export type HSProviderModelCountAggregateInputType = {
     id?: true
-    biz_registration_number?: true
     address_zone_code?: true
     address_road?: true
     address_detail?: true
     address_extra?: true
+    biz_phone?: true
+    biz_registration_number?: true
     biz_open_date?: true
     _all?: true
   }
@@ -8432,11 +10685,12 @@ export namespace Prisma {
 
   export type HSProviderModelGroupByOutputType = {
     id: string
-    biz_registration_number: string
     address_zone_code: string
     address_road: string
     address_detail: string | null
     address_extra: string | null
+    biz_phone: string
+    biz_registration_number: string
     biz_open_date: Date
     _count: HSProviderModelCountAggregateOutputType | null
     _min: HSProviderModelMinAggregateOutputType | null
@@ -8459,11 +10713,12 @@ export namespace Prisma {
 
   export type HSProviderModelSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    biz_registration_number?: boolean
     address_zone_code?: boolean
     address_road?: boolean
     address_detail?: boolean
     address_extra?: boolean
+    biz_phone?: boolean
+    biz_registration_number?: boolean
     biz_open_date?: boolean
     base?: boolean | BIZUserModelArgs<ExtArgs>
     expertise_relation?: boolean | HSProviderModel$expertise_relationArgs<ExtArgs>
@@ -8473,11 +10728,12 @@ export namespace Prisma {
 
   export type HSProviderModelSelectScalar = {
     id?: boolean
-    biz_registration_number?: boolean
     address_zone_code?: boolean
     address_road?: boolean
     address_detail?: boolean
     address_extra?: boolean
+    biz_phone?: boolean
+    biz_registration_number?: boolean
     biz_open_date?: boolean
   }
 
@@ -8897,11 +11153,12 @@ export namespace Prisma {
    */ 
   interface HSProviderModelFieldRefs {
     readonly id: FieldRef<"HSProviderModel", 'String'>
-    readonly biz_registration_number: FieldRef<"HSProviderModel", 'String'>
     readonly address_zone_code: FieldRef<"HSProviderModel", 'String'>
     readonly address_road: FieldRef<"HSProviderModel", 'String'>
     readonly address_detail: FieldRef<"HSProviderModel", 'String'>
     readonly address_extra: FieldRef<"HSProviderModel", 'String'>
+    readonly biz_phone: FieldRef<"HSProviderModel", 'String'>
+    readonly biz_registration_number: FieldRef<"HSProviderModel", 'String'>
     readonly biz_open_date: FieldRef<"HSProviderModel", 'DateTime'>
   }
     
@@ -11199,18 +13456,30 @@ export namespace Prisma {
 
   export type HSSubExpertiseRelationModelMinAggregateOutputType = {
     id: string | null
+    created_at: Date | null
+    updated_at: Date | null
+    is_deleted: boolean | null
+    deleted_at: Date | null
     hs_provider_id: string | null
     sub_expertise_id: string | null
   }
 
   export type HSSubExpertiseRelationModelMaxAggregateOutputType = {
     id: string | null
+    created_at: Date | null
+    updated_at: Date | null
+    is_deleted: boolean | null
+    deleted_at: Date | null
     hs_provider_id: string | null
     sub_expertise_id: string | null
   }
 
   export type HSSubExpertiseRelationModelCountAggregateOutputType = {
     id: number
+    created_at: number
+    updated_at: number
+    is_deleted: number
+    deleted_at: number
     hs_provider_id: number
     sub_expertise_id: number
     _all: number
@@ -11219,18 +13488,30 @@ export namespace Prisma {
 
   export type HSSubExpertiseRelationModelMinAggregateInputType = {
     id?: true
+    created_at?: true
+    updated_at?: true
+    is_deleted?: true
+    deleted_at?: true
     hs_provider_id?: true
     sub_expertise_id?: true
   }
 
   export type HSSubExpertiseRelationModelMaxAggregateInputType = {
     id?: true
+    created_at?: true
+    updated_at?: true
+    is_deleted?: true
+    deleted_at?: true
     hs_provider_id?: true
     sub_expertise_id?: true
   }
 
   export type HSSubExpertiseRelationModelCountAggregateInputType = {
     id?: true
+    created_at?: true
+    updated_at?: true
+    is_deleted?: true
+    deleted_at?: true
     hs_provider_id?: true
     sub_expertise_id?: true
     _all?: true
@@ -11311,6 +13592,10 @@ export namespace Prisma {
 
   export type HSSubExpertiseRelationModelGroupByOutputType = {
     id: string
+    created_at: Date
+    updated_at: Date
+    is_deleted: boolean
+    deleted_at: Date | null
     hs_provider_id: string
     sub_expertise_id: string
     _count: HSSubExpertiseRelationModelCountAggregateOutputType | null
@@ -11334,6 +13619,10 @@ export namespace Prisma {
 
   export type HSSubExpertiseRelationModelSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    is_deleted?: boolean
+    deleted_at?: boolean
     hs_provider_id?: boolean
     sub_expertise_id?: boolean
     hs_provider?: boolean | HSProviderModelArgs<ExtArgs>
@@ -11342,6 +13631,10 @@ export namespace Prisma {
 
   export type HSSubExpertiseRelationModelSelectScalar = {
     id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    is_deleted?: boolean
+    deleted_at?: boolean
     hs_provider_id?: boolean
     sub_expertise_id?: boolean
   }
@@ -11758,6 +14051,10 @@ export namespace Prisma {
    */ 
   interface HSSubExpertiseRelationModelFieldRefs {
     readonly id: FieldRef<"HSSubExpertiseRelationModel", 'String'>
+    readonly created_at: FieldRef<"HSSubExpertiseRelationModel", 'DateTime'>
+    readonly updated_at: FieldRef<"HSSubExpertiseRelationModel", 'DateTime'>
+    readonly is_deleted: FieldRef<"HSSubExpertiseRelationModel", 'Boolean'>
+    readonly deleted_at: FieldRef<"HSSubExpertiseRelationModel", 'DateTime'>
     readonly hs_provider_id: FieldRef<"HSSubExpertiseRelationModel", 'String'>
     readonly sub_expertise_id: FieldRef<"HSSubExpertiseRelationModel", 'String'>
   }
@@ -15108,6 +17405,35 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+  export const TermsModelScalarFieldEnum: {
+    id: 'id',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
+    is_deleted: 'is_deleted',
+    deleted_at: 'deleted_at',
+    title: 'title',
+    version: 'version',
+    url: 'url',
+    is_required: 'is_required',
+    type: 'type'
+  };
+
+  export type TermsModelScalarFieldEnum = (typeof TermsModelScalarFieldEnum)[keyof typeof TermsModelScalarFieldEnum]
+
+
+  export const TermsAgreementModelScalarFieldEnum: {
+    id: 'id',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
+    is_deleted: 'is_deleted',
+    deleted_at: 'deleted_at',
+    terms_id: 'terms_id',
+    user_id: 'user_id'
+  };
+
+  export type TermsAgreementModelScalarFieldEnum = (typeof TermsAgreementModelScalarFieldEnum)[keyof typeof TermsAgreementModelScalarFieldEnum]
+
+
   export const UserModelScalarFieldEnum: {
     id: 'id',
     created_at: 'created_at',
@@ -15194,11 +17520,12 @@ export namespace Prisma {
 
   export const HSProviderModelScalarFieldEnum: {
     id: 'id',
-    biz_registration_number: 'biz_registration_number',
     address_zone_code: 'address_zone_code',
     address_road: 'address_road',
     address_detail: 'address_detail',
     address_extra: 'address_extra',
+    biz_phone: 'biz_phone',
+    biz_registration_number: 'biz_registration_number',
     biz_open_date: 'biz_open_date'
   };
 
@@ -15232,6 +17559,10 @@ export namespace Prisma {
 
   export const HSSubExpertiseRelationModelScalarFieldEnum: {
     id: 'id',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
+    is_deleted: 'is_deleted',
+    deleted_at: 'deleted_at',
     hs_provider_id: 'hs_provider_id',
     sub_expertise_id: 'sub_expertise_id'
   };
@@ -15359,6 +17690,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'TermsType'
+   */
+  export type EnumTermsTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TermsType'>
+    
+
+
+  /**
+   * Reference to a field of type 'TermsType[]'
+   */
+  export type ListEnumTermsTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TermsType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'GenderType'
    */
   export type EnumGenderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GenderType'>
@@ -15417,6 +17762,155 @@ export namespace Prisma {
    */
 
 
+  export type TermsModelWhereInput = {
+    AND?: TermsModelWhereInput | TermsModelWhereInput[]
+    OR?: TermsModelWhereInput[]
+    NOT?: TermsModelWhereInput | TermsModelWhereInput[]
+    id?: StringFilter<"TermsModel"> | string
+    created_at?: DateTimeFilter<"TermsModel"> | Date | string
+    updated_at?: DateTimeFilter<"TermsModel"> | Date | string
+    is_deleted?: BoolFilter<"TermsModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"TermsModel"> | Date | string | null
+    title?: StringFilter<"TermsModel"> | string
+    version?: StringFilter<"TermsModel"> | string
+    url?: StringFilter<"TermsModel"> | string
+    is_required?: BoolFilter<"TermsModel"> | boolean
+    type?: EnumTermsTypeFilter<"TermsModel"> | TermsType
+    agreements?: TermsAgreementModelListRelationFilter
+  }
+
+  export type TermsModelOrderByWithRelationInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    title?: SortOrder
+    version?: SortOrder
+    url?: SortOrder
+    is_required?: SortOrder
+    type?: SortOrder
+    agreements?: TermsAgreementModelOrderByRelationAggregateInput
+  }
+
+  export type TermsModelWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TermsModelWhereInput | TermsModelWhereInput[]
+    OR?: TermsModelWhereInput[]
+    NOT?: TermsModelWhereInput | TermsModelWhereInput[]
+    created_at?: DateTimeFilter<"TermsModel"> | Date | string
+    updated_at?: DateTimeFilter<"TermsModel"> | Date | string
+    is_deleted?: BoolFilter<"TermsModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"TermsModel"> | Date | string | null
+    title?: StringFilter<"TermsModel"> | string
+    version?: StringFilter<"TermsModel"> | string
+    url?: StringFilter<"TermsModel"> | string
+    is_required?: BoolFilter<"TermsModel"> | boolean
+    type?: EnumTermsTypeFilter<"TermsModel"> | TermsType
+    agreements?: TermsAgreementModelListRelationFilter
+  }, "id">
+
+  export type TermsModelOrderByWithAggregationInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    title?: SortOrder
+    version?: SortOrder
+    url?: SortOrder
+    is_required?: SortOrder
+    type?: SortOrder
+    _count?: TermsModelCountOrderByAggregateInput
+    _max?: TermsModelMaxOrderByAggregateInput
+    _min?: TermsModelMinOrderByAggregateInput
+  }
+
+  export type TermsModelScalarWhereWithAggregatesInput = {
+    AND?: TermsModelScalarWhereWithAggregatesInput | TermsModelScalarWhereWithAggregatesInput[]
+    OR?: TermsModelScalarWhereWithAggregatesInput[]
+    NOT?: TermsModelScalarWhereWithAggregatesInput | TermsModelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TermsModel"> | string
+    created_at?: DateTimeWithAggregatesFilter<"TermsModel"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"TermsModel"> | Date | string
+    is_deleted?: BoolWithAggregatesFilter<"TermsModel"> | boolean
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"TermsModel"> | Date | string | null
+    title?: StringWithAggregatesFilter<"TermsModel"> | string
+    version?: StringWithAggregatesFilter<"TermsModel"> | string
+    url?: StringWithAggregatesFilter<"TermsModel"> | string
+    is_required?: BoolWithAggregatesFilter<"TermsModel"> | boolean
+    type?: EnumTermsTypeWithAggregatesFilter<"TermsModel"> | TermsType
+  }
+
+  export type TermsAgreementModelWhereInput = {
+    AND?: TermsAgreementModelWhereInput | TermsAgreementModelWhereInput[]
+    OR?: TermsAgreementModelWhereInput[]
+    NOT?: TermsAgreementModelWhereInput | TermsAgreementModelWhereInput[]
+    id?: StringFilter<"TermsAgreementModel"> | string
+    created_at?: DateTimeFilter<"TermsAgreementModel"> | Date | string
+    updated_at?: DateTimeFilter<"TermsAgreementModel"> | Date | string
+    is_deleted?: BoolFilter<"TermsAgreementModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"TermsAgreementModel"> | Date | string | null
+    terms_id?: StringFilter<"TermsAgreementModel"> | string
+    user_id?: StringFilter<"TermsAgreementModel"> | string
+    terms?: XOR<TermsModelRelationFilter, TermsModelWhereInput>
+    user?: XOR<UserModelRelationFilter, UserModelWhereInput>
+  }
+
+  export type TermsAgreementModelOrderByWithRelationInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    terms_id?: SortOrder
+    user_id?: SortOrder
+    terms?: TermsModelOrderByWithRelationInput
+    user?: UserModelOrderByWithRelationInput
+  }
+
+  export type TermsAgreementModelWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    user_id_terms_id?: TermsAgreementModelUser_idTerms_idCompoundUniqueInput
+    AND?: TermsAgreementModelWhereInput | TermsAgreementModelWhereInput[]
+    OR?: TermsAgreementModelWhereInput[]
+    NOT?: TermsAgreementModelWhereInput | TermsAgreementModelWhereInput[]
+    created_at?: DateTimeFilter<"TermsAgreementModel"> | Date | string
+    updated_at?: DateTimeFilter<"TermsAgreementModel"> | Date | string
+    is_deleted?: BoolFilter<"TermsAgreementModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"TermsAgreementModel"> | Date | string | null
+    terms_id?: StringFilter<"TermsAgreementModel"> | string
+    user_id?: StringFilter<"TermsAgreementModel"> | string
+    terms?: XOR<TermsModelRelationFilter, TermsModelWhereInput>
+    user?: XOR<UserModelRelationFilter, UserModelWhereInput>
+  }, "id" | "user_id_terms_id">
+
+  export type TermsAgreementModelOrderByWithAggregationInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    terms_id?: SortOrder
+    user_id?: SortOrder
+    _count?: TermsAgreementModelCountOrderByAggregateInput
+    _max?: TermsAgreementModelMaxOrderByAggregateInput
+    _min?: TermsAgreementModelMinOrderByAggregateInput
+  }
+
+  export type TermsAgreementModelScalarWhereWithAggregatesInput = {
+    AND?: TermsAgreementModelScalarWhereWithAggregatesInput | TermsAgreementModelScalarWhereWithAggregatesInput[]
+    OR?: TermsAgreementModelScalarWhereWithAggregatesInput[]
+    NOT?: TermsAgreementModelScalarWhereWithAggregatesInput | TermsAgreementModelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TermsAgreementModel"> | string
+    created_at?: DateTimeWithAggregatesFilter<"TermsAgreementModel"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"TermsAgreementModel"> | Date | string
+    is_deleted?: BoolWithAggregatesFilter<"TermsAgreementModel"> | boolean
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"TermsAgreementModel"> | Date | string | null
+    terms_id?: StringWithAggregatesFilter<"TermsAgreementModel"> | string
+    user_id?: StringWithAggregatesFilter<"TermsAgreementModel"> | string
+  }
+
   export type UserModelWhereInput = {
     AND?: UserModelWhereInput | UserModelWhereInput[]
     OR?: UserModelWhereInput[]
@@ -15430,6 +17924,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"UserModel"> | string | null
     client?: XOR<ClientModelNullableRelationFilter, ClientModelWhereInput> | null
     biz_user?: XOR<BIZUserModelNullableRelationFilter, BIZUserModelWhereInput> | null
+    terms_agreements?: TermsAgreementModelListRelationFilter
   }
 
   export type UserModelOrderByWithRelationInput = {
@@ -15442,6 +17937,7 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     client?: ClientModelOrderByWithRelationInput
     biz_user?: BIZUserModelOrderByWithRelationInput
+    terms_agreements?: TermsAgreementModelOrderByRelationAggregateInput
   }
 
   export type UserModelWhereUniqueInput = Prisma.AtLeast<{
@@ -15457,6 +17953,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"UserModel"> | string | null
     client?: XOR<ClientModelNullableRelationFilter, ClientModelWhereInput> | null
     biz_user?: XOR<BIZUserModelNullableRelationFilter, BIZUserModelWhereInput> | null
+    terms_agreements?: TermsAgreementModelListRelationFilter
   }, "id">
 
   export type UserModelOrderByWithAggregationInput = {
@@ -15866,11 +18363,12 @@ export namespace Prisma {
     OR?: HSProviderModelWhereInput[]
     NOT?: HSProviderModelWhereInput | HSProviderModelWhereInput[]
     id?: StringFilter<"HSProviderModel"> | string
-    biz_registration_number?: StringFilter<"HSProviderModel"> | string
     address_zone_code?: StringFilter<"HSProviderModel"> | string
     address_road?: StringFilter<"HSProviderModel"> | string
     address_detail?: StringNullableFilter<"HSProviderModel"> | string | null
     address_extra?: StringNullableFilter<"HSProviderModel"> | string | null
+    biz_phone?: StringFilter<"HSProviderModel"> | string
+    biz_registration_number?: StringFilter<"HSProviderModel"> | string
     biz_open_date?: DateTimeFilter<"HSProviderModel"> | Date | string
     base?: XOR<BIZUserModelRelationFilter, BIZUserModelWhereInput>
     expertise_relation?: HSSubExpertiseRelationModelListRelationFilter
@@ -15879,11 +18377,12 @@ export namespace Prisma {
 
   export type HSProviderModelOrderByWithRelationInput = {
     id?: SortOrder
-    biz_registration_number?: SortOrder
     address_zone_code?: SortOrder
     address_road?: SortOrder
     address_detail?: SortOrderInput | SortOrder
     address_extra?: SortOrderInput | SortOrder
+    biz_phone?: SortOrder
+    biz_registration_number?: SortOrder
     biz_open_date?: SortOrder
     base?: BIZUserModelOrderByWithRelationInput
     expertise_relation?: HSSubExpertiseRelationModelOrderByRelationAggregateInput
@@ -15895,11 +18394,12 @@ export namespace Prisma {
     AND?: HSProviderModelWhereInput | HSProviderModelWhereInput[]
     OR?: HSProviderModelWhereInput[]
     NOT?: HSProviderModelWhereInput | HSProviderModelWhereInput[]
-    biz_registration_number?: StringFilter<"HSProviderModel"> | string
     address_zone_code?: StringFilter<"HSProviderModel"> | string
     address_road?: StringFilter<"HSProviderModel"> | string
     address_detail?: StringNullableFilter<"HSProviderModel"> | string | null
     address_extra?: StringNullableFilter<"HSProviderModel"> | string | null
+    biz_phone?: StringFilter<"HSProviderModel"> | string
+    biz_registration_number?: StringFilter<"HSProviderModel"> | string
     biz_open_date?: DateTimeFilter<"HSProviderModel"> | Date | string
     base?: XOR<BIZUserModelRelationFilter, BIZUserModelWhereInput>
     expertise_relation?: HSSubExpertiseRelationModelListRelationFilter
@@ -15908,11 +18408,12 @@ export namespace Prisma {
 
   export type HSProviderModelOrderByWithAggregationInput = {
     id?: SortOrder
-    biz_registration_number?: SortOrder
     address_zone_code?: SortOrder
     address_road?: SortOrder
     address_detail?: SortOrderInput | SortOrder
     address_extra?: SortOrderInput | SortOrder
+    biz_phone?: SortOrder
+    biz_registration_number?: SortOrder
     biz_open_date?: SortOrder
     _count?: HSProviderModelCountOrderByAggregateInput
     _max?: HSProviderModelMaxOrderByAggregateInput
@@ -15924,11 +18425,12 @@ export namespace Prisma {
     OR?: HSProviderModelScalarWhereWithAggregatesInput[]
     NOT?: HSProviderModelScalarWhereWithAggregatesInput | HSProviderModelScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"HSProviderModel"> | string
-    biz_registration_number?: StringWithAggregatesFilter<"HSProviderModel"> | string
     address_zone_code?: StringWithAggregatesFilter<"HSProviderModel"> | string
     address_road?: StringWithAggregatesFilter<"HSProviderModel"> | string
     address_detail?: StringNullableWithAggregatesFilter<"HSProviderModel"> | string | null
     address_extra?: StringNullableWithAggregatesFilter<"HSProviderModel"> | string | null
+    biz_phone?: StringWithAggregatesFilter<"HSProviderModel"> | string
+    biz_registration_number?: StringWithAggregatesFilter<"HSProviderModel"> | string
     biz_open_date?: DateTimeWithAggregatesFilter<"HSProviderModel"> | Date | string
   }
 
@@ -16065,6 +18567,10 @@ export namespace Prisma {
     OR?: HSSubExpertiseRelationModelWhereInput[]
     NOT?: HSSubExpertiseRelationModelWhereInput | HSSubExpertiseRelationModelWhereInput[]
     id?: StringFilter<"HSSubExpertiseRelationModel"> | string
+    created_at?: DateTimeFilter<"HSSubExpertiseRelationModel"> | Date | string
+    updated_at?: DateTimeFilter<"HSSubExpertiseRelationModel"> | Date | string
+    is_deleted?: BoolFilter<"HSSubExpertiseRelationModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"HSSubExpertiseRelationModel"> | Date | string | null
     hs_provider_id?: StringFilter<"HSSubExpertiseRelationModel"> | string
     sub_expertise_id?: StringFilter<"HSSubExpertiseRelationModel"> | string
     hs_provider?: XOR<HSProviderModelRelationFilter, HSProviderModelWhereInput>
@@ -16073,6 +18579,10 @@ export namespace Prisma {
 
   export type HSSubExpertiseRelationModelOrderByWithRelationInput = {
     id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
     hs_provider_id?: SortOrder
     sub_expertise_id?: SortOrder
     hs_provider?: HSProviderModelOrderByWithRelationInput
@@ -16085,6 +18595,10 @@ export namespace Prisma {
     AND?: HSSubExpertiseRelationModelWhereInput | HSSubExpertiseRelationModelWhereInput[]
     OR?: HSSubExpertiseRelationModelWhereInput[]
     NOT?: HSSubExpertiseRelationModelWhereInput | HSSubExpertiseRelationModelWhereInput[]
+    created_at?: DateTimeFilter<"HSSubExpertiseRelationModel"> | Date | string
+    updated_at?: DateTimeFilter<"HSSubExpertiseRelationModel"> | Date | string
+    is_deleted?: BoolFilter<"HSSubExpertiseRelationModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"HSSubExpertiseRelationModel"> | Date | string | null
     hs_provider_id?: StringFilter<"HSSubExpertiseRelationModel"> | string
     sub_expertise_id?: StringFilter<"HSSubExpertiseRelationModel"> | string
     hs_provider?: XOR<HSProviderModelRelationFilter, HSProviderModelWhereInput>
@@ -16093,6 +18607,10 @@ export namespace Prisma {
 
   export type HSSubExpertiseRelationModelOrderByWithAggregationInput = {
     id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
     hs_provider_id?: SortOrder
     sub_expertise_id?: SortOrder
     _count?: HSSubExpertiseRelationModelCountOrderByAggregateInput
@@ -16105,6 +18623,10 @@ export namespace Prisma {
     OR?: HSSubExpertiseRelationModelScalarWhereWithAggregatesInput[]
     NOT?: HSSubExpertiseRelationModelScalarWhereWithAggregatesInput | HSSubExpertiseRelationModelScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"HSSubExpertiseRelationModel"> | string
+    created_at?: DateTimeWithAggregatesFilter<"HSSubExpertiseRelationModel"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"HSSubExpertiseRelationModel"> | Date | string
+    is_deleted?: BoolWithAggregatesFilter<"HSSubExpertiseRelationModel"> | boolean
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"HSSubExpertiseRelationModel"> | Date | string | null
     hs_provider_id?: StringWithAggregatesFilter<"HSSubExpertiseRelationModel"> | string
     sub_expertise_id?: StringWithAggregatesFilter<"HSSubExpertiseRelationModel"> | string
   }
@@ -16387,6 +18909,169 @@ export namespace Prisma {
     address_extra?: StringNullableWithAggregatesFilter<"OauthAccountModel"> | string | null
   }
 
+  export type TermsModelCreateInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    title: string
+    version: string
+    url: string
+    is_required: boolean
+    type: TermsType
+    agreements?: TermsAgreementModelCreateNestedManyWithoutTermsInput
+  }
+
+  export type TermsModelUncheckedCreateInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    title: string
+    version: string
+    url: string
+    is_required: boolean
+    type: TermsType
+    agreements?: TermsAgreementModelUncheckedCreateNestedManyWithoutTermsInput
+  }
+
+  export type TermsModelUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    is_required?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumTermsTypeFieldUpdateOperationsInput | TermsType
+    agreements?: TermsAgreementModelUpdateManyWithoutTermsNestedInput
+  }
+
+  export type TermsModelUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    is_required?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumTermsTypeFieldUpdateOperationsInput | TermsType
+    agreements?: TermsAgreementModelUncheckedUpdateManyWithoutTermsNestedInput
+  }
+
+  export type TermsModelCreateManyInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    title: string
+    version: string
+    url: string
+    is_required: boolean
+    type: TermsType
+  }
+
+  export type TermsModelUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    is_required?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumTermsTypeFieldUpdateOperationsInput | TermsType
+  }
+
+  export type TermsModelUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    is_required?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumTermsTypeFieldUpdateOperationsInput | TermsType
+  }
+
+  export type TermsAgreementModelCreateInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    terms: TermsModelCreateNestedOneWithoutAgreementsInput
+    user: UserModelCreateNestedOneWithoutTerms_agreementsInput
+  }
+
+  export type TermsAgreementModelUncheckedCreateInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    terms_id: string
+    user_id: string
+  }
+
+  export type TermsAgreementModelUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    terms?: TermsModelUpdateOneRequiredWithoutAgreementsNestedInput
+    user?: UserModelUpdateOneRequiredWithoutTerms_agreementsNestedInput
+  }
+
+  export type TermsAgreementModelUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    terms_id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TermsAgreementModelCreateManyInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    terms_id: string
+    user_id: string
+  }
+
+  export type TermsAgreementModelUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type TermsAgreementModelUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    terms_id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+  }
+
   export type UserModelCreateInput = {
     id: string
     created_at: Date | string
@@ -16397,6 +19082,7 @@ export namespace Prisma {
     email?: string | null
     client?: ClientModelCreateNestedOneWithoutBaseInput
     biz_user?: BIZUserModelCreateNestedOneWithoutBaseInput
+    terms_agreements?: TermsAgreementModelCreateNestedManyWithoutUserInput
   }
 
   export type UserModelUncheckedCreateInput = {
@@ -16409,6 +19095,7 @@ export namespace Prisma {
     email?: string | null
     client?: ClientModelUncheckedCreateNestedOneWithoutBaseInput
     biz_user?: BIZUserModelUncheckedCreateNestedOneWithoutBaseInput
+    terms_agreements?: TermsAgreementModelUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserModelUpdateInput = {
@@ -16421,6 +19108,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     client?: ClientModelUpdateOneWithoutBaseNestedInput
     biz_user?: BIZUserModelUpdateOneWithoutBaseNestedInput
+    terms_agreements?: TermsAgreementModelUpdateManyWithoutUserNestedInput
   }
 
   export type UserModelUncheckedUpdateInput = {
@@ -16433,6 +19121,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     client?: ClientModelUncheckedUpdateOneWithoutBaseNestedInput
     biz_user?: BIZUserModelUncheckedUpdateOneWithoutBaseNestedInput
+    terms_agreements?: TermsAgreementModelUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserModelCreateManyInput = {
@@ -16881,11 +19570,12 @@ export namespace Prisma {
   }
 
   export type HSProviderModelCreateInput = {
-    biz_registration_number: string
     address_zone_code: string
     address_road: string
     address_detail?: string | null
     address_extra?: string | null
+    biz_phone: string
+    biz_registration_number: string
     biz_open_date: Date | string
     base: BIZUserModelCreateNestedOneWithoutHs_providerInput
     expertise_relation?: HSSubExpertiseRelationModelCreateNestedManyWithoutHs_providerInput
@@ -16894,22 +19584,24 @@ export namespace Prisma {
 
   export type HSProviderModelUncheckedCreateInput = {
     id: string
-    biz_registration_number: string
     address_zone_code: string
     address_road: string
     address_detail?: string | null
     address_extra?: string | null
+    biz_phone: string
+    biz_registration_number: string
     biz_open_date: Date | string
     expertise_relation?: HSSubExpertiseRelationModelUncheckedCreateNestedManyWithoutHs_providerInput
     portfolios?: HSPortfolioModelUncheckedCreateNestedManyWithoutHs_providerInput
   }
 
   export type HSProviderModelUpdateInput = {
-    biz_registration_number?: StringFieldUpdateOperationsInput | string
     address_zone_code?: StringFieldUpdateOperationsInput | string
     address_road?: StringFieldUpdateOperationsInput | string
     address_detail?: NullableStringFieldUpdateOperationsInput | string | null
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
+    biz_phone?: StringFieldUpdateOperationsInput | string
+    biz_registration_number?: StringFieldUpdateOperationsInput | string
     biz_open_date?: DateTimeFieldUpdateOperationsInput | Date | string
     base?: BIZUserModelUpdateOneRequiredWithoutHs_providerNestedInput
     expertise_relation?: HSSubExpertiseRelationModelUpdateManyWithoutHs_providerNestedInput
@@ -16918,11 +19610,12 @@ export namespace Prisma {
 
   export type HSProviderModelUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    biz_registration_number?: StringFieldUpdateOperationsInput | string
     address_zone_code?: StringFieldUpdateOperationsInput | string
     address_road?: StringFieldUpdateOperationsInput | string
     address_detail?: NullableStringFieldUpdateOperationsInput | string | null
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
+    biz_phone?: StringFieldUpdateOperationsInput | string
+    biz_registration_number?: StringFieldUpdateOperationsInput | string
     biz_open_date?: DateTimeFieldUpdateOperationsInput | Date | string
     expertise_relation?: HSSubExpertiseRelationModelUncheckedUpdateManyWithoutHs_providerNestedInput
     portfolios?: HSPortfolioModelUncheckedUpdateManyWithoutHs_providerNestedInput
@@ -16930,30 +19623,33 @@ export namespace Prisma {
 
   export type HSProviderModelCreateManyInput = {
     id: string
-    biz_registration_number: string
     address_zone_code: string
     address_road: string
     address_detail?: string | null
     address_extra?: string | null
+    biz_phone: string
+    biz_registration_number: string
     biz_open_date: Date | string
   }
 
   export type HSProviderModelUpdateManyMutationInput = {
-    biz_registration_number?: StringFieldUpdateOperationsInput | string
     address_zone_code?: StringFieldUpdateOperationsInput | string
     address_road?: StringFieldUpdateOperationsInput | string
     address_detail?: NullableStringFieldUpdateOperationsInput | string | null
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
+    biz_phone?: StringFieldUpdateOperationsInput | string
+    biz_registration_number?: StringFieldUpdateOperationsInput | string
     biz_open_date?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type HSProviderModelUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    biz_registration_number?: StringFieldUpdateOperationsInput | string
     address_zone_code?: StringFieldUpdateOperationsInput | string
     address_road?: StringFieldUpdateOperationsInput | string
     address_detail?: NullableStringFieldUpdateOperationsInput | string | null
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
+    biz_phone?: StringFieldUpdateOperationsInput | string
+    biz_registration_number?: StringFieldUpdateOperationsInput | string
     biz_open_date?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -17099,40 +19795,68 @@ export namespace Prisma {
 
   export type HSSubExpertiseRelationModelCreateInput = {
     id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
     hs_provider: HSProviderModelCreateNestedOneWithoutExpertise_relationInput
     sub_expertise: HSSubExpertiseModelCreateNestedOneWithoutRelationsInput
   }
 
   export type HSSubExpertiseRelationModelUncheckedCreateInput = {
     id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
     hs_provider_id: string
     sub_expertise_id: string
   }
 
   export type HSSubExpertiseRelationModelUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     hs_provider?: HSProviderModelUpdateOneRequiredWithoutExpertise_relationNestedInput
     sub_expertise?: HSSubExpertiseModelUpdateOneRequiredWithoutRelationsNestedInput
   }
 
   export type HSSubExpertiseRelationModelUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     hs_provider_id?: StringFieldUpdateOperationsInput | string
     sub_expertise_id?: StringFieldUpdateOperationsInput | string
   }
 
   export type HSSubExpertiseRelationModelCreateManyInput = {
     id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
     hs_provider_id: string
     sub_expertise_id: string
   }
 
   export type HSSubExpertiseRelationModelUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type HSSubExpertiseRelationModelUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     hs_provider_id?: StringFieldUpdateOperationsInput | string
     sub_expertise_id?: StringFieldUpdateOperationsInput | string
   }
@@ -17497,29 +20221,17 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  export type EnumTermsTypeFilter<$PrismaModel = never> = {
+    equals?: TermsType | EnumTermsTypeFieldRefInput<$PrismaModel>
+    in?: TermsType[] | ListEnumTermsTypeFieldRefInput<$PrismaModel>
+    notIn?: TermsType[] | ListEnumTermsTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTermsTypeFilter<$PrismaModel> | TermsType
   }
 
-  export type ClientModelNullableRelationFilter = {
-    is?: ClientModelWhereInput | null
-    isNot?: ClientModelWhereInput | null
-  }
-
-  export type BIZUserModelNullableRelationFilter = {
-    is?: BIZUserModelWhereInput | null
-    isNot?: BIZUserModelWhereInput | null
+  export type TermsAgreementModelListRelationFilter = {
+    every?: TermsAgreementModelWhereInput
+    some?: TermsAgreementModelWhereInput
+    none?: TermsAgreementModelWhereInput
   }
 
   export type SortOrderInput = {
@@ -17527,34 +20239,47 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
-  export type UserModelCountOrderByAggregateInput = {
-    id?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    is_deleted?: SortOrder
-    deleted_at?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
+  export type TermsAgreementModelOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
-  export type UserModelMaxOrderByAggregateInput = {
+  export type TermsModelCountOrderByAggregateInput = {
     id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     is_deleted?: SortOrder
     deleted_at?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
+    title?: SortOrder
+    version?: SortOrder
+    url?: SortOrder
+    is_required?: SortOrder
+    type?: SortOrder
   }
 
-  export type UserModelMinOrderByAggregateInput = {
+  export type TermsModelMaxOrderByAggregateInput = {
     id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     is_deleted?: SortOrder
     deleted_at?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
+    title?: SortOrder
+    version?: SortOrder
+    url?: SortOrder
+    is_required?: SortOrder
+    type?: SortOrder
+  }
+
+  export type TermsModelMinOrderByAggregateInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrder
+    title?: SortOrder
+    version?: SortOrder
+    url?: SortOrder
+    is_required?: SortOrder
+    type?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -17611,6 +20336,116 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type EnumTermsTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: TermsType | EnumTermsTypeFieldRefInput<$PrismaModel>
+    in?: TermsType[] | ListEnumTermsTypeFieldRefInput<$PrismaModel>
+    notIn?: TermsType[] | ListEnumTermsTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTermsTypeWithAggregatesFilter<$PrismaModel> | TermsType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTermsTypeFilter<$PrismaModel>
+    _max?: NestedEnumTermsTypeFilter<$PrismaModel>
+  }
+
+  export type TermsModelRelationFilter = {
+    is?: TermsModelWhereInput
+    isNot?: TermsModelWhereInput
+  }
+
+  export type UserModelRelationFilter = {
+    is?: UserModelWhereInput
+    isNot?: UserModelWhereInput
+  }
+
+  export type TermsAgreementModelUser_idTerms_idCompoundUniqueInput = {
+    user_id: string
+    terms_id: string
+  }
+
+  export type TermsAgreementModelCountOrderByAggregateInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrder
+    terms_id?: SortOrder
+    user_id?: SortOrder
+  }
+
+  export type TermsAgreementModelMaxOrderByAggregateInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrder
+    terms_id?: SortOrder
+    user_id?: SortOrder
+  }
+
+  export type TermsAgreementModelMinOrderByAggregateInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrder
+    terms_id?: SortOrder
+    user_id?: SortOrder
+  }
+
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type ClientModelNullableRelationFilter = {
+    is?: ClientModelWhereInput | null
+    isNot?: ClientModelWhereInput | null
+  }
+
+  export type BIZUserModelNullableRelationFilter = {
+    is?: BIZUserModelWhereInput | null
+    isNot?: BIZUserModelWhereInput | null
+  }
+
+  export type UserModelCountOrderByAggregateInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+  }
+
+  export type UserModelMaxOrderByAggregateInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+  }
+
+  export type UserModelMinOrderByAggregateInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+  }
+
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -17634,11 +20469,6 @@ export namespace Prisma {
     in?: GenderType[] | ListEnumGenderTypeFieldRefInput<$PrismaModel> | null
     notIn?: GenderType[] | ListEnumGenderTypeFieldRefInput<$PrismaModel> | null
     not?: NestedEnumGenderTypeNullableFilter<$PrismaModel> | GenderType | null
-  }
-
-  export type UserModelRelationFilter = {
-    is?: UserModelWhereInput
-    isNot?: UserModelWhereInput
   }
 
   export type OauthAccountModelListRelationFilter = {
@@ -17918,31 +20748,34 @@ export namespace Prisma {
 
   export type HSProviderModelCountOrderByAggregateInput = {
     id?: SortOrder
-    biz_registration_number?: SortOrder
     address_zone_code?: SortOrder
     address_road?: SortOrder
     address_detail?: SortOrder
     address_extra?: SortOrder
+    biz_phone?: SortOrder
+    biz_registration_number?: SortOrder
     biz_open_date?: SortOrder
   }
 
   export type HSProviderModelMaxOrderByAggregateInput = {
     id?: SortOrder
-    biz_registration_number?: SortOrder
     address_zone_code?: SortOrder
     address_road?: SortOrder
     address_detail?: SortOrder
     address_extra?: SortOrder
+    biz_phone?: SortOrder
+    biz_registration_number?: SortOrder
     biz_open_date?: SortOrder
   }
 
   export type HSProviderModelMinOrderByAggregateInput = {
     id?: SortOrder
-    biz_registration_number?: SortOrder
     address_zone_code?: SortOrder
     address_road?: SortOrder
     address_detail?: SortOrder
     address_extra?: SortOrder
+    biz_phone?: SortOrder
+    biz_registration_number?: SortOrder
     biz_open_date?: SortOrder
   }
 
@@ -18035,18 +20868,30 @@ export namespace Prisma {
 
   export type HSSubExpertiseRelationModelCountOrderByAggregateInput = {
     id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrder
     hs_provider_id?: SortOrder
     sub_expertise_id?: SortOrder
   }
 
   export type HSSubExpertiseRelationModelMaxOrderByAggregateInput = {
     id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrder
     hs_provider_id?: SortOrder
     sub_expertise_id?: SortOrder
   }
 
   export type HSSubExpertiseRelationModelMinOrderByAggregateInput = {
     id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrder
     hs_provider_id?: SortOrder
     sub_expertise_id?: SortOrder
   }
@@ -18211,28 +21056,18 @@ export namespace Prisma {
     _max?: NestedEnumOauthTypeFilter<$PrismaModel>
   }
 
-  export type ClientModelCreateNestedOneWithoutBaseInput = {
-    create?: XOR<ClientModelCreateWithoutBaseInput, ClientModelUncheckedCreateWithoutBaseInput>
-    connectOrCreate?: ClientModelCreateOrConnectWithoutBaseInput
-    connect?: ClientModelWhereUniqueInput
+  export type TermsAgreementModelCreateNestedManyWithoutTermsInput = {
+    create?: XOR<TermsAgreementModelCreateWithoutTermsInput, TermsAgreementModelUncheckedCreateWithoutTermsInput> | TermsAgreementModelCreateWithoutTermsInput[] | TermsAgreementModelUncheckedCreateWithoutTermsInput[]
+    connectOrCreate?: TermsAgreementModelCreateOrConnectWithoutTermsInput | TermsAgreementModelCreateOrConnectWithoutTermsInput[]
+    createMany?: TermsAgreementModelCreateManyTermsInputEnvelope
+    connect?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
   }
 
-  export type BIZUserModelCreateNestedOneWithoutBaseInput = {
-    create?: XOR<BIZUserModelCreateWithoutBaseInput, BIZUserModelUncheckedCreateWithoutBaseInput>
-    connectOrCreate?: BIZUserModelCreateOrConnectWithoutBaseInput
-    connect?: BIZUserModelWhereUniqueInput
-  }
-
-  export type ClientModelUncheckedCreateNestedOneWithoutBaseInput = {
-    create?: XOR<ClientModelCreateWithoutBaseInput, ClientModelUncheckedCreateWithoutBaseInput>
-    connectOrCreate?: ClientModelCreateOrConnectWithoutBaseInput
-    connect?: ClientModelWhereUniqueInput
-  }
-
-  export type BIZUserModelUncheckedCreateNestedOneWithoutBaseInput = {
-    create?: XOR<BIZUserModelCreateWithoutBaseInput, BIZUserModelUncheckedCreateWithoutBaseInput>
-    connectOrCreate?: BIZUserModelCreateOrConnectWithoutBaseInput
-    connect?: BIZUserModelWhereUniqueInput
+  export type TermsAgreementModelUncheckedCreateNestedManyWithoutTermsInput = {
+    create?: XOR<TermsAgreementModelCreateWithoutTermsInput, TermsAgreementModelUncheckedCreateWithoutTermsInput> | TermsAgreementModelCreateWithoutTermsInput[] | TermsAgreementModelUncheckedCreateWithoutTermsInput[]
+    connectOrCreate?: TermsAgreementModelCreateOrConnectWithoutTermsInput | TermsAgreementModelCreateOrConnectWithoutTermsInput[]
+    createMany?: TermsAgreementModelCreateManyTermsInputEnvelope
+    connect?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -18249,6 +21084,104 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
+  }
+
+  export type EnumTermsTypeFieldUpdateOperationsInput = {
+    set?: TermsType
+  }
+
+  export type TermsAgreementModelUpdateManyWithoutTermsNestedInput = {
+    create?: XOR<TermsAgreementModelCreateWithoutTermsInput, TermsAgreementModelUncheckedCreateWithoutTermsInput> | TermsAgreementModelCreateWithoutTermsInput[] | TermsAgreementModelUncheckedCreateWithoutTermsInput[]
+    connectOrCreate?: TermsAgreementModelCreateOrConnectWithoutTermsInput | TermsAgreementModelCreateOrConnectWithoutTermsInput[]
+    upsert?: TermsAgreementModelUpsertWithWhereUniqueWithoutTermsInput | TermsAgreementModelUpsertWithWhereUniqueWithoutTermsInput[]
+    createMany?: TermsAgreementModelCreateManyTermsInputEnvelope
+    set?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
+    disconnect?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
+    delete?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
+    connect?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
+    update?: TermsAgreementModelUpdateWithWhereUniqueWithoutTermsInput | TermsAgreementModelUpdateWithWhereUniqueWithoutTermsInput[]
+    updateMany?: TermsAgreementModelUpdateManyWithWhereWithoutTermsInput | TermsAgreementModelUpdateManyWithWhereWithoutTermsInput[]
+    deleteMany?: TermsAgreementModelScalarWhereInput | TermsAgreementModelScalarWhereInput[]
+  }
+
+  export type TermsAgreementModelUncheckedUpdateManyWithoutTermsNestedInput = {
+    create?: XOR<TermsAgreementModelCreateWithoutTermsInput, TermsAgreementModelUncheckedCreateWithoutTermsInput> | TermsAgreementModelCreateWithoutTermsInput[] | TermsAgreementModelUncheckedCreateWithoutTermsInput[]
+    connectOrCreate?: TermsAgreementModelCreateOrConnectWithoutTermsInput | TermsAgreementModelCreateOrConnectWithoutTermsInput[]
+    upsert?: TermsAgreementModelUpsertWithWhereUniqueWithoutTermsInput | TermsAgreementModelUpsertWithWhereUniqueWithoutTermsInput[]
+    createMany?: TermsAgreementModelCreateManyTermsInputEnvelope
+    set?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
+    disconnect?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
+    delete?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
+    connect?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
+    update?: TermsAgreementModelUpdateWithWhereUniqueWithoutTermsInput | TermsAgreementModelUpdateWithWhereUniqueWithoutTermsInput[]
+    updateMany?: TermsAgreementModelUpdateManyWithWhereWithoutTermsInput | TermsAgreementModelUpdateManyWithWhereWithoutTermsInput[]
+    deleteMany?: TermsAgreementModelScalarWhereInput | TermsAgreementModelScalarWhereInput[]
+  }
+
+  export type TermsModelCreateNestedOneWithoutAgreementsInput = {
+    create?: XOR<TermsModelCreateWithoutAgreementsInput, TermsModelUncheckedCreateWithoutAgreementsInput>
+    connectOrCreate?: TermsModelCreateOrConnectWithoutAgreementsInput
+    connect?: TermsModelWhereUniqueInput
+  }
+
+  export type UserModelCreateNestedOneWithoutTerms_agreementsInput = {
+    create?: XOR<UserModelCreateWithoutTerms_agreementsInput, UserModelUncheckedCreateWithoutTerms_agreementsInput>
+    connectOrCreate?: UserModelCreateOrConnectWithoutTerms_agreementsInput
+    connect?: UserModelWhereUniqueInput
+  }
+
+  export type TermsModelUpdateOneRequiredWithoutAgreementsNestedInput = {
+    create?: XOR<TermsModelCreateWithoutAgreementsInput, TermsModelUncheckedCreateWithoutAgreementsInput>
+    connectOrCreate?: TermsModelCreateOrConnectWithoutAgreementsInput
+    upsert?: TermsModelUpsertWithoutAgreementsInput
+    connect?: TermsModelWhereUniqueInput
+    update?: XOR<XOR<TermsModelUpdateToOneWithWhereWithoutAgreementsInput, TermsModelUpdateWithoutAgreementsInput>, TermsModelUncheckedUpdateWithoutAgreementsInput>
+  }
+
+  export type UserModelUpdateOneRequiredWithoutTerms_agreementsNestedInput = {
+    create?: XOR<UserModelCreateWithoutTerms_agreementsInput, UserModelUncheckedCreateWithoutTerms_agreementsInput>
+    connectOrCreate?: UserModelCreateOrConnectWithoutTerms_agreementsInput
+    upsert?: UserModelUpsertWithoutTerms_agreementsInput
+    connect?: UserModelWhereUniqueInput
+    update?: XOR<XOR<UserModelUpdateToOneWithWhereWithoutTerms_agreementsInput, UserModelUpdateWithoutTerms_agreementsInput>, UserModelUncheckedUpdateWithoutTerms_agreementsInput>
+  }
+
+  export type ClientModelCreateNestedOneWithoutBaseInput = {
+    create?: XOR<ClientModelCreateWithoutBaseInput, ClientModelUncheckedCreateWithoutBaseInput>
+    connectOrCreate?: ClientModelCreateOrConnectWithoutBaseInput
+    connect?: ClientModelWhereUniqueInput
+  }
+
+  export type BIZUserModelCreateNestedOneWithoutBaseInput = {
+    create?: XOR<BIZUserModelCreateWithoutBaseInput, BIZUserModelUncheckedCreateWithoutBaseInput>
+    connectOrCreate?: BIZUserModelCreateOrConnectWithoutBaseInput
+    connect?: BIZUserModelWhereUniqueInput
+  }
+
+  export type TermsAgreementModelCreateNestedManyWithoutUserInput = {
+    create?: XOR<TermsAgreementModelCreateWithoutUserInput, TermsAgreementModelUncheckedCreateWithoutUserInput> | TermsAgreementModelCreateWithoutUserInput[] | TermsAgreementModelUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TermsAgreementModelCreateOrConnectWithoutUserInput | TermsAgreementModelCreateOrConnectWithoutUserInput[]
+    createMany?: TermsAgreementModelCreateManyUserInputEnvelope
+    connect?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
+  }
+
+  export type ClientModelUncheckedCreateNestedOneWithoutBaseInput = {
+    create?: XOR<ClientModelCreateWithoutBaseInput, ClientModelUncheckedCreateWithoutBaseInput>
+    connectOrCreate?: ClientModelCreateOrConnectWithoutBaseInput
+    connect?: ClientModelWhereUniqueInput
+  }
+
+  export type BIZUserModelUncheckedCreateNestedOneWithoutBaseInput = {
+    create?: XOR<BIZUserModelCreateWithoutBaseInput, BIZUserModelUncheckedCreateWithoutBaseInput>
+    connectOrCreate?: BIZUserModelCreateOrConnectWithoutBaseInput
+    connect?: BIZUserModelWhereUniqueInput
+  }
+
+  export type TermsAgreementModelUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<TermsAgreementModelCreateWithoutUserInput, TermsAgreementModelUncheckedCreateWithoutUserInput> | TermsAgreementModelCreateWithoutUserInput[] | TermsAgreementModelUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TermsAgreementModelCreateOrConnectWithoutUserInput | TermsAgreementModelCreateOrConnectWithoutUserInput[]
+    createMany?: TermsAgreementModelCreateManyUserInputEnvelope
+    connect?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -18275,6 +21208,20 @@ export namespace Prisma {
     update?: XOR<XOR<BIZUserModelUpdateToOneWithWhereWithoutBaseInput, BIZUserModelUpdateWithoutBaseInput>, BIZUserModelUncheckedUpdateWithoutBaseInput>
   }
 
+  export type TermsAgreementModelUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TermsAgreementModelCreateWithoutUserInput, TermsAgreementModelUncheckedCreateWithoutUserInput> | TermsAgreementModelCreateWithoutUserInput[] | TermsAgreementModelUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TermsAgreementModelCreateOrConnectWithoutUserInput | TermsAgreementModelCreateOrConnectWithoutUserInput[]
+    upsert?: TermsAgreementModelUpsertWithWhereUniqueWithoutUserInput | TermsAgreementModelUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TermsAgreementModelCreateManyUserInputEnvelope
+    set?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
+    disconnect?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
+    delete?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
+    connect?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
+    update?: TermsAgreementModelUpdateWithWhereUniqueWithoutUserInput | TermsAgreementModelUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TermsAgreementModelUpdateManyWithWhereWithoutUserInput | TermsAgreementModelUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: TermsAgreementModelScalarWhereInput | TermsAgreementModelScalarWhereInput[]
+  }
+
   export type ClientModelUncheckedUpdateOneWithoutBaseNestedInput = {
     create?: XOR<ClientModelCreateWithoutBaseInput, ClientModelUncheckedCreateWithoutBaseInput>
     connectOrCreate?: ClientModelCreateOrConnectWithoutBaseInput
@@ -18293,6 +21240,20 @@ export namespace Prisma {
     delete?: BIZUserModelWhereInput | boolean
     connect?: BIZUserModelWhereUniqueInput
     update?: XOR<XOR<BIZUserModelUpdateToOneWithWhereWithoutBaseInput, BIZUserModelUpdateWithoutBaseInput>, BIZUserModelUncheckedUpdateWithoutBaseInput>
+  }
+
+  export type TermsAgreementModelUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TermsAgreementModelCreateWithoutUserInput, TermsAgreementModelUncheckedCreateWithoutUserInput> | TermsAgreementModelCreateWithoutUserInput[] | TermsAgreementModelUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TermsAgreementModelCreateOrConnectWithoutUserInput | TermsAgreementModelCreateOrConnectWithoutUserInput[]
+    upsert?: TermsAgreementModelUpsertWithWhereUniqueWithoutUserInput | TermsAgreementModelUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TermsAgreementModelCreateManyUserInputEnvelope
+    set?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
+    disconnect?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
+    delete?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
+    connect?: TermsAgreementModelWhereUniqueInput | TermsAgreementModelWhereUniqueInput[]
+    update?: TermsAgreementModelUpdateWithWhereUniqueWithoutUserInput | TermsAgreementModelUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TermsAgreementModelUpdateManyWithWhereWithoutUserInput | TermsAgreementModelUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: TermsAgreementModelScalarWhereInput | TermsAgreementModelScalarWhereInput[]
   }
 
   export type UserModelCreateNestedOneWithoutClientInput = {
@@ -18976,18 +21937,11 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  export type NestedEnumTermsTypeFilter<$PrismaModel = never> = {
+    equals?: TermsType | EnumTermsTypeFieldRefInput<$PrismaModel>
+    in?: TermsType[] | ListEnumTermsTypeFieldRefInput<$PrismaModel>
+    notIn?: TermsType[] | ListEnumTermsTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTermsTypeFilter<$PrismaModel> | TermsType
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -19065,6 +22019,30 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedEnumTermsTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: TermsType | EnumTermsTypeFieldRefInput<$PrismaModel>
+    in?: TermsType[] | ListEnumTermsTypeFieldRefInput<$PrismaModel>
+    notIn?: TermsType[] | ListEnumTermsTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTermsTypeWithAggregatesFilter<$PrismaModel> | TermsType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTermsTypeFilter<$PrismaModel>
+    _max?: NestedEnumTermsTypeFilter<$PrismaModel>
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -19133,6 +22111,195 @@ export namespace Prisma {
     _max?: NestedEnumOauthTypeFilter<$PrismaModel>
   }
 
+  export type TermsAgreementModelCreateWithoutTermsInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    user: UserModelCreateNestedOneWithoutTerms_agreementsInput
+  }
+
+  export type TermsAgreementModelUncheckedCreateWithoutTermsInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    user_id: string
+  }
+
+  export type TermsAgreementModelCreateOrConnectWithoutTermsInput = {
+    where: TermsAgreementModelWhereUniqueInput
+    create: XOR<TermsAgreementModelCreateWithoutTermsInput, TermsAgreementModelUncheckedCreateWithoutTermsInput>
+  }
+
+  export type TermsAgreementModelCreateManyTermsInputEnvelope = {
+    data: TermsAgreementModelCreateManyTermsInput | TermsAgreementModelCreateManyTermsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TermsAgreementModelUpsertWithWhereUniqueWithoutTermsInput = {
+    where: TermsAgreementModelWhereUniqueInput
+    update: XOR<TermsAgreementModelUpdateWithoutTermsInput, TermsAgreementModelUncheckedUpdateWithoutTermsInput>
+    create: XOR<TermsAgreementModelCreateWithoutTermsInput, TermsAgreementModelUncheckedCreateWithoutTermsInput>
+  }
+
+  export type TermsAgreementModelUpdateWithWhereUniqueWithoutTermsInput = {
+    where: TermsAgreementModelWhereUniqueInput
+    data: XOR<TermsAgreementModelUpdateWithoutTermsInput, TermsAgreementModelUncheckedUpdateWithoutTermsInput>
+  }
+
+  export type TermsAgreementModelUpdateManyWithWhereWithoutTermsInput = {
+    where: TermsAgreementModelScalarWhereInput
+    data: XOR<TermsAgreementModelUpdateManyMutationInput, TermsAgreementModelUncheckedUpdateManyWithoutTermsInput>
+  }
+
+  export type TermsAgreementModelScalarWhereInput = {
+    AND?: TermsAgreementModelScalarWhereInput | TermsAgreementModelScalarWhereInput[]
+    OR?: TermsAgreementModelScalarWhereInput[]
+    NOT?: TermsAgreementModelScalarWhereInput | TermsAgreementModelScalarWhereInput[]
+    id?: StringFilter<"TermsAgreementModel"> | string
+    created_at?: DateTimeFilter<"TermsAgreementModel"> | Date | string
+    updated_at?: DateTimeFilter<"TermsAgreementModel"> | Date | string
+    is_deleted?: BoolFilter<"TermsAgreementModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"TermsAgreementModel"> | Date | string | null
+    terms_id?: StringFilter<"TermsAgreementModel"> | string
+    user_id?: StringFilter<"TermsAgreementModel"> | string
+  }
+
+  export type TermsModelCreateWithoutAgreementsInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    title: string
+    version: string
+    url: string
+    is_required: boolean
+    type: TermsType
+  }
+
+  export type TermsModelUncheckedCreateWithoutAgreementsInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    title: string
+    version: string
+    url: string
+    is_required: boolean
+    type: TermsType
+  }
+
+  export type TermsModelCreateOrConnectWithoutAgreementsInput = {
+    where: TermsModelWhereUniqueInput
+    create: XOR<TermsModelCreateWithoutAgreementsInput, TermsModelUncheckedCreateWithoutAgreementsInput>
+  }
+
+  export type UserModelCreateWithoutTerms_agreementsInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    name: string
+    email?: string | null
+    client?: ClientModelCreateNestedOneWithoutBaseInput
+    biz_user?: BIZUserModelCreateNestedOneWithoutBaseInput
+  }
+
+  export type UserModelUncheckedCreateWithoutTerms_agreementsInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    name: string
+    email?: string | null
+    client?: ClientModelUncheckedCreateNestedOneWithoutBaseInput
+    biz_user?: BIZUserModelUncheckedCreateNestedOneWithoutBaseInput
+  }
+
+  export type UserModelCreateOrConnectWithoutTerms_agreementsInput = {
+    where: UserModelWhereUniqueInput
+    create: XOR<UserModelCreateWithoutTerms_agreementsInput, UserModelUncheckedCreateWithoutTerms_agreementsInput>
+  }
+
+  export type TermsModelUpsertWithoutAgreementsInput = {
+    update: XOR<TermsModelUpdateWithoutAgreementsInput, TermsModelUncheckedUpdateWithoutAgreementsInput>
+    create: XOR<TermsModelCreateWithoutAgreementsInput, TermsModelUncheckedCreateWithoutAgreementsInput>
+    where?: TermsModelWhereInput
+  }
+
+  export type TermsModelUpdateToOneWithWhereWithoutAgreementsInput = {
+    where?: TermsModelWhereInput
+    data: XOR<TermsModelUpdateWithoutAgreementsInput, TermsModelUncheckedUpdateWithoutAgreementsInput>
+  }
+
+  export type TermsModelUpdateWithoutAgreementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    is_required?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumTermsTypeFieldUpdateOperationsInput | TermsType
+  }
+
+  export type TermsModelUncheckedUpdateWithoutAgreementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    is_required?: BoolFieldUpdateOperationsInput | boolean
+    type?: EnumTermsTypeFieldUpdateOperationsInput | TermsType
+  }
+
+  export type UserModelUpsertWithoutTerms_agreementsInput = {
+    update: XOR<UserModelUpdateWithoutTerms_agreementsInput, UserModelUncheckedUpdateWithoutTerms_agreementsInput>
+    create: XOR<UserModelCreateWithoutTerms_agreementsInput, UserModelUncheckedCreateWithoutTerms_agreementsInput>
+    where?: UserModelWhereInput
+  }
+
+  export type UserModelUpdateToOneWithWhereWithoutTerms_agreementsInput = {
+    where?: UserModelWhereInput
+    data: XOR<UserModelUpdateWithoutTerms_agreementsInput, UserModelUncheckedUpdateWithoutTerms_agreementsInput>
+  }
+
+  export type UserModelUpdateWithoutTerms_agreementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    client?: ClientModelUpdateOneWithoutBaseNestedInput
+    biz_user?: BIZUserModelUpdateOneWithoutBaseNestedInput
+  }
+
+  export type UserModelUncheckedUpdateWithoutTerms_agreementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    client?: ClientModelUncheckedUpdateOneWithoutBaseNestedInput
+    biz_user?: BIZUserModelUncheckedUpdateOneWithoutBaseNestedInput
+  }
+
   export type ClientModelCreateWithoutBaseInput = {
     birth?: Date | string | null
     gender?: GenderType | null
@@ -19189,6 +22356,34 @@ export namespace Prisma {
   export type BIZUserModelCreateOrConnectWithoutBaseInput = {
     where: BIZUserModelWhereUniqueInput
     create: XOR<BIZUserModelCreateWithoutBaseInput, BIZUserModelUncheckedCreateWithoutBaseInput>
+  }
+
+  export type TermsAgreementModelCreateWithoutUserInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    terms: TermsModelCreateNestedOneWithoutAgreementsInput
+  }
+
+  export type TermsAgreementModelUncheckedCreateWithoutUserInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    terms_id: string
+  }
+
+  export type TermsAgreementModelCreateOrConnectWithoutUserInput = {
+    where: TermsAgreementModelWhereUniqueInput
+    create: XOR<TermsAgreementModelCreateWithoutUserInput, TermsAgreementModelUncheckedCreateWithoutUserInput>
+  }
+
+  export type TermsAgreementModelCreateManyUserInputEnvelope = {
+    data: TermsAgreementModelCreateManyUserInput | TermsAgreementModelCreateManyUserInput[]
+    skipDuplicates?: boolean
   }
 
   export type ClientModelUpsertWithoutBaseInput = {
@@ -19261,6 +22456,22 @@ export namespace Prisma {
     biz_certification_images?: BIZCertificationImageModelUncheckedUpdateManyWithoutBiz_userNestedInput
   }
 
+  export type TermsAgreementModelUpsertWithWhereUniqueWithoutUserInput = {
+    where: TermsAgreementModelWhereUniqueInput
+    update: XOR<TermsAgreementModelUpdateWithoutUserInput, TermsAgreementModelUncheckedUpdateWithoutUserInput>
+    create: XOR<TermsAgreementModelCreateWithoutUserInput, TermsAgreementModelUncheckedCreateWithoutUserInput>
+  }
+
+  export type TermsAgreementModelUpdateWithWhereUniqueWithoutUserInput = {
+    where: TermsAgreementModelWhereUniqueInput
+    data: XOR<TermsAgreementModelUpdateWithoutUserInput, TermsAgreementModelUncheckedUpdateWithoutUserInput>
+  }
+
+  export type TermsAgreementModelUpdateManyWithWhereWithoutUserInput = {
+    where: TermsAgreementModelScalarWhereInput
+    data: XOR<TermsAgreementModelUpdateManyMutationInput, TermsAgreementModelUncheckedUpdateManyWithoutUserInput>
+  }
+
   export type UserModelCreateWithoutClientInput = {
     id: string
     created_at: Date | string
@@ -19270,6 +22481,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     biz_user?: BIZUserModelCreateNestedOneWithoutBaseInput
+    terms_agreements?: TermsAgreementModelCreateNestedManyWithoutUserInput
   }
 
   export type UserModelUncheckedCreateWithoutClientInput = {
@@ -19281,6 +22493,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     biz_user?: BIZUserModelUncheckedCreateNestedOneWithoutBaseInput
+    terms_agreements?: TermsAgreementModelUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserModelCreateOrConnectWithoutClientInput = {
@@ -19360,6 +22573,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     biz_user?: BIZUserModelUpdateOneWithoutBaseNestedInput
+    terms_agreements?: TermsAgreementModelUpdateManyWithoutUserNestedInput
   }
 
   export type UserModelUncheckedUpdateWithoutClientInput = {
@@ -19371,6 +22585,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     biz_user?: BIZUserModelUncheckedUpdateOneWithoutBaseNestedInput
+    terms_agreements?: TermsAgreementModelUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OauthAccountModelUpsertWithWhereUniqueWithoutClientInput = {
@@ -19423,6 +22638,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     client?: ClientModelCreateNestedOneWithoutBaseInput
+    terms_agreements?: TermsAgreementModelCreateNestedManyWithoutUserInput
   }
 
   export type UserModelUncheckedCreateWithoutBiz_userInput = {
@@ -19434,6 +22650,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     client?: ClientModelUncheckedCreateNestedOneWithoutBaseInput
+    terms_agreements?: TermsAgreementModelUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserModelCreateOrConnectWithoutBiz_userInput = {
@@ -19477,22 +22694,24 @@ export namespace Prisma {
   }
 
   export type HSProviderModelCreateWithoutBaseInput = {
-    biz_registration_number: string
     address_zone_code: string
     address_road: string
     address_detail?: string | null
     address_extra?: string | null
+    biz_phone: string
+    biz_registration_number: string
     biz_open_date: Date | string
     expertise_relation?: HSSubExpertiseRelationModelCreateNestedManyWithoutHs_providerInput
     portfolios?: HSPortfolioModelCreateNestedManyWithoutHs_providerInput
   }
 
   export type HSProviderModelUncheckedCreateWithoutBaseInput = {
-    biz_registration_number: string
     address_zone_code: string
     address_road: string
     address_detail?: string | null
     address_extra?: string | null
+    biz_phone: string
+    biz_registration_number: string
     biz_open_date: Date | string
     expertise_relation?: HSSubExpertiseRelationModelUncheckedCreateNestedManyWithoutHs_providerInput
     portfolios?: HSPortfolioModelUncheckedCreateNestedManyWithoutHs_providerInput
@@ -19605,6 +22824,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     client?: ClientModelUpdateOneWithoutBaseNestedInput
+    terms_agreements?: TermsAgreementModelUpdateManyWithoutUserNestedInput
   }
 
   export type UserModelUncheckedUpdateWithoutBiz_userInput = {
@@ -19616,6 +22836,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     client?: ClientModelUncheckedUpdateOneWithoutBaseNestedInput
+    terms_agreements?: TermsAgreementModelUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type REAgentModelUpsertWithoutBaseInput = {
@@ -19671,22 +22892,24 @@ export namespace Prisma {
   }
 
   export type HSProviderModelUpdateWithoutBaseInput = {
-    biz_registration_number?: StringFieldUpdateOperationsInput | string
     address_zone_code?: StringFieldUpdateOperationsInput | string
     address_road?: StringFieldUpdateOperationsInput | string
     address_detail?: NullableStringFieldUpdateOperationsInput | string | null
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
+    biz_phone?: StringFieldUpdateOperationsInput | string
+    biz_registration_number?: StringFieldUpdateOperationsInput | string
     biz_open_date?: DateTimeFieldUpdateOperationsInput | Date | string
     expertise_relation?: HSSubExpertiseRelationModelUpdateManyWithoutHs_providerNestedInput
     portfolios?: HSPortfolioModelUpdateManyWithoutHs_providerNestedInput
   }
 
   export type HSProviderModelUncheckedUpdateWithoutBaseInput = {
-    biz_registration_number?: StringFieldUpdateOperationsInput | string
     address_zone_code?: StringFieldUpdateOperationsInput | string
     address_road?: StringFieldUpdateOperationsInput | string
     address_detail?: NullableStringFieldUpdateOperationsInput | string | null
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
+    biz_phone?: StringFieldUpdateOperationsInput | string
+    biz_registration_number?: StringFieldUpdateOperationsInput | string
     biz_open_date?: DateTimeFieldUpdateOperationsInput | Date | string
     expertise_relation?: HSSubExpertiseRelationModelUncheckedUpdateManyWithoutHs_providerNestedInput
     portfolios?: HSPortfolioModelUncheckedUpdateManyWithoutHs_providerNestedInput
@@ -20086,11 +23309,19 @@ export namespace Prisma {
 
   export type HSSubExpertiseRelationModelCreateWithoutHs_providerInput = {
     id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
     sub_expertise: HSSubExpertiseModelCreateNestedOneWithoutRelationsInput
   }
 
   export type HSSubExpertiseRelationModelUncheckedCreateWithoutHs_providerInput = {
     id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
     sub_expertise_id: string
   }
 
@@ -20192,6 +23423,10 @@ export namespace Prisma {
     OR?: HSSubExpertiseRelationModelScalarWhereInput[]
     NOT?: HSSubExpertiseRelationModelScalarWhereInput | HSSubExpertiseRelationModelScalarWhereInput[]
     id?: StringFilter<"HSSubExpertiseRelationModel"> | string
+    created_at?: DateTimeFilter<"HSSubExpertiseRelationModel"> | Date | string
+    updated_at?: DateTimeFilter<"HSSubExpertiseRelationModel"> | Date | string
+    is_deleted?: BoolFilter<"HSSubExpertiseRelationModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"HSSubExpertiseRelationModel"> | Date | string | null
     hs_provider_id?: StringFilter<"HSSubExpertiseRelationModel"> | string
     sub_expertise_id?: StringFilter<"HSSubExpertiseRelationModel"> | string
   }
@@ -20229,11 +23464,19 @@ export namespace Prisma {
 
   export type HSSubExpertiseRelationModelCreateWithoutSub_expertiseInput = {
     id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
     hs_provider: HSProviderModelCreateNestedOneWithoutExpertise_relationInput
   }
 
   export type HSSubExpertiseRelationModelUncheckedCreateWithoutSub_expertiseInput = {
     id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
     hs_provider_id: string
   }
 
@@ -20375,11 +23618,12 @@ export namespace Prisma {
   }
 
   export type HSProviderModelCreateWithoutExpertise_relationInput = {
-    biz_registration_number: string
     address_zone_code: string
     address_road: string
     address_detail?: string | null
     address_extra?: string | null
+    biz_phone: string
+    biz_registration_number: string
     biz_open_date: Date | string
     base: BIZUserModelCreateNestedOneWithoutHs_providerInput
     portfolios?: HSPortfolioModelCreateNestedManyWithoutHs_providerInput
@@ -20387,11 +23631,12 @@ export namespace Prisma {
 
   export type HSProviderModelUncheckedCreateWithoutExpertise_relationInput = {
     id: string
-    biz_registration_number: string
     address_zone_code: string
     address_road: string
     address_detail?: string | null
     address_extra?: string | null
+    biz_phone: string
+    biz_registration_number: string
     biz_open_date: Date | string
     portfolios?: HSPortfolioModelUncheckedCreateNestedManyWithoutHs_providerInput
   }
@@ -20438,11 +23683,12 @@ export namespace Prisma {
   }
 
   export type HSProviderModelUpdateWithoutExpertise_relationInput = {
-    biz_registration_number?: StringFieldUpdateOperationsInput | string
     address_zone_code?: StringFieldUpdateOperationsInput | string
     address_road?: StringFieldUpdateOperationsInput | string
     address_detail?: NullableStringFieldUpdateOperationsInput | string | null
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
+    biz_phone?: StringFieldUpdateOperationsInput | string
+    biz_registration_number?: StringFieldUpdateOperationsInput | string
     biz_open_date?: DateTimeFieldUpdateOperationsInput | Date | string
     base?: BIZUserModelUpdateOneRequiredWithoutHs_providerNestedInput
     portfolios?: HSPortfolioModelUpdateManyWithoutHs_providerNestedInput
@@ -20450,11 +23696,12 @@ export namespace Prisma {
 
   export type HSProviderModelUncheckedUpdateWithoutExpertise_relationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    biz_registration_number?: StringFieldUpdateOperationsInput | string
     address_zone_code?: StringFieldUpdateOperationsInput | string
     address_road?: StringFieldUpdateOperationsInput | string
     address_detail?: NullableStringFieldUpdateOperationsInput | string | null
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
+    biz_phone?: StringFieldUpdateOperationsInput | string
+    biz_registration_number?: StringFieldUpdateOperationsInput | string
     biz_open_date?: DateTimeFieldUpdateOperationsInput | Date | string
     portfolios?: HSPortfolioModelUncheckedUpdateManyWithoutHs_providerNestedInput
   }
@@ -20567,11 +23814,12 @@ export namespace Prisma {
   }
 
   export type HSProviderModelCreateWithoutPortfoliosInput = {
-    biz_registration_number: string
     address_zone_code: string
     address_road: string
     address_detail?: string | null
     address_extra?: string | null
+    biz_phone: string
+    biz_registration_number: string
     biz_open_date: Date | string
     base: BIZUserModelCreateNestedOneWithoutHs_providerInput
     expertise_relation?: HSSubExpertiseRelationModelCreateNestedManyWithoutHs_providerInput
@@ -20579,11 +23827,12 @@ export namespace Prisma {
 
   export type HSProviderModelUncheckedCreateWithoutPortfoliosInput = {
     id: string
-    biz_registration_number: string
     address_zone_code: string
     address_road: string
     address_detail?: string | null
     address_extra?: string | null
+    biz_phone: string
+    biz_registration_number: string
     biz_open_date: Date | string
     expertise_relation?: HSSubExpertiseRelationModelUncheckedCreateNestedManyWithoutHs_providerInput
   }
@@ -20605,11 +23854,12 @@ export namespace Prisma {
   }
 
   export type HSProviderModelUpdateWithoutPortfoliosInput = {
-    biz_registration_number?: StringFieldUpdateOperationsInput | string
     address_zone_code?: StringFieldUpdateOperationsInput | string
     address_road?: StringFieldUpdateOperationsInput | string
     address_detail?: NullableStringFieldUpdateOperationsInput | string | null
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
+    biz_phone?: StringFieldUpdateOperationsInput | string
+    biz_registration_number?: StringFieldUpdateOperationsInput | string
     biz_open_date?: DateTimeFieldUpdateOperationsInput | Date | string
     base?: BIZUserModelUpdateOneRequiredWithoutHs_providerNestedInput
     expertise_relation?: HSSubExpertiseRelationModelUpdateManyWithoutHs_providerNestedInput
@@ -20617,11 +23867,12 @@ export namespace Prisma {
 
   export type HSProviderModelUncheckedUpdateWithoutPortfoliosInput = {
     id?: StringFieldUpdateOperationsInput | string
-    biz_registration_number?: StringFieldUpdateOperationsInput | string
     address_zone_code?: StringFieldUpdateOperationsInput | string
     address_road?: StringFieldUpdateOperationsInput | string
     address_detail?: NullableStringFieldUpdateOperationsInput | string | null
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
+    biz_phone?: StringFieldUpdateOperationsInput | string
+    biz_registration_number?: StringFieldUpdateOperationsInput | string
     biz_open_date?: DateTimeFieldUpdateOperationsInput | Date | string
     expertise_relation?: HSSubExpertiseRelationModelUncheckedUpdateManyWithoutHs_providerNestedInput
   }
@@ -20752,6 +24003,78 @@ export namespace Prisma {
     re_agent?: REAgentModelUncheckedUpdateOneWithoutBaseNestedInput
     hs_provider?: HSProviderModelUncheckedUpdateOneWithoutBaseNestedInput
     biz_certification_images?: BIZCertificationImageModelUncheckedUpdateManyWithoutBiz_userNestedInput
+  }
+
+  export type TermsAgreementModelCreateManyTermsInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    user_id: string
+  }
+
+  export type TermsAgreementModelUpdateWithoutTermsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserModelUpdateOneRequiredWithoutTerms_agreementsNestedInput
+  }
+
+  export type TermsAgreementModelUncheckedUpdateWithoutTermsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TermsAgreementModelUncheckedUpdateManyWithoutTermsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TermsAgreementModelCreateManyUserInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    terms_id: string
+  }
+
+  export type TermsAgreementModelUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    terms?: TermsModelUpdateOneRequiredWithoutAgreementsNestedInput
+  }
+
+  export type TermsAgreementModelUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    terms_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TermsAgreementModelUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    terms_id?: StringFieldUpdateOperationsInput | string
   }
 
   export type OauthAccountModelCreateManyClientInput = {
@@ -21066,6 +24389,10 @@ export namespace Prisma {
 
   export type HSSubExpertiseRelationModelCreateManyHs_providerInput = {
     id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
     sub_expertise_id: string
   }
 
@@ -21082,16 +24409,28 @@ export namespace Prisma {
 
   export type HSSubExpertiseRelationModelUpdateWithoutHs_providerInput = {
     id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sub_expertise?: HSSubExpertiseModelUpdateOneRequiredWithoutRelationsNestedInput
   }
 
   export type HSSubExpertiseRelationModelUncheckedUpdateWithoutHs_providerInput = {
     id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sub_expertise_id?: StringFieldUpdateOperationsInput | string
   }
 
   export type HSSubExpertiseRelationModelUncheckedUpdateManyWithoutHs_providerInput = {
     id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sub_expertise_id?: StringFieldUpdateOperationsInput | string
   }
 
@@ -21130,21 +24469,37 @@ export namespace Prisma {
 
   export type HSSubExpertiseRelationModelCreateManySub_expertiseInput = {
     id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
     hs_provider_id: string
   }
 
   export type HSSubExpertiseRelationModelUpdateWithoutSub_expertiseInput = {
     id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     hs_provider?: HSProviderModelUpdateOneRequiredWithoutExpertise_relationNestedInput
   }
 
   export type HSSubExpertiseRelationModelUncheckedUpdateWithoutSub_expertiseInput = {
     id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     hs_provider_id?: StringFieldUpdateOperationsInput | string
   }
 
   export type HSSubExpertiseRelationModelUncheckedUpdateManyWithoutSub_expertiseInput = {
     id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     hs_provider_id?: StringFieldUpdateOperationsInput | string
   }
 

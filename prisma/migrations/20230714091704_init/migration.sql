@@ -8,13 +8,42 @@ CREATE TYPE "OauthType" AS ENUM ('kakao', 'naver', 'apple');
 CREATE TYPE "ServiceType" AS ENUM ('HS', 'RE');
 
 -- CreateEnum
-CREATE TYPE "AgreementTargetType" AS ENUM ('all', 'CL', 'BIZ', 'HS', 'RE');
+CREATE TYPE "TermsType" AS ENUM ('all', 'CL', 'BIZ', 'HS', 'RE');
 
 -- CreateEnum
 CREATE TYPE "ZipzoongCareStatus" AS ENUM ('pending', 'caring', 'cared', 'cancelled');
 
 -- CreateEnum
 CREATE TYPE "ImageAccessType" AS ENUM ('public', 'zipzoong_s3');
+
+-- CreateTable
+CREATE TABLE "terms" (
+    "id" TEXT NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL,
+    "updated_at" TIMESTAMPTZ NOT NULL,
+    "is_deleted" BOOLEAN NOT NULL,
+    "deleted_at" TIMESTAMPTZ,
+    "title" TEXT NOT NULL,
+    "version" TEXT NOT NULL,
+    "url" TEXT NOT NULL,
+    "is_required" BOOLEAN NOT NULL,
+    "type" "TermsType" NOT NULL,
+
+    CONSTRAINT "terms_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "terms_agreements" (
+    "id" TEXT NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL,
+    "updated_at" TIMESTAMPTZ NOT NULL,
+    "is_deleted" BOOLEAN NOT NULL,
+    "deleted_at" TIMESTAMPTZ,
+    "terms_id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
+
+    CONSTRAINT "terms_agreements_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -103,11 +132,12 @@ CREATE TABLE "re_expertises" (
 -- CreateTable
 CREATE TABLE "hs_providers" (
     "id" TEXT NOT NULL,
-    "biz_registration_number" TEXT NOT NULL,
     "address_zone_code" TEXT NOT NULL,
     "address_road" TEXT NOT NULL,
     "address_detail" TEXT,
     "address_extra" TEXT,
+    "biz_phone" TEXT NOT NULL,
+    "biz_registration_number" TEXT NOT NULL,
     "biz_open_date" DATE NOT NULL,
 
     CONSTRAINT "hs_providers_pkey" PRIMARY KEY ("id")
@@ -141,6 +171,10 @@ CREATE TABLE "hs_super_expertises" (
 -- CreateTable
 CREATE TABLE "hs_sub_expertise_relations" (
     "id" TEXT NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL,
+    "updated_at" TIMESTAMPTZ NOT NULL,
+    "is_deleted" BOOLEAN NOT NULL,
+    "deleted_at" TIMESTAMPTZ,
     "hs_provider_id" TEXT NOT NULL,
     "sub_expertise_id" TEXT NOT NULL,
 
@@ -203,6 +237,9 @@ CREATE TABLE "oauth_accounts" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "terms_agreements_user_id_terms_id_key" ON "terms_agreements"("user_id", "terms_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "re_expertises_name_key" ON "re_expertises"("name");
 
 -- CreateIndex
@@ -210,6 +247,12 @@ CREATE UNIQUE INDEX "hs_super_expertises_name_key" ON "hs_super_expertises"("nam
 
 -- CreateIndex
 CREATE UNIQUE INDEX "hs_sub_expertise_relations_hs_provider_id_sub_expertise_id_key" ON "hs_sub_expertise_relations"("hs_provider_id", "sub_expertise_id");
+
+-- AddForeignKey
+ALTER TABLE "terms_agreements" ADD CONSTRAINT "terms_agreements_terms_id_fkey" FOREIGN KEY ("terms_id") REFERENCES "terms"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "terms_agreements" ADD CONSTRAINT "terms_agreements_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "clients" ADD CONSTRAINT "clients_id_fkey" FOREIGN KEY ("id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

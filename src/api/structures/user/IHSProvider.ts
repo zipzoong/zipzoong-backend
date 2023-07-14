@@ -102,7 +102,7 @@ export namespace IHSProvider {
         /**
          * 동의 약관 id 목록
          */
-        acceptant_agreement_ids: string[];
+        agreed_terms_ids: string[];
         /**
          * 대표자 전화번호 인증 정보 id
          * - 전화번호 인증을 통해 얻은 id를 입력한다.

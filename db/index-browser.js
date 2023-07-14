@@ -105,6 +105,29 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.TermsModelScalarFieldEnum = {
+  id: 'id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  is_deleted: 'is_deleted',
+  deleted_at: 'deleted_at',
+  title: 'title',
+  version: 'version',
+  url: 'url',
+  is_required: 'is_required',
+  type: 'type'
+};
+
+exports.Prisma.TermsAgreementModelScalarFieldEnum = {
+  id: 'id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  is_deleted: 'is_deleted',
+  deleted_at: 'deleted_at',
+  terms_id: 'terms_id',
+  user_id: 'user_id'
+};
+
 exports.Prisma.UserModelScalarFieldEnum = {
   id: 'id',
   created_at: 'created_at',
@@ -173,11 +196,12 @@ exports.Prisma.REExpertiseModelScalarFieldEnum = {
 
 exports.Prisma.HSProviderModelScalarFieldEnum = {
   id: 'id',
-  biz_registration_number: 'biz_registration_number',
   address_zone_code: 'address_zone_code',
   address_road: 'address_road',
   address_detail: 'address_detail',
   address_extra: 'address_extra',
+  biz_phone: 'biz_phone',
+  biz_registration_number: 'biz_registration_number',
   biz_open_date: 'biz_open_date'
 };
 
@@ -202,6 +226,10 @@ exports.Prisma.HSSuperExpertiseModelScalarFieldEnum = {
 
 exports.Prisma.HSSubExpertiseRelationModelScalarFieldEnum = {
   id: 'id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  is_deleted: 'is_deleted',
+  deleted_at: 'deleted_at',
   hs_provider_id: 'hs_provider_id',
   sub_expertise_id: 'sub_expertise_id'
 };
@@ -266,6 +294,14 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.TermsType = {
+  all: 'all',
+  CL: 'CL',
+  BIZ: 'BIZ',
+  HS: 'HS',
+  RE: 'RE'
+};
+
 exports.GenderType = {
   female: 'female',
   male: 'male'
@@ -283,6 +319,8 @@ exports.OauthType = {
 };
 
 exports.Prisma.ModelName = {
+  TermsModel: 'TermsModel',
+  TermsAgreementModel: 'TermsAgreementModel',
   UserModel: 'UserModel',
   ClientModel: 'ClientModel',
   BIZUserModel: 'BIZUserModel',

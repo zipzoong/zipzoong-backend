@@ -24,7 +24,7 @@ enum ServiceType {
   RE
 }
 
-enum AgreementTargetType {
+enum TermsType {
   all
   CL
   BIZ
@@ -44,16 +44,48 @@ enum ImageAccessType {
   zipzoong_s3
 }
 
-model UserModel {
-  id         String        @id
-  created_at DateTime      @database.Timestamptz
-  updated_at DateTime      @database.Timestamptz
+model TermsModel {
+  id          String                @id
+  created_at  DateTime              @database.Timestamptz
+  updated_at  DateTime              @database.Timestamptz
+  is_deleted  Boolean
+  deleted_at  DateTime?             @database.Timestamptz
+  title       String
+  version     String
+  url         String
+  is_required Boolean
+  type        TermsType
+  agreements  TermsAgreementModel[]
+
+  @@map("terms")
+}
+
+model TermsAgreementModel {
+  id         String     @id
+  created_at DateTime   @database.Timestamptz
+  updated_at DateTime   @database.Timestamptz
   is_deleted Boolean
-  deleted_at DateTime?     @database.Timestamptz
-  name       String
-  email      String?
-  client     ClientModel?
-  biz_user   BIZUserModel?
+  deleted_at DateTime?  @database.Timestamptz
+  terms_id   String
+  user_id    String
+  terms      TermsModel @relation(fields: [terms_id], references: [id])
+  user       UserModel  @relation(fields: [user_id], references: [id])
+
+  @@unique([user_id, terms_id])
+  @@map("terms_agreements")
+}
+
+model UserModel {
+  id               String                @id
+  created_at       DateTime              @database.Timestamptz
+  updated_at       DateTime              @database.Timestamptz
+  is_deleted       Boolean
+  deleted_at       DateTime?             @database.Timestamptz
+  name             String
+  email            String?
+  client           ClientModel?
+  biz_user         BIZUserModel?
+  terms_agreements TermsAgreementModel[]
 
   @@map("users")
 }
@@ -138,11 +170,12 @@ model REExpertiseModel {
 
 model HSProviderModel {
   id                      String                        @id
-  biz_registration_number String
   address_zone_code       String
   address_road            String
   address_detail          String?
   address_extra           String?
+  biz_phone               String
+  biz_registration_number String
   biz_open_date           DateTime                      @database.Date
   base                    BIZUserModel                  @relation(fields: [id], references: [id])
   expertise_relation      HSSubExpertiseRelationModel[]
@@ -179,6 +212,10 @@ model HSSuperExpertiseModel {
 
 model HSSubExpertiseRelationModel {
   id               String              @id
+  created_at       DateTime            @database.Timestamptz
+  updated_at       DateTime            @database.Timestamptz
+  is_deleted       Boolean
+  deleted_at       DateTime?           @database.Timestamptz
   hs_provider_id   String
   sub_expertise_id String
   hs_provider      HSProviderModel     @relation(fields: [hs_provider_id], references: [id])

@@ -3,6 +3,7 @@ import { Entity } from "../mixins";
 import { RelationalFieldOptions } from "schemix/dist/typings/prisma-type-options";
 import { GenderType, ImageAccessType } from "../enums";
 import { OauthAccount } from "./account";
+import { TermsAgreement } from "./terms";
 
 const one_to_one: RelationalFieldOptions = {
     fields: ["id"],
@@ -19,6 +20,7 @@ export const User = createModel("UserModel", (model) => {
         .string("email", { optional: true })
         .relation("client", Client, { optional: true })
         .relation("biz_user", BIZUser, { optional: true })
+        .relation("terms_agreements", TermsAgreement, { list: true })
         .map("users");
 });
 
@@ -109,11 +111,12 @@ export const REExpertise = createModel("REExpertiseModel", (model) => {
 export const HSProvider = createModel("HSProviderModel", (model) => {
     model
         .string("id", { id: true })
-        .string("biz_registration_number")
         .string("address_zone_code")
         .string("address_road")
         .string("address_detail", { optional: true })
         .string("address_extra", { optional: true })
+        .string("biz_phone")
+        .string("biz_registration_number")
         .dateTime("biz_open_date", { raw: "@database.Date" }) // 사업장 개업일
         .relation("base", BIZUser, one_to_one)
         .relation("expertise_relation", HSSubExpertiseRelation, {
@@ -153,7 +156,7 @@ export const HSSubExpertiseRelation = createModel(
     "HSSubExpertiseRelationModel",
     (model) => {
         model
-            .string("id", { id: true })
+            .mixin(Entity)
             .string("hs_provider_id")
             .string("sub_expertise_id")
             .unique({ fields: ["hs_provider_id", "sub_expertise_id"] })
