@@ -5,8 +5,8 @@ import {
     DateMapper,
     Failure,
     Result,
-    isActive,
-    isInActive,
+    isDeleted,
+    isUnDeleted,
     pick,
     skip,
     throwError,
@@ -84,7 +84,7 @@ export namespace Service {
                     ),
                 ),
 
-                skip(isActive, () =>
+                skip(isUnDeleted, () =>
                     Failure.throwFailure<IAuthentication.FailureCode.AccountVerify>(
                         {
                             cause: "ACCOUNT_INACTIVE",
@@ -154,7 +154,7 @@ export namespace Service {
                 }),
             ),
 
-            skip(isActive, () =>
+            skip(isUnDeleted, () =>
                 Failure.throwFailure<IAuthentication.FailureCode.SignIn>({
                     cause: "ACCOUNT_INACTIVE",
                     message: "비활성화된 계정입니다.",
@@ -226,7 +226,7 @@ export namespace Service {
                     },
                 }),
 
-            skip(isActive, () =>
+            skip(isUnDeleted, () =>
                 Failure.throwFailure<IAuthentication.FailureCode.SignUp>({
                     cause: "ACCOUNT_INACTIVE",
                     message: "비활성화된 계정입니다.",
@@ -339,7 +339,7 @@ export namespace Service {
                 where: { id: createInput.expertise_id },
             });
 
-            if (isNull(re_expertise) || isInActive(re_expertise))
+            if (isNull(re_expertise) || isDeleted(re_expertise))
                 throw Failure.create<IAuthentication.FailureCode.CreateUser>({
                     cause: "EXPERTISE_INVALID",
                     message: "유효하지 않은 전문분야입니다.",
@@ -386,7 +386,7 @@ export namespace Service {
                 await tx.hSSubExpertiseModel.findMany({
                     where: { id: { in: createInput.sub_expertise_ids } },
                 })
-            ).filter(isActive);
+            ).filter(isUnDeleted);
 
             if (hs_expertises.length === 0)
                 throw Failure.create<IAuthentication.FailureCode.CreateUser>({

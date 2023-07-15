@@ -1,7 +1,7 @@
 import { IUser } from "@APP/api/structures/user/IUser";
 import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
-import { DateMapper, Result, isActive, pick, skip } from "@APP/utils";
+import { DateMapper, Result, isUnDeleted, pick, skip } from "@APP/utils";
 import { Prisma, TermsType } from "@PRISMA";
 import { filter, isUndefined, pipe, toArray } from "@fxts/core";
 import { randomUUID } from "crypto";
@@ -37,7 +37,7 @@ export namespace Service {
                 async (terms) =>
                     tx.termsModel.findMany({ where: { type: { in: terms } } }),
 
-                filter(isActive),
+                filter(isUnDeleted),
 
                 toArray,
 
