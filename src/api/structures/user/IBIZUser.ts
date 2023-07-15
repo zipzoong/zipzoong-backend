@@ -1,3 +1,5 @@
+import { IUpload } from "../IUpload";
+
 export namespace IBIZUser {
     export interface IIntroduction {
         /**
@@ -18,7 +20,7 @@ export namespace IBIZUser {
          * - public: 외부 리소스 혹은 public 리소스
          * - zipzoong_s3: zipzoong_s3 private 리소스
          */
-        access_type: "public" | "zipzoong_s3";
+        access_type: IUpload.AccessType;
         /**
          * url 주소
          * @format url

@@ -569,6 +569,88 @@
         ]
       }
     },
+    "/upload": {
+      "post": {
+        "tags": [
+          "resources"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "리소스 유형 정보를 입력한다.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IUpload.IBody"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "리소스 업로드 정보",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IUpload"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "리소스 업로드용 presigned url 요청",
+        "description": "리소를 업로드하기 위한 presigned url과 접근에 필요한 정보를 얻을 수 있다.\n\npresigned url의 사용법은 aws s3 presigned url을 확인할 것\n\n@summary 리소스 업로드용 presigned url 요청\n\n@tag resources\n\n@param body 리소스 유형 정보를 입력한다.\n\n@return 리소스 업로드 정보",
+        "x-nestia-namespace": "upload.getUrl",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "리소스 업로드용 presigned url 요청",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "resources",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "리소스 유형 정보를 입력한다.",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "return",
+            "text": [
+              {
+                "text": "리소스 업로드 정보",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
     "/biz-users/certifications": {
       "get": {
         "tags": [
@@ -2547,14 +2629,7 @@
         "type": "object",
         "properties": {
           "access_type": {
-            "description": "url 리소스의 접근 형식이다.\n- public: 외부 리소스 혹은 public 리소스\n- zipzoong_s3: zipzoong_s3 private 리소스",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string",
-            "enum": [
-              "public",
-              "zipzoong_s3"
-            ]
+            "$ref": "#/components/schemas/IUpload.AccessType"
           },
           "url": {
             "description": "url 주소\n@format url",
@@ -2588,6 +2663,13 @@
         ],
         "description": "url 주소\n@format url",
         "x-typia-jsDocTags": []
+      },
+      "IUpload.AccessType": {
+        "type": "string",
+        "enum": [
+          "public",
+          "zipzoong_s3"
+        ]
       },
       "IBIZUser.IIntroduction": {
         "type": "object",
@@ -3112,6 +3194,56 @@
           "type"
         ],
         "description": "약관 대상 유형",
+        "x-typia-jsDocTags": []
+      },
+      "IUpload.IBody": {
+        "type": "object",
+        "properties": {
+          "resource_type": {
+            "$ref": "#/components/schemas/IUpload.ResourceType"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "resource_type"
+        ],
+        "description": "등록하고자 하는 리소스의 유형을 입력한다.\n\n잘못된 리소스 타입을 입력할 경우 저장소 정책에 따라 잘못 변환되거나 삭제될 수 있다.",
+        "x-typia-jsDocTags": []
+      },
+      "IUpload.ResourceType": {
+        "type": "string",
+        "enum": [
+          "profile",
+          "portfolio",
+          "biz_certification"
+        ]
+      },
+      "IUpload": {
+        "type": "object",
+        "properties": {
+          "access_type": {
+            "$ref": "#/components/schemas/IUpload.AccessType"
+          },
+          "url": {
+            "description": "리소스 url\n\n해당 리소스를 저장하기 위해 url을 입력해야 한다면 presigned url이 아니라 url을 사용해야 한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "presigned_url": {
+            "description": "미리 서명된 url이란 실제 이미지나 영상 등의 리소스를 저장소에 업로드하기 위한 서명까지 받은 형태의 url로서 리소스를 업로드할 때 사용한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "access_type",
+          "url",
+          "presigned_url"
+        ],
+        "description": "미리 서명된 url이란 실제 이미지나 영상 등의 리소스를 저장소에 업로드하기 위한 서명까지 받은 형태의 url로서 리소스를 업로드할 때 사용한다.",
         "x-typia-jsDocTags": []
       },
       "IHSProvider.ISearch": {
