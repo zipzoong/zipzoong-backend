@@ -3,7 +3,9 @@ import { TypedParam, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
 import { Authorization } from "../decorators/authorization";
 
-@Controller("users/re-agents")
+const route = "users/re-agents";
+
+@Controller(route)
 export class UsersREAgentsController {
     /**
      * 검색기준에 맞는 인증된 공인중개사 간단 정보 목록을 확안할 수 있다.
@@ -60,7 +62,10 @@ export class UsersREAgentsController {
     ): Promise<IREAgent.IPublic> {
         throw Error();
     }
+}
 
+@Controller(route + "/:agent_id/contact")
+export class UsersREAgentsContactController {
     /**
      * 공인중개사 연락처 정보를 요청한다.
      *
@@ -72,10 +77,8 @@ export class UsersREAgentsController {
      *
      * @return 공인중개사 연락처 정보
      */
-    @TypedRoute.Get(":agent_id/contact")
-    getContact(
-        @TypedParam("agent_id") agent_id: string,
-    ): Promise<IREAgent.IContact> {
+    @TypedRoute.Get()
+    get(@TypedParam("agent_id") agent_id: string): Promise<IREAgent.IContact> {
         throw Error();
     }
 }

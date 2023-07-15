@@ -2,6 +2,7 @@ import { Mutable } from "@APP/api/types";
 import { IAddress, IPage, IPaginatedResponse } from "../common";
 import { IBIZUser } from "./IBIZUser";
 import { IUser } from "./IUser";
+import { IExpertise } from "../IExpertise";
 
 export interface IREAgent extends IUser.IBase<"real estate agent"> {
     /** 사업자 승인 여부 */
@@ -39,7 +40,7 @@ export interface IREAgent extends IUser.IBase<"real estate agent"> {
      * 전문분야
      * - 공인중개사는 하나의 전문 분야만 등록 가능하다.
      */
-    readonly expertise: IREAgent.IExpertise;
+    readonly expertise: IExpertise;
 }
 
 export namespace IREAgent {
@@ -64,13 +65,6 @@ export namespace IREAgent {
          * @format date
          */
         readonly open_date: string;
-    }
-
-    export interface IExpertise {
-        /** 전문분야 카테고리 id */
-        readonly id: string;
-        /** 전문 분야 카테고리명 */
-        readonly name: string;
     }
 
     export interface ICreate

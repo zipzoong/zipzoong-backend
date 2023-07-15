@@ -5,4 +5,7 @@
  */
 //================================================================
 export * as auth from "./auth";
+export * as hs_expertises from "./hs_expertises";
+export * as re_expertises from "./re_expertises";
+export * as terms from "./terms";
 export * as users from "./users";

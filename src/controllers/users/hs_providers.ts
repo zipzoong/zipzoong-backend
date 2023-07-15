@@ -1,10 +1,11 @@
-import { IREAgent } from "@APP/api/structures/user/IREAgent";
 import { TypedParam, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
 import { Authorization } from "../decorators/authorization";
 import { IHSProvider } from "@APP/api/structures/user/IHSProvider";
 
-@Controller("users/hs-providers")
+const route = "users/hs-providers";
+
+@Controller(route)
 export class UsersHSProvidersController {
     /**
      * 검색기준에 맞는 인증된 생활서비스 전문가 간단 정보 목록을 확안할 수 있다.
@@ -61,7 +62,10 @@ export class UsersHSProvidersController {
     ): Promise<IHSProvider.IPublic> {
         throw Error();
     }
+}
 
+@Controller(route + "/:provider_id/contact")
+export class UsersHSProvidersContactController {
     /**
      * 생활서비스 전문가 연락처 정보를 요청한다.
      *
@@ -73,8 +77,8 @@ export class UsersHSProvidersController {
      *
      * @return 생활서비스 전문가 연락처 정보
      */
-    @TypedRoute.Get(":provider_id/contact")
-    getContact(
+    @TypedRoute.Get()
+    get(
         @TypedParam("provider_id") provider_id: string,
     ): Promise<IHSProvider.IContact> {
         throw Error();

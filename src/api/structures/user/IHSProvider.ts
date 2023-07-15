@@ -2,6 +2,7 @@ import { Mutable } from "@APP/api/types";
 import { IAddress, IPage, IPaginatedResponse } from "../common";
 import { IBIZUser } from "./IBIZUser";
 import { IUser } from "./IUser";
+import { IExpertise } from "../IExpertise";
 
 export interface IHSProvider extends IUser.IBase<"home service provider"> {
     /** 업체 승인 여부 */
@@ -44,7 +45,7 @@ export interface IHSProvider extends IUser.IBase<"home service provider"> {
      * - 자신이 속한 상위 전문 분야와 하위 전문 분야 정보
      * - 하위 전문 분야는 복수 정보다.
      */
-    readonly expertise: IHSProvider.ISuperExpertise[];
+    readonly expertise: IExpertise.ISuper;
 }
 
 export namespace IHSProvider {
@@ -53,15 +54,6 @@ export namespace IHSProvider {
         readonly id: string;
         /** 하위 전문 분야 이름 */
         readonly name: string;
-    }
-
-    export interface ISuperExpertise {
-        /** 상위 전문 분야 고유 id */
-        readonly id: string;
-        /** 상위 전문 분야 이름 */
-        readonly name: string;
-        /** 하위 전문 분야 목록 */
-        readonly sub_expertises: ISubExpertise[];
     }
 
     export interface ICreate
