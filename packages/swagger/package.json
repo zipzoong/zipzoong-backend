@@ -1,6 +1,6 @@
 {
   "name": "@zipzoong/swagger",
-  "version": "0.0.1",
+  "version": "0.1.16",
   "description": "Swagger UI for Zipzoong RESTAPI",
   "main": "./index.mjs",
   "bin": { 
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/zipzoong/zipzoong-backend"
+    "url": "https://github.com/zipzoong/zipzoong-backend/packages/swagger"
   },
   "author": "industriously",
   "license": "MIT",

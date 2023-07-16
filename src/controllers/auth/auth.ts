@@ -71,6 +71,8 @@ export class AuthController {
      *
      * @tag authentication
      *
+     * @param account_token 계정 토큰
+     *
      * @return 계정 프로필 정보
      */
     @TypedRoute.Get("profile")
@@ -78,6 +80,27 @@ export class AuthController {
         @Authorization("account") account_token: string,
     ): Promise<IAuthentication.IAccountProfile> {
         return Authentication.Service.getProfile(account_token);
+    }
+}
+
+@Controller("auth/token/access")
+export class AuthAccessTokenController {
+    /**
+     * 액세스 토큰 재발급 요청
+     *
+     * @summary 액세스 토큰 재발급
+     *
+     * @tag authentication
+     *
+     * @param refresh_token 액세스 토큰 재발급 토큰
+     *
+     * @return 액세스 토큰
+     */
+    @TypedRoute.Post()
+    create(
+        @Authorization("refresh") refresh_token: string,
+    ): Promise<IAuthentication.IResponse.IRefresh> {
+        throw Error();
     }
 }
 
@@ -103,7 +126,11 @@ export class AUthUserController {
      *
      * @summary 사용자 정보 생성
      *
-     * @tag users
+     * @tag authentication
+     *
+     * @param account_token 계정 토큰
+     *
+     * @param body 사용자 정보
      *
      * @return 사용자 토큰(access token)
      */

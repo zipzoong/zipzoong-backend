@@ -16,15 +16,17 @@ export interface IREAgent extends IUser.IBase<"real estate agent"> {
      *
      * - `+`로 시작하고 `공백`으로 국가코드를 구분한다.
      * - 전화번호는 `숫자`와 `-`로만 이루어진다.
-     * - 조회시 `마킹`된 형태로 표기된다.
      *
-     * e.g) +82 10-1234-5678, +82 10-1***-5***
+     * e.g) +82 10-1234-5678
+     *
      * @pattern ^\+\d+\s\d+(?:-\d+)*$
      */
     readonly phone: string;
     /**
      * 프로필 이미지
+     *
      * - 사업자는 반드시 본인 인물 사진을 프로필 이미지로 등록해야 한다.
+     *
      * @format url
      */
     readonly profile_image_url: string;
@@ -38,6 +40,7 @@ export interface IREAgent extends IUser.IBase<"real estate agent"> {
     readonly real_estate: IREAgent.IRealEstate;
     /**
      * 전문분야
+     *
      * - 공인중개사는 하나의 전문 분야만 등록 가능하다.
      */
     readonly expertise: IExpertise;
@@ -51,6 +54,7 @@ export namespace IREAgent {
         readonly name: string;
         /**
          * 부동산 전화번호
+         *
          * - 없을 경우, 대표자 연락처
          */
         readonly phone: string;
@@ -62,6 +66,7 @@ export namespace IREAgent {
          * 부동산 등록일자
          *
          * YYYY-MM-DD
+         *
          * @format date
          */
         readonly open_date: string;
@@ -101,6 +106,7 @@ export namespace IREAgent {
         agreed_terms_ids: string[];
         /**
          * 전화번호 인증 정보 id
+         *
          * - 전화번호 인증을 통해 얻은 id를 입력한다.
          * - null 입력시 소셜 계정에 저장된 전화번호를 자동 저장한다.
          * - 소셜 계정에 전화번호 정보가 없으면 null이 저장된다.
@@ -109,6 +115,7 @@ export namespace IREAgent {
         phone_verification_id: null | string;
         /**
          * 이메일 인증 정보 id
+         *
          * - 아직 미구현, null 입력할 것
          */
         email_verification_id: null | string;
@@ -148,30 +155,7 @@ export namespace IREAgent {
         | "updated_at"
     >;
 
-    export interface IPrivate extends IREAgent {
-        /**
-         * 사업자 전화번호
-         *
-         * - `+`로 시작하고 `공백`으로 국가코드를 구분한다.
-         * - 전화번호는 `숫자`와 `-`로만 이루어진다.
-         * - 조회시 `마킹`된 형태로 표기된다.
-         *
-         * e.g) +82 10-1***-5***
-         *
-         * @pattern ^\+\d+\s\d+(?:-\d\**)*$
-         */
-        readonly phone: string;
-        /**
-         * 사용자 이메일
-         *
-         * 조회시 마킹된 형태로 표기됩니다.
-         *
-         * e.g) b****@n****.com
-         *
-         * @pattern ^\w\w\*+@\w\*+(.\w+)+$
-         */
-        readonly email: null | string;
-    }
+    export interface IPrivate extends IREAgent {}
 
     export interface IContact extends Pick<IREAgent, "phone" | "email"> {
         /**

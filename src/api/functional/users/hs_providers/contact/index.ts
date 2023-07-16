@@ -18,6 +18,8 @@ import type { IHSProvider } from "./../../../../structures/user/IHSProvider";
  * 
  * @tag hs-providers
  * 
+ * @param access_token 아무 사용자 권한을 갖는 액세스 토큰
+ * 
  * @param provider_id 생활서비스 전문가 id
  * 
  * @return 생활서비스 전문가 연락처 정보

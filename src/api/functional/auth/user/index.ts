@@ -32,7 +32,11 @@ import type { IAuthentication } from "./../../../structures/IAuthentication";
  * 
  * @summary 사용자 정보 생성
  * 
- * @tag users
+ * @tag authentication
+ * 
+ * @param account_token 계정 토큰
+ * 
+ * @param body 사용자 정보
  * 
  * @return 사용자 토큰(access token)
  * 

@@ -56,10 +56,15 @@ export class UsersREAgentsMeController {
      *
      * @tag re-agents
      *
+     * @param access_token 공인중개사 권한을 갖는 액세스 토큰
+     *
      * @param body 포트폴리오 정보
      */
     @TypedRoute.Post("portfolios")
-    create(@TypedBody() body: IREPortfolio.ICreateRequest): Promise<void> {
+    create(
+        @Authorization("access") access_token: string,
+        @TypedBody() body: IREPortfolio.ICreateRequest,
+    ): Promise<void> {
         throw Error();
     }
 
@@ -70,12 +75,15 @@ export class UsersREAgentsMeController {
      *
      * @tag re-agents
      *
+     * @param access_token 공인중개사 권한을 갖는 액세스 토큰
+     *
      * @param query 페이지 정보
      *
      * @return 포트폴리오 상세 정보 목록
      */
     @TypedRoute.Get("portfolios")
     getList(
+        @Authorization("access") access_token: string,
         @TypedQuery() query: IREPortfolio.ISearch,
     ): Promise<IREPortfolio.IPaginatedPrivate> {
         throw Error();
@@ -105,16 +113,23 @@ export class UsersREAgentsSomeoneController {
     /**
      * 공인 중개사 연락처 정보를 요청한다.
      *
+     * 로그인 후 이용가능하다.
+     *
      * @summary 공인 중개사 연락처 정보 조회
      *
      * @tag re-agents
+     *
+     * @param access_token 아무 사용자 권한을 갖는 액세스 토큰
      *
      * @param agent_id 공인 중개사 id
      *
      * @return 공인 중개사 연락처 정보
      */
     @TypedRoute.Get("contact")
-    get(@TypedParam("agent_id") agent_id: string): Promise<IREAgent.IContact> {
+    get(
+        @Authorization("access") access_token: string,
+        @TypedParam("agent_id") agent_id: string,
+    ): Promise<IREAgent.IContact> {
         throw Error();
     }
 

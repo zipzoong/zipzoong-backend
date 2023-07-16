@@ -18,6 +18,8 @@ import type { IHSPortfolio } from "./../../../../../structures/IHSPortfolio";
  * 
  * @tag hs-providers
  * 
+ * @param access_token 생활서비스 전문가 권한을 갖는 액세스 토큰
+ * 
  * @param body 포트폴리오 정보
  * 
  * @controller UsersHSProvidersMeController.create()
@@ -75,6 +77,8 @@ export namespace create {
  * @summary 내 포트폴리오 목록 조회
  * 
  * @tag hs-providers
+ * 
+ * @param access_token 생활서비스 전문가 권한을 갖는 액세스 토큰
  * 
  * @param query 페이지 정보
  * 

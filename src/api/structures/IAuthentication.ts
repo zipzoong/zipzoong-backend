@@ -16,16 +16,17 @@ export namespace IAuthentication {
          *
          * - `+`로 시작하고 `공백`으로 국가코드를 구분한다.
          * - 전화번호는 `숫자`와 `-`로만 이루어진다.
-         * - 조회시 `마킹`된 형태로 표기된다.
          *
-         * e.g) +82 10-1234-5678, +82 10-1***-5***
+         * e.g) +82 10-1234-5678
          * @pattern ^\+\d+\s\d+(?:-\d+)*$
          */
         readonly phone: null | string;
         readonly profile_image_url: null | string;
         /**
          * 생일(양력)
+         *
          * YYYY-MM-DD
+         *
          * @format date
          */
         readonly birth: null | string;
@@ -66,6 +67,7 @@ export namespace IAuthentication {
         readonly token: string;
         /**
          * 토큰 만료일자
+         *
          * @format date-time
          */
         readonly expired_at: string;

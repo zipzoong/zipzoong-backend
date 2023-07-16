@@ -56,10 +56,15 @@ export class UsersHSProvidersMeController {
      *
      * @tag hs-providers
      *
+     * @param access_token 생활서비스 전문가 권한을 갖는 액세스 토큰
+     *
      * @param body 포트폴리오 정보
      */
     @TypedRoute.Post("portfolios")
-    create(@TypedBody() body: IHSPortfolio.ICreateRequest): Promise<void> {
+    create(
+        @Authorization("access") access_token: string,
+        @TypedBody() body: IHSPortfolio.ICreateRequest,
+    ): Promise<void> {
         throw Error();
     }
 
@@ -70,12 +75,15 @@ export class UsersHSProvidersMeController {
      *
      * @tag hs-providers
      *
+     * @param access_token 생활서비스 전문가 권한을 갖는 액세스 토큰
+     *
      * @param query 페이지 정보
      *
      * @return 포트폴리오 상세 정보 목록
      */
     @TypedRoute.Get("portfolios")
     getList(
+        @Authorization("access") access_token: string,
         @TypedQuery() query: IHSPortfolio.ISearch,
     ): Promise<IHSPortfolio.IPaginatedPrivate> {
         throw Error();
@@ -108,6 +116,8 @@ export class UsersHSProvidersSomeoneController {
      * @summary 생활서비스 전문가 연락처 정보 조회
      *
      * @tag hs-providers
+     *
+     * @param access_token 아무 사용자 권한을 갖는 액세스 토큰
      *
      * @param provider_id 생활서비스 전문가 id
      *

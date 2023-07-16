@@ -2,6 +2,7 @@ export interface IPaginatedResponse<T> {
     data: T[];
     /**
      * @type uint
+     *
      * @minimum 1
      */
     page: number;
@@ -10,7 +11,9 @@ export interface IPaginatedResponse<T> {
 export interface IPage {
     /**
      * @type uint
+     *
      * @minimum 1
+     *
      * @default 1
      */
     page?: number;

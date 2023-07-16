@@ -14,9 +14,13 @@ import type { IREAgent } from "./../../../../structures/user/IREAgent";
 /**
  * 공인 중개사 연락처 정보를 요청한다.
  * 
+ * 로그인 후 이용가능하다.
+ * 
  * @summary 공인 중개사 연락처 정보 조회
  * 
  * @tag re-agents
+ * 
+ * @param access_token 아무 사용자 권한을 갖는 액세스 토큰
  * 
  * @param agent_id 공인 중개사 id
  * 

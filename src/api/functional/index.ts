@@ -9,6 +9,5 @@ export * as hs_expertises from "./hs_expertises";
 export * as re_expertises from "./re_expertises";
 export * as terms from "./terms";
 export * as upload from "./upload";
-export * as biz_users from "./biz_users";
 export * as users from "./users";
 export * as verification from "./verification";
