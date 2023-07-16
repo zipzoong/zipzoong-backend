@@ -1,9 +1,9 @@
 import { IResult } from "@APP/api/types";
 import { IToken } from "./interface";
-import { Crypto, DateMapper, Result, skip } from "@APP/utils";
+import { Crypto, DateMapper, Result } from "@APP/utils";
 import { Configuration } from "@APP/infrastructure/config";
 import typia from "typia";
-import { pipe } from "@fxts/core";
+import { pipe, unless } from "@fxts/core";
 import { IAuthentication } from "@APP/api/structures/IAuthentication";
 
 export namespace Token {
@@ -33,7 +33,7 @@ export namespace Token {
                     ? Result.Error.map("Token Invalid" as const)
                     : Result.Error.map("Inner System Error" as const),
 
-            skip(Result.Error.is, (input) => {
+            unless(Result.Error.is, (input) => {
                 try {
                     const payload = parser(Result.Ok.flatten(input));
                     const expired_at = new Date(payload.expired_at);

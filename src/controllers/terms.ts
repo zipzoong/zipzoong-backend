@@ -1,4 +1,5 @@
 import { ITerms } from "@APP/api/structures/ITerms";
+import { Terms } from "@APP/providers/terms";
 import { TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
 
@@ -17,6 +18,6 @@ export class TermsController {
      */
     @TypedRoute.Get()
     getList(@TypedQuery() query: ITerms.ISearch): Promise<ITerms[]> {
-        throw Error();
+        return Terms.Service.getList(query);
     }
 }

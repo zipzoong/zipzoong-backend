@@ -1,9 +1,10 @@
+import { ITerms } from "@APP/api/structures/ITerms";
 import { IUser } from "@APP/api/structures/user/IUser";
 import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
-import { DateMapper, Result, isUnDeleted, pick, skip } from "@APP/utils";
+import { DateMapper, Result, isUnDeleted, pick } from "@APP/utils";
 import { Prisma, TermsType } from "@PRISMA";
-import { filter, isUndefined, pipe, toArray } from "@fxts/core";
+import { filter, isUndefined, map, pipe, toArray, unless } from "@fxts/core";
 import { randomUUID } from "crypto";
 
 export namespace Service {
@@ -51,7 +52,7 @@ export namespace Service {
                         : Result.Error.map("TERMS_INSUFFICIENT" as const),
 
                 // 존재하지 않는 id를 포함하는가
-                skip(Result.Error.is, (terms_ids) =>
+                unless(Result.Error.is, (terms_ids) =>
                     agreement_ids.every((agreement_id) =>
                         Result.Ok.flatten(terms_ids).includes(agreement_id),
                     )
@@ -126,4 +127,30 @@ export namespace Service {
         isUndefined(tx)
             ? prisma.$transaction(_agree({ user_id, agreed_terms_ids }))
             : _agree({ user_id, agreed_terms_ids })(tx);
+
+    export const getList = (search: ITerms.ISearch): Promise<ITerms[]> =>
+        pipe(
+            search,
+
+            async (input) =>
+                prisma.termsModel.findMany({
+                    where: { type: { in: input.type } },
+                }),
+
+            filter(isUnDeleted),
+
+            map(
+                (terms) =>
+                    ({
+                        id: terms.id,
+                        title: terms.title,
+                        url: terms.url,
+                        type: terms.type,
+                        version: terms.version,
+                        is_required: terms.is_required,
+                    }) satisfies ITerms,
+            ),
+
+            toArray,
+        );
 }
