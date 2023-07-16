@@ -1,4 +1,5 @@
 import { IExpertise } from "@APP/api/structures/IExpertise";
+import { Expertise } from "@APP/providers/expertise";
 import { TypedParam, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
 
@@ -15,7 +16,7 @@ export class HSExpertisesController {
      */
     @TypedRoute.Get()
     getList(): Promise<IExpertise.ISuper[]> {
-        throw Error();
+        return Expertise.Service.HS.getList();
     }
 
     /**
@@ -33,7 +34,7 @@ export class HSExpertisesController {
     get(
         @TypedParam("expertise_id") expertise_id: string,
     ): Promise<IExpertise.ISuper> {
-        throw Error();
+        return Expertise.Service.HS.getOne(expertise_id);
     }
 }
 
@@ -50,6 +51,6 @@ export class REExpertisesController {
      */
     @TypedRoute.Get()
     getList(): Promise<IExpertise[]> {
-        throw Error();
+        return Expertise.Service.RE.getList();
     }
 }
