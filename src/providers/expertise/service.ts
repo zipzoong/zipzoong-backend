@@ -34,6 +34,9 @@ export namespace Service {
                 toArray,
             );
 
+        /**
+         * @throw 404 EXPERTISE_NOT_FOUND
+         */
         export const getOne = (
             expertise_id: string,
         ): Promise<IExpertise.ISuper> =>

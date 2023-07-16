@@ -124,7 +124,7 @@ export namespace IAuthentication {
 
         export type RefreshAccessToken =
             | TokenVerify
-            | "USER_NOT_EXIST"
+            | "USER_NOT_FOUND"
             | "USER_INACTIVE";
     }
 }

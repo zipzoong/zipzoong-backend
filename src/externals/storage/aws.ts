@@ -7,8 +7,6 @@ import { IStorage } from "./interface";
 import { Configuration } from "@APP/infrastructure/config";
 import { IUpload } from "@APP/api/structures/IUpload";
 import { randomUUID } from "crypto";
-import { Logger } from "@APP/infrastructure/logger";
-import { Result } from "@APP/utils";
 import {
     S3RequestPresigner,
     getSignedUrl,
@@ -19,6 +17,7 @@ import { fromIni } from "@aws-sdk/credential-providers";
 import { formatUrl } from "@aws-sdk/util-format-url";
 import { HttpRequest } from "@aws-sdk/protocol-http";
 import { parseUrl } from "@aws-sdk/url-parser";
+import { isUndefined } from "@fxts/core";
 
 export namespace AWS {
     export namespace S3 {
@@ -71,17 +70,15 @@ export namespace AWS {
                 });
                 const url = new URL(presigned_url);
                 url.search = "";
-                return Result.Ok.map({
+                return {
                     access_type: AccessType(input.resource_type),
                     url: url.href,
                     presigned_url,
-                });
+                };
             } catch (error) {
-                Logger.get().error(
-                    (error as Error).stack ??
-                        "Error: Fail to AWS Presigned Url For Upload",
-                );
-                return Result.Error.map("AWS_S3_UPLOAD_URL_FAIL" as const);
+                if (isUndefined((error as Error).stack))
+                    throw Error("Fail to AWS Presigned Url For Upload");
+                throw error;
             }
         };
         export const getPresignedReadUrl: IStorage["getReadUrl"] = async (
@@ -90,21 +87,18 @@ export namespace AWS {
             if (input.access_type === "zipzoong_s3") {
                 try {
                     const parsedUrl = parseUrl(input.resource_url);
-                    return Result.Ok.map(
-                        formatUrl(
-                            await presigner.presign(new HttpRequest(parsedUrl)),
-                        ),
+                    return formatUrl(
+                        await presigner.presign(new HttpRequest(parsedUrl)),
                     );
                 } catch (error) {
-                    Logger.get().error(
-                        (error as Error).stack ??
-                            "Error: Fail to AWS Presigned Url For READ",
-                    );
-                    return Result.Error.map("AWS_S3_READ_URL_FAIL" as const);
+                    if (isUndefined((error as Error).stack))
+                        throw Error("Fail to AWS Presigned Url For READ");
+
+                    throw error;
                 }
             }
 
-            return Result.Ok.map(input.resource_url); // access_type is public
+            return input.resource_url; // access_type is public
         };
     }
 }

@@ -18,7 +18,7 @@ export namespace IVerification {
             /**
              * 인증 코드
              *
-             * 문자로 전달된 6자리 인증코드
+             * 숫자로 전달된 6자리 인증코드
              */
             code: string;
         }
@@ -40,5 +40,12 @@ export namespace IVerification {
              */
             readonly verification_id: string;
         }
+    }
+
+    export namespace FailureCode {
+        export type CreatePhone = "PHONE_INVALID" | "COUNTRY_CODE_UNSUPPORTED";
+        export type VerifyPhone =
+            | "VERIFICATION_NOT_FOUND"
+            | "VERIFICATION_EXPIRED";
     }
 }

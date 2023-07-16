@@ -614,7 +614,7 @@ export namespace Service {
     /**
      * @throw 403 TOKEN_EXPIRED
      * @throw 403 TOKEN_INVALID
-     * @throw 403 USER_NOT_EXIST
+     * @throw 403 USER_NOT_FOUND
      * @throw 403 USER_INACTIVE
      */
     export const refreshAccessToken = (
@@ -635,7 +635,7 @@ export namespace Service {
                         if (isNull(client))
                             Failure.throwFailure<IAuthentication.FailureCode.RefreshAccessToken>(
                                 {
-                                    cause: "USER_NOT_EXIST",
+                                    cause: "USER_NOT_FOUND",
                                     message: "사용자 정보가 존재하지 않습니다.",
                                     statusCode: HttpStatus.FORBIDDEN,
                                 },
@@ -658,7 +658,7 @@ export namespace Service {
                         if (isNull(re_agent))
                             Failure.throwFailure<IAuthentication.FailureCode.RefreshAccessToken>(
                                 {
-                                    cause: "USER_NOT_EXIST",
+                                    cause: "USER_NOT_FOUND",
                                     message: "사용자 정보가 존재하지 않습니다.",
                                     statusCode: HttpStatus.FORBIDDEN,
                                 },
@@ -682,7 +682,7 @@ export namespace Service {
                         if (isNull(hs_provider))
                             Failure.throwFailure<IAuthentication.FailureCode.RefreshAccessToken>(
                                 {
-                                    cause: "USER_NOT_EXIST",
+                                    cause: "USER_NOT_FOUND",
                                     message: "사용자 정보가 존재하지 않습니다.",
                                     statusCode: HttpStatus.FORBIDDEN,
                                 },

@@ -5,7 +5,7 @@ import { INaver } from "./interface";
 import typia from "typia";
 import { Result } from "@APP/utils";
 import { ISMS } from "../interface";
-import { Logger } from "@APP/infrastructure/logger";
+import { isUndefined } from "@fxts/core";
 
 export namespace Naver {
     const service_id = Configuration.NAVER_SENS_SERVICE_ID;
@@ -62,12 +62,20 @@ export namespace Naver {
      * - 성공시 요청 id 반환
      */
     export const requestSendMessage: ISMS["sendMessage"] = async ({
-        messages,
+        message,
+        contentType = "COMM",
     }) => {
         try {
             const method = "POST";
             const path = `/sms/v2/services/${service_id}/messages`;
             const timestamp = Date.now();
+            const [countryCode, phone] = message.to.slice(1).split(" ");
+
+            if (isUndefined(countryCode) || isUndefined(phone))
+                return Result.Error.map("PHONE_INVALID" as const);
+            if (!typia.is<INaver.CountryCode>(countryCode))
+                return Result.Error.map("COUNTRY_CODE_UNSUPPORTED" as const);
+
             const response = await Fetcher.fetch<
                 INaver.ISendSMSInput,
                 INaver.ISendMessageOutput
@@ -84,21 +92,27 @@ export namespace Naver {
                 path,
                 {
                     type: "SMS",
-                    from: caller,
                     content: "default",
-                    messages,
+                    contentType,
+                    from: caller,
+                    countryCode,
+                    messages: [
+                        {
+                            to: phone.replaceAll("-", ""),
+                            content: message.content,
+                        },
+                    ],
                 },
             );
 
             if (!typia.is<INaver.ISendMessageOutput>(response))
-                return Result.Error.map("NAVER_SEND_MESSAGE_FAIL" as const);
+                throw Error("NAVER SEND MESSAGE OUTPUT INVAILD TYPE");
+
             return Result.Ok.map(response.requestId);
         } catch (error) {
-            Logger.get().error(
-                (error as Error).stack ??
-                    "Error: Fail to Naver Request Send Message.",
-            );
-            return Result.Error.map("NAVER_SEND_MESSAGE_FAIL" as const);
+            if (isUndefined((error as Error).stack))
+                throw Error("Fail to SENS Request Send Message.");
+            throw error;
         }
     };
 }
