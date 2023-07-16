@@ -1,6 +1,7 @@
 import { Mutable } from "@APP/api/types";
 import { IAddress } from "../common";
 import { IUser } from "./IUser";
+import { IAuthentication } from "../IAuthentication";
 
 export interface IClient extends IUser.IBase<"client"> {
     /**
@@ -80,4 +81,12 @@ export namespace IClient {
     }
 
     export interface IPrivate extends IClient {}
+
+    export namespace FailureCode {
+        export type GetMe =
+            | IAuthentication.FailureCode.TokenVerify
+            | "UESR_NOT_FOUND"
+            | "USER_INACTIVE"
+            | "PERMISSION_INSUFFICIENT";
+    }
 }

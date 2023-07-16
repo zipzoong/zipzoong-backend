@@ -16,8 +16,8 @@ import type { IAuthentication } from "./../../../structures/IAuthentication";
  * 
  * account에 포함된 정보는 회원 정보에 기본값으로 사용할 수 있다.
  * 
- * {@link IAuthentication.FailureCode.SignUp 에러 코드 타입}
- * - `OAUTH_FAIL` : oauth 인증에 실패한 경우
+ * {@link IAuthentication.FailureCode.SignUp 에러 코드}
+ * - `OAUTH_FAIL` : 소셜 로그인에 실패한 경우
  * - `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우
  * 
  * @summary 계정 생성(회원가입)

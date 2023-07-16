@@ -1,3 +1,3 @@
 import { PrismaJson } from "./prisma";
 
-export const BIZUser = { Prisma: PrismaJson };
+export const BIZUser = { Json: PrismaJson };

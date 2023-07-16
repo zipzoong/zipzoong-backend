@@ -13,6 +13,12 @@ import type { IAuthentication } from "./../../../../structures/IAuthentication";
 /**
  * 액세스 토큰 재발급 요청
  * 
+ * {@link IAuthentication.FailureCode.RefreshAccessToken 에러 코드}
+ * - `TOKEN_EXPIRED` : 계정 토큰이 만료된 경우
+ * - `TOKEN_INVALID` : 계정 토큰이 유효하지 않은 경우
+ * - `USER_NOT_FOUND` : 사용자가 존재하지 않는 경우
+ * - `USER_INACTIVE` : 사용자가 비활성화된 경우
+ * 
  * @summary 액세스 토큰 재발급
  * 
  * @tag authentication

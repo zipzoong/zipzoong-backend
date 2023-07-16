@@ -1,3 +1,3 @@
 import { PrismaJson } from "./prisma";
 
-export const REAgent = { Prisma: PrismaJson };
+export const REAgent = { Json: PrismaJson };

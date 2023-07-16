@@ -18,6 +18,12 @@ export * as verify from "./verify";
  * 
  * 해당 API를 호출시, 전달된 휴대폰 번호로 문자를 전송합니다.
  * 
+ * 5분뒤 만료됩니다.
+ * 
+ * {@link IVerification.FailureCode.CreatePhone 에러 코드}
+ * - `PHONE_INVALID` : 전화번호 형식이 올바르지 않은 경우
+ * - `COUNTRY_CODE_UNSUPPORTED` : 지원하지 않는 국가 코드인 경우
+ * 
  * @summary 휴대전화 인증 정보 생성
  * 
  * @tag verification

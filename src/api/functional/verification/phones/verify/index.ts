@@ -14,6 +14,10 @@ import type { IVerification } from "./../../../../structures/IVerification";
 /**
  * 생성된 인증 정보에 대해 인증을 진행하는 요청이다.
  * 
+ * {@link IVerification.FailureCode.VerifyPhone 에러 코드}
+ * - `VERIFICATION_NOT_FOUND` : 인증 정보가 존재하지 않는 경우
+ * - `VERIFICATION_EXPIRED` : 인증이 만료된 경우
+ * 
  * @summary 휴대전화 인증
  * 
  * @tag verification

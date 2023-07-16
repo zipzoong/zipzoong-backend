@@ -31,14 +31,14 @@ export namespace Service {
             unless(Result.Ok.is, (failure) => {
                 const cause = Result.Error.flatten(failure);
                 if (cause === "COUNTRY_CODE_UNSUPPORTED")
-                    Failure.throwFailure<IVerification.FailureCode.CreatePhone>(
+                    throw Failure.create<IVerification.FailureCode.CreatePhone>(
                         {
                             cause: "COUNTRY_CODE_UNSUPPORTED",
                             message: "지원하지 않는 국가코드입니다.",
                             statusCode: HttpStatus.BAD_REQUEST,
                         },
                     );
-                Failure.throwFailure<IVerification.FailureCode.CreatePhone>({
+                throw Failure.create<IVerification.FailureCode.CreatePhone>({
                     cause: "PHONE_INVALID",
                     message: "전화번호 형식이 올바르지 않습니다.",
                     statusCode: HttpStatus.BAD_REQUEST,

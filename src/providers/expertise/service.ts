@@ -49,7 +49,8 @@ export namespace Service {
                         select: PrismaJson.HS.superSelect(),
                     }),
 
-                unless(negate(isNull), () =>
+                unless(
+                    negate(isNull),
                     Failure.throwFailure<IExpertise.FailureCode.GetOne>({
                         cause: "EXPERTISE_NOT_FOUND",
                         message: "존재하지 않는 전문 분야입니다.",
@@ -57,7 +58,8 @@ export namespace Service {
                     }),
                 ),
 
-                unless(isUnDeleted, () =>
+                unless(
+                    isUnDeleted,
                     Failure.throwFailure<IExpertise.FailureCode.GetOne>({
                         cause: "EXPERTISE_NOT_FOUND",
                         message: "존재하지 않는 전문 분야입니다.",

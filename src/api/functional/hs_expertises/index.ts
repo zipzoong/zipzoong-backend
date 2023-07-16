@@ -68,6 +68,9 @@ export namespace getList {
 /**
  * 생활서비스 상위 전문 분야 조회
  * 
+ * {@link IExpertise.FailureCode.GetOne 에러 코드}
+ * - `EXPERTISE_NOT_FOUND` : 전문분야가 존재하지 않는 경우
+ * 
  * @summary 생활서비스 상위 전문 분야 조회
  * 
  * @tag hs-providers

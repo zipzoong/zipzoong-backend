@@ -64,14 +64,13 @@ export namespace Service {
                                 code,
                             ): code is Exclude<typeof code, "Token Expired"> =>
                                 code === "Token Expired",
-                            () =>
-                                Failure.throwFailure<IAuthentication.FailureCode.TokenVerify>(
-                                    {
-                                        cause: "TOKEN_EXPIRED",
-                                        message: "토큰이 만료되었습니다.",
-                                        statusCode: HttpStatus.FORBIDDEN,
-                                    },
-                                ),
+                            Failure.throwFailure<IAuthentication.FailureCode.TokenVerify>(
+                                {
+                                    cause: "TOKEN_EXPIRED",
+                                    message: "토큰이 만료되었습니다.",
+                                    statusCode: HttpStatus.FORBIDDEN,
+                                },
+                            ),
                         ),
 
                         unless(
@@ -79,14 +78,13 @@ export namespace Service {
                                 code,
                             ): code is Exclude<typeof code, "Token Invalid"> =>
                                 code === "Token Invalid",
-                            () =>
-                                Failure.throwFailure<IAuthentication.FailureCode.TokenVerify>(
-                                    {
-                                        cause: "TOKEN_INVALID",
-                                        message: "유효하지 않은 토큰입니다.",
-                                        statusCode: HttpStatus.FORBIDDEN,
-                                    },
-                                ),
+                            Failure.throwFailure<IAuthentication.FailureCode.TokenVerify>(
+                                {
+                                    cause: "TOKEN_INVALID",
+                                    message: "유효하지 않은 토큰입니다.",
+                                    statusCode: HttpStatus.FORBIDDEN,
+                                },
+                            ),
                         ),
 
                         throwError(() => Error("토큰 검증 실패")),
@@ -113,7 +111,8 @@ export namespace Service {
 
                 async (id) => tx.oauthAccountModel.findFirst({ where: { id } }),
 
-                unless(negate(isNull), () =>
+                unless(
+                    negate(isNull),
                     Failure.throwFailure<IAuthentication.FailureCode.AccountVerify>(
                         {
                             cause: "ACCOUNT_NOT_FOUND",
@@ -123,7 +122,8 @@ export namespace Service {
                     ),
                 ),
 
-                unless(isUnDeleted, () =>
+                unless(
+                    isUnDeleted,
                     Failure.throwFailure<IAuthentication.FailureCode.AccountVerify>(
                         {
                             cause: "ACCOUNT_INACTIVE",
@@ -169,7 +169,8 @@ export namespace Service {
 
             Oauth[input.oauth],
 
-            unless(Result.Ok.is, () =>
+            unless(
+                Result.Ok.is,
                 Failure.throwFailure<IAuthentication.FailureCode.SignIn>({
                     cause: "OAUTH_FAIL",
                     message: `${input.oauth} 인증에 실패했습니다.`,
@@ -184,7 +185,8 @@ export namespace Service {
                     where: { oauth_sub, oauth_type: input.oauth },
                 }),
 
-            unless(negate(isNull), () =>
+            unless(
+                negate(isNull),
                 Failure.throwFailure<IAuthentication.FailureCode.SignIn>({
                     cause: "ACCOUNT_NOT_FOUND",
                     message:
@@ -193,7 +195,8 @@ export namespace Service {
                 }),
             ),
 
-            unless(isUnDeleted, () =>
+            unless(
+                isUnDeleted,
                 Failure.throwFailure<IAuthentication.FailureCode.SignIn>({
                     cause: "ACCOUNT_INACTIVE",
                     message: "비활성화된 계정입니다.",
@@ -203,7 +206,8 @@ export namespace Service {
 
             pick(idMapper[input.user]),
 
-            unless(negate(isNull), () =>
+            unless(
+                negate(isNull),
                 Failure.throwFailure<IAuthentication.FailureCode.SignIn>({
                     cause: "USER_NOT_FOUND",
                     message: "사용자 정보가 존재하지 않습니다.",
@@ -226,7 +230,8 @@ export namespace Service {
 
             Oauth[input.oauth],
 
-            unless(Result.Ok.is, () =>
+            unless(
+                Result.Ok.is,
                 Failure.throwFailure<IAuthentication.FailureCode.SignUp>({
                     cause: "OAUTH_FAIL",
                     message: `${input.oauth} 인증에 실패했습니다.`,
@@ -262,7 +267,8 @@ export namespace Service {
                     },
                 }),
 
-            unless(isUnDeleted, () =>
+            unless(
+                isUnDeleted,
                 Failure.throwFailure<IAuthentication.FailureCode.SignUp>({
                     cause: "ACCOUNT_INACTIVE",
                     message: "비활성화된 계정입니다.",
@@ -347,7 +353,7 @@ export namespace Service {
             email: string | null;
             phone: string | null;
         }): Promise<string> => {
-            const client = Client.Prisma.createData({
+            const client = Client.Json.createData({
                 ...createInput,
                 email,
                 phone,
@@ -389,14 +395,14 @@ export namespace Service {
                     statusCode: HttpStatus.BAD_REQUEST,
                 });
 
-            const re_agent = REAgent.Prisma.createData({
+            const re_agent = REAgent.Json.createData({
                 ...createInput,
                 email,
                 phone,
             });
             await tx.rEAgentModel.create({ data: re_agent });
             await tx.bIZCertificationImageModel.createMany({
-                data: BIZUser.Prisma.createCertificationImageListData(
+                data: BIZUser.Json.createCertificationImageListData(
                     re_agent.base.create.base.create.id,
                 )(createInput.biz_certification_images),
             });
@@ -460,7 +466,7 @@ export namespace Service {
             });
             await tx.hSProviderModel.create({ data: hs_provider });
             await tx.bIZCertificationImageModel.createMany({
-                data: BIZUser.Prisma.createCertificationImageListData(
+                data: BIZUser.Json.createCertificationImageListData(
                     hs_provider.base.create.base.create.id,
                 )(createInput.biz_certification_images),
             });
@@ -633,22 +639,22 @@ export namespace Service {
                             include: { base: true },
                         });
                         if (isNull(client))
-                            Failure.throwFailure<IAuthentication.FailureCode.RefreshAccessToken>(
+                            throw Failure.create<IAuthentication.FailureCode.RefreshAccessToken>(
                                 {
                                     cause: "USER_NOT_FOUND",
                                     message: "사용자 정보가 존재하지 않습니다.",
                                     statusCode: HttpStatus.FORBIDDEN,
                                 },
                             );
-                        if (isDeleted(client.base)) {
-                            Failure.throwFailure<IAuthentication.FailureCode.RefreshAccessToken>(
+
+                        if (isDeleted(client.base))
+                            throw Failure.create<IAuthentication.FailureCode.RefreshAccessToken>(
                                 {
                                     cause: "USER_INACTIVE",
                                     message: "비활성화된 사용자입니다.",
                                     statusCode: HttpStatus.FORBIDDEN,
                                 },
                             );
-                        }
                         break;
                     case "real estate agent":
                         const re_agent = await prisma.rEAgentModel.findFirst({
@@ -656,22 +662,22 @@ export namespace Service {
                             select: { base: { select: { base: true } } },
                         });
                         if (isNull(re_agent))
-                            Failure.throwFailure<IAuthentication.FailureCode.RefreshAccessToken>(
+                            throw Failure.create<IAuthentication.FailureCode.RefreshAccessToken>(
                                 {
                                     cause: "USER_NOT_FOUND",
                                     message: "사용자 정보가 존재하지 않습니다.",
                                     statusCode: HttpStatus.FORBIDDEN,
                                 },
                             );
-                        if (isDeleted(re_agent.base.base)) {
-                            Failure.throwFailure<IAuthentication.FailureCode.RefreshAccessToken>(
+                        if (isDeleted(re_agent.base.base))
+                            throw Failure.create<IAuthentication.FailureCode.RefreshAccessToken>(
                                 {
                                     cause: "USER_INACTIVE",
                                     message: "비활성화된 사용자입니다.",
                                     statusCode: HttpStatus.FORBIDDEN,
                                 },
                             );
-                        }
+
                         break;
                     case "home service provider":
                         const hs_provider =
@@ -680,7 +686,7 @@ export namespace Service {
                                 select: { base: { select: { base: true } } },
                             });
                         if (isNull(hs_provider))
-                            Failure.throwFailure<IAuthentication.FailureCode.RefreshAccessToken>(
+                            throw Failure.create<IAuthentication.FailureCode.RefreshAccessToken>(
                                 {
                                     cause: "USER_NOT_FOUND",
                                     message: "사용자 정보가 존재하지 않습니다.",
@@ -688,7 +694,7 @@ export namespace Service {
                                 },
                             );
                         if (isDeleted(hs_provider.base.base))
-                            Failure.throwFailure<IAuthentication.FailureCode.RefreshAccessToken>(
+                            throw Failure.create<IAuthentication.FailureCode.RefreshAccessToken>(
                                 {
                                     cause: "USER_INACTIVE",
                                     message: "비활성화된 사용자입니다.",

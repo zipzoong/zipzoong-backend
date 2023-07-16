@@ -14,8 +14,8 @@ import type { IAuthentication } from "./../../../structures/IAuthentication";
 /**
  * 전달된 정보에 대응하는 특정 회원에 대한 권한이 부여된 인증 토큰을 발급한다.
  * 
- * {@link IAuthentication.FailureCode.SignIn 에러 코드 타입}
- * - `OAUTH_FAIL` : oauth 인증에 실패한 경우
+ * {@link IAuthentication.FailureCode.SignIn 에러 코드}
+ * - `OAUTH_FAIL` : 소셜 로그인에 실패한 경우
  * - `ACCOUNT_NOT_FOUND` : 집중 서버에 계정 정보가 없는 경우
  * - `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우
  * - `USER_NOT_FOUND` : 사용자 정보가 없는 경우

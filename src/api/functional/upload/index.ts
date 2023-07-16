@@ -16,6 +16,8 @@ import type { IUpload } from "./../../structures/IUpload";
  * 
  * presigned url의 사용법은 aws s3 presigned url을 확인할 것
  * 
+ * 3분뒤 만료됩니다.
+ * 
  * @summary 리소스 업로드용 presigned url 요청
  * 
  * @tag resources

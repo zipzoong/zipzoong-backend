@@ -44,7 +44,7 @@
           }
         },
         "summary": "로그인",
-        "description": "전달된 정보에 대응하는 특정 회원에 대한 권한이 부여된 인증 토큰을 발급한다.\n\n{@link IAuthentication.FailureCode.SignIn 에러 코드 타입}\n- `OAUTH_FAIL` : oauth 인증에 실패한 경우\n- `ACCOUNT_NOT_FOUND` : 집중 서버에 계정 정보가 없는 경우\n- `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우\n- `USER_NOT_FOUND` : 사용자 정보가 없는 경우\n\n@summary 로그인\n\n@tag authentication\n\n@param body oauth code, oauth type, user type\n\n@return 사용자 권한이 부여된 토큰",
+        "description": "전달된 정보에 대응하는 특정 회원에 대한 권한이 부여된 인증 토큰을 발급한다.\n\n{@link IAuthentication.FailureCode.SignIn 에러 코드}\n- `OAUTH_FAIL` : 소셜 로그인에 실패한 경우\n- `ACCOUNT_NOT_FOUND` : 집중 서버에 계정 정보가 없는 경우\n- `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우\n- `USER_NOT_FOUND` : 사용자 정보가 없는 경우\n\n@summary 로그인\n\n@tag authentication\n\n@param body oauth code, oauth type, user type\n\n@return 사용자 권한이 부여된 토큰",
         "x-nestia-namespace": "auth.sign-in.execute",
         "x-nestia-jsDocTags": [
           {
@@ -126,7 +126,7 @@
           }
         },
         "summary": "계정 생성(회원가입)",
-        "description": "회원을 생성하거나 계정 프로필 정보 요청을 위한 인증 토큰을 발급한다.\n\naccount에 포함된 정보는 회원 정보에 기본값으로 사용할 수 있다.\n\n{@link IAuthentication.FailureCode.SignUp 에러 코드 타입}\n- `OAUTH_FAIL` : oauth 인증에 실패한 경우\n- `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우\n\n@summary 계정 생성(회원가입)\n\n@tag authentication\n\n@param body oauth code, oauth type\n\n@return 계정 권한이 부여된 토큰",
+        "description": "회원을 생성하거나 계정 프로필 정보 요청을 위한 인증 토큰을 발급한다.\n\naccount에 포함된 정보는 회원 정보에 기본값으로 사용할 수 있다.\n\n{@link IAuthentication.FailureCode.SignUp 에러 코드}\n- `OAUTH_FAIL` : 소셜 로그인에 실패한 경우\n- `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우\n\n@summary 계정 생성(회원가입)\n\n@tag authentication\n\n@param body oauth code, oauth type\n\n@return 계정 권한이 부여된 토큰",
         "x-nestia-namespace": "auth.sign-up.create",
         "x-nestia-jsDocTags": [
           {
@@ -196,7 +196,7 @@
           }
         },
         "summary": "계정 프로필 조회",
-        "description": "계정 프로필 정보를 불러옵니다. 소셜 계정을 통해 얻은 정보입니다.\n\n사용자 정보를 생성할 때, 기본값으로 사용될 수 있습니다.\n\n{@link IAuthentication.FailureCode.GetProfile 에러 코드 타입}\n- `ACCOUNT_NOT_FOUND` : 집중 서버에 계정 정보가 없는 경우\n- `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우\n- `TOKEN_EXPIRED` : 계정 토큰이 만료된 경우\n- `TOKEN_INVALID` : 계정 토큰이 유효하지 않은 경우\n\n@summary 계정 프로필 조회\n\n@tag authentication\n\n@param account_token 계정 토큰\n\n@return 계정 프로필 정보",
+        "description": "계정 프로필 정보를 불러옵니다. 소셜 계정을 통해 얻은 정보입니다.\n\n사용자 정보를 생성할 때, 기본값으로 사용될 수 있습니다.\n\n{@link IAuthentication.FailureCode.GetProfile 에러 코드}\n- `ACCOUNT_NOT_FOUND` : 집중 서버에 계정 정보가 없는 경우\n- `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우\n- `TOKEN_EXPIRED` : 계정 토큰이 만료된 경우\n- `TOKEN_INVALID` : 계정 토큰이 유효하지 않은 경우\n\n@summary 계정 프로필 조회\n\n@tag authentication\n\n@param account_token 계정 토큰\n\n@return 계정 프로필 정보",
         "x-nestia-namespace": "auth.profile.get",
         "x-nestia-jsDocTags": [
           {
@@ -266,7 +266,7 @@
           }
         },
         "summary": "액세스 토큰 재발급",
-        "description": "액세스 토큰 재발급 요청\n\n@summary 액세스 토큰 재발급\n\n@tag authentication\n\n@param refresh_token 액세스 토큰 재발급 토큰\n\n@return 액세스 토큰",
+        "description": "액세스 토큰 재발급 요청\n\n{@link IAuthentication.FailureCode.RefreshAccessToken 에러 코드}\n- `TOKEN_EXPIRED` : 계정 토큰이 만료된 경우\n- `TOKEN_INVALID` : 계정 토큰이 유효하지 않은 경우\n- `USER_NOT_FOUND` : 사용자가 존재하지 않는 경우\n- `USER_INACTIVE` : 사용자가 비활성화된 경우\n\n@summary 액세스 토큰 재발급\n\n@tag authentication\n\n@param refresh_token 액세스 토큰 재발급 토큰\n\n@return 액세스 토큰",
         "x-nestia-namespace": "auth.token.access.create",
         "x-nestia-jsDocTags": [
           {
@@ -348,7 +348,7 @@
           }
         },
         "summary": "사용자 정보 생성",
-        "description": "계정 토큰을 사용하여 사용자 정보를 생성한다.\n\n이메일, 휴대전화는 verification_id를 null로 하면 계정 프로필에 저장된 정보가 기본으로 적용된다.\n\n그 외 정보는 null을 전송할 경우, null을 저장한다.\n\n{@link IAuthentication.FailureCode.CreateUser 에러 코드 타입}\n- `TOKEN_EXPIRED` : 계정 토큰이 만료된 경우\n- `TOKEN_INVALID` : 계정 토큰이 유효하지 않은 경우\n- `ACCOUNT_NOT_FOUND` : 집중 서버에 계정 정보가 없는 경우\n- `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우\n- `USER_ALREADY_EXIST` : 이미 연동된 해당 유형의 사용자 정보가 있는 경우\n- `PHONE_REQUIRED` : 사용가능한 휴대전화 정보가 없는 경우 (사업자 유형은 전화번호가 필수)\n- `EXPERTISE_INVALID` : 사업자 전문분야 정보가 유효하지 않은 경우\n- `TERMS_INSUFFICIENT` : 필수 약관 동의가 불충분한 경우\n- `TERMS_INVALID` : 약관 정보가 유효하지 않은 경우\n\n@summary 사용자 정보 생성\n\n@tag authentication\n\n@param account_token 계정 토큰\n\n@param body 사용자 정보\n\n@return 사용자 토큰(access token)",
+        "description": "계정 토큰을 사용하여 사용자 정보를 생성한다.\n\n이메일, 휴대전화는 verification_id를 null로 하면 계정 프로필에 저장된 정보가 기본으로 적용된다.\n\n그 외 정보는 null을 전송할 경우, null을 저장한다.\n\n{@link IAuthentication.FailureCode.CreateUser 에러 코드}\n- `TOKEN_EXPIRED` : 계정 토큰이 만료된 경우\n- `TOKEN_INVALID` : 계정 토큰이 유효하지 않은 경우\n- `ACCOUNT_NOT_FOUND` : 집중 서버에 계정 정보가 없는 경우\n- `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우\n- `USER_ALREADY_EXIST` : 이미 연동된 해당 유형의 사용자 정보가 있는 경우\n- `PHONE_REQUIRED` : 사용가능한 휴대전화 정보가 없는 경우 (사업자 유형은 전화번호가 필수)\n- `EXPERTISE_INVALID` : 사업자 전문분야 정보가 유효하지 않은 경우\n- `TERMS_INSUFFICIENT` : 필수 약관 동의가 불충분한 경우\n- `TERMS_INVALID` : 약관 정보가 유효하지 않은 경우\n\n@summary 사용자 정보 생성\n\n@tag authentication\n\n@param account_token 계정 토큰\n\n@param body 사용자 정보\n\n@return 사용자 토큰(access token)",
         "x-nestia-namespace": "auth.user.create",
         "x-nestia-jsDocTags": [
           {
@@ -501,7 +501,7 @@
           }
         },
         "summary": "생활서비스 상위 전문 분야 조회",
-        "description": "생활서비스 상위 전문 분야 조회\n\n@summary 생활서비스 상위 전문 분야 조회\n\n@tag hs-providers\n\n@param expertise_id 상위 전문분야 id\n\n@return 생활서비스 상위 전문 분야",
+        "description": "생활서비스 상위 전문 분야 조회\n\n{@link IExpertise.FailureCode.GetOne 에러 코드}\n- `EXPERTISE_NOT_FOUND` : 전문분야가 존재하지 않는 경우\n\n@summary 생활서비스 상위 전문 분야 조회\n\n@tag hs-providers\n\n@param expertise_id 상위 전문분야 id\n\n@return 생활서비스 상위 전문 분야",
         "x-nestia-namespace": "hs-expertises.get",
         "x-nestia-jsDocTags": [
           {
@@ -722,7 +722,7 @@
           }
         },
         "summary": "리소스 업로드용 presigned url 요청",
-        "description": "리소를 업로드하기 위한 presigned url과 접근에 필요한 정보를 얻을 수 있다.\n\npresigned url의 사용법은 aws s3 presigned url을 확인할 것\n\n@summary 리소스 업로드용 presigned url 요청\n\n@tag resources\n\n@param body 리소스 유형 정보를 입력한다.\n\n@return 리소스 업로드 정보",
+        "description": "리소를 업로드하기 위한 presigned url과 접근에 필요한 정보를 얻을 수 있다.\n\npresigned url의 사용법은 aws s3 presigned url을 확인할 것\n\n3분뒤 만료됩니다.\n\n@summary 리소스 업로드용 presigned url 요청\n\n@tag resources\n\n@param body 리소스 유형 정보를 입력한다.\n\n@return 리소스 업로드 정보",
         "x-nestia-namespace": "upload.getUrl",
         "x-nestia-jsDocTags": [
           {
@@ -949,7 +949,7 @@
           }
         },
         "summary": "일반 고객 내 정보 요청",
-        "description": "일반 고객 내 정보 보기 요청\n\n@summary 일반 고객 내 정보 요청\n\n@tag clients\n\n@param access_token 일반 고객 권한을 가진 액세스 토큰\n\n@return 내 정보",
+        "description": "일반 고객 내 정보 보기 요청\n\n{@link IClient.FailureCode.GetMe 에러 코드}\n- `TOKEN_EXPIRED` : 액세스 토큰이 만료된 경우\n- `TOKEN_INVALID` : 액세스 토큰이 유효하지 않은 경우\n- `PERMISSION_INSUFFICIENT` : 액세스 토큰의 권한이 부족한 경우\n- `USER_INACTIVE` : 비활성화된 사용자인 경우\n- `USER_NOT_FOUND` : 사용자가 존재하지 않는 경우\n\n@summary 일반 고객 내 정보 요청\n\n@tag clients\n\n@param access_token 일반 고객 권한을 가진 액세스 토큰\n\n@return 내 정보",
         "x-nestia-namespace": "users.clients.me.get",
         "x-nestia-jsDocTags": [
           {
@@ -2253,7 +2253,7 @@
           }
         },
         "summary": "휴대전화 인증 정보 생성",
-        "description": "휴대전화 인증 정보를 생성한다.\n\n해당 API를 호출시, 전달된 휴대폰 번호로 문자를 전송합니다.\n\n@summary 휴대전화 인증 정보 생성\n\n@tag verification\n\n@param body 인증받을 휴대전화 번호\n\n@return 인증 만료일자(생성일로부터 5분)",
+        "description": "휴대전화 인증 정보를 생성한다.\n\n해당 API를 호출시, 전달된 휴대폰 번호로 문자를 전송합니다.\n\n5분뒤 만료됩니다.\n\n{@link IVerification.FailureCode.CreatePhone 에러 코드}\n- `PHONE_INVALID` : 전화번호 형식이 올바르지 않은 경우\n- `COUNTRY_CODE_UNSUPPORTED` : 지원하지 않는 국가 코드인 경우\n\n@summary 휴대전화 인증 정보 생성\n\n@tag verification\n\n@param body 인증받을 휴대전화 번호\n\n@return 인증 만료일자(생성일로부터 5분)",
         "x-nestia-namespace": "verification.phones.create",
         "x-nestia-jsDocTags": [
           {
@@ -2335,7 +2335,7 @@
           }
         },
         "summary": "휴대전화 인증",
-        "description": "생성된 인증 정보에 대해 인증을 진행하는 요청이다.\n\n@summary 휴대전화 인증\n\n@tag verification\n\n@param body 인증 코드와 휴대전화\n\n@return 인증 정보 id",
+        "description": "생성된 인증 정보에 대해 인증을 진행하는 요청이다.\n\n{@link IVerification.FailureCode.VerifyPhone 에러 코드}\n- `VERIFICATION_NOT_FOUND` : 인증 정보가 존재하지 않는 경우\n- `VERIFICATION_EXPIRED` : 인증이 만료된 경우\n\n@summary 휴대전화 인증\n\n@tag verification\n\n@param body 인증 코드와 휴대전화\n\n@return 인증 정보 id",
         "x-nestia-namespace": "verification.phones.verify.execute",
         "x-nestia-jsDocTags": [
           {
@@ -5919,7 +5919,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "description": "인증 코드\n\n문자로 전달된 6자리 인증코드",
+            "description": "인증 코드\n\n숫자로 전달된 6자리 인증코드",
             "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string"
@@ -5954,7 +5954,7 @@
           "code",
           "phone"
         ],
-        "description": "인증 코드\n\n문자로 전달된 6자리 인증코드",
+        "description": "인증 코드\n\n숫자로 전달된 6자리 인증코드",
         "x-typia-jsDocTags": []
       },
       "IVerification.IResponse.IVerify": {

@@ -25,8 +25,12 @@ export class Failure<T extends string = string> extends Error {
         return new Failure(input);
     }
 
-    static throwFailure<T extends string = string>(input: ICreate<T>): never {
-        throw this.create(input);
+    static throwFailure<T extends string = string>(
+        input: ICreate<T>,
+    ): () => never {
+        return () => {
+            throw this.create(input);
+        };
     }
 
     getCause() {

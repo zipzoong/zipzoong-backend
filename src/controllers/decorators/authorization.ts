@@ -1,7 +1,13 @@
-import { isNull, isUndefined, negate, pipe } from "@fxts/core";
+import {
+    isNull,
+    isUndefined,
+    negate,
+    pipe,
+    throwError,
+    unless,
+} from "@fxts/core";
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 import { Exception } from "./exception";
-import { skip, throwError } from "@APP/utils";
 import { IToken } from "@APP/providers/authentication/interface";
 import { Request } from "express";
 
@@ -20,7 +26,7 @@ export const Authorization = (token_type: IToken.Type) =>
 
             extract_authorization_header,
 
-            skip(
+            unless(
                 negate(isUndefined),
                 throwError(
                     Exception.Unauthorized("Authorization Header Required"),
@@ -29,7 +35,7 @@ export const Authorization = (token_type: IToken.Type) =>
 
             validate_token_type(type),
 
-            skip(
+            unless(
                 negate(isNull),
                 throwError(
                     Exception.Unauthorized(
@@ -40,7 +46,7 @@ export const Authorization = (token_type: IToken.Type) =>
 
             extract_token,
 
-            skip(
+            unless(
                 negate(isUndefined),
                 throwError(
                     Exception.Unauthorized(

@@ -19,7 +19,7 @@ import type { IAuthentication } from "./../../../structures/IAuthentication";
  * 
  * 그 외 정보는 null을 전송할 경우, null을 저장한다.
  * 
- * {@link IAuthentication.FailureCode.CreateUser 에러 코드 타입}
+ * {@link IAuthentication.FailureCode.CreateUser 에러 코드}
  * - `TOKEN_EXPIRED` : 계정 토큰이 만료된 경우
  * - `TOKEN_INVALID` : 계정 토큰이 유효하지 않은 경우
  * - `ACCOUNT_NOT_FOUND` : 집중 서버에 계정 정보가 없는 경우
