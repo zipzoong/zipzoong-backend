@@ -10,6 +10,10 @@ export namespace Token {
     const hour = 1000 * 60 * 60 * 1;
     const day = hour * 24;
 
+    export type FailureCode =
+        | "Token Expired"
+        | "Token Invalid"
+        | "Inner System Error";
     const _verify = <T extends IToken.IBase>({
         token,
         key,
@@ -18,7 +22,7 @@ export namespace Token {
         token: string;
         key: string;
         parser: (input: string) => T;
-    }): IResult<T, "Token Expired" | "Token Invalid" | "Inner System Error"> =>
+    }): IResult<T, FailureCode> =>
         pipe(
             Crypto.decrypt({ token, key }),
 
@@ -72,10 +76,7 @@ export namespace Token {
 
         export const verify = (
             token: string,
-        ): IResult<
-            IToken.IAccount,
-            "Token Expired" | "Token Invalid" | "Inner System Error"
-        > =>
+        ): IResult<IToken.IAccount, FailureCode> =>
             _verify({
                 token,
                 parser: typia.createAssertParse<IToken.IAccount>(),
@@ -114,10 +115,7 @@ export namespace Token {
 
         export const verify = (
             token: string,
-        ): IResult<
-            IToken.IAccess,
-            "Token Expired" | "Token Invalid" | "Inner System Error"
-        > =>
+        ): IResult<IToken.IAccess, FailureCode> =>
             _verify({
                 token,
                 parser: typia.createAssertParse<IToken.IAccess>(),
@@ -156,10 +154,7 @@ export namespace Token {
 
         export const verify = (
             token: string,
-        ): IResult<
-            IToken.IRefresh,
-            "Token Expired" | "Token Invalid" | "Inner System Error"
-        > =>
+        ): IResult<IToken.IRefresh, FailureCode> =>
             _verify({
                 token,
                 parser: typia.createAssertParse<IToken.IRefresh>(),

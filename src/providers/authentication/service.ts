@@ -1,4 +1,12 @@
-import { isNull, isString, negate, pipe } from "@fxts/core";
+import {
+    isNull,
+    isString,
+    negate,
+    pipe,
+    tap,
+    throwError,
+    unless,
+} from "@fxts/core";
 import { IAuthentication } from "@APP/api/structures/IAuthentication";
 import { Oauth } from "@APP/externals/oauth";
 import {
@@ -8,8 +16,6 @@ import {
     isDeleted,
     isUnDeleted,
     pick,
-    skip,
-    throwError,
 } from "@APP/utils";
 import { HttpStatus } from "@nestjs/common";
 import { prisma } from "@APP/infrastructure/DB";
@@ -25,6 +31,8 @@ import { Terms } from "../terms";
 import { IClient } from "@APP/api/structures/user/IClient";
 import { IREAgent } from "@APP/api/structures/user/IREAgent";
 import { IHSProvider } from "@APP/api/structures/user/IHSProvider";
+import { IResult } from "@APP/api/types";
+import { IToken } from "./interface";
 
 export namespace Service {
     const idMapper: Record<IUser.Type, "client_id" | "biz_user_id"> = {
@@ -32,6 +40,61 @@ export namespace Service {
         "real estate agent": "biz_user_id",
         "home service provider": "biz_user_id",
     };
+    /**
+     * @throw 403 TOKEN_EXPIRED
+     * @throw 403 TOKEN_INVALID
+     * @return token payload
+     */
+    export const tokenVerify =
+        <T extends IToken.IBase>(
+            verify: (token: string) => IResult<T, Token.FailureCode>,
+        ) =>
+        (token: string) =>
+            pipe(
+                token,
+                verify,
+                unless(Result.Ok.is, (error) =>
+                    pipe(
+                        error,
+
+                        Result.Error.flatten,
+
+                        unless(
+                            (
+                                code,
+                            ): code is Exclude<typeof code, "Token Expired"> =>
+                                code === "Token Expired",
+                            () =>
+                                Failure.throwFailure<IAuthentication.FailureCode.TokenVerify>(
+                                    {
+                                        cause: "TOKEN_EXPIRED",
+                                        message: "토큰이 만료되었습니다.",
+                                        statusCode: HttpStatus.FORBIDDEN,
+                                    },
+                                ),
+                        ),
+
+                        unless(
+                            (
+                                code,
+                            ): code is Exclude<typeof code, "Token Invalid"> =>
+                                code === "Token Invalid",
+                            () =>
+                                Failure.throwFailure<IAuthentication.FailureCode.TokenVerify>(
+                                    {
+                                        cause: "TOKEN_INVALID",
+                                        message: "유효하지 않은 토큰입니다.",
+                                        statusCode: HttpStatus.FORBIDDEN,
+                                    },
+                                ),
+                        ),
+
+                        throwError(() => Error("토큰 검증 실패")),
+                    ),
+                ),
+                Result.Ok.flatten,
+            );
+
     /**
      * @throw 403 TOKEN_EXPIRED
      * @throw 403 TOKEN_INVALID
@@ -44,37 +107,13 @@ export namespace Service {
             pipe(
                 account_token,
 
-                Token.Account.verify,
-
-                skip(Result.Ok.is, (error) => {
-                    const code = Result.Error.flatten(error);
-                    if (code === "Token Expired")
-                        Failure.throwFailure<IAuthentication.FailureCode.TokenVerify>(
-                            {
-                                cause: "TOKEN_EXPIRED",
-                                message: "토큰이 만료되었습니다.",
-                                statusCode: HttpStatus.FORBIDDEN,
-                            },
-                        );
-                    if (code === "Token Invalid")
-                        Failure.throwFailure<IAuthentication.FailureCode.TokenVerify>(
-                            {
-                                cause: "TOKEN_INVALID",
-                                message: "유효하지 않은 토큰입니다.",
-                                statusCode: HttpStatus.FORBIDDEN,
-                            },
-                        );
-
-                    throw Error("계정 토큰 검증 실패");
-                }),
-
-                Result.Ok.flatten,
+                tokenVerify(Token.Account.verify),
 
                 pick("account_id"),
 
                 async (id) => tx.oauthAccountModel.findFirst({ where: { id } }),
 
-                skip(negate(isNull), () =>
+                unless(negate(isNull), () =>
                     Failure.throwFailure<IAuthentication.FailureCode.AccountVerify>(
                         {
                             cause: "ACCOUNT_NOT_FOUND",
@@ -84,7 +123,7 @@ export namespace Service {
                     ),
                 ),
 
-                skip(isUnDeleted, () =>
+                unless(isUnDeleted, () =>
                     Failure.throwFailure<IAuthentication.FailureCode.AccountVerify>(
                         {
                             cause: "ACCOUNT_INACTIVE",
@@ -130,7 +169,7 @@ export namespace Service {
 
             Oauth[input.oauth],
 
-            skip(Result.Ok.is, () =>
+            unless(Result.Ok.is, () =>
                 Failure.throwFailure<IAuthentication.FailureCode.SignIn>({
                     cause: "OAUTH_FAIL",
                     message: `${input.oauth} 인증에 실패했습니다.`,
@@ -145,7 +184,7 @@ export namespace Service {
                     where: { oauth_sub, oauth_type: input.oauth },
                 }),
 
-            skip(negate(isNull), () =>
+            unless(negate(isNull), () =>
                 Failure.throwFailure<IAuthentication.FailureCode.SignIn>({
                     cause: "ACCOUNT_NOT_FOUND",
                     message:
@@ -154,7 +193,7 @@ export namespace Service {
                 }),
             ),
 
-            skip(isUnDeleted, () =>
+            unless(isUnDeleted, () =>
                 Failure.throwFailure<IAuthentication.FailureCode.SignIn>({
                     cause: "ACCOUNT_INACTIVE",
                     message: "비활성화된 계정입니다.",
@@ -164,15 +203,12 @@ export namespace Service {
 
             pick(idMapper[input.user]),
 
-            skip(
-                negate(isNull),
-                throwError(() =>
-                    Failure.create<IAuthentication.FailureCode.SignIn>({
-                        cause: "USER_NOT_FOUND",
-                        message: "사용자 정보가 존재하지 않습니다.",
-                        statusCode: HttpStatus.FORBIDDEN,
-                    }),
-                ),
+            unless(negate(isNull), () =>
+                Failure.throwFailure<IAuthentication.FailureCode.SignIn>({
+                    cause: "USER_NOT_FOUND",
+                    message: "사용자 정보가 존재하지 않습니다.",
+                    statusCode: HttpStatus.FORBIDDEN,
+                }),
             ),
 
             SignInResponse(input.user),
@@ -190,7 +226,7 @@ export namespace Service {
 
             Oauth[input.oauth],
 
-            skip(Result.Ok.is, () =>
+            unless(Result.Ok.is, () =>
                 Failure.throwFailure<IAuthentication.FailureCode.SignUp>({
                     cause: "OAUTH_FAIL",
                     message: `${input.oauth} 인증에 실패했습니다.`,
@@ -226,7 +262,7 @@ export namespace Service {
                     },
                 }),
 
-            skip(isUnDeleted, () =>
+            unless(isUnDeleted, () =>
                 Failure.throwFailure<IAuthentication.FailureCode.SignUp>({
                     cause: "ACCOUNT_INACTIVE",
                     message: "비활성화된 계정입니다.",
@@ -236,7 +272,7 @@ export namespace Service {
 
             (model) => Token.Account.generate({ account_id: model.id }),
 
-            skip(
+            unless(
                 Result.Ok.is,
                 throwError(() => Error("계정 토큰 발급 실패")),
             ),
@@ -436,6 +472,7 @@ export namespace Service {
      * @throw 400 TERMS_INSUFFICIENT
      * @throw 400 TERMS_INVALID
      * @throw 400 PHONE_REQUIRED
+     * @throw 403 USER_ALREADY_EXIST
      * @throw 403 TOKEN_EXPIRED
      * @throw 403 TOKEN_INVALID
      * @throw 403 ACCOUNT_INACTIVE
@@ -504,6 +541,15 @@ export namespace Service {
 
             switch (input.type) {
                 case "client":
+                    if (negate(isNull)(account.client_id)) {
+                        throw Failure.create<IAuthentication.FailureCode.CreateUser>(
+                            {
+                                cause: "USER_ALREADY_EXIST",
+                                message: "이미 연동된 사용자 정보가 있습니다.",
+                                statusCode: HttpStatus.FORBIDDEN,
+                            },
+                        );
+                    }
                     const client_id = await createClient(tx)({
                         createInput: input,
                         email,
@@ -517,6 +563,15 @@ export namespace Service {
                     await connect({ client_id });
                     return Response(client_id);
                 case "real estate agent":
+                    if (negate(isNull)(account.biz_user_id)) {
+                        throw Failure.create<IAuthentication.FailureCode.CreateUser>(
+                            {
+                                cause: "USER_ALREADY_EXIST",
+                                message: "이미 연동된 사용자 정보가 있습니다.",
+                                statusCode: HttpStatus.FORBIDDEN,
+                            },
+                        );
+                    }
                     const re_agent_id = await createREAgent(tx)({
                         createInput: input,
                         email,
@@ -530,6 +585,15 @@ export namespace Service {
                     await connect({ biz_user_id: re_agent_id });
                     return Response(re_agent_id);
                 case "home service provider":
+                    if (negate(isNull)(account.biz_user_id)) {
+                        throw Failure.create<IAuthentication.FailureCode.CreateUser>(
+                            {
+                                cause: "USER_ALREADY_EXIST",
+                                message: "이미 연동된 사용자 정보가 있습니다.",
+                                statusCode: HttpStatus.FORBIDDEN,
+                            },
+                        );
+                    }
                     const hs_provider_id = await createHSProvider(tx)({
                         email,
                         phone,
@@ -546,4 +610,104 @@ export namespace Service {
                     return Response(hs_provider_id);
             }
         });
+
+    /**
+     * @throw 403 TOKEN_EXPIRED
+     * @throw 403 TOKEN_INVALID
+     * @throw 403 USER_NOT_EXIST
+     * @throw 403 USER_INACTIVE
+     */
+    export const refreshAccessToken = (
+        refresh_token: string,
+    ): Promise<IAuthentication.IResponse.IRefresh> =>
+        pipe(
+            refresh_token,
+
+            tokenVerify(Token.Refresh.verify),
+
+            tap(async (payload) => {
+                switch (payload.user_type) {
+                    case "client":
+                        const client = await prisma.clientModel.findFirst({
+                            where: { id: payload.user_id },
+                            include: { base: true },
+                        });
+                        if (isNull(client))
+                            Failure.throwFailure<IAuthentication.FailureCode.RefreshAccessToken>(
+                                {
+                                    cause: "USER_NOT_EXIST",
+                                    message: "사용자 정보가 존재하지 않습니다.",
+                                    statusCode: HttpStatus.FORBIDDEN,
+                                },
+                            );
+                        if (isDeleted(client.base)) {
+                            Failure.throwFailure<IAuthentication.FailureCode.RefreshAccessToken>(
+                                {
+                                    cause: "USER_INACTIVE",
+                                    message: "비활성화된 사용자입니다.",
+                                    statusCode: HttpStatus.FORBIDDEN,
+                                },
+                            );
+                        }
+                        break;
+                    case "real estate agent":
+                        const re_agent = await prisma.rEAgentModel.findFirst({
+                            where: { id: payload.user_id },
+                            select: { base: { select: { base: true } } },
+                        });
+                        if (isNull(re_agent))
+                            Failure.throwFailure<IAuthentication.FailureCode.RefreshAccessToken>(
+                                {
+                                    cause: "USER_NOT_EXIST",
+                                    message: "사용자 정보가 존재하지 않습니다.",
+                                    statusCode: HttpStatus.FORBIDDEN,
+                                },
+                            );
+                        if (isDeleted(re_agent.base.base)) {
+                            Failure.throwFailure<IAuthentication.FailureCode.RefreshAccessToken>(
+                                {
+                                    cause: "USER_INACTIVE",
+                                    message: "비활성화된 사용자입니다.",
+                                    statusCode: HttpStatus.FORBIDDEN,
+                                },
+                            );
+                        }
+                        break;
+                    case "home service provider":
+                        const hs_provider =
+                            await prisma.hSProviderModel.findFirst({
+                                where: { id: payload.user_id },
+                                select: { base: { select: { base: true } } },
+                            });
+                        if (isNull(hs_provider))
+                            Failure.throwFailure<IAuthentication.FailureCode.RefreshAccessToken>(
+                                {
+                                    cause: "USER_NOT_EXIST",
+                                    message: "사용자 정보가 존재하지 않습니다.",
+                                    statusCode: HttpStatus.FORBIDDEN,
+                                },
+                            );
+                        if (isDeleted(hs_provider.base.base))
+                            Failure.throwFailure<IAuthentication.FailureCode.RefreshAccessToken>(
+                                {
+                                    cause: "USER_INACTIVE",
+                                    message: "비활성화된 사용자입니다.",
+                                    statusCode: HttpStatus.FORBIDDEN,
+                                },
+                            );
+                        break;
+                }
+            }),
+
+            Token.Access.generate,
+
+            unless(
+                Result.Ok.is,
+                throwError(() => Error("액세스 토큰 발급 실패")),
+            ),
+
+            Result.Ok.flatten,
+
+            (access_token) => ({ access_token }),
+        );
 }

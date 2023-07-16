@@ -37,7 +37,7 @@
         "url": "https://github.com/zipzoong/zipzoong-backend.git"
     },
     "dependencies": {
-        "@fxts/core": "^0.17.0",
+        "@fxts/core": "^0.18.0",
         "@nestia/core": "^1.4.4",
         "@nestia/fetcher": "^1.4.0",
         "@nestjs/common": "^10.0.5",
@@ -50,7 +50,7 @@
         "rxjs": "^7.8.1",
         "schemix": "^1.14.1",
         "ts-patch": "^3.0.1",
-        "typia": "^4.1.6",
+        "typia": "^4.1.7",
         "winston": "^3.10.0"
     },
     "devDependencies": {

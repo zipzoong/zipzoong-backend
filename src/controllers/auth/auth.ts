@@ -88,6 +88,12 @@ export class AuthAccessTokenController {
     /**
      * 액세스 토큰 재발급 요청
      *
+     * {@link IAuthentication.FailureCode.RefreshAccessToken 에러 코드 타입}
+     * - `TOKEN_EXPIRED` : 계정 토큰이 만료된 경우
+     * - `TOKEN_INVALID` : 계정 토큰이 유효하지 않은 경우
+     * - `USER_NOT_EXIST` : 사용자가 존재하지 않는 경우
+     * - `USER_INACTIVE` : 사용자가 비활성화된 경우
+     *
      * @summary 액세스 토큰 재발급
      *
      * @tag authentication
@@ -100,7 +106,7 @@ export class AuthAccessTokenController {
     create(
         @Authorization("refresh") refresh_token: string,
     ): Promise<IAuthentication.IResponse.IRefresh> {
-        throw Error();
+        return Authentication.Service.refreshAccessToken(refresh_token);
     }
 }
 

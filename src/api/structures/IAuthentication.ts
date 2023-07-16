@@ -121,5 +121,10 @@ export namespace IAuthentication {
             | "EXPERTISE_INVALID"
             | "TERMS_INSUFFICIENT"
             | "TERMS_INVALID";
+
+        export type RefreshAccessToken =
+            | TokenVerify
+            | "USER_NOT_EXIST"
+            | "USER_INACTIVE";
     }
 }
