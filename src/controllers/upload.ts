@@ -1,4 +1,5 @@
 import { IUpload } from "@APP/api/structures/IUpload";
+import { Upload } from "@APP/providers/upload";
 import { TypedBody, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
 
@@ -8,6 +9,8 @@ export class UploadController {
      * 리소를 업로드하기 위한 presigned url과 접근에 필요한 정보를 얻을 수 있다.
      *
      * presigned url의 사용법은 aws s3 presigned url을 확인할 것
+     *
+     * 3분뒤 만료됩니다.
      *
      * @summary 리소스 업로드용 presigned url 요청
      *
@@ -19,6 +22,6 @@ export class UploadController {
      */
     @TypedRoute.Post()
     getUrl(@TypedBody() body: IUpload.IBody): Promise<IUpload> {
-        throw Error();
+        return Upload.Service.getUrl(body);
     }
 }

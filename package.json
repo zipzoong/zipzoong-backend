@@ -37,6 +37,13 @@
         "url": "https://github.com/zipzoong/zipzoong-backend.git"
     },
     "dependencies": {
+        "@aws-sdk/client-s3": "^3.370.0",
+        "@aws-sdk/credential-providers": "^3.370.0",
+        "@aws-sdk/hash-node": "^3.370.0",
+        "@aws-sdk/protocol-http": "^3.370.0",
+        "@aws-sdk/s3-request-presigner": "^3.370.0",
+        "@aws-sdk/url-parser": "^3.370.0",
+        "@aws-sdk/util-format-url": "^3.370.0",
         "@fxts/core": "^0.18.0",
         "@nestia/core": "^1.4.4",
         "@nestia/fetcher": "^1.4.0",

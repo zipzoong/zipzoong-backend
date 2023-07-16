@@ -4,7 +4,8 @@ import { createHmac } from "crypto";
 import { INaver } from "./interface";
 import typia from "typia";
 import { Result } from "@APP/utils";
-import { IResult } from "@APP/api/types";
+import { ISMS } from "../interface";
+import { Logger } from "@APP/infrastructure/logger";
 
 export namespace Naver {
     const service_id = Configuration.NAVER_SENS_SERVICE_ID;
@@ -57,13 +58,12 @@ export namespace Naver {
     /**
      * 네이버 sens 메시지 발송 API
      *
-     * - 실패시 IError 객체 리턴
+     * - 실패시 IError 객체 반환
+     * - 성공시 요청 id 반환
      */
-    export const sendSendMessage = async ({
+    export const requestSendMessage: ISMS["sendMessage"] = async ({
         messages,
-    }: Pick<INaver.ISendSMSInput, "messages">): Promise<
-        IResult<INaver.ISendMessageOutput, "NAVER_SEND_MESSAGE_FAIL">
-    > => {
+    }) => {
         try {
             const method = "POST";
             const path = `/sms/v2/services/${service_id}/messages`;
@@ -92,8 +92,12 @@ export namespace Naver {
 
             if (!typia.is<INaver.ISendMessageOutput>(response))
                 return Result.Error.map("NAVER_SEND_MESSAGE_FAIL" as const);
-            return Result.Ok.map(response);
-        } catch {
+            return Result.Ok.map(response.requestId);
+        } catch (error) {
+            Logger.get().error(
+                (error as Error).stack ??
+                    "Error: Fail to Naver Request Send Message.",
+            );
             return Result.Error.map("NAVER_SEND_MESSAGE_FAIL" as const);
         }
     };
