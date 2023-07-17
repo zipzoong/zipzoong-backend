@@ -125,6 +125,7 @@ export class UsersHSProvidersSomeoneController {
      */
     @TypedRoute.Get("contact")
     get(
+        @Authorization("access") access_token: string,
         @TypedParam("provider_id") provider_id: string,
     ): Promise<IHSProvider.IContact> {
         throw Error();

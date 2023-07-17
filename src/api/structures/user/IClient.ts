@@ -85,8 +85,7 @@ export namespace IClient {
     export namespace FailureCode {
         export type GetMe =
             | IAuthentication.FailureCode.TokenVerify
-            | "UESR_NOT_FOUND"
-            | "USER_INACTIVE"
-            | "PERMISSION_INSUFFICIENT";
+            | IAuthentication.FailureCode.PermissionInSufficient
+            | IUser.FailureCode.Get;
     }
 }

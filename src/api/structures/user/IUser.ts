@@ -46,4 +46,8 @@ export namespace IUser {
         | IClient.ICreateRequest
         | IREAgent.ICreateRequest
         | IHSProvider.ICreateRequest;
+
+    export namespace FailureCode {
+        export type Get = "USER_NOT_FOUND" | "USER_INACTIVE";
+    }
 }

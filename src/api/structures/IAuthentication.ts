@@ -109,6 +109,7 @@ export namespace IAuthentication {
     }
 
     export namespace FailureCode {
+        export type PermissionInSufficient = "PERMISSION_INSUFFICIENT";
         export type TokenVerify = "TOKEN_EXPIRED" | "TOKEN_INVALID";
         export type AccountVerify = "ACCOUNT_NOT_FOUND" | "ACCOUNT_INACTIVE";
         export type SignIn = AccountVerify | "OAUTH_FAIL" | "USER_NOT_FOUND";
@@ -122,9 +123,6 @@ export namespace IAuthentication {
             | "TERMS_INSUFFICIENT"
             | "TERMS_INVALID";
 
-        export type RefreshAccessToken =
-            | TokenVerify
-            | "USER_NOT_FOUND"
-            | "USER_INACTIVE";
+        export type RefreshAccessToken = TokenVerify | IUser.FailureCode.Get;
     }
 }

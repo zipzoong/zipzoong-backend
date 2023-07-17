@@ -22,4 +22,20 @@ export namespace PrismaJson {
                     }) satisfies Prisma.BIZCertificationImageModelCreateManyInput,
             );
         };
+
+    export const createCertificationImageData =
+        (biz_user_id: string) =>
+        (image: IBIZUser.ICertificationImageCreate) => {
+            const now = DateMapper.toISO();
+            return {
+                id: randomUUID(),
+                access_type: image.access_type,
+                url: image.url,
+                biz_user: { connect: { id: biz_user_id } },
+                created_at: now,
+                updated_at: now,
+                is_deleted: false,
+                deleted_at: null,
+            } satisfies Prisma.BIZCertificationImageModelCreateInput;
+        };
 }

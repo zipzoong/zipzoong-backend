@@ -10,6 +10,6 @@ export interface IStorage {
      */
     getReadUrl: (input: {
         access_type: IUpload.AccessType;
-        resource_url: string;
+        url: string;
     }) => Promise<string>;
 }

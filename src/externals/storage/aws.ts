@@ -86,7 +86,7 @@ export namespace AWS {
         ) => {
             if (input.access_type === "zipzoong_s3") {
                 try {
-                    const parsedUrl = parseUrl(input.resource_url);
+                    const parsedUrl = parseUrl(input.url);
                     return formatUrl(
                         await presigner.presign(new HttpRequest(parsedUrl)),
                     );
@@ -98,7 +98,7 @@ export namespace AWS {
                 }
             }
 
-            return input.resource_url; // access_type is public
+            return input.url; // access_type is public
         };
     }
 }

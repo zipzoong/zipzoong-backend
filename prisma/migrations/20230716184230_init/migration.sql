@@ -236,6 +236,21 @@ CREATE TABLE "oauth_accounts" (
     CONSTRAINT "oauth_accounts_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "phone_verifications" (
+    "id" TEXT NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL,
+    "updated_at" TIMESTAMPTZ NOT NULL,
+    "is_deleted" BOOLEAN NOT NULL,
+    "deleted_at" TIMESTAMPTZ,
+    "phone" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
+    "transaction_id" TEXT NOT NULL,
+    "is_verified" BOOLEAN NOT NULL,
+
+    CONSTRAINT "phone_verifications_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "terms_agreements_user_id_terms_id_key" ON "terms_agreements"("user_id", "terms_id");
 

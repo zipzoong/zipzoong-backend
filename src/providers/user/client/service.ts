@@ -46,7 +46,7 @@ export namespace Service {
                     unless(
                         negate(isNull),
                         Failure.throwFailure<IClient.FailureCode.GetMe>({
-                            cause: "UESR_NOT_FOUND",
+                            cause: "USER_NOT_FOUND",
                             message: "존재하지 않는 사용자입니다.",
                             statusCode: HttpStatus.NOT_FOUND,
                         }),

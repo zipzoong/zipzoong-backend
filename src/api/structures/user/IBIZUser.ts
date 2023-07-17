@@ -1,4 +1,6 @@
+import { IAuthentication } from "../IAuthentication";
 import { IUpload } from "../IUpload";
+import { IUser } from "./IUser";
 
 export namespace IBIZUser {
     export interface IIntroduction {
@@ -52,5 +54,17 @@ export namespace IBIZUser {
          * @format email
          */
         readonly email: null | string;
+    }
+
+    export namespace FailureCode {
+        export type GetBIZCertificationList =
+            | IAuthentication.FailureCode.TokenVerify
+            | IAuthentication.FailureCode.PermissionInSufficient
+            | IUser.FailureCode.Get;
+
+        export type CreateBIZCertification =
+            | IAuthentication.FailureCode.TokenVerify
+            | IAuthentication.FailureCode.PermissionInSufficient
+            | IUser.FailureCode.Get;
     }
 }

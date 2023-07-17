@@ -1,7 +1,7 @@
 import { IResult } from "@APP/api/types";
 
 export interface ISMS {
-    sendMessage: (input: {
+    send: (input: {
         message: ISMS.IMessage;
         /** @default COMM */
         contentType?: "COMM" | "AD";

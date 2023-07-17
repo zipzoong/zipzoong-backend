@@ -3,6 +3,7 @@ import { IResult } from "@APP/api/types";
 import { SMS } from "@APP/externals/sms";
 import { prisma } from "@APP/infrastructure/DB";
 import { DateMapper, Failure, Result, isDeleted } from "@APP/utils";
+import { Prisma } from "@PRISMA";
 import { isNull, pipe, unless } from "@fxts/core";
 import { HttpStatus } from "@nestjs/common";
 import { randomInt, randomUUID } from "crypto";
@@ -21,7 +22,7 @@ export namespace Service {
         const phone = input.phone;
         const code = randomInt(1_00_000, 9_00_000).toString();
         return pipe(
-            SMS.sendMessage({
+            SMS.send({
                 message: {
                     to: phone,
                     content: `[집중 서비스] 인증번호 [${code}]를 입력해주세요.`,
@@ -108,22 +109,24 @@ export namespace Service {
         return { verification_id: verification.id };
     };
 
-    export const getVerifiedPhone = (
-        verification_id: string,
-    ): Promise<IResult<string, "NOT_FOUND" | "UNVERIFIED">> =>
-        pipe(
-            verification_id,
+    export const getVerifiedPhone =
+        (tx: Prisma.TransactionClient = prisma) =>
+        (
+            verification_id: string,
+        ): Promise<IResult<string, "NOT_FOUND" | "UNVERIFIED">> =>
+            pipe(
+                verification_id,
 
-            async (id) =>
-                prisma.phoneVerificationModel.findFirst({ where: { id } }),
+                async (id) =>
+                    tx.phoneVerificationModel.findFirst({ where: { id } }),
 
-            (verification) =>
-                isNull(verification)
-                    ? Result.Error.map("NOT_FOUND" as const)
-                    : isDeleted(verification)
-                    ? Result.Error.map("NOT_FOUND" as const)
-                    : !verification.is_verified
-                    ? Result.Error.map("UNVERIFIED" as const)
-                    : Result.Ok.map(verification.phone),
-        );
+                (verification) =>
+                    isNull(verification)
+                        ? Result.Error.map("NOT_FOUND" as const)
+                        : isDeleted(verification)
+                        ? Result.Error.map("NOT_FOUND" as const)
+                        : !verification.is_verified
+                        ? Result.Error.map("UNVERIFIED" as const)
+                        : Result.Ok.map(verification.phone),
+            );
 }
