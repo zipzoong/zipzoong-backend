@@ -61,7 +61,7 @@ export namespace Naver {
      * - 실패시 IError 객체 반환
      * - 성공시 요청 id 반환
      */
-    export const requestSendMessage: ISMS["sendMessage"] = async ({
+    export const requestSendMessage: ISMS["send"] = async ({
         message,
         contentType = "COMM",
     }) => {

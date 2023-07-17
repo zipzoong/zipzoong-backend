@@ -14,11 +14,20 @@ import type { IBIZUser } from "./../../../../structures/user/IBIZUser";
 /**
  * 제출한 사업자 인증 서류 이미지 목록 조회
  * 
+ * {@link IBIZUser.FailureCode.GetBIZCertificationList 에러 코드}
+ * - `TOKEN_EXPIRED` : 액세스 토큰이 만료된 경우
+ * - `TOKEN_INVALID` : 액세스 토큰이 유효하지 않은 경우
+ * - `PERMISSION_INSUFFICIENT` : 액세스 토큰 권한이 부족한 경우
+ * - `USER_INACTIVE` : 비활성화된 사용자인 경우
+ * - `USER_NOT_FOUND` : 사용자 정보를 찾을 수 없는 경우
+ * 
  * @summary 사업자 인증 서류 이미지 목록 조회
  * 
  * @tag re-agents
  * 
  * @tag hs-providers
+ * 
+ * @param access_token 사업자 권한을 가진 액세스 토큰
  * 
  * @return 사업자 인증 서류 이미지 url 목록
  * 
@@ -69,6 +78,13 @@ export namespace getList {
 
 /**
  * 사업자 인증 서류 이미지 추가
+ * 
+ * {@link IBIZUser.FailureCode.CreateBIZCertification 에러 코드}
+ * - `TOKEN_EXPIRED` : 액세스 토큰이 만료된 경우
+ * - `TOKEN_INVALID` : 액세스 토큰이 유효하지 않은 경우
+ * - `PERMISSION_INSUFFICIENT` : 액세스 토큰 권한이 부족한 경우
+ * - `USER_INACTIVE` : 비활성화된 사용자인 경우
+ * - `USER_NOT_FOUND` : 사용자 정보를 찾을 수 없는 경우
  * 
  * @summary 사업자 인증 서류 이미지 추가
  * 
