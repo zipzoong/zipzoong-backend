@@ -58,13 +58,11 @@ export namespace IBIZUser {
 
     export namespace FailureCode {
         export type GetBIZCertificationList =
-            | IAuthentication.FailureCode.TokenVerify
-            | IAuthentication.FailureCode.PermissionInSufficient
-            | IUser.FailureCode.Get;
+            | IUser.FailureCode.Authorize
+            | IAuthentication.FailureCode.PermissionInSufficient;
 
-        export type CreateBIZCertification =
-            | IAuthentication.FailureCode.TokenVerify
-            | IAuthentication.FailureCode.PermissionInSufficient
-            | IUser.FailureCode.Get;
+        export type GetContact =
+            | IUser.FailureCode.Authorize
+            | IUser.FailureCode.GetPublic;
     }
 }

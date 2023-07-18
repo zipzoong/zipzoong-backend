@@ -1,34 +1,52 @@
-import { IREAgent } from "@APP/api/structures/user/IREAgent";
 import { IUser } from "@APP/api/structures/user/IUser";
+import { IHSProvider } from "@APP/api/structures/user/IHSProvider";
 import { prisma } from "@APP/infrastructure/DB";
+import {
+    filter,
+    isNull,
+    isString,
+    map,
+    pipe,
+    toArray,
+    unless,
+} from "@fxts/core";
+import { PrismaJson, PrismaMapper } from "./prisma";
 import { Failure, InternalError, Result, isDeleted } from "@APP/utils";
 import { Prisma } from "@PRISMA";
-import { filter, isNull, map, pipe, toArray, unless } from "@fxts/core";
 import { HttpStatus } from "@nestjs/common";
-import { PrismaJson, PrismaMapper } from "./prisma";
-import { IResult } from "@APP/api/types";
 import { User } from "../user";
+import { IResult } from "@APP/api/types";
 import { Mapper } from "./mapper";
 import { IBIZUser } from "@APP/api/structures/user/IBIZUser";
 
 export namespace Service {
     export const getList = ({
         page = 1,
-        expertise_name,
-    }: IREAgent.ISearch): Promise<IREAgent.IPaginatedSummary> =>
+        sub_expertise_name,
+        super_expertise_name,
+    }: IHSProvider.ISearch): Promise<IHSProvider.IPaginatedSummary> =>
         pipe(
             page,
 
             async (take) =>
-                prisma.rEAgentModel.findMany({
+                prisma.hSProviderModel.findMany({
                     where: {
                         base: {
                             base: { is_deleted: false },
                             is_verified: true,
                         },
-                        expertise: {
-                            name: expertise_name,
-                        },
+                        expertise_relation: isString(super_expertise_name)
+                            ? {
+                                  some: {
+                                      sub_expertise: {
+                                          name: sub_expertise_name,
+                                          super_expertise: {
+                                              name: super_expertise_name,
+                                          },
+                                      },
+                                  },
+                              }
+                            : {},
                     },
                     select: PrismaJson.summarySelect(),
                     take,
@@ -46,54 +64,15 @@ export namespace Service {
             (data) => ({ data, page }),
         );
 
-    export const getPrivate =
-        (tx: Prisma.TransactionClient = prisma) =>
-        async (
-            agent_id: string,
-        ): Promise<
-            IResult<
-                IREAgent.IPrivate,
-                Failure<IUser.FailureCode.GetPrivate> | InternalError
-            >
-        > =>
-            pipe(
-                agent_id,
-
-                async (id) =>
-                    tx.rEAgentModel.findFirst({
-                        where: { id },
-                        select: PrismaJson.privateSelect(),
-                    }),
-
-                (model) =>
-                    isNull(model)
-                        ? Result.Error.map(
-                              Failure.create<IUser.FailureCode.GetPrivate>({
-                                  cause: "USER_NOT_FOUND",
-                                  message: "존재하지 않는 사용자입니다.",
-                                  statusCode: HttpStatus.NOT_FOUND,
-                              }),
-                          )
-                        : isDeleted(model.base.base)
-                        ? Result.Error.map(
-                              Failure.create<IUser.FailureCode.GetPrivate>({
-                                  cause: "USER_INACTIVE",
-                                  message: "비활성화된 사용자입니다.",
-                                  statusCode: HttpStatus.FORBIDDEN,
-                              }),
-                          )
-                        : PrismaMapper.toPrivate(model),
-            );
-
     export const getPublic =
         (tx: Prisma.TransactionClient = prisma) =>
-        async (
-            agent_id: string,
+        (
+            provider_id: string,
         ): Promise<
-            IResult<IREAgent.IPublic, Failure<IUser.FailureCode.GetPublic>>
+            IResult<IHSProvider.IPublic, Failure<IUser.FailureCode.GetPublic>>
         > =>
             pipe(
-                agent_id,
+                provider_id,
 
                 getPrivate(tx),
 
@@ -130,10 +109,10 @@ export namespace Service {
         (tx: Prisma.TransactionClient = prisma) =>
         (access_token: string) =>
         async (
-            agent_id: string,
+            provider_id: string,
         ): Promise<
             IResult<
-                IREAgent.IContact,
+                IHSProvider.IContact,
                 Failure<IBIZUser.FailureCode.GetContact> | InternalError
             >
         > => {
@@ -141,7 +120,7 @@ export namespace Service {
             if (Result.Error.is(permission)) return permission;
 
             return pipe(
-                agent_id,
+                provider_id,
 
                 getPrivate(tx),
 
@@ -174,4 +153,48 @@ export namespace Service {
                 ),
             );
         };
+
+    export const getPrivate =
+        (tx: Prisma.TransactionClient = prisma) =>
+        (
+            provider_id: string,
+        ): Promise<
+            IResult<
+                IHSProvider.IPrivate,
+                Failure<IUser.FailureCode.GetPrivate> | InternalError
+            >
+        > =>
+            pipe(
+                provider_id,
+
+                async (id) =>
+                    tx.hSProviderModel.findFirst({
+                        where: { id },
+                        select: PrismaJson.privateSelect(),
+                    }),
+
+                (model) =>
+                    isNull(model)
+                        ? Result.Error.map(
+                              Failure.create<IUser.FailureCode.GetPrivate>({
+                                  cause: "USER_NOT_FOUND",
+                                  message: "존재하지 않는 사용자입니다.",
+                                  statusCode: HttpStatus.NOT_FOUND,
+                              }),
+                          )
+                        : isDeleted(model.base.base)
+                        ? Result.Error.map(
+                              Failure.create<IUser.FailureCode.GetPrivate>({
+                                  cause: "USER_INACTIVE",
+                                  message: "비활성화된 사용자입니다.",
+                                  statusCode: HttpStatus.FORBIDDEN,
+                              }),
+                          )
+                        : PrismaMapper.toPrivate(model),
+            );
+
+    export const getProfile = User.Service.getProfile({
+        user_type: "home service provider",
+        getPrivate,
+    });
 }

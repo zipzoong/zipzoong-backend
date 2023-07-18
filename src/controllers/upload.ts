@@ -2,6 +2,7 @@ import { IUpload } from "@APP/api/structures/IUpload";
 import { Upload } from "@APP/providers/upload";
 import { TypedBody, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
+import { httpResponse } from "./internal";
 
 @Controller("upload")
 export class UploadController {
@@ -21,7 +22,8 @@ export class UploadController {
      * @return 리소스 업로드 정보
      */
     @TypedRoute.Post()
-    getUrl(@TypedBody() body: IUpload.IBody): Promise<IUpload> {
-        return Upload.Service.getUrl(body);
+    async getUrl(@TypedBody() body: IUpload.IBody): Promise<IUpload> {
+        const result = await Upload.Service.getUrl(body);
+        return httpResponse(result);
     }
 }

@@ -12,3 +12,19 @@ export const toFixed =
     (digit = 0) =>
     (num: number): number =>
         +num.toFixed(digit);
+
+`
+/**
+ * @before +82 10-1234-5678
+ *
+ * @after +82 1*-1***-5***
+ */
+export const markPhone = (phone: string) => {};
+
+/**
+ * @before abcd@naver.com
+ *
+ * @after a****@n****.com
+ */
+export const markEmail = (email: string) => {};
+`;

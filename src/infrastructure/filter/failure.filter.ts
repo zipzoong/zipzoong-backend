@@ -12,7 +12,7 @@ export class FailureFilter implements ExceptionFilter {
         httpAdapter.reply(
             ctx.getResponse(),
             exception.getFailure(),
-            exception.getStatusCode(),
+            exception.statusCode,
         );
     }
 }

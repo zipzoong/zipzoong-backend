@@ -3,7 +3,7 @@ import { Fetcher } from "@nestia/fetcher";
 import { createHmac } from "crypto";
 import { INaver } from "./interface";
 import typia from "typia";
-import { Result } from "@APP/utils";
+import { InternalError, Result } from "@APP/utils";
 import { ISMS } from "../interface";
 import { isUndefined } from "@fxts/core";
 
@@ -104,15 +104,9 @@ export namespace Naver {
                     ],
                 },
             );
-
-            if (!typia.is<INaver.ISendMessageOutput>(response))
-                throw Error("NAVER SEND MESSAGE OUTPUT INVAILD TYPE");
-
             return Result.Ok.map(response.requestId);
         } catch (error) {
-            if (isUndefined((error as Error).stack))
-                throw Error("Fail to SENS Request Send Message.");
-            throw error;
+            return Result.Error.map(InternalError.create(error as Error));
         }
     };
 }

@@ -4,6 +4,7 @@ import { TypedBody, TypedRoute } from "@nestia/core";
 import { Controller, HttpCode, HttpStatus } from "@nestjs/common";
 import { Authorization } from "../decorators/authorization";
 import { IUser } from "@APP/api/structures/user/IUser";
+import { httpResponse } from "../internal";
 
 @Controller("auth")
 export class AuthController {
@@ -11,10 +12,6 @@ export class AuthController {
      * 전달된 정보에 대응하는 특정 회원에 대한 권한이 부여된 인증 토큰을 발급한다.
      *
      * {@link IAuthentication.FailureCode.SignIn 에러 코드}
-     * - `OAUTH_FAIL` : 소셜 로그인에 실패한 경우
-     * - `ACCOUNT_NOT_FOUND` : 집중 서버에 계정 정보가 없는 경우
-     * - `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우
-     * - `USER_NOT_FOUND` : 사용자 정보가 없는 경우
      *
      * @summary 로그인
      *
@@ -26,10 +23,11 @@ export class AuthController {
      */
     @HttpCode(HttpStatus.OK)
     @TypedRoute.Post("sign-in")
-    execute(
+    async execute(
         @TypedBody() body: IAuthentication.ISignIn,
     ): Promise<IAuthentication.IResponse.ISignIn> {
-        return Authentication.Service.signIn(body);
+        const result = await Authentication.Service.signIn(body);
+        return httpResponse(result);
     }
 
     /**
@@ -38,8 +36,6 @@ export class AuthController {
      * account에 포함된 정보는 회원 정보에 기본값으로 사용할 수 있다.
      *
      * {@link IAuthentication.FailureCode.SignUp 에러 코드}
-     * - `OAUTH_FAIL` : 소셜 로그인에 실패한 경우
-     * - `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우
      *
      * @summary 계정 생성(회원가입)
      *
@@ -50,10 +46,11 @@ export class AuthController {
      * @return 계정 권한이 부여된 토큰
      */
     @TypedRoute.Post("sign-up")
-    create(
+    async create(
         @TypedBody() body: IAuthentication.ISignUp,
     ): Promise<IAuthentication.IResponse.ISignUp> {
-        return Authentication.Service.signUp(body);
+        const result = await Authentication.Service.signUp(body);
+        return httpResponse(result);
     }
 
     /**
@@ -62,10 +59,6 @@ export class AuthController {
      * 사용자 정보를 생성할 때, 기본값으로 사용될 수 있습니다.
      *
      * {@link IAuthentication.FailureCode.GetProfile 에러 코드}
-     * - `ACCOUNT_NOT_FOUND` : 집중 서버에 계정 정보가 없는 경우
-     * - `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우
-     * - `TOKEN_EXPIRED` : 계정 토큰이 만료된 경우
-     * - `TOKEN_INVALID` : 계정 토큰이 유효하지 않은 경우
      *
      * @summary 계정 프로필 조회
      *
@@ -76,10 +69,11 @@ export class AuthController {
      * @return 계정 프로필 정보
      */
     @TypedRoute.Get("profile")
-    get(
+    async get(
         @Authorization("account") account_token: string,
     ): Promise<IAuthentication.IAccountProfile> {
-        return Authentication.Service.getProfile(account_token);
+        const result = await Authentication.Service.getProfile()(account_token);
+        return httpResponse(result);
     }
 }
 
@@ -89,10 +83,6 @@ export class AuthAccessTokenController {
      * 액세스 토큰 재발급 요청
      *
      * {@link IAuthentication.FailureCode.RefreshAccessToken 에러 코드}
-     * - `TOKEN_EXPIRED` : 계정 토큰이 만료된 경우
-     * - `TOKEN_INVALID` : 계정 토큰이 유효하지 않은 경우
-     * - `USER_NOT_FOUND` : 사용자가 존재하지 않는 경우
-     * - `USER_INACTIVE` : 사용자가 비활성화된 경우
      *
      * @summary 액세스 토큰 재발급
      *
@@ -103,10 +93,13 @@ export class AuthAccessTokenController {
      * @return 액세스 토큰
      */
     @TypedRoute.Post()
-    create(
+    async create(
         @Authorization("refresh") refresh_token: string,
     ): Promise<IAuthentication.IResponse.IRefresh> {
-        return Authentication.Service.refreshAccessToken(refresh_token);
+        const result = await Authentication.Service.refreshAccessToken()(
+            refresh_token,
+        );
+        return httpResponse(result);
     }
 }
 
@@ -141,13 +134,13 @@ export class AUthUserController {
      * @return 사용자 토큰(access token)
      */
     @TypedRoute.Post()
-    create(
+    async create(
         @Authorization("account") account_token: string,
         @TypedBody() body: IUser.ICreateRequest,
     ): Promise<IAuthentication.IResponse.ISignIn> {
-        return Authentication.Service.createUser({
-            account_token,
-            input: body,
-        });
+        const result = await Authentication.Service.createUser()(account_token)(
+            body,
+        );
+        return httpResponse(result);
     }
 }

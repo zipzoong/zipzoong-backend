@@ -18,6 +18,6 @@ export class TermsController {
      */
     @TypedRoute.Get()
     getList(@TypedQuery() query: ITerms.ISearch): Promise<ITerms[]> {
-        return Terms.Service.getList(query);
+        return Terms.Service.getList()(query);
     }
 }

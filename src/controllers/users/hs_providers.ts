@@ -3,6 +3,7 @@ import { Controller } from "@nestjs/common";
 import { Authorization } from "../decorators/authorization";
 import { IHSProvider } from "@APP/api/structures/user/IHSProvider";
 import { IHSPortfolio } from "@APP/api/structures/IHSPortfolio";
+import { HSProvider } from "@APP/providers/user/hs_provider";
 
 const route = "users/hs-providers";
 
@@ -23,7 +24,7 @@ export class UsersHSProvidersController {
     getList(
         @TypedQuery() query: IHSProvider.ISearch,
     ): Promise<IHSProvider.IPaginatedSummary> {
-        throw Error("");
+        return HSProvider.Service.Summary.getList(query);
     }
 }
 
@@ -95,6 +96,10 @@ export class UsersHSProvidersSomeoneController {
     /**
      * 생활서비스 전문가의 공개 정보를 요청한다.
      *
+     * {@link IHSProvider.FailureCode.GetPublicOne 에러 코드}
+     * - `USER_INACTIVE` : 비활성화된 사용자인 경우
+     * - `USER_NOT_FOUND` : 사용자 정보를 찾을 수 없는 경우
+     *
      * @summary 생활서비스 전문가 공개 프로필 정보 조회
      *
      * @tag hs-providers
@@ -107,11 +112,15 @@ export class UsersHSProvidersSomeoneController {
     getOne(
         @TypedParam("provider_id") provider_id: string,
     ): Promise<IHSProvider.IPublic> {
-        throw Error();
+        return HSProvider.Service.Public.getOne()(provider_id);
     }
 
     /**
      * 생활서비스 전문가 연락처 정보를 요청한다.
+     *
+     * {@link IHSProvider.FailureCode.GetContact 에러 코드}
+     * - `USER_INACTIVE` : 비활성화된 사용자인 경우
+     * - `USER_NOT_FOUND` : 사용자 정보를 찾을 수 없는 경우
      *
      * @summary 생활서비스 전문가 연락처 정보 조회
      *
@@ -128,7 +137,9 @@ export class UsersHSProvidersSomeoneController {
         @Authorization("access") access_token: string,
         @TypedParam("provider_id") provider_id: string,
     ): Promise<IHSProvider.IContact> {
-        throw Error();
+        return HSProvider.Service.Public.getContact()(access_token)(
+            provider_id,
+        );
     }
 
     /**

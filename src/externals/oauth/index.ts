@@ -3,7 +3,7 @@ import { Kakao } from "./kakao/sdk";
 import { isUndefined } from "@fxts/core";
 import typia from "typia";
 import { IResult } from "@APP/api/types";
-import { Result } from "@APP/utils";
+import { InternalError, Result } from "@APP/utils";
 
 export const Oauth: Record<
     IAuthentication.OauthType,
@@ -13,7 +13,7 @@ export const Oauth: Record<
                 oauth_sub: string;
                 profile: IAuthentication.IAccountProfile;
             },
-            "OAUTH_FAIL"
+            InternalError
         >
     >
 > = {
@@ -85,8 +85,8 @@ export const Oauth: Record<
                 address: null,
             };
             return Result.Ok.map({ oauth_sub, profile });
-        } catch {
-            return Result.Error.map("OAUTH_FAIL" as const);
+        } catch (error) {
+            return Result.Error.map(InternalError.create(error as Error));
         }
     },
 };

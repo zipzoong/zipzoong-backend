@@ -10,7 +10,7 @@ interface ICreate<T extends string = string> {
  */
 export class Failure<T extends string = string> extends Error {
     override readonly name: "Failure";
-    override readonly cause: string;
+    override readonly cause: T;
     override readonly message: string;
     public readonly statusCode: number;
     constructor({ cause, message, statusCode }: ICreate<T>) {
@@ -21,31 +21,29 @@ export class Failure<T extends string = string> extends Error {
         this.statusCode = statusCode;
     }
 
-    static create<T extends string = string>(input: ICreate<T>): Failure {
+    static create<T extends string = string>(input: ICreate<T>): Failure<T> {
         return new Failure(input);
     }
 
-    static throwFailure<T extends string = string>(
-        input: ICreate<T>,
-    ): () => never {
-        return () => {
-            throw this.create(input);
-        };
+    getFailure() {
+        return { cause: this.cause, message: this.message } satisfies IFailure;
     }
 
-    getCause() {
-        return this.cause;
+    throw(): never {
+        throw this;
+    }
+}
+
+export class InternalError {
+    readonly name: "InternalError";
+    constructor(public readonly error: Error) {
+        this.name = "InternalError";
+    }
+    static create(error: Error): InternalError {
+        return new InternalError(error);
     }
 
-    getMessage() {
-        return this.message;
-    }
-
-    getStatusCode() {
-        return this.statusCode;
-    }
-
-    getFailure(): IFailure {
-        return { cause: this.cause, message: this.message };
+    throw(): never {
+        throw this.error;
     }
 }

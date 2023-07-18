@@ -146,17 +146,37 @@ export namespace IREAgent {
         | "type"
         | "id"
         | "name"
-        | "introduction"
         | "profile_image_url"
+        | "introduction"
         | "is_licensed"
         | "expertise"
         | "real_estate"
-        | "created_at"
-        | "updated_at"
     >;
 
-    export interface IPrivate extends IREAgent {}
-
+    export type IPrivate = IREAgent;
+    export type IProfile = IPrivate;
+    `
+    export interface IPrivate
+        extends Pick<
+            IREAgent,
+            | "type"
+            | "id"
+            | "name"
+            | "profile_image_url"
+            | "introduction"
+            | "expertise"
+            | "is_verified"
+            | "is_licensed"
+            | "real_estate"
+            | "created_at"
+            | "updated_at"
+        > {
+        /** 마킹된 전화전번호 */
+        readonly marked_phone: string;
+        /** 마킹된 이메일  */
+        readonly marked_email: string | null;
+    }
+`;
     export interface IContact extends Pick<IREAgent, "phone" | "email"> {
         /**
          * 부동산 연락처

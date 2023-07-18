@@ -143,8 +143,31 @@ export namespace IHSProvider {
         | "open_date"
         | "address"
     >;
-
-    export interface IPrivate extends IHSProvider {}
+    export type IPrivate = IHSProvider;
+    export type IProfile = IPrivate;
+    `
+    export interface IProfile
+        extends Pick<
+            IHSProvider,
+            | "type"
+            | "id"
+            | "name"
+            | "profile_image_url"
+            | "introduction"
+            | "biz_phone"
+            | "address"
+            | "expertise"
+            | "is_verified"
+            | "registration_number"
+            | "open_date"
+            | "created_at"
+            | "updated_at"
+        > {
+        /** 마킹된 전화전번호 */
+        readonly marked_phone: string;
+        /** 마킹된 이메일  */
+        readonly marked_email: string | null;
+    }`;
 
     export type IContact = Pick<
         IHSProvider,
@@ -163,4 +186,6 @@ export namespace IHSProvider {
     }
 
     export type IPaginatedSummary = IPaginatedResponse<ISummary>;
+
+    export namespace FailureCode {}
 }

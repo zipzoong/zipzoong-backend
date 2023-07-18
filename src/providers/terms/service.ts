@@ -2,9 +2,10 @@ import { ITerms } from "@APP/api/structures/ITerms";
 import { IUser } from "@APP/api/structures/user/IUser";
 import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
-import { DateMapper, Result, isUnDeleted, pick } from "@APP/utils";
+import { DateMapper, Failure, Result, isUnDeleted, pick } from "@APP/utils";
 import { Prisma, TermsType } from "@PRISMA";
-import { filter, isUndefined, map, pipe, toArray, unless } from "@fxts/core";
+import { filter, map, pipe, toArray, unless } from "@fxts/core";
+import { HttpStatus } from "@nestjs/common";
 import { randomUUID } from "crypto";
 
 export namespace Service {
@@ -20,7 +21,9 @@ export namespace Service {
         (user_type: IUser.Type) =>
         (
             agreement_ids: string[],
-        ): Promise<IResult<string[], "TERMS_INSUFFICIENT" | "TERMS_INVALID">> =>
+        ): Promise<
+            IResult<string[], Failure<"TERMS_INSUFFICIENT" | "TERMS_INVALID">>
+        > =>
             pipe(
                 user_type,
 
@@ -49,7 +52,13 @@ export namespace Service {
                         .map(pick("id"))
                         .every((terms_id) => agreement_ids.includes(terms_id))
                         ? Result.Ok.map(terms.map(pick("id")))
-                        : Result.Error.map("TERMS_INSUFFICIENT" as const),
+                        : Result.Error.map(
+                              Failure.create<"TERMS_INSUFFICIENT">({
+                                  cause: "TERMS_INSUFFICIENT",
+                                  message: "필수 약관에 동의하지 않았습니다.",
+                                  statusCode: HttpStatus.FORBIDDEN,
+                              }),
+                          ),
 
                 // 존재하지 않는 id를 포함하는가
                 unless(Result.Error.is, (terms_ids) =>
@@ -57,19 +66,31 @@ export namespace Service {
                         Result.Ok.flatten(terms_ids).includes(agreement_id),
                     )
                         ? Result.Ok.map(agreement_ids)
-                        : Result.Error.map("TERMS_INVALID" as const),
+                        : Result.Error.map(
+                              Failure.create<"TERMS_INVALID">({
+                                  cause: "TERMS_INVALID",
+                                  message:
+                                      "유효하지 않은 약관을 포함하고 있습니다.",
+                                  statusCode: HttpStatus.BAD_REQUEST,
+                              }),
+                          ),
                 ),
             );
 
-    const _agree =
-        ({
+    /**
+     * 존재하는 user_id인지, 존재하는 terms_id인지 확인하지 않는다.
+     *
+     * tx를 전달하면 자체적으로 transaction을 생성하고, tx를 전달 받으면 해당 transaction내에 포함된다.
+     */
+    export const agree =
+        (tx: Prisma.TransactionClient = prisma) =>
+        async ({
             user_id,
             agreed_terms_ids,
         }: {
             agreed_terms_ids: string[];
             user_id: string;
-        }) =>
-        async (tx: Prisma.TransactionClient): Promise<void> => {
+        }): Promise<void> => {
             const now = DateMapper.toISO();
 
             const agreements = await tx.termsAgreementModel.findMany({
@@ -110,47 +131,31 @@ export namespace Service {
             });
         };
 
-    /**
-     * 존재하는 user_id인지, 존재하는 terms_id인지 확인하지 않는다.
-     *
-     * tx를 전달하면 자체적으로 transaction을 생성하고, tx를 전달 받으면 해당 transaction내에 포함된다.
-     */
-    export const agree = async ({
-        tx,
-        user_id,
-        agreed_terms_ids,
-    }: {
-        tx?: Prisma.TransactionClient;
-        user_id: string;
-        agreed_terms_ids: string[];
-    }) =>
-        isUndefined(tx)
-            ? prisma.$transaction(_agree({ user_id, agreed_terms_ids }))
-            : _agree({ user_id, agreed_terms_ids })(tx);
+    export const getList =
+        (tx: Prisma.TransactionClient = prisma) =>
+        (search: ITerms.ISearch): Promise<ITerms[]> =>
+            pipe(
+                search,
 
-    export const getList = (search: ITerms.ISearch): Promise<ITerms[]> =>
-        pipe(
-            search,
+                async (input) =>
+                    tx.termsModel.findMany({
+                        where: { type: { in: input.type } },
+                    }),
 
-            async (input) =>
-                prisma.termsModel.findMany({
-                    where: { type: { in: input.type } },
-                }),
+                filter(isUnDeleted),
 
-            filter(isUnDeleted),
+                map(
+                    (terms) =>
+                        ({
+                            id: terms.id,
+                            title: terms.title,
+                            url: terms.url,
+                            type: terms.type,
+                            version: terms.version,
+                            is_required: terms.is_required,
+                        }) satisfies ITerms,
+                ),
 
-            map(
-                (terms) =>
-                    ({
-                        id: terms.id,
-                        title: terms.title,
-                        url: terms.url,
-                        type: terms.type,
-                        version: terms.version,
-                        is_required: terms.is_required,
-                    }) satisfies ITerms,
-            ),
-
-            toArray,
-        );
+                toArray,
+            );
 }

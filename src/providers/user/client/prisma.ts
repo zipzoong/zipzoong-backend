@@ -1,7 +1,7 @@
 import { IClient } from "@APP/api/structures/user/IClient";
 import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
-import { DateMapper, Result } from "@APP/utils";
+import { DateMapper, InternalError, Result } from "@APP/utils";
 import { Prisma } from "@PRISMA";
 import { isNull, negate } from "@fxts/core";
 import { randomUUID } from "crypto";
@@ -69,7 +69,7 @@ export namespace PrismaMapper {
                 >
             >
         >,
-    ): IResult<IClient.IPrivate, string> => {
+    ): IResult<IClient.IPrivate, InternalError> => {
         const isNotNull = negate(isNull);
         const client: IClient.IPrivate = {
             type: "client",
@@ -97,6 +97,10 @@ export namespace PrismaMapper {
         };
         return typia.equals<IClient.IPrivate>(client)
             ? Result.Ok.map(client)
-            : Result.Error.map(input.id);
+            : Result.Error.map(
+                  InternalError.create(
+                      Error(`Fail to map Client Private. id: | ${input.id} |`),
+                  ),
+              );
     };
 }

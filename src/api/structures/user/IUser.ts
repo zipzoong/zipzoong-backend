@@ -1,3 +1,4 @@
+import { IAuthentication } from "../IAuthentication";
 import { IClient } from "./IClient";
 import { IHSProvider } from "./IHSProvider";
 import { IREAgent } from "./IREAgent";
@@ -48,6 +49,14 @@ export namespace IUser {
         | IHSProvider.ICreateRequest;
 
     export namespace FailureCode {
-        export type Get = "USER_NOT_FOUND" | "USER_INACTIVE";
+        export type GetPublic = "USER_NOT_FOUND";
+        export type GetPrivate = GetPublic | "USER_INACTIVE";
+        export type GetProfile =
+            | IAuthentication.FailureCode.TokenVerify
+            | IAuthentication.FailureCode.PermissionInSufficient
+            | GetPrivate;
+        export type Authorize =
+            | IAuthentication.FailureCode.TokenVerify
+            | "USER_UNVERIFIED";
     }
 }

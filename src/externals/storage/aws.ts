@@ -17,7 +17,7 @@ import { fromIni } from "@aws-sdk/credential-providers";
 import { formatUrl } from "@aws-sdk/util-format-url";
 import { HttpRequest } from "@aws-sdk/protocol-http";
 import { parseUrl } from "@aws-sdk/url-parser";
-import { isUndefined } from "@fxts/core";
+import { InternalError, Result } from "@APP/utils";
 
 export namespace AWS {
     export namespace S3 {
@@ -70,15 +70,13 @@ export namespace AWS {
                 });
                 const url = new URL(presigned_url);
                 url.search = "";
-                return {
+                return Result.Ok.map({
                     access_type: AccessType(input.resource_type),
                     url: url.href,
                     presigned_url,
-                };
+                });
             } catch (error) {
-                if (isUndefined((error as Error).stack))
-                    throw Error("Fail to AWS Presigned Url For Upload");
-                throw error;
+                return Result.Error.map(InternalError.create(error as Error));
             }
         };
         export const getPresignedReadUrl: IStorage["getReadUrl"] = async (
@@ -87,18 +85,19 @@ export namespace AWS {
             if (input.access_type === "zipzoong_s3") {
                 try {
                     const parsedUrl = parseUrl(input.url);
-                    return formatUrl(
-                        await presigner.presign(new HttpRequest(parsedUrl)),
+                    return Result.Ok.map(
+                        formatUrl(
+                            await presigner.presign(new HttpRequest(parsedUrl)),
+                        ),
                     );
                 } catch (error) {
-                    if (isUndefined((error as Error).stack))
-                        throw Error("Fail to AWS Presigned Url For READ");
-
-                    throw error;
+                    return Result.Error.map(
+                        InternalError.create(error as Error),
+                    );
                 }
             }
 
-            return input.url; // access_type is public
+            return Result.Ok.map(input.url); // access_type is public
         };
     }
 }

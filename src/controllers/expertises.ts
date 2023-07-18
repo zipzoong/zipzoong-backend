@@ -2,6 +2,7 @@ import { IExpertise } from "@APP/api/structures/IExpertise";
 import { Expertise } from "@APP/providers/expertise";
 import { TypedParam, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
+import { httpResponse } from "./internal";
 
 @Controller("hs-expertises")
 export class HSExpertisesController {
@@ -23,7 +24,6 @@ export class HSExpertisesController {
      * 생활서비스 상위 전문 분야 조회
      *
      * {@link IExpertise.FailureCode.GetOne 에러 코드}
-     * - `EXPERTISE_NOT_FOUND` : 전문분야가 존재하지 않는 경우
      *
      * @summary 생활서비스 상위 전문 분야 조회
      *
@@ -34,10 +34,11 @@ export class HSExpertisesController {
      * @return 생활서비스 상위 전문 분야
      */
     @TypedRoute.Get(":expertise_id")
-    get(
+    async get(
         @TypedParam("expertise_id") expertise_id: string,
     ): Promise<IExpertise.ISuper> {
-        return Expertise.Service.HS.getOne(expertise_id);
+        const result = await Expertise.Service.HS.getOne(expertise_id);
+        return httpResponse(result);
     }
 }
 

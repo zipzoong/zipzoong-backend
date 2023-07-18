@@ -1,7 +1,6 @@
 import { Mutable } from "@APP/api/types";
 import { IAddress } from "../common";
 import { IUser } from "./IUser";
-import { IAuthentication } from "../IAuthentication";
 
 export interface IClient extends IUser.IBase<"client"> {
     /**
@@ -79,13 +78,28 @@ export namespace IClient {
          */
         email_verification_id: null | string;
     }
-
-    export interface IPrivate extends IClient {}
-
-    export namespace FailureCode {
-        export type GetMe =
-            | IAuthentication.FailureCode.TokenVerify
-            | IAuthentication.FailureCode.PermissionInSufficient
-            | IUser.FailureCode.Get;
+    export type IPrivate = IClient;
+    export type IProfile = IPrivate;
+    `
+    export interface IPrivate
+        extends Pick<
+            IClient,
+            | "type"
+            | "id"
+            | "name"
+            | "profile_image_url"
+            | "address"
+            | "birth"
+            | "gender"
+            | "created_at"
+            | "updated_at"
+        > {
+        /** 마킹된 전화전번호 */
+        readonly marked_phone: string | null;
+        /** 마킹된 이메일  */
+        readonly marked_email: string | null;
     }
+    `;
+
+    export namespace FailureCode {}
 }

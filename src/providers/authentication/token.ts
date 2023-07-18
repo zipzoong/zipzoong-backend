@@ -1,6 +1,6 @@
 import { IResult } from "@APP/api/types";
 import { IToken } from "./interface";
-import { Crypto, DateMapper, Result } from "@APP/utils";
+import { Crypto, DateMapper, InternalError, Result } from "@APP/utils";
 import { Configuration } from "@APP/infrastructure/config";
 import typia from "typia";
 import { pipe, unless } from "@fxts/core";
@@ -10,10 +10,6 @@ export namespace Token {
     const hour = 1000 * 60 * 60 * 1;
     const day = hour * 24;
 
-    export type FailureCode =
-        | "Token Expired"
-        | "Token Invalid"
-        | "Inner System Error";
     const _verify = <T extends IToken.IBase>({
         token,
         key,
@@ -22,27 +18,19 @@ export namespace Token {
         token: string;
         key: string;
         parser: (input: string) => T;
-    }): IResult<T, FailureCode> =>
+    }): IResult<T, IAuthentication.FailureCode.TokenVerify | InternalError> =>
         pipe(
             Crypto.decrypt({ token, key }),
-
-            (input) =>
-                Result.Ok.is(input)
-                    ? input
-                    : Result.Error.flatten(input) === "Token Invalid"
-                    ? Result.Error.map("Token Invalid" as const)
-                    : Result.Error.map("Inner System Error" as const),
-
             unless(Result.Error.is, (input) => {
                 try {
                     const payload = parser(Result.Ok.flatten(input));
                     const expired_at = new Date(payload.expired_at);
                     const now = new Date();
                     if (now > expired_at)
-                        return Result.Error.map("Token Expired" as const);
+                        return Result.Error.map("TOKEN_EXPIRED" as const);
                     return Result.Ok.map(payload);
                 } catch {
-                    return Result.Error.map("Token Invalid" as const);
+                    return Result.Error.map("TOKEN_INVALID" as const);
                 }
             }),
         );
@@ -55,28 +43,30 @@ export namespace Token {
             account_id,
         }: Pick<IToken.IAccount, "account_id">): IResult<
             IAuthentication.IToken,
-            "Inner System Error"
+            InternalError
         > => {
             const expired_at = DateMapper.toISO(
                 new Date(Date.now() + duration),
             );
-            const plain = typia.stringify<IToken.IAccount>({
-                type: "account",
-                account_id,
-                expired_at,
-            });
-            const token = Crypto.encrypt({ plain, key });
-            if (Result.Error.is(token))
-                return Result.Error.map("Inner System Error" as const);
-            return Result.Ok.map({
-                token: Result.Ok.flatten(token),
-                expired_at,
-            });
+            return pipe(
+                {
+                    type: "account",
+                    account_id,
+                    expired_at,
+                } satisfies IToken.IAccount,
+
+                typia.createStringify<IToken.IAccount>(),
+
+                (plain) => Crypto.encrypt({ plain, key }),
+
+                unless(
+                    Result.Error.is,
+                    Result.Ok.lift((token) => ({ token, expired_at })),
+                ),
+            );
         };
 
-        export const verify = (
-            token: string,
-        ): IResult<IToken.IAccount, FailureCode> =>
+        export const verify = (token: string) =>
             _verify({
                 token,
                 parser: typia.createAssertParse<IToken.IAccount>(),
@@ -93,29 +83,31 @@ export namespace Token {
             user_type,
         }: Pick<IToken.IAccess, "user_id" | "user_type">): IResult<
             IAuthentication.IToken,
-            "Inner System Error"
+            InternalError
         > => {
             const expired_at = DateMapper.toISO(
                 new Date(Date.now() + duration),
             );
-            const plain = typia.stringify<IToken.IAccess>({
-                type: "access",
-                user_id,
-                user_type,
-                expired_at,
-            });
-            const token = Crypto.encrypt({ plain, key });
-            if (Result.Error.is(token))
-                return Result.Error.map("Inner System Error" as const);
-            return Result.Ok.map({
-                token: Result.Ok.flatten(token),
-                expired_at,
-            });
+            return pipe(
+                {
+                    type: "access",
+                    user_id,
+                    user_type,
+                    expired_at,
+                } satisfies IToken.IAccess,
+
+                typia.createStringify<IToken.IAccess>(),
+
+                (plain) => Crypto.encrypt({ plain, key }),
+
+                unless(
+                    Result.Error.is,
+                    Result.Ok.lift((token) => ({ token, expired_at })),
+                ),
+            );
         };
 
-        export const verify = (
-            token: string,
-        ): IResult<IToken.IAccess, FailureCode> =>
+        export const verify = (token: string) =>
             _verify({
                 token,
                 parser: typia.createAssertParse<IToken.IAccess>(),
@@ -132,29 +124,31 @@ export namespace Token {
             user_type,
         }: Pick<IToken.IRefresh, "user_id" | "user_type">): IResult<
             IAuthentication.IToken,
-            "Inner System Error"
+            InternalError
         > => {
             const expired_at = DateMapper.toISO(
                 new Date(Date.now() + duration),
             );
-            const plain = typia.stringify<IToken.IRefresh>({
-                type: "refresh",
-                user_id,
-                user_type,
-                expired_at,
-            });
-            const token = Crypto.encrypt({ plain, key });
-            if (Result.Error.is(token))
-                return Result.Error.map("Inner System Error" as const);
-            return Result.Ok.map({
-                token: Result.Ok.flatten(token),
-                expired_at,
-            });
+            return pipe(
+                {
+                    type: "refresh",
+                    user_id,
+                    user_type,
+                    expired_at,
+                } satisfies IToken.IRefresh,
+
+                typia.createStringify<IToken.IRefresh>(),
+
+                (plain) => Crypto.encrypt({ plain, key }),
+
+                unless(
+                    Result.Error.is,
+                    Result.Ok.lift((token) => ({ token, expired_at })),
+                ),
+            );
         };
 
-        export const verify = (
-            token: string,
-        ): IResult<IToken.IRefresh, FailureCode> =>
+        export const verify = (token: string) =>
             _verify({
                 token,
                 parser: typia.createAssertParse<IToken.IRefresh>(),
