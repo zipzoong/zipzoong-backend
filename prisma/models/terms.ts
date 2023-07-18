@@ -1,6 +1,6 @@
 import { createModel } from "schemix";
-import { Entity } from "../mixins";
 import { TermsType } from "../enums";
+import { Entity } from "../mixins";
 import { User } from "./user";
 
 export const Terms = createModel("TermsModel", (model) => {

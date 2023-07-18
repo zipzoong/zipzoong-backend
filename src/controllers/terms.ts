@@ -1,7 +1,7 @@
-import { ITerms } from "@APP/api/structures/ITerms";
-import { Terms } from "@APP/providers/terms";
 import { TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
+import { ITerms } from "@APP/api/structures/ITerms";
+import { Terms } from "@APP/providers/terms";
 
 @Controller("terms")
 export class TermsController {

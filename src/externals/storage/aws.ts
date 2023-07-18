@@ -3,21 +3,21 @@ import {
     PutObjectCommandInput,
     S3Client,
 } from "@aws-sdk/client-s3";
-import { IStorage } from "./interface";
-import { Configuration } from "@APP/infrastructure/config";
-import { IUpload } from "@APP/api/structures/IUpload";
-import { randomUUID } from "crypto";
+import { fromIni } from "@aws-sdk/credential-providers";
+import { Hash } from "@aws-sdk/hash-node";
+import { HttpRequest } from "@aws-sdk/protocol-http";
 import {
     S3RequestPresigner,
     getSignedUrl,
 } from "@aws-sdk/s3-request-presigner";
-import { URL } from "url";
-import { Hash } from "@aws-sdk/hash-node";
-import { fromIni } from "@aws-sdk/credential-providers";
-import { formatUrl } from "@aws-sdk/util-format-url";
-import { HttpRequest } from "@aws-sdk/protocol-http";
 import { parseUrl } from "@aws-sdk/url-parser";
+import { formatUrl } from "@aws-sdk/util-format-url";
+import { randomUUID } from "crypto";
+import { URL } from "url";
+import { IUpload } from "@APP/api/structures/IUpload";
+import { Configuration } from "@APP/infrastructure/config";
 import { InternalError, Result } from "@APP/utils";
+import { IStorage } from "./interface";
 
 export namespace AWS {
     export namespace S3 {

@@ -1,8 +1,8 @@
 import { Mutable } from "@APP/api/types";
+import { IExpertise } from "../IExpertise";
 import { IAddress, IPage, IPaginatedResponse } from "../common";
 import { IBIZUser } from "./IBIZUser";
 import { IUser } from "./IUser";
-import { IExpertise } from "../IExpertise";
 
 export interface IHSProvider extends IUser.IBase<"home service provider"> {
     /** 업체 승인 여부 */
@@ -187,5 +187,13 @@ export namespace IHSProvider {
 
     export type IPaginatedSummary = IPaginatedResponse<ISummary>;
 
-    export namespace FailureCode {}
+    export namespace FailureCode {
+        export type Authorize = IUser.FailureCode.Authorize;
+        export type GetPublic = IUser.FailureCode.GetPublic;
+        export type GetPrivate = IUser.FailureCode.GetPrivate;
+        export type GetProfile = IUser.FailureCode.GetProfile;
+        export type GetContact = Authorize | GetPublic;
+        export type GetCertificationList = GetProfile;
+        export type CreateCertification = GetProfile;
+    }
 }

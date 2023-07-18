@@ -1,7 +1,7 @@
-import { parseFailure } from "@APP/api";
-import { IFailure } from "@APP/api/types";
 import { HttpError } from "@nestia/fetcher";
 import assert from "assert";
+import { parseFailure } from "@APP/api";
+import { IFailure } from "@APP/api/types";
 
 export const test_failure =
     <T = void>(api: (input: T) => Promise<unknown>) =>

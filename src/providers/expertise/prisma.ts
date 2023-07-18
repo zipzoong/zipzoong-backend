@@ -14,7 +14,7 @@ export namespace PrismaJson {
                         name: true,
                     },
                 },
-            }) satisfies Prisma.HSSubExpertiseModelSelect;
+            } satisfies Prisma.HSSubExpertiseModelSelect);
 
         export const superSelect = () =>
             ({
@@ -30,7 +30,7 @@ export namespace PrismaJson {
                         deleted_at: true,
                     },
                 },
-            }) satisfies Prisma.HSSuperExpertiseModelSelect;
+            } satisfies Prisma.HSSuperExpertiseModelSelect);
     }
 
     export namespace RE {
@@ -40,6 +40,6 @@ export namespace PrismaJson {
                 name: true,
                 is_deleted: true,
                 deleted_at: true,
-            }) satisfies Prisma.REExpertiseModelSelect;
+            } satisfies Prisma.REExpertiseModelSelect);
     }
 }

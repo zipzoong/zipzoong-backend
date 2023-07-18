@@ -1,13 +1,13 @@
-import { IUser } from "@APP/api/structures/user/IUser";
-import { IClient } from "@APP/api/structures/user/IClient";
-import { prisma } from "@APP/infrastructure/DB";
 import { Prisma } from "@PRISMA";
 import { isNull, pipe } from "@fxts/core";
-import { PrismaJson, PrismaMapper } from "./prisma";
-import { Failure, InternalError, Result, isDeleted } from "@APP/utils";
 import { HttpStatus } from "@nestjs/common";
+import { IClient } from "@APP/api/structures/user/IClient";
+import { IUser } from "@APP/api/structures/user/IUser";
 import { IResult } from "@APP/api/types";
+import { prisma } from "@APP/infrastructure/DB";
+import { Failure, InternalError, Result, isDeleted } from "@APP/utils";
 import { User } from "../user";
+import { PrismaJson, PrismaMapper } from "./prisma";
 
 export namespace Service {
     export const getPrivate =

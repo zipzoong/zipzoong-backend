@@ -1,7 +1,7 @@
-import { IVerification } from "@APP/api/structures/IVerification";
-import { Verification } from "@APP/providers/verification";
 import { TypedBody, TypedRoute } from "@nestia/core";
 import { Controller, HttpCode, HttpStatus } from "@nestjs/common";
+import { IVerification } from "@APP/api/structures/IVerification";
+import { Verification } from "@APP/providers/verification";
 import { httpResponse } from "./internal";
 
 const route = "verification/phones";

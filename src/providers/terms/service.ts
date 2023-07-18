@@ -1,12 +1,12 @@
+import { Prisma, TermsType } from "@PRISMA";
+import { filter, map, pipe, toArray, unless } from "@fxts/core";
+import { HttpStatus } from "@nestjs/common";
+import { randomUUID } from "crypto";
 import { ITerms } from "@APP/api/structures/ITerms";
 import { IUser } from "@APP/api/structures/user/IUser";
 import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
 import { DateMapper, Failure, Result, isUnDeleted, pick } from "@APP/utils";
-import { Prisma, TermsType } from "@PRISMA";
-import { filter, map, pipe, toArray, unless } from "@fxts/core";
-import { HttpStatus } from "@nestjs/common";
-import { randomUUID } from "crypto";
 
 export namespace Service {
     /**
@@ -153,7 +153,7 @@ export namespace Service {
                             type: terms.type,
                             version: terms.version,
                             is_required: terms.is_required,
-                        }) satisfies ITerms,
+                        } satisfies ITerms),
                 ),
 
                 toArray,

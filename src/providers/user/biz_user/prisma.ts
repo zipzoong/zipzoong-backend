@@ -1,7 +1,7 @@
-import { IBIZUser } from "@APP/api/structures/user/IBIZUser";
-import { DateMapper } from "@APP/utils";
 import { Prisma } from "@PRISMA";
 import { randomUUID } from "crypto";
+import { IBIZUser } from "@APP/api/structures/user/IBIZUser";
+import { DateMapper } from "@APP/utils";
 
 export namespace PrismaJson {
     export const createCertificationImageListData =
@@ -19,7 +19,7 @@ export namespace PrismaJson {
                         updated_at: now,
                         is_deleted: false,
                         deleted_at: null,
-                    }) satisfies Prisma.BIZCertificationImageModelCreateManyInput,
+                    } satisfies Prisma.BIZCertificationImageModelCreateManyInput),
             );
         };
 

@@ -1,7 +1,7 @@
-import { IExpertise } from "@APP/api/structures/IExpertise";
-import { Expertise } from "@APP/providers/expertise";
 import { TypedParam, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
+import { IExpertise } from "@APP/api/structures/IExpertise";
+import { Expertise } from "@APP/providers/expertise";
 import { httpResponse } from "./internal";
 
 @Controller("hs-expertises")

@@ -93,7 +93,7 @@ export namespace getList {
 /**
  * 생활서비스 전문가의 공개 정보를 요청한다.
  * 
- * {@link IUser.FailureCode.GetPublic 에러 코드}
+ * {@link IHSProvider.FailureCode.GetPublic 에러 코드}
  * 
  * @summary 생활서비스 전문가 공개 프로필 정보 조회
  * 

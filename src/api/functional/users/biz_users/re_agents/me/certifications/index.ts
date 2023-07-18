@@ -14,7 +14,7 @@ import type { IBIZUser } from "./../../../../../../structures/user/IBIZUser";
 /**
  * 제출한 사업자 인증 서류 이미지 목록 조회
  * 
- * {@link IUser.FailureCode.Authorize 에러 코드}
+ * {@link IREAgent.FailureCode.GetCertificationList 에러 코드}
  * 
  * @summary 사업자 인증 서류 이미지 목록 조회
  * 
@@ -72,7 +72,7 @@ export namespace getList {
 /**
  * 사업자 인증 서류 이미지 추가
  * 
- * {@link IUser.FailureCode.Authorize 에러 코드}
+ * {@link IREAgent.FailureCode.CreateCertification 에러 코드}
  * 
  * @summary 사업자 인증 서류 이미지 추가
  * 

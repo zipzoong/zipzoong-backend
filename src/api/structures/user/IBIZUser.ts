@@ -1,5 +1,4 @@
 import { IUpload } from "../IUpload";
-import { IUser } from "./IUser";
 
 export namespace IBIZUser {
     export interface IIntroduction {
@@ -55,9 +54,5 @@ export namespace IBIZUser {
         readonly email: null | string;
     }
 
-    export namespace FailureCode {
-        export type GetContact =
-            | IUser.FailureCode.Authorize
-            | IUser.FailureCode.GetPublic;
-    }
+    export namespace FailureCode {}
 }

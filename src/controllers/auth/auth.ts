@@ -1,9 +1,9 @@
-import { IAuthentication } from "@APP/api/structures/IAuthentication";
-import { Authentication } from "@APP/providers/authentication";
 import { TypedBody, TypedRoute } from "@nestia/core";
 import { Controller, HttpCode, HttpStatus } from "@nestjs/common";
-import { Authorization } from "../decorators/authorization";
+import { IAuthentication } from "@APP/api/structures/IAuthentication";
 import { IUser } from "@APP/api/structures/user/IUser";
+import { Authentication } from "@APP/providers/authentication";
+import { Authorization } from "../decorators/authorization";
 import { httpResponse } from "../internal";
 
 @Controller("auth")

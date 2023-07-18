@@ -1,9 +1,8 @@
-import { IUser } from "@APP/api/structures/user/IUser";
-import { IClient } from "@APP/api/structures/user/IClient";
 import { TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
-import { Authorization } from "../decorators/authorization";
+import { IClient } from "@APP/api/structures/user/IClient";
 import { Client } from "@APP/providers/user/client";
+import { Authorization } from "../decorators/authorization";
 import { httpResponse } from "../internal";
 
 const route = "users/clients";
@@ -13,7 +12,7 @@ export class UsersClientsController {
     /**
      * 일반 고객 내 정보 보기 요청
      *
-     * {@link IUser.FailureCode.GetProfile 에러 코드}
+     * {@link IClient.FailureCode.GetProfile 에러 코드}
      *
      * @summary 일반 고객 내 정보 요청
      *

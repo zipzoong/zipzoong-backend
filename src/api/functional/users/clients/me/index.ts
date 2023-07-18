@@ -13,7 +13,7 @@ import type { IClient } from "./../../../../structures/user/IClient";
 /**
  * 일반 고객 내 정보 보기 요청
  * 
- * {@link IUser.FailureCode.GetProfile 에러 코드}
+ * {@link IClient.FailureCode.GetProfile 에러 코드}
  * 
  * @summary 일반 고객 내 정보 요청
  * 

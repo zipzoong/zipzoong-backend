@@ -1,16 +1,16 @@
-import { IUser } from "@APP/api/structures/user/IUser";
+import { Prisma } from "@PRISMA";
+import { isString, pipe, unless } from "@fxts/core";
+import { HttpStatus } from "@nestjs/common";
+import { IAuthentication } from "@APP/api/structures/IAuthentication";
 import { IClient } from "@APP/api/structures/user/IClient";
 import { IHSProvider } from "@APP/api/structures/user/IHSProvider";
 import { IREAgent } from "@APP/api/structures/user/IREAgent";
+import { IUser } from "@APP/api/structures/user/IUser";
+import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
 import { Authentication } from "@APP/providers/authentication";
-import { Prisma } from "@PRISMA";
-import { isString, pipe, unless } from "@fxts/core";
-import { Failure, InternalError, Result, pick } from "@APP/utils";
-import { HttpStatus } from "@nestjs/common";
-import { IResult } from "@APP/api/types";
 import { IToken } from "@APP/providers/authentication/interface";
-import { IAuthentication } from "@APP/api/structures/IAuthentication";
+import { Failure, InternalError, Result, pick } from "@APP/utils";
 
 export namespace Service {
     export const isVerified = <

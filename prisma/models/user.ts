@@ -1,7 +1,7 @@
 import { createModel } from "schemix";
-import { Entity } from "../mixins";
 import { RelationalFieldOptions } from "schemix/dist/typings/prisma-type-options";
 import { GenderType, ImageAccessType } from "../enums";
+import { Entity } from "../mixins";
 import { OauthAccount } from "./account";
 import { TermsAgreement } from "./terms";
 

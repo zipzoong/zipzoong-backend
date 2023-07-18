@@ -1,12 +1,11 @@
-import { IUser } from "@APP/api/structures/user/IUser";
-import { IREAgent } from "@APP/api/structures/user/IREAgent";
 import { TypedBody, TypedParam, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
-import { Authorization } from "../../decorators/authorization";
 import { IREPortfolio } from "@APP/api/structures/IREPortfolio";
-import { REAgent } from "@APP/providers/user/re_agent";
-import { httpResponse } from "../../internal";
 import { IBIZUser } from "@APP/api/structures/user/IBIZUser";
+import { IREAgent } from "@APP/api/structures/user/IREAgent";
+import { REAgent } from "@APP/providers/user/re_agent";
+import { Authorization } from "../../decorators/authorization";
+import { httpResponse } from "../../internal";
 
 const route = "users/biz-users/re-agents";
 
@@ -38,7 +37,7 @@ export class UsersREAgentsMeController {
      *
      * 이메일, 휴대전화 등의 개인 정보는 마킹처리되어 전달된다.
      *
-     * {@link IUser.FailureCode.GetProfile 에러 코드}
+     * {@link IREAgent.FailureCode.GetProfile 에러 코드}
      *
      * @summary 공인중개사 내 정보 조회
      *
@@ -102,7 +101,7 @@ export class UsersREAgentsMeCertificationsController {
     /**
      * 제출한 사업자 인증 서류 이미지 목록 조회
      *
-     * {@link IUser.FailureCode.Authorize 에러 코드}
+     * {@link IREAgent.FailureCode.GetCertificationList 에러 코드}
      *
      * @summary 사업자 인증 서류 이미지 목록 조회
      *
@@ -116,7 +115,7 @@ export class UsersREAgentsMeCertificationsController {
     async getList(
         @Authorization("access") access_token: string,
     ): Promise<string[]> {
-        const result = await REAgent.Service.getBIZCertificationList()(
+        const result = await REAgent.Service.getCertificationList()(
             access_token,
         );
         return httpResponse(result);
@@ -125,7 +124,7 @@ export class UsersREAgentsMeCertificationsController {
     /**
      * 사업자 인증 서류 이미지 추가
      *
-     * {@link IUser.FailureCode.Authorize 에러 코드}
+     * {@link IREAgent.FailureCode.CreateCertification 에러 코드}
      *
      * @summary 사업자 인증 서류 이미지 추가
      *
@@ -140,7 +139,7 @@ export class UsersREAgentsMeCertificationsController {
         @Authorization("access") access_token: string,
         @TypedBody() body: IBIZUser.ICertificationImageCreate,
     ): Promise<void> {
-        const result = await REAgent.Service.createBIZCertificationImage()(
+        const result = await REAgent.Service.createCertification()(
             access_token,
         )(body);
         httpResponse(result);
@@ -152,7 +151,7 @@ export class UsersREAgentsSomeoneController {
     /**
      * 공인 중개사의 공개 정보를 요청한다.
      *
-     * {@link IUser.FailureCode.GetPublic 에러 코드}
+     * {@link IREAgent.FailureCode.GetPublic 에러 코드}
      *
      * @summary 공인 중개사 공개 프로필 정보 조회
      *
@@ -173,7 +172,7 @@ export class UsersREAgentsSomeoneController {
     /**
      * 공인 중개사 연락처 정보를 요청한다.
      *
-     * {@link IUser.FailureCode.GetContact 에러 코드}
+     * {@link IREAgent.FailureCode.GetContact 에러 코드}
      *
      * @summary 공인 중개사 연락처 정보 조회
      *

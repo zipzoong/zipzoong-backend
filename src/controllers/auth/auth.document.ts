@@ -1,7 +1,7 @@
-import { Kakao } from "@APP/externals/oauth/kakao/sdk";
 import { TypedRoute } from "@nestia/core";
 import { Controller, HttpCode, HttpStatus, Res } from "@nestjs/common";
 import { Response } from "express";
+import { Kakao } from "@APP/externals/oauth/kakao/sdk";
 
 @Controller("auth/oauth")
 export class AuthOauthController {

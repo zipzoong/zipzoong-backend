@@ -1,16 +1,16 @@
-import { IREAgent } from "@APP/api/structures/user/IREAgent";
-import { IUser } from "@APP/api/structures/user/IUser";
-import { prisma } from "@APP/infrastructure/DB";
-import { Failure, InternalError, Result, isDeleted } from "@APP/utils";
 import { Prisma } from "@PRISMA";
 import { filter, isNull, map, pipe, toArray, unless } from "@fxts/core";
 import { HttpStatus } from "@nestjs/common";
-import { PrismaJson, PrismaMapper } from "./prisma";
+import { IBIZUser } from "@APP/api/structures/user/IBIZUser";
+import { IREAgent } from "@APP/api/structures/user/IREAgent";
+import { IUser } from "@APP/api/structures/user/IUser";
 import { IResult } from "@APP/api/types";
+import { prisma } from "@APP/infrastructure/DB";
+import { Failure, InternalError, Result, isDeleted } from "@APP/utils";
+import { BIZUser } from "../biz_user";
 import { User } from "../user";
 import { Mapper } from "./mapper";
-import { IBIZUser } from "@APP/api/structures/user/IBIZUser";
-import { BIZUser } from "../biz_user";
+import { PrismaJson, PrismaMapper } from "./prisma";
 
 export namespace Service {
     export const getList = ({
@@ -135,7 +135,7 @@ export namespace Service {
         ): Promise<
             IResult<
                 IREAgent.IContact,
-                Failure<IBIZUser.FailureCode.GetContact> | InternalError
+                Failure<IREAgent.FailureCode.GetContact> | InternalError
             >
         > => {
             const permission = await User.Service.authorize(
@@ -152,7 +152,7 @@ export namespace Service {
                 unless(
                     Result.Ok.is,
                     Result.Error.lift(() =>
-                        Failure.create<IBIZUser.FailureCode.GetContact>({
+                        Failure.create<IREAgent.FailureCode.GetContact>({
                             cause: "USER_NOT_FOUND",
                             message: "사용자를 찾을 수 없습니다.",
                             statusCode: HttpStatus.NOT_FOUND,
@@ -164,7 +164,7 @@ export namespace Service {
                     User.Service.isVerified(Result.Ok.flatten(ok))
                         ? ok
                         : Result.Error.map(
-                              Failure.create<IBIZUser.FailureCode.GetContact>({
+                              Failure.create<IREAgent.FailureCode.GetContact>({
                                   cause: "USER_NOT_FOUND",
                                   message: "사용자를 찾을 수 없습니다.",
                                   statusCode: HttpStatus.NOT_FOUND,
@@ -184,43 +184,46 @@ export namespace Service {
         getPrivate,
     });
 
-    export const getBIZCertificationList =
+    export const getCertificationList =
         (tx: Prisma.TransactionClient = prisma) =>
         (
             access_token: string,
         ): Promise<
             IResult<
                 string[],
-                InternalError | Failure<IUser.FailureCode.Authorize>
+                | InternalError
+                | Failure<IREAgent.FailureCode.GetCertificationList>
             >
         > =>
             pipe(
                 access_token,
 
-                User.Service.authorize("real estate agent", getPrivate(tx)),
+                getProfile(tx),
 
                 unless(
                     Result.Error.is,
                     Result.Ok.asyncLift((provider) =>
-                        BIZUser.Service.getBIZCertificationList(tx)(
-                            provider.id,
-                        ),
+                        BIZUser.Service.getCertificationList(tx)(provider.id),
                     ),
                 ),
             );
 
-    export const createBIZCertificationImage =
+    export const createCertification =
         (tx: Prisma.TransactionClient = prisma) =>
         (access_token: string) =>
         (
             input: IBIZUser.ICertificationImageCreate,
         ): Promise<
-            IResult<null, InternalError | Failure<IUser.FailureCode.Authorize>>
+            IResult<
+                null,
+                | InternalError
+                | Failure<IREAgent.FailureCode.CreateCertification>
+            >
         > =>
             pipe(
                 access_token,
 
-                User.Service.authorize("real estate agent", getPrivate(tx)),
+                getProfile(tx),
 
                 unless(
                     Result.Error.is,

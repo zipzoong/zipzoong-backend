@@ -14,7 +14,7 @@ import type { IHSProvider } from "./../../../../../structures/user/IHSProvider";
 /**
  * 생활서비스 전문가 연락처 정보를 요청한다.
  * 
- * {@link IBIZUser.FailureCode.GetContact 에러 코드}
+ * {@link IHSProvider.FailureCode.GetContact 에러 코드}
  * 
  * @summary 생활서비스 전문가 연락처 정보 조회
  * 

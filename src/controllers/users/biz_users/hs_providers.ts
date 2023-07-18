@@ -1,11 +1,10 @@
-import { IBIZUser } from "@APP/api/structures/user/IBIZUser";
-import { IUser } from "@APP/api/structures/user/IUser";
 import { TypedBody, TypedParam, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
-import { Authorization } from "../../decorators/authorization";
-import { IHSProvider } from "@APP/api/structures/user/IHSProvider";
 import { IHSPortfolio } from "@APP/api/structures/IHSPortfolio";
+import { IBIZUser } from "@APP/api/structures/user/IBIZUser";
+import { IHSProvider } from "@APP/api/structures/user/IHSProvider";
 import { HSProvider } from "@APP/providers/user/hs_provider";
+import { Authorization } from "../../decorators/authorization";
 import { httpResponse } from "../../internal";
 
 const route = "users/biz-users/hs-providers";
@@ -38,7 +37,7 @@ export class UsersHSProvidersMeController {
      *
      * 이메일, 휴대전화 등의 개인 정보는 마킹처리되어 전달된다.
      *
-     * {@link IUser.FailureCode.GetProfile 에러 코드}
+     * {@link IHSProvider.FailureCode.GetProfile 에러 코드}
      *
      * @summary 생활서비스 전문가 내 정보 조회
      *
@@ -102,7 +101,7 @@ export class UsersHSProvidersMeCertificationsController {
     /**
      * 제출한 사업자 인증 서류 이미지 목록 조회
      *
-     * {@link IUser.FailureCode.Authorize 에러 코드}
+     * {@link IHSProvider.FailureCode.GetCertificationList 에러 코드}
      *
      * @summary 사업자 인증 서류 이미지 목록 조회
      *
@@ -116,7 +115,7 @@ export class UsersHSProvidersMeCertificationsController {
     async getList(
         @Authorization("access") access_token: string,
     ): Promise<string[]> {
-        const result = await HSProvider.Service.getBIZCertificationList()(
+        const result = await HSProvider.Service.getCertificationList()(
             access_token,
         );
         return httpResponse(result);
@@ -125,7 +124,7 @@ export class UsersHSProvidersMeCertificationsController {
     /**
      * 사업자 인증 서류 이미지 추가
      *
-     * {@link IUser.FailureCode.Authorize 에러 코드}
+     * {@link IHSProvider.FailureCode.CreateCertification 에러 코드}
      *
      * @summary 사업자 인증 서류 이미지 추가
      *
@@ -140,7 +139,7 @@ export class UsersHSProvidersMeCertificationsController {
         @Authorization("access") access_token: string,
         @TypedBody() body: IBIZUser.ICertificationImageCreate,
     ): Promise<void> {
-        const result = await HSProvider.Service.createBIZCertificationImage()(
+        const result = await HSProvider.Service.createCertification()(
             access_token,
         )(body);
         httpResponse(result);
@@ -152,7 +151,7 @@ export class UsersHSProvidersSomeoneController {
     /**
      * 생활서비스 전문가의 공개 정보를 요청한다.
      *
-     * {@link IUser.FailureCode.GetPublic 에러 코드}
+     * {@link IHSProvider.FailureCode.GetPublic 에러 코드}
      *
      * @summary 생활서비스 전문가 공개 프로필 정보 조회
      *
@@ -173,7 +172,7 @@ export class UsersHSProvidersSomeoneController {
     /**
      * 생활서비스 전문가 연락처 정보를 요청한다.
      *
-     * {@link IBIZUser.FailureCode.GetContact 에러 코드}
+     * {@link IHSProvider.FailureCode.GetContact 에러 코드}
      *
      * @summary 생활서비스 전문가 연락처 정보 조회
      *

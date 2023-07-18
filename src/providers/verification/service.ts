@@ -1,3 +1,7 @@
+import { Prisma } from "@PRISMA";
+import { isNull, pipe, unless } from "@fxts/core";
+import { HttpStatus } from "@nestjs/common";
+import { randomInt, randomUUID } from "crypto";
 import { IVerification } from "@APP/api/structures/IVerification";
 import { IResult } from "@APP/api/types";
 import { SMS } from "@APP/externals/sms";
@@ -9,10 +13,6 @@ import {
     Result,
     isDeleted,
 } from "@APP/utils";
-import { Prisma } from "@PRISMA";
-import { isNull, pipe, unless } from "@fxts/core";
-import { HttpStatus } from "@nestjs/common";
-import { randomInt, randomUUID } from "crypto";
 
 export namespace Service {
     /** 5min */

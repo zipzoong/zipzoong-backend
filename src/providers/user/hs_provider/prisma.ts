@@ -1,3 +1,7 @@
+import { Prisma } from "@PRISMA";
+import { isUndefined } from "@fxts/core";
+import { randomUUID } from "crypto";
+import typia from "typia";
 import { IHSProvider } from "@APP/api/structures/user/IHSProvider";
 import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
@@ -8,10 +12,6 @@ import {
     isUnDeleted,
     pick,
 } from "@APP/utils";
-import { Prisma } from "@PRISMA";
-import { isUndefined } from "@fxts/core";
-import { randomUUID } from "crypto";
-import typia from "typia";
 
 export namespace PrismaJson {
     export const createData = (input: IHSProvider.ICreate) => {
@@ -75,7 +75,7 @@ export namespace PrismaJson {
                     },
                 },
             },
-        }) satisfies Prisma.HSSubExpertiseRelationModelSelect;
+        } satisfies Prisma.HSSubExpertiseRelationModelSelect);
 
     export const summarySelect = () =>
         ({
@@ -95,7 +95,7 @@ export namespace PrismaJson {
             expertise_relation: {
                 select: expertiseRelationSelect(),
             },
-        }) satisfies Prisma.HSProviderModelSelect;
+        } satisfies Prisma.HSProviderModelSelect);
 
     export const privateSelect = () =>
         ({
@@ -129,7 +129,7 @@ export namespace PrismaJson {
             address_zone_code: true,
             address_detail: true,
             address_extra: true,
-        }) satisfies Prisma.HSProviderModelSelect;
+        } satisfies Prisma.HSProviderModelSelect);
 }
 
 export namespace PrismaMapper {

@@ -1,10 +1,10 @@
+import { Prisma } from "@PRISMA";
+import { randomUUID } from "crypto";
+import typia from "typia";
 import { IREAgent } from "@APP/api/structures/user/IREAgent";
 import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
 import { DateMapper, InternalError, Result } from "@APP/utils";
-import { Prisma } from "@PRISMA";
-import { randomUUID } from "crypto";
-import typia from "typia";
 
 export namespace PrismaJson {
     export const createData = (input: IREAgent.ICreate) => {
@@ -72,7 +72,7 @@ export namespace PrismaJson {
             re_address_detail: true,
             re_address_extra: true,
             biz_open_date: true,
-        }) satisfies Prisma.REAgentModelSelect;
+        } satisfies Prisma.REAgentModelSelect);
 
     export const privateSelect = () =>
         ({
@@ -109,7 +109,7 @@ export namespace PrismaJson {
             re_address_detail: true,
             re_address_extra: true,
             biz_open_date: true,
-        }) satisfies Prisma.REAgentModelSelect;
+        } satisfies Prisma.REAgentModelSelect);
 }
 
 export namespace PrismaMapper {

@@ -1,7 +1,7 @@
-import { IUpload } from "@APP/api/structures/IUpload";
-import { Upload } from "@APP/providers/upload";
 import { TypedBody, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
+import { IUpload } from "@APP/api/structures/IUpload";
+import { Upload } from "@APP/providers/upload";
 import { httpResponse } from "./internal";
 
 @Controller("upload")

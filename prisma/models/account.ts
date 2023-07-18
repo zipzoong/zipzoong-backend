@@ -1,6 +1,6 @@
 import { createModel } from "schemix";
-import { Entity } from "../mixins";
 import { GenderType, OauthType } from "../enums";
+import { Entity } from "../mixins";
 import { BIZUser, Client } from "./user";
 
 export const OauthAccount = createModel("OauthAccountModel", (model) => {

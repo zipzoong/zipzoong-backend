@@ -1,8 +1,8 @@
 import { isUndefined } from "@fxts/core";
 import crypto from "crypto";
-import { Result } from "./result";
 import { IResult } from "@APP/api/types";
 import { InternalError } from "./failure";
+import { Result } from "./result";
 
 export namespace Crypto {
     const IV_LEN = 12;

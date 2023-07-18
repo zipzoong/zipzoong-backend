@@ -1,6 +1,14 @@
+import { OauthAccountModel, Prisma } from "@PRISMA";
 import { identity, isNull, isString, negate, pipe, unless } from "@fxts/core";
+import { HttpStatus } from "@nestjs/common";
+import { randomUUID } from "crypto";
 import { IAuthentication } from "@APP/api/structures/IAuthentication";
+import { IHSProvider } from "@APP/api/structures/user/IHSProvider";
+import { IREAgent } from "@APP/api/structures/user/IREAgent";
+import { IUser } from "@APP/api/structures/user/IUser";
+import { IResult } from "@APP/api/types";
 import { Oauth } from "@APP/externals/oauth";
+import { prisma } from "@APP/infrastructure/DB";
 import {
     DateMapper,
     Failure,
@@ -10,21 +18,13 @@ import {
     isUnDeleted,
     pick,
 } from "@APP/utils";
-import { HttpStatus } from "@nestjs/common";
-import { prisma } from "@APP/infrastructure/DB";
-import { IUser } from "@APP/api/structures/user/IUser";
-import { Token } from "./token";
-import { randomUUID } from "crypto";
-import { OauthAccountModel, Prisma } from "@PRISMA";
-import { Client } from "../user/client";
-import { REAgent } from "../user/re_agent";
-import { HSProvider } from "../user/hs_provider";
-import { BIZUser } from "../user/biz_user";
 import { Terms } from "../terms";
-import { IREAgent } from "@APP/api/structures/user/IREAgent";
-import { IHSProvider } from "@APP/api/structures/user/IHSProvider";
-import { IResult } from "@APP/api/types";
+import { BIZUser } from "../user/biz_user";
+import { Client } from "../user/client";
+import { HSProvider } from "../user/hs_provider";
+import { REAgent } from "../user/re_agent";
 import { IToken } from "./interface";
+import { Token } from "./token";
 
 export namespace Service {
     const idMapper: Record<IUser.Type, "client" | "biz_user"> = {

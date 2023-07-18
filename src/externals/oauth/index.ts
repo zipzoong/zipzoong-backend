@@ -1,9 +1,9 @@
-import { IAuthentication } from "@APP/api/structures/IAuthentication";
-import { Kakao } from "./kakao/sdk";
 import { isUndefined } from "@fxts/core";
 import typia from "typia";
+import { IAuthentication } from "@APP/api/structures/IAuthentication";
 import { IResult } from "@APP/api/types";
 import { InternalError, Result } from "@APP/utils";
+import { Kakao } from "./kakao/sdk";
 
 export const Oauth: Record<
     IAuthentication.OauthType,

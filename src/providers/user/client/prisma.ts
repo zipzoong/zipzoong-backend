@@ -1,11 +1,11 @@
-import { IClient } from "@APP/api/structures/user/IClient";
-import { IResult } from "@APP/api/types";
-import { prisma } from "@APP/infrastructure/DB";
-import { DateMapper, InternalError, Result } from "@APP/utils";
 import { Prisma } from "@PRISMA";
 import { isNull, negate } from "@fxts/core";
 import { randomUUID } from "crypto";
 import typia from "typia";
+import { IClient } from "@APP/api/structures/user/IClient";
+import { IResult } from "@APP/api/types";
+import { prisma } from "@APP/infrastructure/DB";
+import { DateMapper, InternalError, Result } from "@APP/utils";
 
 export namespace PrismaJson {
     export const createData = (input: IClient.ICreate) => {
@@ -55,7 +55,7 @@ export namespace PrismaJson {
                     deleted_at: true,
                 },
             },
-        }) satisfies Prisma.ClientModelSelect;
+        } satisfies Prisma.ClientModelSelect);
 }
 
 export namespace PrismaMapper {

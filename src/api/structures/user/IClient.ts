@@ -101,5 +101,8 @@ export namespace IClient {
     }
     `;
 
-    export namespace FailureCode {}
+    export namespace FailureCode {
+        export type Authorize = IUser.FailureCode.Authorize;
+        export type GetProfile = IUser.FailureCode.GetProfile;
+    }
 }

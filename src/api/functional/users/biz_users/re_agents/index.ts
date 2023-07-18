@@ -93,7 +93,7 @@ export namespace getList {
 /**
  * 공인 중개사의 공개 정보를 요청한다.
  * 
- * {@link IUser.FailureCode.GetPublic 에러 코드}
+ * {@link IREAgent.FailureCode.GetPublic 에러 코드}
  * 
  * @summary 공인 중개사 공개 프로필 정보 조회
  * 
