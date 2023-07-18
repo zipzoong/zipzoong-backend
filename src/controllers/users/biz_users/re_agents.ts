@@ -2,12 +2,13 @@ import { IUser } from "@APP/api/structures/user/IUser";
 import { IREAgent } from "@APP/api/structures/user/IREAgent";
 import { TypedBody, TypedParam, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
-import { Authorization } from "../decorators/authorization";
+import { Authorization } from "../../decorators/authorization";
 import { IREPortfolio } from "@APP/api/structures/IREPortfolio";
 import { REAgent } from "@APP/providers/user/re_agent";
-import { httpResponse } from "../internal";
+import { httpResponse } from "../../internal";
+import { IBIZUser } from "@APP/api/structures/user/IBIZUser";
 
-const route = "users/re-agents";
+const route = "users/biz-users/re-agents";
 
 @Controller(route)
 export class UsersREAgentsController {
@@ -36,6 +37,8 @@ export class UsersREAgentsMeController {
      * 공인중개사 개인정보를 요청한다.
      *
      * 이메일, 휴대전화 등의 개인 정보는 마킹처리되어 전달된다.
+     *
+     * {@link IUser.FailureCode.GetProfile 에러 코드}
      *
      * @summary 공인중개사 내 정보 조회
      *
@@ -91,6 +94,56 @@ export class UsersREAgentsMeController {
         @TypedQuery() query: IREPortfolio.ISearch,
     ): Promise<IREPortfolio.IPaginatedPrivate> {
         throw Error();
+    }
+}
+
+@Controller(route + "/me/certifications")
+export class UsersREAgentsMeCertificationsController {
+    /**
+     * 제출한 사업자 인증 서류 이미지 목록 조회
+     *
+     * {@link IUser.FailureCode.Authorize 에러 코드}
+     *
+     * @summary 사업자 인증 서류 이미지 목록 조회
+     *
+     * @tag re-agents
+     *
+     * @param access_token 사업자 권한을 가진 액세스 토큰
+     *
+     * @return 사업자 인증 서류 이미지 url 목록
+     */
+    @TypedRoute.Get()
+    async getList(
+        @Authorization("access") access_token: string,
+    ): Promise<string[]> {
+        const result = await REAgent.Service.getBIZCertificationList()(
+            access_token,
+        );
+        return httpResponse(result);
+    }
+
+    /**
+     * 사업자 인증 서류 이미지 추가
+     *
+     * {@link IUser.FailureCode.Authorize 에러 코드}
+     *
+     * @summary 사업자 인증 서류 이미지 추가
+     *
+     * @tag re-agents
+     *
+     * @param access_token 사업자 권한을 가진 액세스 토큰
+     *
+     * @param body 업로드할 이미지 정보
+     */
+    @TypedRoute.Post()
+    async create(
+        @Authorization("access") access_token: string,
+        @TypedBody() body: IBIZUser.ICertificationImageCreate,
+    ): Promise<void> {
+        const result = await REAgent.Service.createBIZCertificationImage()(
+            access_token,
+        )(body);
+        httpResponse(result);
     }
 }
 

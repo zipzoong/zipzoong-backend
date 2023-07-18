@@ -1,4 +1,3 @@
-import { IAuthentication } from "../IAuthentication";
 import { IUpload } from "../IUpload";
 import { IUser } from "./IUser";
 
@@ -57,12 +56,6 @@ export namespace IBIZUser {
     }
 
     export namespace FailureCode {
-        export type GetBIZCertificationList =
-            | IUser.FailureCode.Authorize
-            | IAuthentication.FailureCode.PermissionInSufficient;
-        export type CreateBIZCertification =
-            | IUser.FailureCode.Authorize
-            | IAuthentication.FailureCode.PermissionInSufficient;
         export type GetContact =
             | IUser.FailureCode.Authorize
             | IUser.FailureCode.GetPublic;

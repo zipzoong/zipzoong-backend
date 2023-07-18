@@ -57,6 +57,7 @@ export namespace IUser {
             | GetPrivate;
         export type Authorize =
             | IAuthentication.FailureCode.TokenVerify
+            | IAuthentication.FailureCode.PermissionInSufficient
             | "USER_UNVERIFIED";
     }
 }

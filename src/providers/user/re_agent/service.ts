@@ -10,6 +10,7 @@ import { IResult } from "@APP/api/types";
 import { User } from "../user";
 import { Mapper } from "./mapper";
 import { IBIZUser } from "@APP/api/structures/user/IBIZUser";
+import { BIZUser } from "../biz_user";
 
 export namespace Service {
     export const getList = ({
@@ -137,7 +138,10 @@ export namespace Service {
                 Failure<IBIZUser.FailureCode.GetContact> | InternalError
             >
         > => {
-            const permission = await User.Service.authorize(tx)(access_token);
+            const permission = await User.Service.authorize(
+                "real estate agent",
+                getPrivate(tx),
+            )(access_token);
             if (Result.Error.is(permission)) return permission;
 
             return pipe(
@@ -179,4 +183,59 @@ export namespace Service {
         user_type: "real estate agent",
         getPrivate,
     });
+
+    export const getBIZCertificationList =
+        (tx: Prisma.TransactionClient = prisma) =>
+        (
+            access_token: string,
+        ): Promise<
+            IResult<
+                string[],
+                InternalError | Failure<IUser.FailureCode.Authorize>
+            >
+        > =>
+            pipe(
+                access_token,
+
+                User.Service.authorize("real estate agent", getPrivate(tx)),
+
+                unless(
+                    Result.Error.is,
+                    Result.Ok.asyncLift((provider) =>
+                        BIZUser.Service.getBIZCertificationList(tx)(
+                            provider.id,
+                        ),
+                    ),
+                ),
+            );
+
+    export const createBIZCertificationImage =
+        (tx: Prisma.TransactionClient = prisma) =>
+        (access_token: string) =>
+        (
+            input: IBIZUser.ICertificationImageCreate,
+        ): Promise<
+            IResult<null, InternalError | Failure<IUser.FailureCode.Authorize>>
+        > =>
+            pipe(
+                access_token,
+
+                User.Service.authorize("real estate agent", getPrivate(tx)),
+
+                unless(
+                    Result.Error.is,
+                    Result.Ok.asyncLift((provider) =>
+                        tx.bIZCertificationImageModel.create({
+                            data: BIZUser.Json.createCertificationImageData(
+                                provider.id,
+                            )(input),
+                        }),
+                    ),
+                ),
+
+                unless(
+                    Result.Error.is,
+                    Result.Ok.lift(() => null),
+                ),
+            );
 }

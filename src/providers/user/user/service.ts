@@ -5,14 +5,12 @@ import { IREAgent } from "@APP/api/structures/user/IREAgent";
 import { prisma } from "@APP/infrastructure/DB";
 import { Authentication } from "@APP/providers/authentication";
 import { Prisma } from "@PRISMA";
-import { isNull, negate, pipe, unless } from "@fxts/core";
-import { Client } from "../client";
+import { isString, pipe, unless } from "@fxts/core";
 import { Failure, InternalError, Result, pick } from "@APP/utils";
 import { HttpStatus } from "@nestjs/common";
 import { IResult } from "@APP/api/types";
 import { IToken } from "@APP/providers/authentication/interface";
-import { HSProvider } from "../hs_provider";
-import { REAgent } from "../re_agent";
+import { IAuthentication } from "@APP/api/structures/IAuthentication";
 
 export namespace Service {
     export const isVerified = <
@@ -22,7 +20,7 @@ export namespace Service {
     ): boolean => {
         switch (user.type) {
             case "client":
-                return negate(isNull)(user.phone);
+                return isString(user.phone);
             case "real estate agent":
                 return user.is_verified;
             case "home service provider":
@@ -31,14 +29,21 @@ export namespace Service {
     };
 
     export const authorize =
-        (tx: Prisma.TransactionClient = prisma) =>
+        <T extends IClient.IPrivate | IHSProvider.IPrivate | IREAgent.IPrivate>(
+            user_type: T["type"],
+            getPrivate: (
+                user_id: string,
+            ) => Promise<
+                IResult<
+                    T,
+                    Failure<IUser.FailureCode.GetPrivate> | InternalError
+                >
+            >,
+        ) =>
         async (
             access_token: string,
         ): Promise<
-            IResult<
-                IClient.IPrivate | IREAgent.IPrivate | IHSProvider.IPrivate,
-                Failure<IUser.FailureCode.Authorize> | InternalError
-            >
+            IResult<T, Failure<IUser.FailureCode.Authorize> | InternalError>
         > =>
             pipe(
                 access_token,
@@ -54,64 +59,68 @@ export namespace Service {
                         Result.Ok.flatten,
 
                         (payload) =>
-                            ({
-                                client: Client.Service.getPrivate(tx),
-                                "real estate agent":
-                                    REAgent.Service.getPrivate(tx),
-                                "home service provider":
-                                    HSProvider.Service.getPrivate(tx),
-                            })[payload.user_type](payload.user_id),
-
-                        unless(
-                            Result.Ok.is<
-                                | IClient.IPrivate
-                                | IREAgent.IPrivate
-                                | IHSProvider.IPrivate,
-                                | Failure<IUser.FailureCode.GetPrivate>
-                                | InternalError
-                            >,
-                            Result.Error.lift((error) =>
-                                error.name === "InternalError"
-                                    ? error
-                                    : Failure.create<IUser.FailureCode.Authorize>(
+                            payload.user_type !== user_type
+                                ? Result.Error.map(
+                                      Failure.create<IAuthentication.FailureCode.PermissionInSufficient>(
                                           {
-                                              cause: "USER_UNVERIFIED",
+                                              cause: "PERMISSION_INSUFFICIENT",
                                               message:
-                                                  "승인되지 않은 사용자입니다.",
+                                                  "해당 요청에 권한이 없습니다.",
                                               statusCode: HttpStatus.FORBIDDEN,
                                           },
                                       ),
-                            ),
-                        ),
+                                  )
+                                : pipe(
+                                      payload,
+
+                                      pick("user_id"),
+
+                                      getPrivate,
+
+                                      unless(
+                                          Result.Ok.is,
+                                          Result.Error.lift((error) =>
+                                              error.name === "InternalError"
+                                                  ? error
+                                                  : Failure.create<IUser.FailureCode.Authorize>(
+                                                        {
+                                                            cause: "USER_UNVERIFIED",
+                                                            message:
+                                                                "승인되지 않은 사용자입니다.",
+                                                            statusCode:
+                                                                HttpStatus.FORBIDDEN,
+                                                        },
+                                                    ),
+                                          ),
+                                      ),
+                                  ),
                     ),
                 ),
 
-                unless(
-                    Result.Error.is<
-                        | IClient.IPrivate
-                        | IREAgent.IPrivate
-                        | IHSProvider.IPrivate,
-                        Failure<IUser.FailureCode.Authorize> | InternalError
-                    >,
-                    (ok) =>
-                        isVerified(Result.Ok.flatten(ok))
-                            ? ok
-                            : Result.Error.map(
-                                  Failure.create<IUser.FailureCode.Authorize>({
-                                      cause: "USER_UNVERIFIED",
-                                      message: "승인되지 않은 사용자입니다.",
-                                      statusCode: HttpStatus.FORBIDDEN,
-                                  }),
-                              ),
+                unless(Result.Error.is, (ok) =>
+                    isVerified(Result.Ok.flatten(ok))
+                        ? ok
+                        : Result.Error.map(
+                              Failure.create<IUser.FailureCode.Authorize>({
+                                  cause: "USER_UNVERIFIED",
+                                  message: "승인되지 않은 사용자입니다.",
+                                  statusCode: HttpStatus.FORBIDDEN,
+                              }),
+                          ),
                 ),
             );
 
     export const getProfile =
-        <T>({
+        <
+            T extends
+                | IClient.IPrivate
+                | IHSProvider.IPrivate
+                | IREAgent.IPrivate,
+        >({
             user_type,
             getPrivate,
         }: {
-            user_type: IUser.Type;
+            user_type: T["type"];
             getPrivate: (
                 tx?: Prisma.TransactionClient,
             ) => (
