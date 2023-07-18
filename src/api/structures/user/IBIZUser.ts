@@ -60,7 +60,9 @@ export namespace IBIZUser {
         export type GetBIZCertificationList =
             | IUser.FailureCode.Authorize
             | IAuthentication.FailureCode.PermissionInSufficient;
-
+        export type CreateBIZCertification =
+            | IUser.FailureCode.Authorize
+            | IAuthentication.FailureCode.PermissionInSufficient;
         export type GetContact =
             | IUser.FailureCode.Authorize
             | IUser.FailureCode.GetPublic;

@@ -1,9 +1,12 @@
+import { IBIZUser } from "@APP/api/structures/user/IBIZUser";
+import { IUser } from "@APP/api/structures/user/IUser";
 import { TypedBody, TypedParam, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
 import { Authorization } from "../decorators/authorization";
 import { IHSProvider } from "@APP/api/structures/user/IHSProvider";
 import { IHSPortfolio } from "@APP/api/structures/IHSPortfolio";
 import { HSProvider } from "@APP/providers/user/hs_provider";
+import { httpResponse } from "../internal";
 
 const route = "users/hs-providers";
 
@@ -24,7 +27,7 @@ export class UsersHSProvidersController {
     getList(
         @TypedQuery() query: IHSProvider.ISearch,
     ): Promise<IHSProvider.IPaginatedSummary> {
-        return HSProvider.Service.Summary.getList(query);
+        return HSProvider.Service.getList(query);
     }
 }
 
@@ -44,10 +47,11 @@ export class UsersHSProvidersMeController {
      * @return 생활서비스 전문가 상세 정보
      */
     @TypedRoute.Get()
-    get(
+    async get(
         @Authorization("access") access_token: string,
     ): Promise<IHSProvider.IPrivate> {
-        throw Error();
+        const result = await HSProvider.Service.getProfile()(access_token);
+        return httpResponse(result);
     }
 
     /**
@@ -62,7 +66,7 @@ export class UsersHSProvidersMeController {
      * @param body 포트폴리오 정보
      */
     @TypedRoute.Post("portfolios")
-    create(
+    async create(
         @Authorization("access") access_token: string,
         @TypedBody() body: IHSPortfolio.ICreateRequest,
     ): Promise<void> {
@@ -96,9 +100,7 @@ export class UsersHSProvidersSomeoneController {
     /**
      * 생활서비스 전문가의 공개 정보를 요청한다.
      *
-     * {@link IHSProvider.FailureCode.GetPublicOne 에러 코드}
-     * - `USER_INACTIVE` : 비활성화된 사용자인 경우
-     * - `USER_NOT_FOUND` : 사용자 정보를 찾을 수 없는 경우
+     * {@link IUser.FailureCode.GetPublic 에러 코드}
      *
      * @summary 생활서비스 전문가 공개 프로필 정보 조회
      *
@@ -109,18 +111,17 @@ export class UsersHSProvidersSomeoneController {
      * @return 생활서비스 전문가 공개정보
      */
     @TypedRoute.Get()
-    getOne(
+    async getOne(
         @TypedParam("provider_id") provider_id: string,
     ): Promise<IHSProvider.IPublic> {
-        return HSProvider.Service.Public.getOne()(provider_id);
+        const result = await HSProvider.Service.getPublic()(provider_id);
+        return httpResponse(result);
     }
 
     /**
      * 생활서비스 전문가 연락처 정보를 요청한다.
      *
-     * {@link IHSProvider.FailureCode.GetContact 에러 코드}
-     * - `USER_INACTIVE` : 비활성화된 사용자인 경우
-     * - `USER_NOT_FOUND` : 사용자 정보를 찾을 수 없는 경우
+     * {@link IBIZUser.FailureCode.GetContact 에러 코드}
      *
      * @summary 생활서비스 전문가 연락처 정보 조회
      *
@@ -133,13 +134,14 @@ export class UsersHSProvidersSomeoneController {
      * @return 생활서비스 전문가 연락처 정보
      */
     @TypedRoute.Get("contact")
-    get(
+    async get(
         @Authorization("access") access_token: string,
         @TypedParam("provider_id") provider_id: string,
     ): Promise<IHSProvider.IContact> {
-        return HSProvider.Service.Public.getContact()(access_token)(
+        const result = await HSProvider.Service.getContact()(access_token)(
             provider_id,
         );
+        return httpResponse(result);
     }
 
     /**

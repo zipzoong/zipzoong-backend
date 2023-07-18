@@ -174,4 +174,9 @@ export namespace Service {
                 ),
             );
         };
+
+    export const getProfile = User.Service.getProfile({
+        user_type: "real estate agent",
+        getPrivate,
+    });
 }

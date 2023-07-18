@@ -1,8 +1,11 @@
+import { IUser } from "@APP/api/structures/user/IUser";
 import { IREAgent } from "@APP/api/structures/user/IREAgent";
 import { TypedBody, TypedParam, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
 import { Authorization } from "../decorators/authorization";
 import { IREPortfolio } from "@APP/api/structures/IREPortfolio";
+import { REAgent } from "@APP/providers/user/re_agent";
+import { httpResponse } from "../internal";
 
 const route = "users/re-agents";
 
@@ -23,7 +26,7 @@ export class UsersREAgentsController {
     getList(
         @TypedQuery() query: IREAgent.ISearch,
     ): Promise<IREAgent.IPaginatedSummary> {
-        throw Error("");
+        return REAgent.Service.getList(query);
     }
 }
 
@@ -43,10 +46,11 @@ export class UsersREAgentsMeController {
      * @return 공인중개사 상세 정보
      */
     @TypedRoute.Get()
-    get(
+    async get(
         @Authorization("access") access_token: string,
     ): Promise<IREAgent.IPrivate> {
-        throw Error();
+        const result = await REAgent.Service.getProfile()(access_token);
+        return httpResponse(result);
     }
 
     /**
@@ -95,6 +99,8 @@ export class UsersREAgentsSomeoneController {
     /**
      * 공인 중개사의 공개 정보를 요청한다.
      *
+     * {@link IUser.FailureCode.GetPublic 에러 코드}
+     *
      * @summary 공인 중개사 공개 프로필 정보 조회
      *
      * @tag re-agents
@@ -104,16 +110,17 @@ export class UsersREAgentsSomeoneController {
      * @return 공인 중개사 공개정보
      */
     @TypedRoute.Get()
-    getOne(
+    async getOne(
         @TypedParam("agent_id") agent_id: string,
     ): Promise<IREAgent.IPublic> {
-        throw Error();
+        const result = await REAgent.Service.getPublic()(agent_id);
+        return httpResponse(result);
     }
 
     /**
      * 공인 중개사 연락처 정보를 요청한다.
      *
-     * 로그인 후 이용가능하다.
+     * {@link IUser.FailureCode.GetContact 에러 코드}
      *
      * @summary 공인 중개사 연락처 정보 조회
      *
@@ -126,11 +133,14 @@ export class UsersREAgentsSomeoneController {
      * @return 공인 중개사 연락처 정보
      */
     @TypedRoute.Get("contact")
-    get(
+    async get(
         @Authorization("access") access_token: string,
         @TypedParam("agent_id") agent_id: string,
     ): Promise<IREAgent.IContact> {
-        throw Error();
+        const result = await REAgent.Service.getContact()(access_token)(
+            agent_id,
+        );
+        return httpResponse(result);
     }
 
     /**
