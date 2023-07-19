@@ -348,7 +348,7 @@
           }
         },
         "summary": "사용자 정보 생성",
-        "description": "계정 토큰을 사용하여 사용자 정보를 생성한다.\n\n이메일, 휴대전화는 verification_id를 null로 하면 계정 프로필에 저장된 정보가 기본으로 적용된다.\n\n그 외 정보는 null을 전송할 경우, null을 저장한다.\n\n{@link IAuthentication.FailureCode.CreateUser 에러 코드}\n- `TOKEN_EXPIRED` : 계정 토큰이 만료된 경우\n- `TOKEN_INVALID` : 계정 토큰이 유효하지 않은 경우\n- `ACCOUNT_NOT_FOUND` : 집중 서버에 계정 정보가 없는 경우\n- `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우\n- `USER_ALREADY_EXIST` : 이미 연동된 해당 유형의 사용자 정보가 있는 경우\n- `PHONE_REQUIRED` : 사용가능한 휴대전화 정보가 없는 경우 (사업자 유형은 전화번호가 필수)\n- `EXPERTISE_INVALID` : 사업자 전문분야 정보가 유효하지 않은 경우\n- `TERMS_INSUFFICIENT` : 필수 약관 동의가 불충분한 경우\n- `TERMS_INVALID` : 약관 정보가 유효하지 않은 경우\n\n@summary 사용자 정보 생성\n\n@tag authentication\n\n@param account_token 계정 토큰\n\n@param body 사용자 정보\n\n@return 사용자 토큰(access token)",
+        "description": "계정 토큰을 사용하여 사용자 정보를 생성한다.\n\n이메일, 휴대전화는 verification_id를 null로 하면 계정 프로필에 저장된 정보가 기본으로 적용된다.\n\n그 외 정보는 null을 전송할 경우, null을 저장한다.\n\n{@link IAuthentication.FailureCode.CreateUser 에러 코드}\n- `TOKEN_EXPIRED` : 계정 토큰이 만료된 경우\n- `TOKEN_INVALID` : 계정 토큰이 유효하지 않은 경우\n- `ACCOUNT_NOT_FOUND` : 집중 서버에 계정 정보가 없는 경우\n- `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우\n- `USER_ALREADY_EXIST` : 이미 연동된 해당 유형의 사용자 정보가 있는 경우\n- `EXPERTISE_INVALID` : 사업자 전문분야 정보가 유효하지 않은 경우\n- `TERMS_INSUFFICIENT` : 필수 약관 동의가 불충분한 경우\n- `TERMS_INVALID` : 약관 정보가 유효하지 않은 경우\n- `VERIFICATION_INVALID` : 인증 정보가 잘못된 경우\n- `VERIFICATION_NOT_FOUND` : 인증 정보가 존재하지 않는 경우\n- `VERIFICATION_UNCOMPLETED` : 인증이 완료되지 않은 정보인 경우\n\n@summary 사용자 정보 생성\n\n@tag authentication\n\n@param account_token 계정 토큰\n\n@param body 사용자 정보\n\n@return 사용자 토큰(access token)",
         "x-nestia-namespace": "auth.user.create",
         "x-nestia-jsDocTags": [
           {
@@ -2888,19 +2888,31 @@
               "type": "string"
             }
           },
-          "phone_verification_id": {
-            "description": "전화번호 인증 정보 id\n\n- 전화번호 인증을 통해 얻은 id를 입력한다.\n- null 입력시 소셜 계정에 저장된 전화번호를 자동 저장한다.\n- 소셜 계정에 전화번호 정보가 없으면 null이 저장된다.\n- 사용자는 정상적인 서비스를 이용하기 위해선 전화번호 입력까지 완료해야 한다.",
+          "phone": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/__type.Nullable"
+              },
+              {
+                "$ref": "#/components/schemas/__type.o1.Nullable"
+              }
+            ],
+            "description": "전화번호 인증 정보\n\nnull 입력시 저장하지 않는다.\n\ntype이 verification일 때, 인증을 진행한 전화번호를 입력한다.\n\ntype이 account일 때, 계정에 존재하는 전화번호를 입력한다.",
             "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string",
-            "nullable": true
+            "x-typia-optional": false
           },
-          "email_verification_id": {
-            "description": "이메일 인증 정보 id\n\n- 아직 미구현, null 입력할 것",
+          "email": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/__type.o2.Nullable"
+              },
+              {
+                "$ref": "#/components/schemas/__type.o3.Nullable"
+              }
+            ],
+            "description": "이메일 인증 정보\n\nnull 입력시 저장하지 않는다.\n\ntype이 verification일 때, 인증을 진행한 이메일을 입력한다.\n\ntype이 account일 때, 계정에 존재하는 이메일을 입력한다.",
             "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string",
-            "nullable": true
+            "x-typia-optional": false
           },
           "name": {
             "description": "사용자명\n\n- 사용자가 home service provider인 경우, 업체 상호명이다.",
@@ -2977,15 +2989,173 @@
         "required": [
           "type",
           "agreed_terms_ids",
-          "phone_verification_id",
-          "email_verification_id",
+          "phone",
+          "email",
           "name",
           "profile_image_url",
           "address",
           "gender",
           "birth"
         ],
-        "description": "이메일 인증 정보 id\n\n- 아직 미구현, null 입력할 것",
+        "description": "이메일 인증 정보\n\nnull 입력시 저장하지 않는다.\n\ntype이 verification일 때, 인증을 진행한 이메일을 입력한다.\n\ntype이 account일 때, 계정에 존재하는 이메일을 입력한다.",
+        "x-typia-jsDocTags": []
+      },
+      "__type.Nullable": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "인증 방식\n\n계정 정보를 통해 신뢰할 수 있는 정보임을 확인한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "account"
+            ]
+          },
+          "phone": {
+            "description": "계정 정보에 저장된 전화번호와 일치해야 한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": true,
+        "required": [
+          "type",
+          "phone"
+        ],
+        "description": "계정 정보에 저장된 전화번호와 일치해야 한다.",
+        "x-typia-jsDocTags": []
+      },
+      "__type.o1.Nullable": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "인증 방식\n\n별도의 인증 정보를 통해 신뢰성을 확인한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "verification"
+            ]
+          },
+          "phone": {
+            "description": "인증 정보에 저장된 전화번호와 일치해야 한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "verification_id": {
+            "description": "인증 정보 고유 id",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": true,
+        "required": [
+          "type",
+          "phone",
+          "verification_id"
+        ],
+        "description": "인증 정보 고유 id",
+        "x-typia-jsDocTags": []
+      },
+      "__type.o2.Nullable": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "인증 방식\n\n계정 정보를 통해 신뢰할 수 있는 정보임을 확인한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "account"
+            ]
+          },
+          "email": {
+            "description": "계정 정보에 저장된 이메일과 일치해야 한다.\n\n@format email",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "email"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "email",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "nullable": true,
+        "required": [
+          "type",
+          "email"
+        ],
+        "description": "계정 정보에 저장된 이메일과 일치해야 한다.\n\n@format email",
+        "x-typia-jsDocTags": []
+      },
+      "__type.o3.Nullable": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "인증 방식\n\n별도의 인증 정보를 통해 신뢰성을 확인한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "verification"
+            ]
+          },
+          "email": {
+            "description": "계정 정보에 저장된 이메일과 일치해야 한다.\n\n@format email",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "email"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "email",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "email"
+          },
+          "verification_id": {
+            "description": "인증 정보 고유 id",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": true,
+        "required": [
+          "type",
+          "email",
+          "verification_id"
+        ],
+        "description": "인증 정보 고유 id",
         "x-typia-jsDocTags": []
       },
       "IREAgent.ICreateRequest": {
@@ -3011,19 +3181,21 @@
               "type": "string"
             }
           },
-          "phone_verification_id": {
-            "description": "전화번호 인증 정보 id\n\n- 전화번호 인증을 통해 얻은 id를 입력한다.\n- null 입력시 소셜 계정에 저장된 전화번호를 자동 저장한다.\n- 소셜 계정에 전화번호 정보가 없으면 null이 저장된다.\n- 사용자는 정상적인 서비스를 이용하기 위해선 전화번호 입력까지 완료해야 한다.",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string",
-            "nullable": true
+          "phone": {
+            "$ref": "#/components/schemas/IVerification.IPhoneVerification"
           },
-          "email_verification_id": {
-            "description": "이메일 인증 정보 id\n\n- 아직 미구현, null 입력할 것",
+          "email": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/__type.o2.Nullable"
+              },
+              {
+                "$ref": "#/components/schemas/__type.o3.Nullable"
+              }
+            ],
+            "description": "이메일 인증 정보\n\nnull 입력시 저장하지 않는다.\n\ntype이 verification일 때, 인증을 진행한 이메일을 입력한다.\n\ntype이 account일 때, 계정에 존재하는 이메일을 입력한다.",
             "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string",
-            "nullable": true
+            "x-typia-optional": false
           },
           "biz_certification_images": {
             "description": "사업자 증명 서류 사진 목록",
@@ -3087,8 +3259,8 @@
         "required": [
           "type",
           "agreed_terms_ids",
-          "phone_verification_id",
-          "email_verification_id",
+          "phone",
+          "email",
           "biz_certification_images",
           "name",
           "profile_image_url",
@@ -3098,6 +3270,78 @@
           "expertise_id"
         ],
         "description": "사업자 증명 서류 사진 목록",
+        "x-typia-jsDocTags": []
+      },
+      "IVerification.IPhoneVerification": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/__type"
+          },
+          {
+            "$ref": "#/components/schemas/__type.o1"
+          }
+        ],
+        "description": "인증 정보 고유 id"
+      },
+      "__type": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "인증 방식\n\n계정 정보를 통해 신뢰할 수 있는 정보임을 확인한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "account"
+            ]
+          },
+          "phone": {
+            "description": "계정 정보에 저장된 전화번호와 일치해야 한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "phone"
+        ],
+        "description": "계정 정보에 저장된 전화번호와 일치해야 한다.",
+        "x-typia-jsDocTags": []
+      },
+      "__type.o1": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "인증 방식\n\n별도의 인증 정보를 통해 신뢰성을 확인한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "verification"
+            ]
+          },
+          "phone": {
+            "description": "인증 정보에 저장된 전화번호와 일치해야 한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "verification_id": {
+            "description": "인증 정보 고유 id",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "phone",
+          "verification_id"
+        ],
+        "description": "인증 정보 고유 id",
         "x-typia-jsDocTags": []
       },
       "IBIZUser.ICertificationImageCreate": {
@@ -3336,19 +3580,21 @@
               "type": "string"
             }
           },
-          "phone_verification_id": {
-            "description": "대표자 전화번호 인증 정보 id\n\n- 전화번호 인증을 통해 얻은 id를 입력한다.\n- null 입력시 소셜 계정에 저장된 전화번호를 자동 저장한다.\n- 소셜 계정에 전화번호 정보가 없으면 null이 저장된다.\n- 사용자는 정상적인 서비스를 이용하기 위해선 전화번호 입력까지 완료해야 한다.",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string",
-            "nullable": true
+          "phone": {
+            "$ref": "#/components/schemas/IVerification.IPhoneVerification"
           },
-          "email_verification_id": {
-            "description": "이메일 인증 정보 id\n\n- 아직 미구현, null 입력할 것",
+          "email": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/__type.o2.Nullable"
+              },
+              {
+                "$ref": "#/components/schemas/__type.o3.Nullable"
+              }
+            ],
+            "description": "이메일 인증 정보\n\nnull 입력시 저장하지 않는다.\n\ntype이 verification일 때, 인증을 진행한 이메일을 입력한다.\n\ntype이 account일 때, 계정에 존재하는 이메일을 입력한다.",
             "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string",
-            "nullable": true
+            "x-typia-optional": false
           },
           "biz_certification_images": {
             "description": "사업자 증명 서류 사진 목록",
@@ -3483,8 +3729,8 @@
         "required": [
           "type",
           "agreed_terms_ids",
-          "phone_verification_id",
-          "email_verification_id",
+          "phone",
+          "email",
           "biz_certification_images",
           "name",
           "profile_image_url",

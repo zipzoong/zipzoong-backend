@@ -1,3 +1,4 @@
+import { IVerification } from "@APP/api/structures/IVerification";
 import { IAddress } from "./common";
 import { IUser } from "./user/IUser";
 
@@ -117,8 +118,9 @@ export namespace IAuthentication {
         export type GetProfile = TokenVerify | AccountVerify;
         export type CreateUser =
             | GetProfile
+            | IVerification.FailureCode.IsVerifiedPhone
+            | "VERIFICATION_INVALID"
             | "USER_ALREADY_EXIST"
-            | "PHONE_REQUIRED"
             | "EXPERTISE_INVALID"
             | "TERMS_INSUFFICIENT"
             | "TERMS_INVALID";

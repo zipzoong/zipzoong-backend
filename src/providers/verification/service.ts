@@ -96,10 +96,14 @@ export namespace Service {
         const deadline = new Date(Date.now() - duration);
 
         const verification = await prisma.phoneVerificationModel.findFirst({
-            where: { code, phone, is_deleted: false, is_verified: false },
+            where: { code, phone },
         });
 
-        if (isNull(verification))
+        if (
+            isNull(verification) ||
+            isDeleted(verification) ||
+            verification.is_verified
+        )
             return Result.Error.map(
                 Failure.create<IVerification.FailureCode.VerifyPhone>({
                     cause: "VERIFICATION_NOT_FOUND",
@@ -125,15 +129,15 @@ export namespace Service {
         return Result.Ok.map({ verification_id: verification.id });
     };
 
-    export const getVerifiedPhone =
+    export const isVerifiedPhone =
         (tx: Prisma.TransactionClient = prisma) =>
-        (
-            verification_id: string,
-        ): Promise<
-            IResult<
-                string,
-                Failure<"VERIFICATION_NOT_FOUND" | "VERIFICATION_UNCOMPLETED">
-            >
+        async ({
+            phone,
+            verification_id,
+        }: IVerification.IPhoneVerification & {
+            type: "verification";
+        }): Promise<
+            IResult<string, Failure<IVerification.FailureCode.IsVerifiedPhone>>
         > =>
             pipe(
                 verification_id,
@@ -142,7 +146,9 @@ export namespace Service {
                     tx.phoneVerificationModel.findFirst({ where: { id } }),
 
                 (verification) =>
-                    isNull(verification)
+                    isNull(verification) ||
+                    isDeleted(verification) ||
+                    verification.phone !== phone
                         ? Result.Error.map(
                               Failure.create({
                                   cause: "VERIFICATION_NOT_FOUND",
@@ -151,23 +157,32 @@ export namespace Service {
                                   statusCode: HttpStatus.NOT_FOUND,
                               }),
                           )
-                        : isDeleted(verification)
-                        ? Result.Error.map(
-                              Failure.create({
-                                  cause: "VERIFICATION_NOT_FOUND",
-                                  message:
-                                      "전화번호 인증 정보가 존재하지 않습니다.",
-                                  statusCode: HttpStatus.NOT_FOUND,
-                              }),
-                          )
-                        : !verification.is_verified
-                        ? Result.Error.map(
-                              Failure.create({
-                                  cause: "VERIFICATION_UNCOMPLETED",
-                                  message: "인증이 완료되지 않았습니다.",
-                                  statusCode: HttpStatus.NOT_FOUND,
-                              }),
-                          )
-                        : Result.Ok.map(verification.phone),
+                        : Result.Ok.map(verification),
+
+                unless(Result.Error.is, (ok) =>
+                    pipe(
+                        ok,
+
+                        Result.Ok.flatten,
+
+                        async (verification) => {
+                            const now = DateMapper.toISO();
+                            await tx.phoneVerificationModel.updateMany({
+                                where: { id: verification.id },
+                                data: { is_deleted: true, deleted_at: now },
+                            });
+                            return verification.is_verified
+                                ? Result.Ok.map(phone)
+                                : Result.Error.map(
+                                      Failure.create({
+                                          cause: "VERIFICATION_UNCOMPLETED",
+                                          message:
+                                              "인증이 완료되지 않았습니다.",
+                                          statusCode: HttpStatus.NOT_FOUND,
+                                      }),
+                                  );
+                        },
+                    ),
+                ),
             );
 }

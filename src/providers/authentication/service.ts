@@ -3,6 +3,7 @@ import { identity, isNull, isString, negate, pipe, unless } from "@fxts/core";
 import { HttpStatus } from "@nestjs/common";
 import { randomUUID } from "crypto";
 import { IAuthentication } from "@APP/api/structures/IAuthentication";
+import { IVerification } from "@APP/api/structures/IVerification";
 import { IHSProvider } from "@APP/api/structures/user/IHSProvider";
 import { IREAgent } from "@APP/api/structures/user/IREAgent";
 import { IUser } from "@APP/api/structures/user/IUser";
@@ -23,6 +24,7 @@ import { BIZUser } from "../user/biz_user";
 import { Client } from "../user/client";
 import { HSProvider } from "../user/hs_provider";
 import { REAgent } from "../user/re_agent";
+import { Verification } from "../verification";
 import { IToken } from "./interface";
 import { Token } from "./token";
 
@@ -382,14 +384,6 @@ export namespace Service {
                 ),
             );
 
-    const verify = async ({
-        default_value,
-    }: {
-        verification_id: string | null;
-        default_value: string | null;
-        tx?: Prisma.TransactionClient;
-    }) => default_value;
-
     const createREAgent =
         (tx: Prisma.TransactionClient) =>
         async ({
@@ -399,10 +393,8 @@ export namespace Service {
         }: {
             createInput: IREAgent.ICreateRequest;
             email: string | null;
-            phone: string | null;
-        }): Promise<
-            IResult<string, Failure<"EXPERTISE_INVALID" | "PHONE_REQUIRED">>
-        > => {
+            phone: string;
+        }): Promise<IResult<string, Failure<"EXPERTISE_INVALID">>> => {
             const re_expertise = await tx.rEExpertiseModel.findFirst({
                 where: { id: createInput.expertise_id },
             });
@@ -412,15 +404,6 @@ export namespace Service {
                     Failure.create({
                         cause: "EXPERTISE_INVALID",
                         message: "유효하지 않은 전문분야입니다.",
-                        statusCode: HttpStatus.BAD_REQUEST,
-                    }),
-                );
-
-            if (isNull(phone))
-                return Result.Error.map(
-                    Failure.create({
-                        cause: "PHONE_REQUIRED",
-                        message: "휴대전화 인증이 필요합니다.",
                         statusCode: HttpStatus.BAD_REQUEST,
                     }),
                 );
@@ -448,10 +431,8 @@ export namespace Service {
         }: {
             createInput: IHSProvider.ICreateRequest;
             email: string | null;
-            phone: string | null;
-        }): Promise<
-            IResult<string, Failure<"EXPERTISE_INVALID" | "PHONE_REQUIRED">>
-        > => {
+            phone: string;
+        }): Promise<IResult<string, Failure<"EXPERTISE_INVALID">>> => {
             const hs_expertises = (
                 await tx.hSSubExpertiseModel.findMany({
                     where: { id: { in: createInput.sub_expertise_ids } },
@@ -483,15 +464,6 @@ export namespace Service {
                     }),
                 );
 
-            if (isNull(phone))
-                return Result.Error.map(
-                    Failure.create({
-                        cause: "PHONE_REQUIRED",
-                        message: "휴대전화 인증이 필요합니다.",
-                        statusCode: HttpStatus.BAD_REQUEST,
-                    }),
-                );
-
             const hs_provider = HSProvider.Json.createData({
                 ...createInput,
                 sub_expertise_ids: hs_expertises.map(pick("id")),
@@ -507,6 +479,33 @@ export namespace Service {
             return Result.Ok.map(hs_provider.base.create.base.create.id);
         };
 
+    export const isVerifiedPhone =
+        (tx: Prisma.TransactionClient = prisma) =>
+        (account: OauthAccountModel) =>
+        async (
+            input: IVerification.IPhoneVerification,
+        ): Promise<
+            IResult<
+                string,
+                Failure<
+                    | IVerification.FailureCode.IsVerifiedPhone
+                    | "VERIFICATION_INVALID"
+                >
+            >
+        > =>
+            input.type === "verification"
+                ? Verification.Service.isVerifiedPhone(tx)(input)
+                : account.phone === input.phone
+                ? Result.Ok.map(input.phone)
+                : Result.Error.map(
+                      Failure.create({
+                          cause: "VERIFICATION_INVALID",
+                          message:
+                              "전화번호가 계정 연락처와 일치하지 않습니다.",
+                          statusCode: HttpStatus.FORBIDDEN,
+                      }),
+                  );
+
     export const createUser =
         (tx: Prisma.TransactionClient = prisma) =>
         (account_token: string) =>
@@ -521,17 +520,6 @@ export namespace Service {
             const account_result = await getAccount(tx)(account_token);
             if (Result.Error.is(account_result)) return account_result;
             const account = Result.Ok.flatten(account_result);
-
-            const email = await verify({
-                verification_id: input.email_verification_id,
-                default_value: account.email,
-                tx,
-            });
-            const phone = await verify({
-                verification_id: input.phone_verification_id,
-                default_value: account.phone,
-                tx,
-            });
 
             const connect = async (
                 input:
@@ -569,10 +557,17 @@ export namespace Service {
                             ),
                         );
 
+                    const client_phone_result = isNull(input.phone)
+                        ? Result.Ok.map(null)
+                        : await isVerifiedPhone(tx)(account)(input.phone);
+
+                    if (Result.Error.is(client_phone_result))
+                        return client_phone_result;
+
                     const client = Client.Json.createData({
                         ...input,
-                        email,
-                        phone,
+                        email: null,
+                        phone: Result.Ok.flatten(client_phone_result),
                     });
                     await tx.clientModel.create({ data: client });
 
@@ -595,10 +590,17 @@ export namespace Service {
                             ),
                         );
 
+                    const agent_phone_result = await isVerifiedPhone(tx)(
+                        account,
+                    )(input.phone);
+
+                    if (Result.Error.is(agent_phone_result))
+                        return agent_phone_result;
+
                     const re_agent = await createREAgent(tx)({
                         createInput: input,
-                        email,
-                        phone,
+                        email: null,
+                        phone: Result.Ok.flatten(agent_phone_result),
                     });
                     if (Result.Error.is(re_agent)) return re_agent;
                     const re_agent_id = Result.Ok.flatten(re_agent);
@@ -622,10 +624,17 @@ export namespace Service {
                             ),
                         );
 
+                    const provider_phone_result = await isVerifiedPhone(tx)(
+                        account,
+                    )(input.phone);
+
+                    if (Result.Error.is(provider_phone_result))
+                        return provider_phone_result;
+
                     const hs_provider = await createHSProvider(tx)({
-                        email,
-                        phone,
                         createInput: input,
+                        email: null,
+                        phone: Result.Ok.flatten(provider_phone_result),
                     });
                     if (Result.Error.is(hs_provider)) return hs_provider;
                     const hs_provider_id = Result.Ok.flatten(hs_provider);

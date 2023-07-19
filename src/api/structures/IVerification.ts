@@ -42,10 +42,80 @@ export namespace IVerification {
         }
     }
 
+    export type IPhoneVerification =
+        | {
+              /**
+               * 인증 방식
+               *
+               * 계정 정보를 통해 신뢰할 수 있는 정보임을 확인한다.
+               */
+              type: "account";
+              /**
+               * 계정 정보에 저장된 전화번호와 일치해야 한다.
+               */
+              phone: string;
+          }
+        | {
+              /**
+               * 인증 방식
+               *
+               * 별도의 인증 정보를 통해 신뢰성을 확인한다.
+               */
+              type: "verification";
+              /**
+               * 인증 정보에 저장된 전화번호와 일치해야 한다.
+               */
+              phone: string;
+              /**
+               * 인증 정보 고유 id
+               */
+              verification_id: string;
+          };
+
+    export type IEmailVerification =
+        | {
+              /**
+               * 인증 방식
+               *
+               * 계정 정보를 통해 신뢰할 수 있는 정보임을 확인한다.
+               */
+              type: "account";
+              /**
+               * 계정 정보에 저장된 이메일과 일치해야 한다.
+               *
+               * @format email
+               */
+              email: string;
+          }
+        | {
+              /**
+               * 인증 방식
+               *
+               * 별도의 인증 정보를 통해 신뢰성을 확인한다.
+               */
+              type: "verification";
+              /**
+               * 계정 정보에 저장된 이메일과 일치해야 한다.
+               *
+               * @format email
+               */
+              email: string;
+              /**
+               * 인증 정보 고유 id
+               */
+              verification_id: string;
+          };
+
     export namespace FailureCode {
         export type CreatePhone = "PHONE_INVALID" | "COUNTRY_CODE_UNSUPPORTED";
         export type VerifyPhone =
             | "VERIFICATION_NOT_FOUND"
             | "VERIFICATION_EXPIRED";
+        export type IsVerifiedPhone =
+            | "VERIFICATION_NOT_FOUND"
+            | "VERIFICATION_UNCOMPLETED";
+        export type GetVerifiedPhone =
+            | "VERIFICATION_NOT_FOUND"
+            | "VERIFICATION_UNCOMPLETED";
     }
 }

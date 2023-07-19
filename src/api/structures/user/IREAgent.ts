@@ -1,5 +1,6 @@
 import { Mutable } from "@APP/api/types";
 import { IExpertise } from "../IExpertise";
+import { IVerification } from "../IVerification";
 import { IAddress, IPage, IPaginatedResponse } from "../common";
 import { IBIZUser } from "./IBIZUser";
 import { IUser } from "./IUser";
@@ -105,20 +106,25 @@ export namespace IREAgent {
          */
         agreed_terms_ids: string[];
         /**
-         * 전화번호 인증 정보 id
+         * 전화번호 인증 정보
          *
-         * - 전화번호 인증을 통해 얻은 id를 입력한다.
-         * - null 입력시 소셜 계정에 저장된 전화번호를 자동 저장한다.
-         * - 소셜 계정에 전화번호 정보가 없으면 null이 저장된다.
-         * - 사용자는 정상적인 서비스를 이용하기 위해선 전화번호 입력까지 완료해야 한다.
+         * null 입력시 저장하지 않는다.
+         *
+         * type이 verification일 때, 인증을 진행한 전화번호를 입력한다.
+         *
+         * type이 account일 때, 계정에 존재하는 전화번호를 입력한다.
          */
-        phone_verification_id: null | string;
+        phone: IVerification.IPhoneVerification;
         /**
-         * 이메일 인증 정보 id
+         * 이메일 인증 정보
          *
-         * - 아직 미구현, null 입력할 것
+         * null 입력시 저장하지 않는다.
+         *
+         * type이 verification일 때, 인증을 진행한 이메일을 입력한다.
+         *
+         * type이 account일 때, 계정에 존재하는 이메일을 입력한다.
          */
-        email_verification_id: null | string;
+        email: null | IVerification.IEmailVerification;
         /** 사업자 증명 서류 사진 목록 */
         biz_certification_images: IBIZUser.ICertificationImageCreate[];
     }

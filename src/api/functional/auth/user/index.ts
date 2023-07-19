@@ -25,10 +25,12 @@ import type { IAuthentication } from "./../../../structures/IAuthentication";
  * - `ACCOUNT_NOT_FOUND` : 집중 서버에 계정 정보가 없는 경우
  * - `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우
  * - `USER_ALREADY_EXIST` : 이미 연동된 해당 유형의 사용자 정보가 있는 경우
- * - `PHONE_REQUIRED` : 사용가능한 휴대전화 정보가 없는 경우 (사업자 유형은 전화번호가 필수)
  * - `EXPERTISE_INVALID` : 사업자 전문분야 정보가 유효하지 않은 경우
  * - `TERMS_INSUFFICIENT` : 필수 약관 동의가 불충분한 경우
  * - `TERMS_INVALID` : 약관 정보가 유효하지 않은 경우
+ * - `VERIFICATION_INVALID` : 인증 정보가 잘못된 경우
+ * - `VERIFICATION_NOT_FOUND` : 인증 정보가 존재하지 않는 경우
+ * - `VERIFICATION_UNCOMPLETED` : 인증이 완료되지 않은 정보인 경우
  * 
  * @summary 사용자 정보 생성
  * 
