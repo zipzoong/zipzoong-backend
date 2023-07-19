@@ -483,7 +483,7 @@ export namespace Service {
         (tx: Prisma.TransactionClient = prisma) =>
         (account: OauthAccountModel) =>
         async (
-            input: IVerification.IPhoneVerification,
+            input: IVerification.IVerifiedPhone,
         ): Promise<
             IResult<
                 string,

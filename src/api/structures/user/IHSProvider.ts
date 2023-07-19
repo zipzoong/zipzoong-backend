@@ -111,7 +111,7 @@ export namespace IHSProvider {
          *
          * type이 account일 때, 계정에 존재하는 전화번호를 입력한다.
          */
-        phone: IVerification.IPhoneVerification;
+        phone: IVerification.IVerifiedPhone;
         /**
          * 이메일 인증 정보
          *
@@ -121,7 +121,7 @@ export namespace IHSProvider {
          *
          * type이 account일 때, 계정에 존재하는 이메일을 입력한다.
          */
-        email: null | IVerification.IEmailVerification;
+        email: null | IVerification.IVerifiedEmail;
         /** 사업자 증명 서류 사진 목록 */
         biz_certification_images: IBIZUser.ICertificationImageCreate[];
     }

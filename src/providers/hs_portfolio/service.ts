@@ -1,7 +1,7 @@
 import { Prisma } from "@PRISMA";
 import { map, pipe, toArray, unless } from "@fxts/core";
 import { randomUUID } from "crypto";
-import { IHSPortfolio, IHSProvider, IResult } from "@APP/api";
+import { IHSPortfolio, IResult } from "@APP/api";
 import { prisma } from "@APP/infrastructure/DB";
 import { DateMapper, Failure, InternalError, Result } from "@APP/utils";
 import { HSProvider } from "../user/hs_provider";
@@ -16,7 +16,7 @@ export namespace Service {
         }: IHSPortfolio.ISearch): Promise<
             IResult<
                 IHSPortfolio.IPaginatedPublic,
-                Failure<IHSProvider.FailureCode.GetPublic>
+                Failure<IHSPortfolio.FailureCode.GetPublicList>
             >
         > =>
             pipe(
@@ -58,7 +58,7 @@ export namespace Service {
         }: IHSPortfolio.ISearch): Promise<
             IResult<
                 IHSPortfolio.IPaginatedPrivate,
-                Failure<IHSProvider.FailureCode.Authorize> | InternalError
+                Failure<IHSPortfolio.FailureCode.GetPrivateList> | InternalError
             >
         > =>
             pipe(
@@ -103,7 +103,7 @@ export namespace Service {
         ): Promise<
             IResult<
                 null,
-                InternalError | Failure<IHSProvider.FailureCode.Authorize>
+                InternalError | Failure<IHSPortfolio.FailureCode.Create>
             >
         > =>
             pipe(

@@ -134,9 +134,7 @@ export namespace Service {
         async ({
             phone,
             verification_id,
-        }: IVerification.IPhoneVerification & {
-            type: "verification";
-        }): Promise<
+        }: IVerification.IVerifiedPhone.IVerification): Promise<
             IResult<string, Failure<IVerification.FailureCode.IsVerifiedPhone>>
         > =>
             pipe(

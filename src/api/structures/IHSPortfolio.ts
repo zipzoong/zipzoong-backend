@@ -1,3 +1,4 @@
+import { IHSProvider } from "../module";
 import { IPage, IPaginatedResponse } from "./common/IPagination";
 
 export interface IHSPortfolio {
@@ -46,4 +47,10 @@ export namespace IHSPortfolio {
 
     export type ICreate = Pick<IHSPortfolio, "title" | "main_url">;
     export type ICreateRequest = ICreate;
+
+    export namespace FailureCode {
+        export type GetPublicList = IHSProvider.FailureCode.GetPublic;
+        export type GetPrivateList = IHSProvider.FailureCode.Authorize;
+        export type Create = IHSProvider.FailureCode.Authorize;
+    }
 }
