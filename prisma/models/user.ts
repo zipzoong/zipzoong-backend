@@ -177,7 +177,7 @@ export const REPortfolio = createModel("REPortfolioModel", (model) => {
         .mixin(Entity)
         .string("re_agent_id")
         .string("title")
-        .string("url")
+        .string("main_url")
         .boolean("is_visible")
         .relation("re_agent", REAgent, {
             fields: ["re_agent_id"],
@@ -191,7 +191,7 @@ export const HSPortfolio = createModel("HSPortfolioModel", (model) => {
         .mixin(Entity)
         .string("hs_provider_id")
         .string("title")
-        .string("url")
+        .string("main_url")
         .boolean("is_visible")
         .relation("hs_provider", HSProvider, {
             fields: ["hs_provider_id"],

@@ -190,7 +190,7 @@ CREATE TABLE "re_portfolios" (
     "deleted_at" TIMESTAMPTZ,
     "re_agent_id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "url" TEXT NOT NULL,
+    "main_url" TEXT NOT NULL,
     "is_visible" BOOLEAN NOT NULL,
 
     CONSTRAINT "re_portfolios_pkey" PRIMARY KEY ("id")
@@ -205,7 +205,7 @@ CREATE TABLE "hs_portfolios" (
     "deleted_at" TIMESTAMPTZ,
     "hs_provider_id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "url" TEXT NOT NULL,
+    "main_url" TEXT NOT NULL,
     "is_visible" BOOLEAN NOT NULL,
 
     CONSTRAINT "hs_portfolios_pkey" PRIMARY KEY ("id")

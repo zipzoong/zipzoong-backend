@@ -3,6 +3,7 @@ import { Controller } from "@nestjs/common";
 import { IHSPortfolio } from "@APP/api/structures/IHSPortfolio";
 import { IBIZUser } from "@APP/api/structures/user/IBIZUser";
 import { IHSProvider } from "@APP/api/structures/user/IHSProvider";
+import { HSPortfolio } from "@APP/providers/hs_portfolio";
 import { HSProvider } from "@APP/providers/user/hs_provider";
 import { Authorization } from "../../decorators/authorization";
 import { httpResponse } from "../../internal";
@@ -58,6 +59,8 @@ export class UsersHSProvidersMeController {
     /**
      * 생활서비스 전문가 포트폴리오 추가
      *
+     * {@link IHSProvider.FailureCode.Authorize 에러 코드}
+     *
      * @summary 생활서비스 전문가 포트폴리오 추가
      *
      * @tag hs-providers
@@ -71,11 +74,14 @@ export class UsersHSProvidersMeController {
         @Authorization("access") access_token: string,
         @TypedBody() body: IHSPortfolio.ICreateRequest,
     ): Promise<void> {
-        throw Error();
+        const result = await HSPortfolio.Service.create()(access_token)(body);
+        httpResponse(result);
     }
 
     /**
      * 내 포트폴리오 목록 검색
+     *
+     * {@link IHSProvider.FailureCode.Authorize 에러 코드}
      *
      * @summary 내 포트폴리오 목록 조회
      *
@@ -88,11 +94,14 @@ export class UsersHSProvidersMeController {
      * @return 포트폴리오 상세 정보 목록
      */
     @TypedRoute.Get("portfolios")
-    getList(
+    async getList(
         @Authorization("access") access_token: string,
         @TypedQuery() query: IHSPortfolio.ISearch,
     ): Promise<IHSPortfolio.IPaginatedPrivate> {
-        throw Error();
+        const result = await HSPortfolio.Service.getPrivateList(access_token)(
+            query,
+        );
+        return httpResponse(result);
     }
 }
 
@@ -198,6 +207,8 @@ export class UsersHSProvidersSomeoneController {
     /**
      * 생활서비스 전문가 포트폴리오 목록 검색
      *
+     * {@link IHSProvider.FailureCode.GetPublic 에러 코드}
+     *
      * @summary 생활서비스 전문가 포트폴리오 목록 검색
      *
      * @tag hs-providers
@@ -209,10 +220,13 @@ export class UsersHSProvidersSomeoneController {
      * @return 포트폴리오 공개 정보 목록
      */
     @TypedRoute.Get("portfolios")
-    getList(
+    async getList(
         @TypedParam("provider_id") provider_id: string,
         @TypedQuery() query: IHSPortfolio.ISearch,
     ): Promise<IHSPortfolio.IPaginatedPublic> {
-        throw Error();
+        const result = await HSPortfolio.Service.getPublicList(provider_id)(
+            query,
+        );
+        return httpResponse(result);
     }
 }

@@ -242,7 +242,7 @@ exports.Prisma.REPortfolioModelScalarFieldEnum = {
   deleted_at: 'deleted_at',
   re_agent_id: 're_agent_id',
   title: 'title',
-  url: 'url',
+  main_url: 'main_url',
   is_visible: 'is_visible'
 };
 
@@ -254,7 +254,7 @@ exports.Prisma.HSPortfolioModelScalarFieldEnum = {
   deleted_at: 'deleted_at',
   hs_provider_id: 'hs_provider_id',
   title: 'title',
-  url: 'url',
+  main_url: 'main_url',
   is_visible: 'is_visible'
 };
 

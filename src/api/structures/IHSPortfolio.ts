@@ -12,11 +12,11 @@ export interface IHSPortfolio {
      */
     readonly main_url: string;
     /**
-     * 활성화 유무
+     * 공개 설정
      *
-     * 비활성화된 포트폴리오는 자신만 볼 수 있다.
+     * 비공개 포트폴리오는 자신만 볼 수 있다.
      */
-    readonly is_active: boolean;
+    readonly is_visible: boolean;
     /**
      * 포트폴리오 정보 생성일
      *

@@ -18,7 +18,7 @@ export namespace Service {
         expertise_name,
     }: IREAgent.ISearch): Promise<IREAgent.IPaginatedSummary> =>
         pipe(
-            page,
+            30,
 
             async (take) =>
                 prisma.rEAgentModel.findMany({

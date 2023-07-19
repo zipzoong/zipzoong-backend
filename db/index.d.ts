@@ -312,7 +312,7 @@ export type REPortfolioModelPayload<ExtArgs extends $Extensions.Args = $Extensio
     deleted_at: Date | null
     re_agent_id: string
     title: string
-    url: string
+    main_url: string
     is_visible: boolean
   }, ExtArgs["result"]["rEPortfolioModel"]>
   composites: {}
@@ -336,7 +336,7 @@ export type HSPortfolioModelPayload<ExtArgs extends $Extensions.Args = $Extensio
     deleted_at: Date | null
     hs_provider_id: string
     title: string
-    url: string
+    main_url: string
     is_visible: boolean
   }, ExtArgs["result"]["hSPortfolioModel"]>
   composites: {}
@@ -14502,7 +14502,7 @@ export namespace Prisma {
     deleted_at: Date | null
     re_agent_id: string | null
     title: string | null
-    url: string | null
+    main_url: string | null
     is_visible: boolean | null
   }
 
@@ -14514,7 +14514,7 @@ export namespace Prisma {
     deleted_at: Date | null
     re_agent_id: string | null
     title: string | null
-    url: string | null
+    main_url: string | null
     is_visible: boolean | null
   }
 
@@ -14526,7 +14526,7 @@ export namespace Prisma {
     deleted_at: number
     re_agent_id: number
     title: number
-    url: number
+    main_url: number
     is_visible: number
     _all: number
   }
@@ -14540,7 +14540,7 @@ export namespace Prisma {
     deleted_at?: true
     re_agent_id?: true
     title?: true
-    url?: true
+    main_url?: true
     is_visible?: true
   }
 
@@ -14552,7 +14552,7 @@ export namespace Prisma {
     deleted_at?: true
     re_agent_id?: true
     title?: true
-    url?: true
+    main_url?: true
     is_visible?: true
   }
 
@@ -14564,7 +14564,7 @@ export namespace Prisma {
     deleted_at?: true
     re_agent_id?: true
     title?: true
-    url?: true
+    main_url?: true
     is_visible?: true
     _all?: true
   }
@@ -14650,7 +14650,7 @@ export namespace Prisma {
     deleted_at: Date | null
     re_agent_id: string
     title: string
-    url: string
+    main_url: string
     is_visible: boolean
     _count: REPortfolioModelCountAggregateOutputType | null
     _min: REPortfolioModelMinAggregateOutputType | null
@@ -14679,7 +14679,7 @@ export namespace Prisma {
     deleted_at?: boolean
     re_agent_id?: boolean
     title?: boolean
-    url?: boolean
+    main_url?: boolean
     is_visible?: boolean
     re_agent?: boolean | REAgentModelArgs<ExtArgs>
   }, ExtArgs["result"]["rEPortfolioModel"]>
@@ -14692,7 +14692,7 @@ export namespace Prisma {
     deleted_at?: boolean
     re_agent_id?: boolean
     title?: boolean
-    url?: boolean
+    main_url?: boolean
     is_visible?: boolean
   }
 
@@ -15111,7 +15111,7 @@ export namespace Prisma {
     readonly deleted_at: FieldRef<"REPortfolioModel", 'DateTime'>
     readonly re_agent_id: FieldRef<"REPortfolioModel", 'String'>
     readonly title: FieldRef<"REPortfolioModel", 'String'>
-    readonly url: FieldRef<"REPortfolioModel", 'String'>
+    readonly main_url: FieldRef<"REPortfolioModel", 'String'>
     readonly is_visible: FieldRef<"REPortfolioModel", 'Boolean'>
   }
     
@@ -15459,7 +15459,7 @@ export namespace Prisma {
     deleted_at: Date | null
     hs_provider_id: string | null
     title: string | null
-    url: string | null
+    main_url: string | null
     is_visible: boolean | null
   }
 
@@ -15471,7 +15471,7 @@ export namespace Prisma {
     deleted_at: Date | null
     hs_provider_id: string | null
     title: string | null
-    url: string | null
+    main_url: string | null
     is_visible: boolean | null
   }
 
@@ -15483,7 +15483,7 @@ export namespace Prisma {
     deleted_at: number
     hs_provider_id: number
     title: number
-    url: number
+    main_url: number
     is_visible: number
     _all: number
   }
@@ -15497,7 +15497,7 @@ export namespace Prisma {
     deleted_at?: true
     hs_provider_id?: true
     title?: true
-    url?: true
+    main_url?: true
     is_visible?: true
   }
 
@@ -15509,7 +15509,7 @@ export namespace Prisma {
     deleted_at?: true
     hs_provider_id?: true
     title?: true
-    url?: true
+    main_url?: true
     is_visible?: true
   }
 
@@ -15521,7 +15521,7 @@ export namespace Prisma {
     deleted_at?: true
     hs_provider_id?: true
     title?: true
-    url?: true
+    main_url?: true
     is_visible?: true
     _all?: true
   }
@@ -15607,7 +15607,7 @@ export namespace Prisma {
     deleted_at: Date | null
     hs_provider_id: string
     title: string
-    url: string
+    main_url: string
     is_visible: boolean
     _count: HSPortfolioModelCountAggregateOutputType | null
     _min: HSPortfolioModelMinAggregateOutputType | null
@@ -15636,7 +15636,7 @@ export namespace Prisma {
     deleted_at?: boolean
     hs_provider_id?: boolean
     title?: boolean
-    url?: boolean
+    main_url?: boolean
     is_visible?: boolean
     hs_provider?: boolean | HSProviderModelArgs<ExtArgs>
   }, ExtArgs["result"]["hSPortfolioModel"]>
@@ -15649,7 +15649,7 @@ export namespace Prisma {
     deleted_at?: boolean
     hs_provider_id?: boolean
     title?: boolean
-    url?: boolean
+    main_url?: boolean
     is_visible?: boolean
   }
 
@@ -16068,7 +16068,7 @@ export namespace Prisma {
     readonly deleted_at: FieldRef<"HSPortfolioModel", 'DateTime'>
     readonly hs_provider_id: FieldRef<"HSPortfolioModel", 'String'>
     readonly title: FieldRef<"HSPortfolioModel", 'String'>
-    readonly url: FieldRef<"HSPortfolioModel", 'String'>
+    readonly main_url: FieldRef<"HSPortfolioModel", 'String'>
     readonly is_visible: FieldRef<"HSPortfolioModel", 'Boolean'>
   }
     
@@ -18588,7 +18588,7 @@ export namespace Prisma {
     deleted_at: 'deleted_at',
     re_agent_id: 're_agent_id',
     title: 'title',
-    url: 'url',
+    main_url: 'main_url',
     is_visible: 'is_visible'
   };
 
@@ -18603,7 +18603,7 @@ export namespace Prisma {
     deleted_at: 'deleted_at',
     hs_provider_id: 'hs_provider_id',
     title: 'title',
-    url: 'url',
+    main_url: 'main_url',
     is_visible: 'is_visible'
   };
 
@@ -19667,7 +19667,7 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableFilter<"REPortfolioModel"> | Date | string | null
     re_agent_id?: StringFilter<"REPortfolioModel"> | string
     title?: StringFilter<"REPortfolioModel"> | string
-    url?: StringFilter<"REPortfolioModel"> | string
+    main_url?: StringFilter<"REPortfolioModel"> | string
     is_visible?: BoolFilter<"REPortfolioModel"> | boolean
     re_agent?: XOR<REAgentModelRelationFilter, REAgentModelWhereInput>
   }
@@ -19680,7 +19680,7 @@ export namespace Prisma {
     deleted_at?: SortOrderInput | SortOrder
     re_agent_id?: SortOrder
     title?: SortOrder
-    url?: SortOrder
+    main_url?: SortOrder
     is_visible?: SortOrder
     re_agent?: REAgentModelOrderByWithRelationInput
   }
@@ -19696,7 +19696,7 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableFilter<"REPortfolioModel"> | Date | string | null
     re_agent_id?: StringFilter<"REPortfolioModel"> | string
     title?: StringFilter<"REPortfolioModel"> | string
-    url?: StringFilter<"REPortfolioModel"> | string
+    main_url?: StringFilter<"REPortfolioModel"> | string
     is_visible?: BoolFilter<"REPortfolioModel"> | boolean
     re_agent?: XOR<REAgentModelRelationFilter, REAgentModelWhereInput>
   }, "id">
@@ -19709,7 +19709,7 @@ export namespace Prisma {
     deleted_at?: SortOrderInput | SortOrder
     re_agent_id?: SortOrder
     title?: SortOrder
-    url?: SortOrder
+    main_url?: SortOrder
     is_visible?: SortOrder
     _count?: REPortfolioModelCountOrderByAggregateInput
     _max?: REPortfolioModelMaxOrderByAggregateInput
@@ -19727,7 +19727,7 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableWithAggregatesFilter<"REPortfolioModel"> | Date | string | null
     re_agent_id?: StringWithAggregatesFilter<"REPortfolioModel"> | string
     title?: StringWithAggregatesFilter<"REPortfolioModel"> | string
-    url?: StringWithAggregatesFilter<"REPortfolioModel"> | string
+    main_url?: StringWithAggregatesFilter<"REPortfolioModel"> | string
     is_visible?: BoolWithAggregatesFilter<"REPortfolioModel"> | boolean
   }
 
@@ -19742,7 +19742,7 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableFilter<"HSPortfolioModel"> | Date | string | null
     hs_provider_id?: StringFilter<"HSPortfolioModel"> | string
     title?: StringFilter<"HSPortfolioModel"> | string
-    url?: StringFilter<"HSPortfolioModel"> | string
+    main_url?: StringFilter<"HSPortfolioModel"> | string
     is_visible?: BoolFilter<"HSPortfolioModel"> | boolean
     hs_provider?: XOR<HSProviderModelRelationFilter, HSProviderModelWhereInput>
   }
@@ -19755,7 +19755,7 @@ export namespace Prisma {
     deleted_at?: SortOrderInput | SortOrder
     hs_provider_id?: SortOrder
     title?: SortOrder
-    url?: SortOrder
+    main_url?: SortOrder
     is_visible?: SortOrder
     hs_provider?: HSProviderModelOrderByWithRelationInput
   }
@@ -19771,7 +19771,7 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableFilter<"HSPortfolioModel"> | Date | string | null
     hs_provider_id?: StringFilter<"HSPortfolioModel"> | string
     title?: StringFilter<"HSPortfolioModel"> | string
-    url?: StringFilter<"HSPortfolioModel"> | string
+    main_url?: StringFilter<"HSPortfolioModel"> | string
     is_visible?: BoolFilter<"HSPortfolioModel"> | boolean
     hs_provider?: XOR<HSProviderModelRelationFilter, HSProviderModelWhereInput>
   }, "id">
@@ -19784,7 +19784,7 @@ export namespace Prisma {
     deleted_at?: SortOrderInput | SortOrder
     hs_provider_id?: SortOrder
     title?: SortOrder
-    url?: SortOrder
+    main_url?: SortOrder
     is_visible?: SortOrder
     _count?: HSPortfolioModelCountOrderByAggregateInput
     _max?: HSPortfolioModelMaxOrderByAggregateInput
@@ -19802,7 +19802,7 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableWithAggregatesFilter<"HSPortfolioModel"> | Date | string | null
     hs_provider_id?: StringWithAggregatesFilter<"HSPortfolioModel"> | string
     title?: StringWithAggregatesFilter<"HSPortfolioModel"> | string
-    url?: StringWithAggregatesFilter<"HSPortfolioModel"> | string
+    main_url?: StringWithAggregatesFilter<"HSPortfolioModel"> | string
     is_visible?: BoolWithAggregatesFilter<"HSPortfolioModel"> | boolean
   }
 
@@ -20965,7 +20965,7 @@ export namespace Prisma {
     is_deleted: boolean
     deleted_at?: Date | string | null
     title: string
-    url: string
+    main_url: string
     is_visible: boolean
     re_agent: REAgentModelCreateNestedOneWithoutPortfoliosInput
   }
@@ -20978,7 +20978,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     re_agent_id: string
     title: string
-    url: string
+    main_url: string
     is_visible: boolean
   }
 
@@ -20989,7 +20989,7 @@ export namespace Prisma {
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     title?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
+    main_url?: StringFieldUpdateOperationsInput | string
     is_visible?: BoolFieldUpdateOperationsInput | boolean
     re_agent?: REAgentModelUpdateOneRequiredWithoutPortfoliosNestedInput
   }
@@ -21002,7 +21002,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     re_agent_id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
+    main_url?: StringFieldUpdateOperationsInput | string
     is_visible?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -21014,7 +21014,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     re_agent_id: string
     title: string
-    url: string
+    main_url: string
     is_visible: boolean
   }
 
@@ -21025,7 +21025,7 @@ export namespace Prisma {
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     title?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
+    main_url?: StringFieldUpdateOperationsInput | string
     is_visible?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -21037,7 +21037,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     re_agent_id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
+    main_url?: StringFieldUpdateOperationsInput | string
     is_visible?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -21048,7 +21048,7 @@ export namespace Prisma {
     is_deleted: boolean
     deleted_at?: Date | string | null
     title: string
-    url: string
+    main_url: string
     is_visible: boolean
     hs_provider: HSProviderModelCreateNestedOneWithoutPortfoliosInput
   }
@@ -21061,7 +21061,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     hs_provider_id: string
     title: string
-    url: string
+    main_url: string
     is_visible: boolean
   }
 
@@ -21072,7 +21072,7 @@ export namespace Prisma {
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     title?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
+    main_url?: StringFieldUpdateOperationsInput | string
     is_visible?: BoolFieldUpdateOperationsInput | boolean
     hs_provider?: HSProviderModelUpdateOneRequiredWithoutPortfoliosNestedInput
   }
@@ -21085,7 +21085,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     hs_provider_id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
+    main_url?: StringFieldUpdateOperationsInput | string
     is_visible?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -21097,7 +21097,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     hs_provider_id: string
     title: string
-    url: string
+    main_url: string
     is_visible: boolean
   }
 
@@ -21108,7 +21108,7 @@ export namespace Prisma {
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     title?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
+    main_url?: StringFieldUpdateOperationsInput | string
     is_visible?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -21120,7 +21120,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     hs_provider_id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
+    main_url?: StringFieldUpdateOperationsInput | string
     is_visible?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -22090,7 +22090,7 @@ export namespace Prisma {
     deleted_at?: SortOrder
     re_agent_id?: SortOrder
     title?: SortOrder
-    url?: SortOrder
+    main_url?: SortOrder
     is_visible?: SortOrder
   }
 
@@ -22102,7 +22102,7 @@ export namespace Prisma {
     deleted_at?: SortOrder
     re_agent_id?: SortOrder
     title?: SortOrder
-    url?: SortOrder
+    main_url?: SortOrder
     is_visible?: SortOrder
   }
 
@@ -22114,7 +22114,7 @@ export namespace Prisma {
     deleted_at?: SortOrder
     re_agent_id?: SortOrder
     title?: SortOrder
-    url?: SortOrder
+    main_url?: SortOrder
     is_visible?: SortOrder
   }
 
@@ -22126,7 +22126,7 @@ export namespace Prisma {
     deleted_at?: SortOrder
     hs_provider_id?: SortOrder
     title?: SortOrder
-    url?: SortOrder
+    main_url?: SortOrder
     is_visible?: SortOrder
   }
 
@@ -22138,7 +22138,7 @@ export namespace Prisma {
     deleted_at?: SortOrder
     hs_provider_id?: SortOrder
     title?: SortOrder
-    url?: SortOrder
+    main_url?: SortOrder
     is_visible?: SortOrder
   }
 
@@ -22150,7 +22150,7 @@ export namespace Prisma {
     deleted_at?: SortOrder
     hs_provider_id?: SortOrder
     title?: SortOrder
-    url?: SortOrder
+    main_url?: SortOrder
     is_visible?: SortOrder
   }
 
@@ -24301,7 +24301,7 @@ export namespace Prisma {
     is_deleted: boolean
     deleted_at?: Date | string | null
     title: string
-    url: string
+    main_url: string
     is_visible: boolean
   }
 
@@ -24312,7 +24312,7 @@ export namespace Prisma {
     is_deleted: boolean
     deleted_at?: Date | string | null
     title: string
-    url: string
+    main_url: string
     is_visible: boolean
   }
 
@@ -24417,7 +24417,7 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableFilter<"REPortfolioModel"> | Date | string | null
     re_agent_id?: StringFilter<"REPortfolioModel"> | string
     title?: StringFilter<"REPortfolioModel"> | string
-    url?: StringFilter<"REPortfolioModel"> | string
+    main_url?: StringFilter<"REPortfolioModel"> | string
     is_visible?: BoolFilter<"REPortfolioModel"> | boolean
   }
 
@@ -24559,7 +24559,7 @@ export namespace Prisma {
     is_deleted: boolean
     deleted_at?: Date | string | null
     title: string
-    url: string
+    main_url: string
     is_visible: boolean
   }
 
@@ -24570,7 +24570,7 @@ export namespace Prisma {
     is_deleted: boolean
     deleted_at?: Date | string | null
     title: string
-    url: string
+    main_url: string
     is_visible: boolean
   }
 
@@ -24675,7 +24675,7 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableFilter<"HSPortfolioModel"> | Date | string | null
     hs_provider_id?: StringFilter<"HSPortfolioModel"> | string
     title?: StringFilter<"HSPortfolioModel"> | string
-    url?: StringFilter<"HSPortfolioModel"> | string
+    main_url?: StringFilter<"HSPortfolioModel"> | string
     is_visible?: BoolFilter<"HSPortfolioModel"> | boolean
   }
 
@@ -25509,7 +25509,7 @@ export namespace Prisma {
     is_deleted: boolean
     deleted_at?: Date | string | null
     title: string
-    url: string
+    main_url: string
     is_visible: boolean
   }
 
@@ -25520,7 +25520,7 @@ export namespace Prisma {
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     title?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
+    main_url?: StringFieldUpdateOperationsInput | string
     is_visible?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -25531,7 +25531,7 @@ export namespace Prisma {
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     title?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
+    main_url?: StringFieldUpdateOperationsInput | string
     is_visible?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -25542,7 +25542,7 @@ export namespace Prisma {
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     title?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
+    main_url?: StringFieldUpdateOperationsInput | string
     is_visible?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -25620,7 +25620,7 @@ export namespace Prisma {
     is_deleted: boolean
     deleted_at?: Date | string | null
     title: string
-    url: string
+    main_url: string
     is_visible: boolean
   }
 
@@ -25658,7 +25658,7 @@ export namespace Prisma {
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     title?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
+    main_url?: StringFieldUpdateOperationsInput | string
     is_visible?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -25669,7 +25669,7 @@ export namespace Prisma {
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     title?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
+    main_url?: StringFieldUpdateOperationsInput | string
     is_visible?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -25680,7 +25680,7 @@ export namespace Prisma {
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     title?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
+    main_url?: StringFieldUpdateOperationsInput | string
     is_visible?: BoolFieldUpdateOperationsInput | boolean
   }
 

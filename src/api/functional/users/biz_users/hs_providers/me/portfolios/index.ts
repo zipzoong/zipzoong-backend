@@ -14,6 +14,8 @@ import type { IHSPortfolio } from "./../../../../../../structures/IHSPortfolio";
 /**
  * 생활서비스 전문가 포트폴리오 추가
  * 
+ * {@link IHSProvider.FailureCode.Authorize 에러 코드}
+ * 
  * @summary 생활서비스 전문가 포트폴리오 추가
  * 
  * @tag hs-providers
@@ -73,6 +75,8 @@ export namespace create {
 
 /**
  * 내 포트폴리오 목록 검색
+ * 
+ * {@link IHSProvider.FailureCode.Authorize 에러 코드}
  * 
  * @summary 내 포트폴리오 목록 조회
  * 

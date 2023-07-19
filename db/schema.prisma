@@ -233,7 +233,7 @@ model REPortfolioModel {
   deleted_at  DateTime?    @database.Timestamptz
   re_agent_id String
   title       String
-  url         String
+  main_url    String
   is_visible  Boolean
   re_agent    REAgentModel @relation(fields: [re_agent_id], references: [id])
 
@@ -248,7 +248,7 @@ model HSPortfolioModel {
   deleted_at     DateTime?       @database.Timestamptz
   hs_provider_id String
   title          String
-  url            String
+  main_url       String
   is_visible     Boolean
   hs_provider    HSProviderModel @relation(fields: [hs_provider_id], references: [id])
 

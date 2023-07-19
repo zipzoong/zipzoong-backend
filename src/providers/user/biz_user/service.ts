@@ -10,6 +10,7 @@ export namespace Service {
         (user_id: string) =>
             pipe(
                 user_id,
+
                 async (biz_user_id) =>
                     tx.bIZCertificationImageModel.findMany({
                         where: { biz_user_id },

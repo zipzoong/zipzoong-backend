@@ -27,7 +27,7 @@ export namespace Service {
         super_expertise_name,
     }: IHSProvider.ISearch): Promise<IHSProvider.IPaginatedSummary> =>
         pipe(
-            page,
+            30,
 
             async (take) =>
                 prisma.hSProviderModel.findMany({

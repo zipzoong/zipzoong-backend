@@ -14,6 +14,8 @@ import type { IHSPortfolio } from "./../../../../../structures/IHSPortfolio";
 /**
  * 생활서비스 전문가 포트폴리오 목록 검색
  * 
+ * {@link IHSProvider.FailureCode.GetPublic 에러 코드}
+ * 
  * @summary 생활서비스 전문가 포트폴리오 목록 검색
  * 
  * @tag hs-providers
