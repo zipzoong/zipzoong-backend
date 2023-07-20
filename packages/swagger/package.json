@@ -1,6 +1,6 @@
 {
   "name": "@zipzoong/swagger",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "description": "Swagger UI for Zipzoong RESTAPI",
   "main": "./index.mjs",
   "bin": { 
