@@ -1,28 +1,28 @@
 import { Prisma } from "@PRISMA";
 import { map, pipe, toArray, unless } from "@fxts/core";
 import { randomUUID } from "crypto";
-import { IHSPortfolio, IResult } from "@APP/api";
+import { IREPortfolio, IResult } from "@APP/api";
 import { prisma } from "@APP/infrastructure/DB";
-import { HSProvider } from "@APP/providers/user/hs_provider";
+import { REAgent } from "@APP/providers/user/re_agent";
 import { DateMapper, Failure, InternalError, Result } from "@APP/utils";
 import { User } from "../user/user";
 import { PrismaMapper } from "./prisma";
 
 export namespace Service {
     export const getPublicList =
-        (hs_provider_id: string) =>
+        (re_agent_id: string) =>
         ({
             page = 1,
-        }: IHSPortfolio.ISearch): Promise<
+        }: IREPortfolio.ISearch): Promise<
             IResult<
-                IHSPortfolio.IPaginatedPublic,
-                Failure<IHSPortfolio.FailureCode.GetPublicList>
+                IREPortfolio.IPaginatedPublic,
+                Failure<IREPortfolio.FailureCode.GetPublicList>
             >
         > =>
             pipe(
-                hs_provider_id,
+                re_agent_id,
 
-                HSProvider.Service.getPublic(),
+                REAgent.Service.getPublic(),
 
                 unless(
                     Result.Error.is,
@@ -31,9 +31,9 @@ export namespace Service {
                             10,
 
                             async (take) =>
-                                prisma.hSPortfolioModel.findMany({
+                                prisma.rEPortfolioModel.findMany({
                                     where: {
-                                        hs_provider_id,
+                                        re_agent_id,
                                         is_visible: true,
                                         is_deleted: false,
                                     },
@@ -55,24 +55,24 @@ export namespace Service {
         (access_token: string) =>
         async ({
             page = 1,
-        }: IHSPortfolio.ISearch): Promise<
+        }: IREPortfolio.ISearch): Promise<
             IResult<
-                IHSPortfolio.IPaginatedPrivate,
-                Failure<IHSPortfolio.FailureCode.GetPrivateList> | InternalError
+                IREPortfolio.IPaginatedPrivate,
+                Failure<IREPortfolio.FailureCode.GetPrivateList> | InternalError
             >
         > => {
             const permission = await User.Service.validateType(
-                "home service provider",
+                "real estate agent",
             )()(access_token);
             if (Result.Error.is(permission)) return permission;
-            const provider = Result.Ok.flatten(permission);
+            const agent = Result.Ok.flatten(permission);
             return pipe(
                 10,
 
                 async (take) =>
-                    prisma.hSPortfolioModel.findMany({
+                    prisma.rEPortfolioModel.findMany({
                         where: {
-                            hs_provider_id: provider.id,
+                            re_agent_id: agent.id,
                             is_deleted: false,
                         },
                         take,
@@ -93,33 +93,33 @@ export namespace Service {
         (tx: Prisma.TransactionClient = prisma) =>
         (access_token: string) =>
         async (
-            input: IHSPortfolio.ICreateRequest,
+            input: IREPortfolio.ICreateRequest,
         ): Promise<
             IResult<
                 null,
-                InternalError | Failure<IHSPortfolio.FailureCode.Create>
+                InternalError | Failure<IREPortfolio.FailureCode.Create>
             >
         > => {
             const permission = await User.Service.validateType(
-                "home service provider",
+                "real estate agent",
             )(tx)(access_token);
             if (Result.Error.is(permission)) return permission;
             const verification = User.Service.verify(
                 Result.Ok.flatten(permission),
             );
             if (Result.Error.is(verification)) return verification;
-            const provider = Result.Ok.flatten(verification);
+            const agent = Result.Ok.flatten(verification);
             return pipe(
                 input,
 
                 async ({ title, main_url }) =>
-                    tx.hSPortfolioModel.create({
+                    tx.rEPortfolioModel.create({
                         data: {
                             id: randomUUID(),
                             title,
                             main_url,
                             is_visible: true,
-                            hs_provider_id: provider.id,
+                            re_agent_id: agent.id,
                             created_at: DateMapper.toISO(),
                             updated_at: DateMapper.toISO(),
                             is_deleted: false,

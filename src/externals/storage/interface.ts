@@ -15,5 +15,5 @@ export interface IStorage {
     getReadUrl: (input: {
         access_type: IUpload.AccessType;
         url: string;
-    }) => Promise<IResult<string, InternalError>>;
+    }) => Promise<string>;
 }

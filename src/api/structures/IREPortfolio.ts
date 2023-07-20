@@ -1,3 +1,5 @@
+import { IREAgent } from "@APP/api/structures/user/IREAgent";
+import { IUser } from "../module";
 import { IPage, IPaginatedResponse } from "./common/IPagination";
 
 export interface IREPortfolio {
@@ -46,4 +48,12 @@ export namespace IREPortfolio {
 
     export type ICreate = Pick<IREPortfolio, "title" | "main_url">;
     export type ICreateRequest = ICreate;
+
+    export namespace FailureCode {
+        export type GetPublicList = IREAgent.FailureCode.GetPublic;
+        export type GetPrivateList = IUser.FailureCode.ValidateType;
+        export type Create =
+            | IUser.FailureCode.ValidateType
+            | IUser.FailureCode.Verify;
+    }
 }

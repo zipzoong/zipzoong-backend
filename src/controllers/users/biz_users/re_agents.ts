@@ -1,8 +1,8 @@
 import { TypedBody, TypedParam, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
 import { IREPortfolio } from "@APP/api/structures/IREPortfolio";
-import { IBIZUser } from "@APP/api/structures/user/IBIZUser";
 import { IREAgent } from "@APP/api/structures/user/IREAgent";
+import { REPortfolio } from "@APP/providers/re_portfolio";
 import { REAgent } from "@APP/providers/user/re_agent";
 import { Authorization } from "../../decorators/authorization";
 import { httpResponse } from "../../internal";
@@ -37,7 +37,7 @@ export class UsersREAgentsMeController {
      *
      * 이메일, 휴대전화 등의 개인 정보는 마킹처리되어 전달된다.
      *
-     * {@link IREAgent.FailureCode.GetProfile 에러 코드}
+     * {@link IREAgent.FailureCode.GetPrivate 에러 코드}
      *
      * @summary 공인중개사 내 정보 조회
      *
@@ -51,12 +51,14 @@ export class UsersREAgentsMeController {
     async get(
         @Authorization("access") access_token: string,
     ): Promise<IREAgent.IPrivate> {
-        const result = await REAgent.Service.getProfile()(access_token);
+        const result = await REAgent.Service.getPrivate()(access_token);
         return httpResponse(result);
     }
 
     /**
      * 공인중개사 포트폴리오 추가
+     *
+     * {@link IREPortfolio.FailureCode.Create 에러 코드}
      *
      * @summary 공인중개사 포트폴리오 추가
      *
@@ -67,15 +69,18 @@ export class UsersREAgentsMeController {
      * @param body 포트폴리오 정보
      */
     @TypedRoute.Post("portfolios")
-    create(
+    async create(
         @Authorization("access") access_token: string,
         @TypedBody() body: IREPortfolio.ICreateRequest,
     ): Promise<void> {
-        throw Error();
+        const result = await REPortfolio.Service.create()(access_token)(body);
+        httpResponse(result);
     }
 
     /**
      * 내 포트폴리오 목록 검색
+     *
+     * {@link IREPortfolio.FailureCode.GetPrivateList 에러 코드}
      *
      * @summary 내 포트폴리오 목록 조회
      *
@@ -88,61 +93,14 @@ export class UsersREAgentsMeController {
      * @return 포트폴리오 상세 정보 목록
      */
     @TypedRoute.Get("portfolios")
-    getList(
+    async getList(
         @Authorization("access") access_token: string,
         @TypedQuery() query: IREPortfolio.ISearch,
     ): Promise<IREPortfolio.IPaginatedPrivate> {
-        throw Error();
-    }
-}
-
-@Controller(route + "/me/certifications")
-export class UsersREAgentsMeCertificationsController {
-    /**
-     * 제출한 사업자 인증 서류 이미지 목록 조회
-     *
-     * {@link IREAgent.FailureCode.GetCertificationList 에러 코드}
-     *
-     * @summary 사업자 인증 서류 이미지 목록 조회
-     *
-     * @tag re-agents
-     *
-     * @param access_token 사업자 권한을 가진 액세스 토큰
-     *
-     * @return 사업자 인증 서류 이미지 url 목록
-     */
-    @TypedRoute.Get()
-    async getList(
-        @Authorization("access") access_token: string,
-    ): Promise<string[]> {
-        const result = await REAgent.Service.getCertificationList()(
-            access_token,
+        const result = await REPortfolio.Service.getPrivateList(access_token)(
+            query,
         );
         return httpResponse(result);
-    }
-
-    /**
-     * 사업자 인증 서류 이미지 추가
-     *
-     * {@link IREAgent.FailureCode.CreateCertification 에러 코드}
-     *
-     * @summary 사업자 인증 서류 이미지 추가
-     *
-     * @tag re-agents
-     *
-     * @param access_token 사업자 권한을 가진 액세스 토큰
-     *
-     * @param body 업로드할 이미지 정보
-     */
-    @TypedRoute.Post()
-    async create(
-        @Authorization("access") access_token: string,
-        @TypedBody() body: IBIZUser.ICertificationImageCreate,
-    ): Promise<void> {
-        const result = await REAgent.Service.createCertification()(
-            access_token,
-        )(body);
-        httpResponse(result);
     }
 }
 
@@ -198,6 +156,8 @@ export class UsersREAgentsSomeoneController {
     /**
      * 공인 중개사 포트폴리오 목록 검색
      *
+     * {@link IREPortfolio.FailureCode.GetPublicList 에러 코드}
+     *
      * @summary 공인 중개사 포트폴리오 목록 검색
      *
      * @tag re-agents
@@ -209,10 +169,11 @@ export class UsersREAgentsSomeoneController {
      * @return 포트폴리오 공개 정보 목록
      */
     @TypedRoute.Get("portfolios")
-    getList(
+    async getList(
         @TypedParam("agent_id") agent_id: string,
         @TypedQuery() query: IREPortfolio.ISearch,
     ): Promise<IREPortfolio.IPaginatedPublic> {
-        throw Error();
+        const result = await REPortfolio.Service.getPublicList(agent_id)(query);
+        return httpResponse(result);
     }
 }

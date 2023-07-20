@@ -37,11 +37,11 @@
         "url": "https://github.com/zipzoong/zipzoong-backend.git"
     },
     "dependencies": {
-        "@aws-sdk/client-s3": "^3.370.0",
+        "@aws-sdk/client-s3": "^3.373.0",
         "@aws-sdk/credential-providers": "^3.370.0",
         "@aws-sdk/hash-node": "^3.370.0",
         "@aws-sdk/protocol-http": "^3.370.0",
-        "@aws-sdk/s3-request-presigner": "^3.370.0",
+        "@aws-sdk/s3-request-presigner": "^3.373.0",
         "@aws-sdk/url-parser": "^3.370.0",
         "@aws-sdk/util-format-url": "^3.370.0",
         "@fxts/core": "^0.18.0",
@@ -56,7 +56,7 @@
         "reflect-metadata": "^0.1.13",
         "rxjs": "^7.8.1",
         "schemix": "^1.14.1",
-        "ts-patch": "^3.0.1",
+        "ts-patch": "^3.0.2",
         "typia": "^4.1.7",
         "winston": "^3.10.0"
     },

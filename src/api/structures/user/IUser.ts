@@ -3,6 +3,8 @@ import { IClient } from "./IClient";
 import { IHSProvider } from "./IHSProvider";
 import { IREAgent } from "./IREAgent";
 
+export type IUser = IClient | IREAgent | IHSProvider;
+
 export namespace IUser {
     export type Type = "client" | "real estate agent" | "home service provider";
     export type GenderType = "female" | "male";
@@ -49,15 +51,14 @@ export namespace IUser {
         | IHSProvider.ICreateRequest;
 
     export namespace FailureCode {
+        export type Validate =
+            | IAuthentication.FailureCode.TokenVerify
+            | "USER_INVALID";
+        export type ValidateType =
+            | Validate
+            | IAuthentication.FailureCode.PermissionInSufficient;
+        export type Verify = "USER_UNVERIFIED";
         export type GetPublic = "USER_NOT_FOUND";
-        export type GetPrivate = GetPublic | "USER_INACTIVE";
-        export type GetProfile =
-            | IAuthentication.FailureCode.TokenVerify
-            | IAuthentication.FailureCode.PermissionInSufficient
-            | GetPrivate;
-        export type Authorize =
-            | IAuthentication.FailureCode.TokenVerify
-            | IAuthentication.FailureCode.PermissionInSufficient
-            | "USER_UNVERIFIED";
+        export type GetOne = GetPublic | "USER_INACTIVE";
     }
 }

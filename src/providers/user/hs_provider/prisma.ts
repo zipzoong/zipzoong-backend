@@ -97,7 +97,7 @@ export namespace PrismaJson {
             },
         } satisfies Prisma.HSProviderModelSelect);
 
-    export const privateSelect = () =>
+    export const select = () =>
         ({
             base: {
                 select: {
@@ -133,6 +133,77 @@ export namespace PrismaJson {
 }
 
 export namespace PrismaMapper {
+    export const to = (
+        input: NonNullable<
+            Awaited<
+                ReturnType<
+                    typeof prisma.hSProviderModel.findFirst<{
+                        select: ReturnType<typeof PrismaJson.select>;
+                    }>
+                >
+            >
+        >,
+    ): IResult<IHSProvider, InternalError> => {
+        const sub_expertises = input.expertise_relation
+            .filter(isUnDeleted)
+            .map(pick("sub_expertise"));
+
+        const super_expertise = sub_expertises[0]?.super_expertise;
+
+        if (isUndefined(super_expertise))
+            return Result.Error.map(
+                InternalError.create(
+                    Error(
+                        `HSProvider 전문분야 누락. id: | ${input.base.base.id} |`,
+                    ),
+                ),
+            );
+
+        const expertise = {
+            id: super_expertise.id,
+            name: super_expertise.name,
+            sub_expertises: sub_expertises.filter(
+                ({ super_expertise: { id } }) => super_expertise.id === id,
+            ),
+        };
+
+        const provider: IHSProvider = {
+            type: "home service provider",
+            id: input.base.base.id,
+            name: input.base.base.name,
+            email: input.base.base.email,
+            created_at: DateMapper.toISO(input.base.base.created_at),
+            updated_at: DateMapper.toISO(input.base.base.updated_at),
+            phone: input.base.phone,
+            is_verified: input.base.is_verified,
+            profile_image_url: input.base.profile_image_url,
+            introduction: {
+                title: input.base.introduction_title,
+                content: input.base.introduction_content,
+            },
+            expertise,
+            registration_number: input.biz_registration_number,
+            biz_phone: input.biz_phone,
+            open_date: DateMapper.toDate(input.biz_open_date),
+            address: {
+                road: input.address_road,
+                zone_code: input.address_zone_code,
+                detail: input.address_detail,
+                extra: input.address_extra,
+            },
+        };
+
+        return typia.equals<IHSProvider>(provider)
+            ? Result.Ok.map(provider)
+            : Result.Error.map(
+                  InternalError.create(
+                      Error(
+                          `Fail to map HSProvider Private. id: | ${input.base.base.id} |`,
+                      ),
+                  ),
+              );
+    };
+
     export const toSummary = (
         input: NonNullable<
             Awaited<
@@ -185,77 +256,6 @@ export namespace PrismaMapper {
                   InternalError.create(
                       Error(
                           `Fail to map HSProvider Summary. id: | ${input.base.base.id} |`,
-                      ),
-                  ),
-              );
-    };
-
-    export const toPrivate = (
-        input: NonNullable<
-            Awaited<
-                ReturnType<
-                    typeof prisma.hSProviderModel.findFirst<{
-                        select: ReturnType<typeof PrismaJson.privateSelect>;
-                    }>
-                >
-            >
-        >,
-    ): IResult<IHSProvider.IPrivate, InternalError> => {
-        const sub_expertises = input.expertise_relation
-            .filter(isUnDeleted)
-            .map(pick("sub_expertise"));
-
-        const super_expertise = sub_expertises[0]?.super_expertise;
-
-        if (isUndefined(super_expertise))
-            return Result.Error.map(
-                InternalError.create(
-                    Error(
-                        `HSProvider 전문분야 누락. id: | ${input.base.base.id} |`,
-                    ),
-                ),
-            );
-
-        const expertise = {
-            id: super_expertise.id,
-            name: super_expertise.name,
-            sub_expertises: sub_expertises.filter(
-                ({ super_expertise: { id } }) => super_expertise.id === id,
-            ),
-        };
-
-        const provider: IHSProvider.IPrivate = {
-            type: "home service provider",
-            id: input.base.base.id,
-            name: input.base.base.name,
-            email: input.base.base.email,
-            created_at: DateMapper.toISO(input.base.base.created_at),
-            updated_at: DateMapper.toISO(input.base.base.updated_at),
-            phone: input.base.phone,
-            is_verified: input.base.is_verified,
-            profile_image_url: input.base.profile_image_url,
-            introduction: {
-                title: input.base.introduction_title,
-                content: input.base.introduction_content,
-            },
-            expertise,
-            registration_number: input.biz_registration_number,
-            biz_phone: input.biz_phone,
-            open_date: DateMapper.toDate(input.biz_open_date),
-            address: {
-                road: input.address_road,
-                zone_code: input.address_zone_code,
-                detail: input.address_detail,
-                extra: input.address_extra,
-            },
-        };
-
-        return typia.equals<IHSProvider.IPrivate>(provider)
-            ? Result.Ok.map(provider)
-            : Result.Error.map(
-                  InternalError.create(
-                      Error(
-                          `Fail to map HSProvider Private. id: | ${input.base.base.id} |`,
                       ),
                   ),
               );

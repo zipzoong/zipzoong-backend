@@ -14,6 +14,8 @@ import type { IREPortfolio } from "./../../../../../structures/IREPortfolio";
 /**
  * 공인 중개사 포트폴리오 목록 검색
  * 
+ * {@link IREPortfolio.FailureCode.GetPublicList 에러 코드}
+ * 
  * @summary 공인 중개사 포트폴리오 목록 검색
  * 
  * @tag re-agents

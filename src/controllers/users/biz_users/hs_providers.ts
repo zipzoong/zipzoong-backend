@@ -1,7 +1,6 @@
 import { TypedBody, TypedParam, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
 import { IHSPortfolio } from "@APP/api/structures/IHSPortfolio";
-import { IBIZUser } from "@APP/api/structures/user/IBIZUser";
 import { IHSProvider } from "@APP/api/structures/user/IHSProvider";
 import { HSPortfolio } from "@APP/providers/hs_portfolio";
 import { HSProvider } from "@APP/providers/user/hs_provider";
@@ -38,7 +37,7 @@ export class UsersHSProvidersMeController {
      *
      * 이메일, 휴대전화 등의 개인 정보는 마킹처리되어 전달된다.
      *
-     * {@link IHSProvider.FailureCode.GetProfile 에러 코드}
+     * {@link IHSProvider.FailureCode.GetPrivate 에러 코드}
      *
      * @summary 생활서비스 전문가 내 정보 조회
      *
@@ -52,7 +51,7 @@ export class UsersHSProvidersMeController {
     async get(
         @Authorization("access") access_token: string,
     ): Promise<IHSProvider.IPrivate> {
-        const result = await HSProvider.Service.getProfile()(access_token);
+        const result = await HSProvider.Service.getPrivate()(access_token);
         return httpResponse(result);
     }
 
@@ -102,56 +101,6 @@ export class UsersHSProvidersMeController {
             query,
         );
         return httpResponse(result);
-    }
-}
-
-@Controller(route + "/me/certifications")
-export class UsersHSProvidersMeCertificationsController {
-    /**
-     * 제출한 사업자 인증 서류 이미지 목록 조회
-     *
-     * {@link IHSProvider.FailureCode.GetCertificationList 에러 코드}
-     *
-     * @summary 사업자 인증 서류 이미지 목록 조회
-     *
-     * @tag hs-providers
-     *
-     * @param access_token 사업자 권한을 가진 액세스 토큰
-     *
-     * @return 사업자 인증 서류 이미지 url 목록
-     */
-    @TypedRoute.Get()
-    async getList(
-        @Authorization("access") access_token: string,
-    ): Promise<string[]> {
-        const result = await HSProvider.Service.getCertificationList()(
-            access_token,
-        );
-        return httpResponse(result);
-    }
-
-    /**
-     * 사업자 인증 서류 이미지 추가
-     *
-     * {@link IHSProvider.FailureCode.CreateCertification 에러 코드}
-     *
-     * @summary 사업자 인증 서류 이미지 추가
-     *
-     * @tag hs-providers
-     *
-     * @param access_token 사업자 권한을 가진 액세스 토큰
-     *
-     * @param body 업로드할 이미지 정보
-     */
-    @TypedRoute.Post()
-    async create(
-        @Authorization("access") access_token: string,
-        @TypedBody() body: IBIZUser.ICertificationImageCreate,
-    ): Promise<void> {
-        const result = await HSProvider.Service.createCertification()(
-            access_token,
-        )(body);
-        httpResponse(result);
     }
 }
 

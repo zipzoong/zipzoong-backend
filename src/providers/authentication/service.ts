@@ -1,11 +1,9 @@
 import { OauthAccountModel, Prisma } from "@PRISMA";
-import { identity, isNull, isString, negate, pipe, unless } from "@fxts/core";
+import { isNull, isString, negate, pipe, unless } from "@fxts/core";
 import { HttpStatus } from "@nestjs/common";
 import { randomUUID } from "crypto";
 import { IAuthentication } from "@APP/api/structures/IAuthentication";
 import { IVerification } from "@APP/api/structures/IVerification";
-import { IHSProvider } from "@APP/api/structures/user/IHSProvider";
-import { IREAgent } from "@APP/api/structures/user/IREAgent";
 import { IUser } from "@APP/api/structures/user/IUser";
 import { IResult } from "@APP/api/types";
 import { Oauth } from "@APP/externals/oauth";
@@ -16,7 +14,6 @@ import {
     InternalError,
     Result,
     isDeleted,
-    isUnDeleted,
     pick,
 } from "@APP/utils";
 import { Terms } from "../terms";
@@ -208,7 +205,7 @@ export namespace Service {
                     (model) =>
                         isNull(model)
                             ? Result.Error.map(
-                                  Failure.create<IAuthentication.FailureCode.SignIn>(
+                                  Failure.create<IAuthentication.FailureCode.AccountVerify>(
                                       {
                                           cause: "ACCOUNT_NOT_FOUND",
                                           message: "존재하지 않는 계정입니다.",
@@ -218,7 +215,7 @@ export namespace Service {
                               )
                             : isDeleted(model)
                             ? Result.Error.map(
-                                  Failure.create<IAuthentication.FailureCode.SignIn>(
+                                  Failure.create<IAuthentication.FailureCode.AccountVerify>(
                                       {
                                           cause: "ACCOUNT_INACTIVE",
                                           message: "비활성화된 계정입니다.",
@@ -232,7 +229,7 @@ export namespace Service {
                                   (account) =>
                                       isNull(account)
                                           ? Result.Error.map(
-                                                Failure.create<IAuthentication.FailureCode.SignIn>(
+                                                Failure.create<IUser.FailureCode.GetOne>(
                                                     {
                                                         cause: "USER_NOT_FOUND",
                                                         message:
@@ -262,12 +259,12 @@ export namespace Service {
             ),
         );
 
-    export const signUp = async (
+    export const signUp = (
         input: IAuthentication.ISignUp,
     ): Promise<
         IResult<
             IAuthentication.IResponse.ISignUp,
-            Failure<IAuthentication.FailureCode.SignUp> | InternalError
+            InternalError | Failure<IAuthentication.FailureCode.SignUp>
         >
     > =>
         pipe(
@@ -311,13 +308,11 @@ export namespace Service {
                     (account) =>
                         isDeleted(account)
                             ? Result.Error.map(
-                                  Failure.create<IAuthentication.FailureCode.SignUp>(
-                                      {
-                                          cause: "ACCOUNT_INACTIVE",
-                                          message: "비활성화된 계정입니다.",
-                                          statusCode: HttpStatus.FORBIDDEN,
-                                      },
-                                  ),
+                                  Failure.create({
+                                      cause: "ACCOUNT_INACTIVE",
+                                      message: "비활성화된 계정입니다.",
+                                      statusCode: HttpStatus.FORBIDDEN,
+                                  }),
                               )
                             : Token.Account.generate({
                                   account_id: account.id,
@@ -325,12 +320,13 @@ export namespace Service {
                 ),
             ),
 
-            Result.lift({
-                ok: (account_token) => ({ account_token }),
-                error: identity<
-                    Failure<IAuthentication.FailureCode.SignUp> | InternalError
+            unless(
+                Result.Error.is<
+                    IAuthentication.IToken,
+                    InternalError | Failure<"ACCOUNT_INACTIVE">
                 >,
-            }),
+                Result.Ok.lift((account_token) => ({ account_token })),
+            ),
         );
 
     export const getProfile =
@@ -383,101 +379,6 @@ export namespace Service {
                     ),
                 ),
             );
-
-    const createREAgent =
-        (tx: Prisma.TransactionClient) =>
-        async ({
-            email,
-            phone,
-            createInput,
-        }: {
-            createInput: IREAgent.ICreateRequest;
-            email: string | null;
-            phone: string;
-        }): Promise<IResult<string, Failure<"EXPERTISE_INVALID">>> => {
-            const re_expertise = await tx.rEExpertiseModel.findFirst({
-                where: { id: createInput.expertise_id },
-            });
-
-            if (isNull(re_expertise) || isDeleted(re_expertise))
-                return Result.Error.map(
-                    Failure.create({
-                        cause: "EXPERTISE_INVALID",
-                        message: "유효하지 않은 전문분야입니다.",
-                        statusCode: HttpStatus.BAD_REQUEST,
-                    }),
-                );
-
-            const re_agent = REAgent.Json.createData({
-                ...createInput,
-                email,
-                phone,
-            });
-            await tx.rEAgentModel.create({ data: re_agent });
-            await tx.bIZCertificationImageModel.createMany({
-                data: BIZUser.Json.createCertificationImageListData(
-                    re_agent.base.create.base.create.id,
-                )(createInput.biz_certification_images),
-            });
-            return Result.Ok.map(re_agent.base.create.base.create.id);
-        };
-
-    const createHSProvider =
-        (tx: Prisma.TransactionClient) =>
-        async ({
-            email,
-            phone,
-            createInput,
-        }: {
-            createInput: IHSProvider.ICreateRequest;
-            email: string | null;
-            phone: string;
-        }): Promise<IResult<string, Failure<"EXPERTISE_INVALID">>> => {
-            const hs_expertises = (
-                await tx.hSSubExpertiseModel.findMany({
-                    where: { id: { in: createInput.sub_expertise_ids } },
-                })
-            ).filter(isUnDeleted);
-
-            if (hs_expertises.length === 0)
-                return Result.Error.map(
-                    Failure.create({
-                        cause: "EXPERTISE_INVALID",
-                        message: "전문분야가 최소 한 개 이상이어야 합니다.",
-                        statusCode: HttpStatus.BAD_REQUEST,
-                    }),
-                );
-
-            if (
-                !hs_expertises.every(
-                    // 모든 요소의 상위 전문 분야가 같아야 한다.
-                    (val, _, arr) =>
-                        val.super_expertise_id === arr[0]?.super_expertise_id,
-                )
-            )
-                return Result.Error.map(
-                    Failure.create({
-                        cause: "EXPERTISE_INVALID",
-                        message:
-                            "선택된 모든 하위 전문분야의 상위 분야는 같아야 합니다.",
-                        statusCode: HttpStatus.BAD_REQUEST,
-                    }),
-                );
-
-            const hs_provider = HSProvider.Json.createData({
-                ...createInput,
-                sub_expertise_ids: hs_expertises.map(pick("id")),
-                email,
-                phone,
-            });
-            await tx.hSProviderModel.create({ data: hs_provider });
-            await tx.bIZCertificationImageModel.createMany({
-                data: BIZUser.Json.createCertificationImageListData(
-                    hs_provider.base.create.base.create.id,
-                )(createInput.biz_certification_images),
-            });
-            return Result.Ok.map(hs_provider.base.create.base.create.id);
-        };
 
     export const isVerifiedPhone =
         (tx: Prisma.TransactionClient = prisma) =>
@@ -547,14 +448,11 @@ export namespace Service {
                 case "client":
                     if (negate(isNull)(account.client_id))
                         return Result.Error.map(
-                            Failure.create<IAuthentication.FailureCode.CreateUser>(
-                                {
-                                    cause: "USER_ALREADY_EXIST",
-                                    message:
-                                        "이미 연동된 사용자 정보가 있습니다.",
-                                    statusCode: HttpStatus.FORBIDDEN,
-                                },
-                            ),
+                            Failure.create({
+                                cause: "USER_ALREADY_EXIST",
+                                message: "이미 연동된 사용자 정보가 있습니다.",
+                                statusCode: HttpStatus.FORBIDDEN,
+                            }),
                         );
 
                     const client_phone_result = isNull(input.phone)
@@ -564,47 +462,44 @@ export namespace Service {
                     if (Result.Error.is(client_phone_result))
                         return client_phone_result;
 
-                    const client = Client.Json.createData({
+                    const client_id = await Client.Service.create(tx)({
                         ...input,
                         email: null,
                         phone: Result.Ok.flatten(client_phone_result),
                     });
-                    await tx.clientModel.create({ data: client });
 
                     await Terms.Service.agree(tx)({
-                        user_id: client.base.create.id,
+                        user_id: client_id,
                         agreed_terms_ids: agreement_ids,
                     });
-                    await connect({ client_id: client.base.create.id });
-                    return Response(client.base.create.id);
+                    await connect({ client_id });
+                    return Response(client_id);
                 case "real estate agent":
                     if (negate(isNull)(account.biz_user_id))
                         return Result.Error.map(
-                            Failure.create<IAuthentication.FailureCode.CreateUser>(
-                                {
-                                    cause: "USER_ALREADY_EXIST",
-                                    message:
-                                        "이미 연동된 사용자 정보가 있습니다.",
-                                    statusCode: HttpStatus.FORBIDDEN,
-                                },
-                            ),
+                            Failure.create({
+                                cause: "USER_ALREADY_EXIST",
+                                message: "이미 연동된 사용자 정보가 있습니다.",
+                                statusCode: HttpStatus.FORBIDDEN,
+                            }),
                         );
-
                     const agent_phone_result = await isVerifiedPhone(tx)(
                         account,
                     )(input.phone);
-
                     if (Result.Error.is(agent_phone_result))
                         return agent_phone_result;
-
-                    const re_agent = await createREAgent(tx)({
-                        createInput: input,
+                    const re_agent_result = await REAgent.Service.create(tx)({
+                        ...input,
                         email: null,
                         phone: Result.Ok.flatten(agent_phone_result),
                     });
-                    if (Result.Error.is(re_agent)) return re_agent;
-                    const re_agent_id = Result.Ok.flatten(re_agent);
-
+                    if (Result.Error.is(re_agent_result))
+                        return re_agent_result;
+                    const re_agent_id = Result.Ok.flatten(re_agent_result);
+                    await BIZUser.Service.createCertificationList(tx)({
+                        biz_user_id: re_agent_id,
+                        images: input.biz_certification_images,
+                    });
                     await Terms.Service.agree(tx)({
                         user_id: re_agent_id,
                         agreed_terms_ids: agreement_ids,
@@ -614,30 +509,32 @@ export namespace Service {
                 case "home service provider":
                     if (negate(isNull)(account.biz_user_id))
                         return Result.Error.map(
-                            Failure.create<IAuthentication.FailureCode.CreateUser>(
-                                {
-                                    cause: "USER_ALREADY_EXIST",
-                                    message:
-                                        "이미 연동된 사용자 정보가 있습니다.",
-                                    statusCode: HttpStatus.FORBIDDEN,
-                                },
-                            ),
+                            Failure.create({
+                                cause: "USER_ALREADY_EXIST",
+                                message: "이미 연동된 사용자 정보가 있습니다.",
+                                statusCode: HttpStatus.FORBIDDEN,
+                            }),
                         );
-
                     const provider_phone_result = await isVerifiedPhone(tx)(
                         account,
                     )(input.phone);
-
                     if (Result.Error.is(provider_phone_result))
                         return provider_phone_result;
-
-                    const hs_provider = await createHSProvider(tx)({
-                        createInput: input,
+                    const hs_provider_result = await HSProvider.Service.create(
+                        tx,
+                    )({
+                        ...input,
                         email: null,
                         phone: Result.Ok.flatten(provider_phone_result),
                     });
-                    if (Result.Error.is(hs_provider)) return hs_provider;
-                    const hs_provider_id = Result.Ok.flatten(hs_provider);
+                    if (Result.Error.is(hs_provider_result))
+                        return hs_provider_result;
+                    const hs_provider_id =
+                        Result.Ok.flatten(hs_provider_result);
+                    await BIZUser.Service.createCertificationList(tx)({
+                        biz_user_id: hs_provider_id,
+                        images: input.biz_certification_images,
+                    });
                     await Terms.Service.agree(tx)({
                         user_id: hs_provider_id,
                         agreed_terms_ids: agreement_ids,
@@ -659,147 +556,57 @@ export namespace Service {
                 | Failure<IAuthentication.FailureCode.RefreshAccessToken>
                 | InternalError
             >
-        > =>
-            pipe(
-                refresh_token,
+        > => {
+            const permission = verifyToken(Token.Refresh.verify)(refresh_token);
+            if (Result.Error.is(permission)) return permission;
+            return pipe(
+                permission,
 
-                verifyToken(Token.Refresh.verify),
+                Result.Ok.flatten,
 
-                unless(Result.Error.is, (ok) =>
+                (payload) =>
+                    ({
+                        client: Client.Service.getOne,
+                        "real estate agent": REAgent.Service.getOne,
+                        "home service provider": HSProvider.Service.getOne,
+                    }[payload.user_type](tx)(payload.user_id)),
+
+                unless(
+                    Result.Ok.is<
+                        IUser,
+                        InternalError | Failure<IUser.FailureCode.GetOne>
+                    >,
+                    Result.Error.lift((error) =>
+                        error.name === "InternalError"
+                            ? error
+                            : Failure.create({
+                                  cause: "USER_INVALID",
+                                  message: "유효하지 않은 사용자입니다.",
+                                  statusCode: HttpStatus.FORBIDDEN,
+                              }),
+                    ),
+                ),
+
+                unless(Result.Error.is, (input) =>
                     pipe(
-                        ok,
+                        input,
 
                         Result.Ok.flatten,
 
-                        async (payload) => {
-                            switch (payload.user_type) {
-                                case "client":
-                                    const client =
-                                        await tx.clientModel.findFirst({
-                                            where: { id: payload.user_id },
-                                            include: { base: true },
-                                        });
-                                    if (isNull(client))
-                                        return Result.Error.map(
-                                            Failure.create<IAuthentication.FailureCode.RefreshAccessToken>(
-                                                {
-                                                    cause: "USER_NOT_FOUND",
-                                                    message:
-                                                        "사용자 정보가 존재하지 않습니다.",
-                                                    statusCode:
-                                                        HttpStatus.FORBIDDEN,
-                                                },
-                                            ),
-                                        );
-
-                                    if (isDeleted(client.base))
-                                        return Result.Error.map(
-                                            Failure.create<IAuthentication.FailureCode.RefreshAccessToken>(
-                                                {
-                                                    cause: "USER_INACTIVE",
-                                                    message:
-                                                        "비활성화된 사용자입니다.",
-                                                    statusCode:
-                                                        HttpStatus.FORBIDDEN,
-                                                },
-                                            ),
-                                        );
-                                    return Result.Ok.map(payload);
-                                case "real estate agent":
-                                    const re_agent =
-                                        await tx.rEAgentModel.findFirst({
-                                            where: { id: payload.user_id },
-                                            select: {
-                                                base: {
-                                                    select: { base: true },
-                                                },
-                                            },
-                                        });
-                                    if (isNull(re_agent))
-                                        return Result.Error.map(
-                                            Failure.create<IAuthentication.FailureCode.RefreshAccessToken>(
-                                                {
-                                                    cause: "USER_NOT_FOUND",
-                                                    message:
-                                                        "사용자 정보가 존재하지 않습니다.",
-                                                    statusCode:
-                                                        HttpStatus.FORBIDDEN,
-                                                },
-                                            ),
-                                        );
-                                    if (isDeleted(re_agent.base.base))
-                                        return Result.Error.map(
-                                            Failure.create<IAuthentication.FailureCode.RefreshAccessToken>(
-                                                {
-                                                    cause: "USER_INACTIVE",
-                                                    message:
-                                                        "비활성화된 사용자입니다.",
-                                                    statusCode:
-                                                        HttpStatus.FORBIDDEN,
-                                                },
-                                            ),
-                                        );
-
-                                    return Result.Ok.map(payload);
-                                case "home service provider":
-                                    const hs_provider =
-                                        await tx.hSProviderModel.findFirst({
-                                            where: { id: payload.user_id },
-                                            select: {
-                                                base: {
-                                                    select: { base: true },
-                                                },
-                                            },
-                                        });
-                                    if (isNull(hs_provider))
-                                        return Result.Error.map(
-                                            Failure.create<IAuthentication.FailureCode.RefreshAccessToken>(
-                                                {
-                                                    cause: "USER_NOT_FOUND",
-                                                    message:
-                                                        "사용자 정보가 존재하지 않습니다.",
-                                                    statusCode:
-                                                        HttpStatus.FORBIDDEN,
-                                                },
-                                            ),
-                                        );
-                                    if (isDeleted(hs_provider.base.base))
-                                        return Result.Error.map(
-                                            Failure.create<IAuthentication.FailureCode.RefreshAccessToken>(
-                                                {
-                                                    cause: "USER_INACTIVE",
-                                                    message:
-                                                        "비활성화된 사용자입니다.",
-                                                    statusCode:
-                                                        HttpStatus.FORBIDDEN,
-                                                },
-                                            ),
-                                        );
-                                    return Result.Ok.map(payload);
-                            }
-                        },
-
-                        unless(Result.Error.is, (input) =>
-                            pipe(
-                                input,
-
-                                Result.Ok.flatten,
-
-                                Token.Access.generate,
-
-                                (result) =>
-                                    Result.Error.is(result)
-                                        ? result
-                                        : Result.Ok.lift(
-                                              (
-                                                  access_token: IAuthentication.IToken,
-                                              ) => ({
-                                                  access_token,
-                                              }),
-                                          )(result),
-                            ),
-                        ),
+                        ({ type, id }) =>
+                            Token.Access.generate({
+                                user_id: id,
+                                user_type: type,
+                            }),
                     ),
                 ),
+
+                unless(
+                    Result.Error.is,
+                    Result.Ok.lift((access_token) => ({
+                        access_token,
+                    })),
+                ),
             );
+        };
 }

@@ -12,7 +12,7 @@ export class UsersClientsController {
     /**
      * 일반 고객 내 정보 보기 요청
      *
-     * {@link IClient.FailureCode.GetProfile 에러 코드}
+     * {@link IClient.FailureCode.GetPrivate 에러 코드}
      *
      * @summary 일반 고객 내 정보 요청
      *
@@ -25,8 +25,8 @@ export class UsersClientsController {
     @TypedRoute.Get("me")
     async get(
         @Authorization("access") access_token: string,
-    ): Promise<IClient.IProfile> {
-        const result = await Client.Service.getProfile()(access_token);
+    ): Promise<IClient.IPrivate> {
+        const result = await Client.Service.getPrivate()(access_token);
         return httpResponse(result);
     }
 }

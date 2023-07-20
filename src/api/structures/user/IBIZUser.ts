@@ -1,4 +1,6 @@
+import { IAuthentication } from "../IAuthentication";
 import { IUpload } from "../IUpload";
+import { IUser } from "./IUser";
 
 export namespace IBIZUser {
     export interface IIntroduction {
@@ -32,27 +34,12 @@ export namespace IBIZUser {
         url: string;
     }
 
-    export interface IContact {
-        /**
-         * 사업자 전화번호
-         *
-         * - `+`로 시작하고 `공백`으로 국가코드를 구분한다.
-         * - 전화번호는 `숫자`와 `-`로만 이루어진다.
-         *
-         * e.g) +82 10-1234-5678
-         *
-         * @pattern ^\+\d+\s\d+(?:-\d+)*$
-         */
-        readonly phone: string;
-        /**
-         * 담당자 이메일
-         *
-         * e.g) b****@naver.com
-         *
-         * @format email
-         */
-        readonly email: null | string;
+    export namespace FailureCode {
+        export type GetCertificationList =
+            | IUser.FailureCode.Validate
+            | IAuthentication.FailureCode.PermissionInSufficient;
+        export type CreateCertification =
+            | IUser.FailureCode.Validate
+            | IAuthentication.FailureCode.PermissionInSufficient;
     }
-
-    export namespace FailureCode {}
 }

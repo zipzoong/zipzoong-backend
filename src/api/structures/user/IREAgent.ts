@@ -160,29 +160,7 @@ export namespace IREAgent {
     >;
 
     export type IPrivate = IREAgent;
-    export type IProfile = IPrivate;
-    `
-    export interface IPrivate
-        extends Pick<
-            IREAgent,
-            | "type"
-            | "id"
-            | "name"
-            | "profile_image_url"
-            | "introduction"
-            | "expertise"
-            | "is_verified"
-            | "is_licensed"
-            | "real_estate"
-            | "created_at"
-            | "updated_at"
-        > {
-        /** 마킹된 전화전번호 */
-        readonly marked_phone: string;
-        /** 마킹된 이메일  */
-        readonly marked_email: string | null;
-    }
-`;
+
     export interface IContact extends Pick<IREAgent, "phone" | "email"> {
         /**
          * 부동산 연락처
@@ -202,12 +180,11 @@ export namespace IREAgent {
     export type IPaginatedSummary = IPaginatedResponse<ISummary>;
 
     export namespace FailureCode {
-        export type Authorize = IUser.FailureCode.Authorize;
         export type GetPublic = IUser.FailureCode.GetPublic;
-        export type GetPrivate = IUser.FailureCode.GetPrivate;
-        export type GetProfile = IUser.FailureCode.GetProfile;
-        export type GetContact = Authorize | GetPublic;
-        export type GetCertificationList = GetProfile;
-        export type CreateCertification = GetProfile;
+        export type GetContact =
+            | IUser.FailureCode.Validate
+            | IUser.FailureCode.Verify
+            | GetPublic;
+        export type GetPrivate = IUser.FailureCode.ValidateType;
     }
 }

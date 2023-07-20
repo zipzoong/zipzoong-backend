@@ -85,30 +85,8 @@ export namespace IClient {
         email: null | IVerification.IVerifiedEmail;
     }
     export type IPrivate = IClient;
-    export type IProfile = IPrivate;
-    `
-    export interface IPrivate
-        extends Pick<
-            IClient,
-            | "type"
-            | "id"
-            | "name"
-            | "profile_image_url"
-            | "address"
-            | "birth"
-            | "gender"
-            | "created_at"
-            | "updated_at"
-        > {
-        /** 마킹된 전화전번호 */
-        readonly marked_phone: string | null;
-        /** 마킹된 이메일  */
-        readonly marked_email: string | null;
-    }
-    `;
 
     export namespace FailureCode {
-        export type Authorize = IUser.FailureCode.Authorize;
-        export type GetProfile = IUser.FailureCode.GetProfile;
+        export type GetPrivate = IUser.FailureCode.ValidateType;
     }
 }

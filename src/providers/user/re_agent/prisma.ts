@@ -74,7 +74,7 @@ export namespace PrismaJson {
             biz_open_date: true,
         } satisfies Prisma.REAgentModelSelect);
 
-    export const privateSelect = () =>
+    export const select = () =>
         ({
             base: {
                 select: {
@@ -161,18 +161,18 @@ export namespace PrismaMapper {
               );
     };
 
-    export const toPrivate = (
+    export const to = (
         input: NonNullable<
             Awaited<
                 ReturnType<
                     typeof prisma.rEAgentModel.findFirst<{
-                        select: ReturnType<typeof PrismaJson.privateSelect>;
+                        select: ReturnType<typeof PrismaJson.select>;
                     }>
                 >
             >
         >,
-    ): IResult<IREAgent.IPrivate, InternalError> => {
-        const agent: IREAgent.IPrivate = {
+    ): IResult<IREAgent, InternalError> => {
+        const agent: IREAgent = {
             type: "real estate agent",
             id: input.base.base.id,
             name: input.base.base.name,
@@ -203,7 +203,7 @@ export namespace PrismaMapper {
             },
         };
 
-        return typia.equals<IREAgent.IPrivate>(agent)
+        return typia.equals<IREAgent>(agent)
             ? Result.Ok.map(agent)
             : Result.Error.map(
                   InternalError.create(

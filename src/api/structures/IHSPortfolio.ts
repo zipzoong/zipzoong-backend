@@ -1,4 +1,4 @@
-import { IHSProvider } from "../module";
+import { IHSProvider, IUser } from "../module";
 import { IPage, IPaginatedResponse } from "./common/IPagination";
 
 export interface IHSPortfolio {
@@ -50,7 +50,9 @@ export namespace IHSPortfolio {
 
     export namespace FailureCode {
         export type GetPublicList = IHSProvider.FailureCode.GetPublic;
-        export type GetPrivateList = IHSProvider.FailureCode.Authorize;
-        export type Create = IHSProvider.FailureCode.Authorize;
+        export type GetPrivateList = IUser.FailureCode.ValidateType;
+        export type Create =
+            | IUser.FailureCode.ValidateType
+            | IUser.FailureCode.Verify;
     }
 }

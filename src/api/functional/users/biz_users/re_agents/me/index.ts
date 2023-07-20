@@ -11,14 +11,13 @@ import typia from "typia";
 import type { IREAgent } from "./../../../../../structures/user/IREAgent";
 
 export * as portfolios from "./portfolios";
-export * as certifications from "./certifications";
 
 /**
  * 공인중개사 개인정보를 요청한다.
  * 
  * 이메일, 휴대전화 등의 개인 정보는 마킹처리되어 전달된다.
  * 
- * {@link IREAgent.FailureCode.GetProfile 에러 코드}
+ * {@link IREAgent.FailureCode.GetPrivate 에러 코드}
  * 
  * @summary 공인중개사 내 정보 조회
  * 

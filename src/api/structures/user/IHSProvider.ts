@@ -150,30 +150,6 @@ export namespace IHSProvider {
         | "address"
     >;
     export type IPrivate = IHSProvider;
-    export type IProfile = IPrivate;
-    `
-    export interface IProfile
-        extends Pick<
-            IHSProvider,
-            | "type"
-            | "id"
-            | "name"
-            | "profile_image_url"
-            | "introduction"
-            | "biz_phone"
-            | "address"
-            | "expertise"
-            | "is_verified"
-            | "registration_number"
-            | "open_date"
-            | "created_at"
-            | "updated_at"
-        > {
-        /** 마킹된 전화전번호 */
-        readonly marked_phone: string;
-        /** 마킹된 이메일  */
-        readonly marked_email: string | null;
-    }`;
 
     export type IContact = Pick<
         IHSProvider,
@@ -194,12 +170,11 @@ export namespace IHSProvider {
     export type IPaginatedSummary = IPaginatedResponse<ISummary>;
 
     export namespace FailureCode {
-        export type Authorize = IUser.FailureCode.Authorize;
         export type GetPublic = IUser.FailureCode.GetPublic;
-        export type GetPrivate = IUser.FailureCode.GetPrivate;
-        export type GetProfile = IUser.FailureCode.GetProfile;
-        export type GetContact = Authorize | GetPublic;
-        export type GetCertificationList = GetProfile;
-        export type CreateCertification = GetProfile;
+        export type GetContact =
+            | IUser.FailureCode.Validate
+            | IUser.FailureCode.Verify
+            | GetPublic;
+        export type GetPrivate = IUser.FailureCode.ValidateType;
     }
 }

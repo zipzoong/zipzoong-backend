@@ -14,6 +14,8 @@ import type { IREPortfolio } from "./../../../../../../structures/IREPortfolio";
 /**
  * 공인중개사 포트폴리오 추가
  * 
+ * {@link IREPortfolio.FailureCode.Create 에러 코드}
+ * 
  * @summary 공인중개사 포트폴리오 추가
  * 
  * @tag re-agents
@@ -73,6 +75,8 @@ export namespace create {
 
 /**
  * 내 포트폴리오 목록 검색
+ * 
+ * {@link IREPortfolio.FailureCode.GetPrivateList 에러 코드}
  * 
  * @summary 내 포트폴리오 목록 조회
  * 

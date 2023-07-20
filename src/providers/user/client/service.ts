@@ -1,5 +1,5 @@
 import { Prisma } from "@PRISMA";
-import { isNull, pipe } from "@fxts/core";
+import { isNull, isString, pipe, unless } from "@fxts/core";
 import { HttpStatus } from "@nestjs/common";
 import { IClient } from "@APP/api/structures/user/IClient";
 import { IUser } from "@APP/api/structures/user/IUser";
@@ -7,18 +7,23 @@ import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
 import { Failure, InternalError, Result, isDeleted } from "@APP/utils";
 import { User } from "../user";
+import { Mapper } from "./mapper";
 import { PrismaJson, PrismaMapper } from "./prisma";
 
 export namespace Service {
-    export const getPrivate =
+    export const create =
+        (tx: Prisma.TransactionClient = prisma) =>
+        async (input: IClient.ICreate): Promise<string> => {
+            const client = PrismaJson.createData(input);
+            await tx.clientModel.create({ data: client });
+            return client.base.create.id;
+        };
+    export const getOne =
         (tx: Prisma.TransactionClient = prisma) =>
         (
             client_id: string,
         ): Promise<
-            IResult<
-                IClient.IPrivate,
-                Failure<IUser.FailureCode.GetPrivate> | InternalError
-            >
+            IResult<IClient, Failure<IUser.FailureCode.GetOne> | InternalError>
         > =>
             pipe(
                 client_id,
@@ -26,13 +31,13 @@ export namespace Service {
                 async (id) =>
                     tx.clientModel.findFirst({
                         where: { id },
-                        select: PrismaJson.privateSelect(),
+                        select: PrismaJson.select(),
                     }),
 
                 (model) =>
                     isNull(model)
                         ? Result.Error.map(
-                              Failure.create<IUser.FailureCode.GetPrivate>({
+                              Failure.create({
                                   cause: "USER_NOT_FOUND",
                                   message: "존재하지 않는 사용자입니다.",
                                   statusCode: HttpStatus.NOT_FOUND,
@@ -40,17 +45,34 @@ export namespace Service {
                           )
                         : isDeleted(model.base)
                         ? Result.Error.map(
-                              Failure.create<IUser.FailureCode.GetPrivate>({
+                              Failure.create({
                                   cause: "USER_INACTIVE",
                                   message: "비활성화된 사용자입니다.",
                                   statusCode: HttpStatus.FORBIDDEN,
                               }),
                           )
-                        : PrismaMapper.toPrivate(model),
+                        : PrismaMapper.to(model),
             );
 
-    export const getProfile = User.Service.getProfile({
-        user_type: "client",
-        getPrivate,
-    });
+    export const getPrivate =
+        (tx: Prisma.TransactionClient = prisma) =>
+        (
+            access_token: string,
+        ): Promise<
+            IResult<
+                IClient.IPrivate,
+                InternalError | Failure<IClient.FailureCode.GetPrivate>
+            >
+        > =>
+            pipe(
+                access_token,
+
+                User.Service.validateType("client")(tx),
+
+                unless(Result.Error.is, Result.Ok.lift(Mapper.toPrivate)),
+            );
+
+    export const isVerified = (
+        agg: IClient,
+    ): agg is IClient & { phone: string } => isString(agg.phone);
 }

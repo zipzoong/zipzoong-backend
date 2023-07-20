@@ -33,7 +33,7 @@ export namespace PrismaJson {
         } satisfies Prisma.ClientModelCreateInput;
     };
 
-    export const privateSelect = () =>
+    export const select = () =>
         ({
             id: true,
             profile_image_url: true,
@@ -59,17 +59,17 @@ export namespace PrismaJson {
 }
 
 export namespace PrismaMapper {
-    export const toPrivate = (
+    export const to = (
         input: NonNullable<
             Awaited<
                 ReturnType<
                     typeof prisma.clientModel.findFirst<{
-                        select: ReturnType<typeof PrismaJson.privateSelect>;
+                        select: ReturnType<typeof PrismaJson.select>;
                     }>
                 >
             >
         >,
-    ): IResult<IClient.IPrivate, InternalError> => {
+    ): IResult<IClient, InternalError> => {
         const isNotNull = negate(isNull);
         const client: IClient.IPrivate = {
             type: "client",
@@ -95,7 +95,7 @@ export namespace PrismaMapper {
             created_at: DateMapper.toISO(input.base.created_at),
             updated_at: DateMapper.toISO(input.base.updated_at),
         };
-        return typia.equals<IClient.IPrivate>(client)
+        return typia.equals<IClient>(client)
             ? Result.Ok.map(client)
             : Result.Error.map(
                   InternalError.create(

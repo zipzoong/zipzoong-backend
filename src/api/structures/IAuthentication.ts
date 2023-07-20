@@ -113,11 +113,12 @@ export namespace IAuthentication {
         export type PermissionInSufficient = "PERMISSION_INSUFFICIENT";
         export type TokenVerify = "TOKEN_EXPIRED" | "TOKEN_INVALID";
         export type AccountVerify = "ACCOUNT_NOT_FOUND" | "ACCOUNT_INACTIVE";
-        export type SignIn = IUser.FailureCode.GetPrivate | AccountVerify;
+        export type SignIn = AccountVerify | IUser.FailureCode.GetOne;
         export type SignUp = "ACCOUNT_INACTIVE";
         export type GetProfile = TokenVerify | AccountVerify;
         export type CreateUser =
-            | GetProfile
+            | TokenVerify
+            | AccountVerify
             | IVerification.FailureCode.IsVerifiedPhone
             | "VERIFICATION_INVALID"
             | "USER_ALREADY_EXIST"
@@ -125,8 +126,6 @@ export namespace IAuthentication {
             | "TERMS_INSUFFICIENT"
             | "TERMS_INVALID";
 
-        export type RefreshAccessToken =
-            | TokenVerify
-            | IUser.FailureCode.GetPrivate;
+        export type RefreshAccessToken = IUser.FailureCode.Validate;
     }
 }
