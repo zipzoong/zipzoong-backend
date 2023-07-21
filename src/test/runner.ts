@@ -47,9 +47,8 @@ const test = async (connection: IConnection): Promise<0 | -1> => {
         toArray,
     );
 
-    logger.write("\n</details>");
+    logger.write("\n</details>\n");
     console.log();
-
     if (isEmpty(executions)) {
         console.log("✅ \x1b[32mAll Tests Passed\x1b[0m");
         console.log();
