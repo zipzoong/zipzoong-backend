@@ -19,20 +19,27 @@
         ],
         "parameters": [],
         "responses": {
-          "302": {
+          "200": {
             "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "x-nestia-encrypted": false
           }
         },
-        "summary": "redirect kakao oauth login page",
-        "description": "카카오 로그인 페이지 리다이렉트 api\n\n@summary redirect kakao oauth login page\n\n@tag authentication",
+        "summary": "카카오 로그인 페이지 주소 요청",
+        "description": "카카오 로그인 페이지 주소를 요청합니다.\n\n@summary 카카오 로그인 페이지 주소 요청\n\n@tag authentication",
         "x-nestia-namespace": "auth.oauth.kakao.kakao",
         "x-nestia-jsDocTags": [
           {
             "name": "summary",
             "text": [
               {
-                "text": "redirect kakao oauth login page",
+                "text": "카카오 로그인 페이지 주소 요청",
                 "kind": "text"
               }
             ]

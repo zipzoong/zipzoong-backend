@@ -6,11 +6,12 @@
 //================================================================
 import { Fetcher } from "@nestia/fetcher";
 import type { IConnection } from "@nestia/fetcher";
+import typia from "typia";
 
 /**
- * 카카오 로그인 페이지 리다이렉트 api
+ * 카카오 로그인 페이지 주소를 요청합니다.
  * 
- * @summary redirect kakao oauth login page
+ * @summary 카카오 로그인 페이지 주소 요청
  * 
  * @tag authentication
  * 
@@ -20,7 +21,7 @@ import type { IConnection } from "@nestia/fetcher";
  */
 export async function kakao(
     connection: IConnection,
-): Promise<void> {
+): Promise<kakao.Output> {
     return !!connection.simulate
         ? kakao.simulate(
               connection,
@@ -33,20 +34,28 @@ export async function kakao(
           );
 }
 export namespace kakao {
+    export type Output = string;
 
     export const METHOD = "GET" as const;
     export const PATH: string = "/auth/oauth/kakao";
     export const ENCRYPTED: Fetcher.IEncrypted = {
         request: false,
         response: false,
-        status: 302,
     };
 
     export const path = (): string => {
         return `/auth/oauth/kakao`;
     }
+    export const random = (g?: Partial<typia.IRandomGenerator>): Output =>
+        typia.random<Output>(g);
     export const simulate = async (
-        _connection: IConnection,
-    ): Promise<void> => {
+        connection: IConnection,
+    ): Promise<Output> => {
+        return random(
+            typeof connection.simulate === 'object' &&
+                connection.simulate !== null
+                ? connection.simulate
+                : undefined
+        );
     }
 }

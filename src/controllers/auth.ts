@@ -1,9 +1,7 @@
 import { TypedBody, TypedRoute } from "@nestia/core";
-import { Controller, HttpCode, HttpStatus, Res } from "@nestjs/common";
-import { Response } from "express";
+import { Controller, HttpCode, HttpStatus } from "@nestjs/common";
 import { IAuthentication } from "@APP/api/structures/IAuthentication";
 import { IUser } from "@APP/api/structures/user/IUser";
-import { Kakao } from "@APP/externals/oauth/kakao/sdk";
 import { prisma } from "@APP/infrastructure/DB";
 import { Authentication } from "@APP/providers/authentication";
 import { Authorization } from "./decorators/authorization";
@@ -12,16 +10,15 @@ import { httpResponse } from "./internal";
 @Controller("auth")
 export class AuthController {
     /**
-     * 카카오 로그인 페이지 리다이렉트 api
+     * 카카오 로그인 페이지 주소를 요청합니다.
      *
-     * @summary redirect kakao oauth login page
+     * @summary 카카오 로그인 페이지 주소 요청
      *
      * @tag authentication
      */
-    @HttpCode(HttpStatus.FOUND)
     @TypedRoute.Get("oauth/kakao")
-    kakao(@Res() res: Response) {
-        return res.redirect(Kakao.LoginUri);
+    async kakao(): Promise<string> {
+        return Authentication.Service.getKakaoLoginUrl();
     }
     /**
      * 전달된 정보에 대응하는 특정 회원에 대한 권한이 부여된 인증 토큰을 발급한다.

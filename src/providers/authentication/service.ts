@@ -7,6 +7,7 @@ import { IVerification } from "@APP/api/structures/IVerification";
 import { IUser } from "@APP/api/structures/user/IUser";
 import { IResult } from "@APP/api/types";
 import { Oauth } from "@APP/externals/oauth";
+import { Kakao } from "@APP/externals/oauth/kakao/sdk";
 import { prisma } from "@APP/infrastructure/DB";
 import {
     DateMapper,
@@ -31,6 +32,8 @@ export namespace Service {
         "real estate agent": "biz_user",
         "home service provider": "biz_user",
     };
+
+    export const getKakaoLoginUrl = () => Kakao.LoginUri;
 
     export const verifyToken =
         <T extends IToken.IBase>(
