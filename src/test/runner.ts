@@ -33,11 +33,6 @@ const test = async (connection: IConnection): Promise<0 | -1> => {
         parameters: () => [connection],
     })(__dirname + "/features");
 
-    const a: Error | null = {} as any;
-    if (negate(isNull)(a)) {
-        a;
-    }
-
     const executions = pipe(
         report.executions,
 
