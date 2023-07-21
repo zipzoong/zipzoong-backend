@@ -60,6 +60,50 @@ export type TermsAgreementModelPayload<ExtArgs extends $Extensions.Args = $Exten
  * 
  */
 export type TermsAgreementModel = runtime.Types.DefaultSelection<TermsAgreementModelPayload>
+export type ZipzoongCareRequestModelPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  name: "ZipzoongCareRequestModel"
+  objects: {
+    client: ClientModelPayload<ExtArgs>
+  }
+  scalars: $Extensions.GetResult<{
+    id: string
+    created_at: Date
+    updated_at: Date
+    is_deleted: boolean
+    deleted_at: Date | null
+    client_id: string
+    url: string
+  }, ExtArgs["result"]["zipzoongCareRequestModel"]>
+  composites: {}
+}
+
+/**
+ * Model ZipzoongCareRequestModel
+ * 
+ */
+export type ZipzoongCareRequestModel = runtime.Types.DefaultSelection<ZipzoongCareRequestModelPayload>
+export type ZipzoongCareModelPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  name: "ZipzoongCareModel"
+  objects: {
+    biz_user: BIZUserModelPayload<ExtArgs>
+  }
+  scalars: $Extensions.GetResult<{
+    id: string
+    created_at: Date
+    updated_at: Date
+    is_deleted: boolean
+    deleted_at: Date | null
+    biz_user_id: string
+    url: string
+  }, ExtArgs["result"]["zipzoongCareModel"]>
+  composites: {}
+}
+
+/**
+ * Model ZipzoongCareModel
+ * 
+ */
+export type ZipzoongCareModel = runtime.Types.DefaultSelection<ZipzoongCareModelPayload>
 export type UserModelPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
   name: "UserModel"
   objects: {
@@ -89,6 +133,7 @@ export type ClientModelPayload<ExtArgs extends $Extensions.Args = $Extensions.De
   objects: {
     base: UserModelPayload<ExtArgs>
     oauth_accounts: OauthAccountModelPayload<ExtArgs>[]
+    zipzoong_care_requests: ZipzoongCareRequestModelPayload<ExtArgs>[]
   }
   scalars: $Extensions.GetResult<{
     id: string
@@ -117,6 +162,7 @@ export type BIZUserModelPayload<ExtArgs extends $Extensions.Args = $Extensions.D
     hs_provider: HSProviderModelPayload<ExtArgs> | null
     oauth_accounts: OauthAccountModelPayload<ExtArgs>[]
     biz_certification_images: BIZCertificationImageModelPayload<ExtArgs>[]
+    zipzoong_cares: ZipzoongCareModelPayload<ExtArgs>[]
   }
   scalars: $Extensions.GetResult<{
     id: string
@@ -147,7 +193,7 @@ export type BIZCertificationImageModelPayload<ExtArgs extends $Extensions.Args =
     deleted_at: Date | null
     biz_user_id: string
     url: string
-    access_type: ImageAccessType
+    access_type: ResourceAccessType
   }, ExtArgs["result"]["bIZCertificationImageModel"]>
   composites: {}
 }
@@ -428,12 +474,12 @@ export const GenderType: {
 export type GenderType = (typeof GenderType)[keyof typeof GenderType]
 
 
-export const ImageAccessType: {
+export const ResourceAccessType: {
   public: 'public',
   zipzoong_s3: 'zipzoong_s3'
 };
 
-export type ImageAccessType = (typeof ImageAccessType)[keyof typeof ImageAccessType]
+export type ResourceAccessType = (typeof ResourceAccessType)[keyof typeof ResourceAccessType]
 
 
 export const OauthType: {
@@ -586,6 +632,26 @@ export class PrismaClient<
     * ```
     */
   get termsAgreementModel(): Prisma.TermsAgreementModelDelegate<ExtArgs>;
+
+  /**
+   * `prisma.zipzoongCareRequestModel`: Exposes CRUD operations for the **ZipzoongCareRequestModel** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ZipzoongCareRequestModels
+    * const zipzoongCareRequestModels = await prisma.zipzoongCareRequestModel.findMany()
+    * ```
+    */
+  get zipzoongCareRequestModel(): Prisma.ZipzoongCareRequestModelDelegate<ExtArgs>;
+
+  /**
+   * `prisma.zipzoongCareModel`: Exposes CRUD operations for the **ZipzoongCareModel** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ZipzoongCareModels
+    * const zipzoongCareModels = await prisma.zipzoongCareModel.findMany()
+    * ```
+    */
+  get zipzoongCareModel(): Prisma.ZipzoongCareModelDelegate<ExtArgs>;
 
   /**
    * `prisma.userModel`: Exposes CRUD operations for the **UserModel** model.
@@ -1211,6 +1277,8 @@ export namespace Prisma {
   export const ModelName: {
     TermsModel: 'TermsModel',
     TermsAgreementModel: 'TermsAgreementModel',
+    ZipzoongCareRequestModel: 'ZipzoongCareRequestModel',
+    ZipzoongCareModel: 'ZipzoongCareModel',
     UserModel: 'UserModel',
     ClientModel: 'ClientModel',
     BIZUserModel: 'BIZUserModel',
@@ -1241,7 +1309,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'termsModel' | 'termsAgreementModel' | 'userModel' | 'clientModel' | 'bIZUserModel' | 'bIZCertificationImageModel' | 'rEAgentModel' | 'rEExpertiseModel' | 'hSProviderModel' | 'hSSubExpertiseModel' | 'hSSuperExpertiseModel' | 'hSSubExpertiseRelationModel' | 'rEPortfolioModel' | 'hSPortfolioModel' | 'oauthAccountModel' | 'phoneVerificationModel'
+      modelProps: 'termsModel' | 'termsAgreementModel' | 'zipzoongCareRequestModel' | 'zipzoongCareModel' | 'userModel' | 'clientModel' | 'bIZUserModel' | 'bIZCertificationImageModel' | 'rEAgentModel' | 'rEExpertiseModel' | 'hSProviderModel' | 'hSSubExpertiseModel' | 'hSSuperExpertiseModel' | 'hSSubExpertiseRelationModel' | 'rEPortfolioModel' | 'hSPortfolioModel' | 'oauthAccountModel' | 'phoneVerificationModel'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     },
     model: {
@@ -1374,6 +1442,138 @@ export namespace Prisma {
           count: {
             args: Prisma.TermsAgreementModelCountArgs<ExtArgs>,
             result: $Utils.Optional<TermsAgreementModelCountAggregateOutputType> | number
+          }
+        }
+      }
+      ZipzoongCareRequestModel: {
+        payload: ZipzoongCareRequestModelPayload<ExtArgs>
+        fields: Prisma.ZipzoongCareRequestModelFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ZipzoongCareRequestModelFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareRequestModelPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ZipzoongCareRequestModelFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareRequestModelPayload>
+          }
+          findFirst: {
+            args: Prisma.ZipzoongCareRequestModelFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareRequestModelPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ZipzoongCareRequestModelFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareRequestModelPayload>
+          }
+          findMany: {
+            args: Prisma.ZipzoongCareRequestModelFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareRequestModelPayload>[]
+          }
+          create: {
+            args: Prisma.ZipzoongCareRequestModelCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareRequestModelPayload>
+          }
+          createMany: {
+            args: Prisma.ZipzoongCareRequestModelCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.ZipzoongCareRequestModelDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareRequestModelPayload>
+          }
+          update: {
+            args: Prisma.ZipzoongCareRequestModelUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareRequestModelPayload>
+          }
+          deleteMany: {
+            args: Prisma.ZipzoongCareRequestModelDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ZipzoongCareRequestModelUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.ZipzoongCareRequestModelUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareRequestModelPayload>
+          }
+          aggregate: {
+            args: Prisma.ZipzoongCareRequestModelAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateZipzoongCareRequestModel>
+          }
+          groupBy: {
+            args: Prisma.ZipzoongCareRequestModelGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<ZipzoongCareRequestModelGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ZipzoongCareRequestModelCountArgs<ExtArgs>,
+            result: $Utils.Optional<ZipzoongCareRequestModelCountAggregateOutputType> | number
+          }
+        }
+      }
+      ZipzoongCareModel: {
+        payload: ZipzoongCareModelPayload<ExtArgs>
+        fields: Prisma.ZipzoongCareModelFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ZipzoongCareModelFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareModelPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ZipzoongCareModelFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareModelPayload>
+          }
+          findFirst: {
+            args: Prisma.ZipzoongCareModelFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareModelPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ZipzoongCareModelFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareModelPayload>
+          }
+          findMany: {
+            args: Prisma.ZipzoongCareModelFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareModelPayload>[]
+          }
+          create: {
+            args: Prisma.ZipzoongCareModelCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareModelPayload>
+          }
+          createMany: {
+            args: Prisma.ZipzoongCareModelCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.ZipzoongCareModelDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareModelPayload>
+          }
+          update: {
+            args: Prisma.ZipzoongCareModelUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareModelPayload>
+          }
+          deleteMany: {
+            args: Prisma.ZipzoongCareModelDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ZipzoongCareModelUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.ZipzoongCareModelUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<ZipzoongCareModelPayload>
+          }
+          aggregate: {
+            args: Prisma.ZipzoongCareModelAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateZipzoongCareModel>
+          }
+          groupBy: {
+            args: Prisma.ZipzoongCareModelGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<ZipzoongCareModelGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ZipzoongCareModelCountArgs<ExtArgs>,
+            result: $Utils.Optional<ZipzoongCareModelCountAggregateOutputType> | number
           }
         }
       }
@@ -2518,10 +2718,12 @@ export namespace Prisma {
 
   export type ClientModelCountOutputType = {
     oauth_accounts: number
+    zipzoong_care_requests: number
   }
 
   export type ClientModelCountOutputTypeSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     oauth_accounts?: boolean | ClientModelCountOutputTypeCountOauth_accountsArgs
+    zipzoong_care_requests?: boolean | ClientModelCountOutputTypeCountZipzoong_care_requestsArgs
   }
 
   // Custom InputTypes
@@ -2545,6 +2747,14 @@ export namespace Prisma {
   }
 
 
+  /**
+   * ClientModelCountOutputType without action
+   */
+  export type ClientModelCountOutputTypeCountZipzoong_care_requestsArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    where?: ZipzoongCareRequestModelWhereInput
+  }
+
+
 
   /**
    * Count Type BIZUserModelCountOutputType
@@ -2554,11 +2764,13 @@ export namespace Prisma {
   export type BIZUserModelCountOutputType = {
     oauth_accounts: number
     biz_certification_images: number
+    zipzoong_cares: number
   }
 
   export type BIZUserModelCountOutputTypeSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     oauth_accounts?: boolean | BIZUserModelCountOutputTypeCountOauth_accountsArgs
     biz_certification_images?: boolean | BIZUserModelCountOutputTypeCountBiz_certification_imagesArgs
+    zipzoong_cares?: boolean | BIZUserModelCountOutputTypeCountZipzoong_caresArgs
   }
 
   // Custom InputTypes
@@ -2587,6 +2799,14 @@ export namespace Prisma {
    */
   export type BIZUserModelCountOutputTypeCountBiz_certification_imagesArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: BIZCertificationImageModelWhereInput
+  }
+
+
+  /**
+   * BIZUserModelCountOutputType without action
+   */
+  export type BIZUserModelCountOutputTypeCountZipzoong_caresArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    where?: ZipzoongCareModelWhereInput
   }
 
 
@@ -4712,6 +4932,1880 @@ export namespace Prisma {
 
 
   /**
+   * Model ZipzoongCareRequestModel
+   */
+
+
+  export type AggregateZipzoongCareRequestModel = {
+    _count: ZipzoongCareRequestModelCountAggregateOutputType | null
+    _min: ZipzoongCareRequestModelMinAggregateOutputType | null
+    _max: ZipzoongCareRequestModelMaxAggregateOutputType | null
+  }
+
+  export type ZipzoongCareRequestModelMinAggregateOutputType = {
+    id: string | null
+    created_at: Date | null
+    updated_at: Date | null
+    is_deleted: boolean | null
+    deleted_at: Date | null
+    client_id: string | null
+    url: string | null
+  }
+
+  export type ZipzoongCareRequestModelMaxAggregateOutputType = {
+    id: string | null
+    created_at: Date | null
+    updated_at: Date | null
+    is_deleted: boolean | null
+    deleted_at: Date | null
+    client_id: string | null
+    url: string | null
+  }
+
+  export type ZipzoongCareRequestModelCountAggregateOutputType = {
+    id: number
+    created_at: number
+    updated_at: number
+    is_deleted: number
+    deleted_at: number
+    client_id: number
+    url: number
+    _all: number
+  }
+
+
+  export type ZipzoongCareRequestModelMinAggregateInputType = {
+    id?: true
+    created_at?: true
+    updated_at?: true
+    is_deleted?: true
+    deleted_at?: true
+    client_id?: true
+    url?: true
+  }
+
+  export type ZipzoongCareRequestModelMaxAggregateInputType = {
+    id?: true
+    created_at?: true
+    updated_at?: true
+    is_deleted?: true
+    deleted_at?: true
+    client_id?: true
+    url?: true
+  }
+
+  export type ZipzoongCareRequestModelCountAggregateInputType = {
+    id?: true
+    created_at?: true
+    updated_at?: true
+    is_deleted?: true
+    deleted_at?: true
+    client_id?: true
+    url?: true
+    _all?: true
+  }
+
+  export type ZipzoongCareRequestModelAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ZipzoongCareRequestModel to aggregate.
+     */
+    where?: ZipzoongCareRequestModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZipzoongCareRequestModels to fetch.
+     */
+    orderBy?: ZipzoongCareRequestModelOrderByWithRelationInput | ZipzoongCareRequestModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ZipzoongCareRequestModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZipzoongCareRequestModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZipzoongCareRequestModels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ZipzoongCareRequestModels
+    **/
+    _count?: true | ZipzoongCareRequestModelCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ZipzoongCareRequestModelMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ZipzoongCareRequestModelMaxAggregateInputType
+  }
+
+  export type GetZipzoongCareRequestModelAggregateType<T extends ZipzoongCareRequestModelAggregateArgs> = {
+        [P in keyof T & keyof AggregateZipzoongCareRequestModel]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateZipzoongCareRequestModel[P]>
+      : GetScalarType<T[P], AggregateZipzoongCareRequestModel[P]>
+  }
+
+
+
+
+  export type ZipzoongCareRequestModelGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    where?: ZipzoongCareRequestModelWhereInput
+    orderBy?: ZipzoongCareRequestModelOrderByWithAggregationInput | ZipzoongCareRequestModelOrderByWithAggregationInput[]
+    by: ZipzoongCareRequestModelScalarFieldEnum[] | ZipzoongCareRequestModelScalarFieldEnum
+    having?: ZipzoongCareRequestModelScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ZipzoongCareRequestModelCountAggregateInputType | true
+    _min?: ZipzoongCareRequestModelMinAggregateInputType
+    _max?: ZipzoongCareRequestModelMaxAggregateInputType
+  }
+
+
+  export type ZipzoongCareRequestModelGroupByOutputType = {
+    id: string
+    created_at: Date
+    updated_at: Date
+    is_deleted: boolean
+    deleted_at: Date | null
+    client_id: string
+    url: string
+    _count: ZipzoongCareRequestModelCountAggregateOutputType | null
+    _min: ZipzoongCareRequestModelMinAggregateOutputType | null
+    _max: ZipzoongCareRequestModelMaxAggregateOutputType | null
+  }
+
+  type GetZipzoongCareRequestModelGroupByPayload<T extends ZipzoongCareRequestModelGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ZipzoongCareRequestModelGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ZipzoongCareRequestModelGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ZipzoongCareRequestModelGroupByOutputType[P]>
+            : GetScalarType<T[P], ZipzoongCareRequestModelGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ZipzoongCareRequestModelSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    is_deleted?: boolean
+    deleted_at?: boolean
+    client_id?: boolean
+    url?: boolean
+    client?: boolean | ClientModelArgs<ExtArgs>
+  }, ExtArgs["result"]["zipzoongCareRequestModel"]>
+
+  export type ZipzoongCareRequestModelSelectScalar = {
+    id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    is_deleted?: boolean
+    deleted_at?: boolean
+    client_id?: boolean
+    url?: boolean
+  }
+
+  export type ZipzoongCareRequestModelInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    client?: boolean | ClientModelArgs<ExtArgs>
+  }
+
+
+  type ZipzoongCareRequestModelGetPayload<S extends boolean | null | undefined | ZipzoongCareRequestModelArgs> = $Types.GetResult<ZipzoongCareRequestModelPayload, S>
+
+  type ZipzoongCareRequestModelCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
+    Omit<ZipzoongCareRequestModelFindManyArgs, 'select' | 'include'> & {
+      select?: ZipzoongCareRequestModelCountAggregateInputType | true
+    }
+
+  export interface ZipzoongCareRequestModelDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ZipzoongCareRequestModel'], meta: { name: 'ZipzoongCareRequestModel' } }
+    /**
+     * Find zero or one ZipzoongCareRequestModel that matches the filter.
+     * @param {ZipzoongCareRequestModelFindUniqueArgs} args - Arguments to find a ZipzoongCareRequestModel
+     * @example
+     * // Get one ZipzoongCareRequestModel
+     * const zipzoongCareRequestModel = await prisma.zipzoongCareRequestModel.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends ZipzoongCareRequestModelFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, ZipzoongCareRequestModelFindUniqueArgs<ExtArgs>>
+    ): Prisma__ZipzoongCareRequestModelClient<$Types.GetResult<ZipzoongCareRequestModelPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one ZipzoongCareRequestModel that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {ZipzoongCareRequestModelFindUniqueOrThrowArgs} args - Arguments to find a ZipzoongCareRequestModel
+     * @example
+     * // Get one ZipzoongCareRequestModel
+     * const zipzoongCareRequestModel = await prisma.zipzoongCareRequestModel.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends ZipzoongCareRequestModelFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, ZipzoongCareRequestModelFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__ZipzoongCareRequestModelClient<$Types.GetResult<ZipzoongCareRequestModelPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first ZipzoongCareRequestModel that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZipzoongCareRequestModelFindFirstArgs} args - Arguments to find a ZipzoongCareRequestModel
+     * @example
+     * // Get one ZipzoongCareRequestModel
+     * const zipzoongCareRequestModel = await prisma.zipzoongCareRequestModel.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends ZipzoongCareRequestModelFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, ZipzoongCareRequestModelFindFirstArgs<ExtArgs>>
+    ): Prisma__ZipzoongCareRequestModelClient<$Types.GetResult<ZipzoongCareRequestModelPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first ZipzoongCareRequestModel that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZipzoongCareRequestModelFindFirstOrThrowArgs} args - Arguments to find a ZipzoongCareRequestModel
+     * @example
+     * // Get one ZipzoongCareRequestModel
+     * const zipzoongCareRequestModel = await prisma.zipzoongCareRequestModel.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends ZipzoongCareRequestModelFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, ZipzoongCareRequestModelFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__ZipzoongCareRequestModelClient<$Types.GetResult<ZipzoongCareRequestModelPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more ZipzoongCareRequestModels that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZipzoongCareRequestModelFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ZipzoongCareRequestModels
+     * const zipzoongCareRequestModels = await prisma.zipzoongCareRequestModel.findMany()
+     * 
+     * // Get first 10 ZipzoongCareRequestModels
+     * const zipzoongCareRequestModels = await prisma.zipzoongCareRequestModel.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const zipzoongCareRequestModelWithIdOnly = await prisma.zipzoongCareRequestModel.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends ZipzoongCareRequestModelFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, ZipzoongCareRequestModelFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Types.GetResult<ZipzoongCareRequestModelPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a ZipzoongCareRequestModel.
+     * @param {ZipzoongCareRequestModelCreateArgs} args - Arguments to create a ZipzoongCareRequestModel.
+     * @example
+     * // Create one ZipzoongCareRequestModel
+     * const ZipzoongCareRequestModel = await prisma.zipzoongCareRequestModel.create({
+     *   data: {
+     *     // ... data to create a ZipzoongCareRequestModel
+     *   }
+     * })
+     * 
+    **/
+    create<T extends ZipzoongCareRequestModelCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, ZipzoongCareRequestModelCreateArgs<ExtArgs>>
+    ): Prisma__ZipzoongCareRequestModelClient<$Types.GetResult<ZipzoongCareRequestModelPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many ZipzoongCareRequestModels.
+     *     @param {ZipzoongCareRequestModelCreateManyArgs} args - Arguments to create many ZipzoongCareRequestModels.
+     *     @example
+     *     // Create many ZipzoongCareRequestModels
+     *     const zipzoongCareRequestModel = await prisma.zipzoongCareRequestModel.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends ZipzoongCareRequestModelCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, ZipzoongCareRequestModelCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a ZipzoongCareRequestModel.
+     * @param {ZipzoongCareRequestModelDeleteArgs} args - Arguments to delete one ZipzoongCareRequestModel.
+     * @example
+     * // Delete one ZipzoongCareRequestModel
+     * const ZipzoongCareRequestModel = await prisma.zipzoongCareRequestModel.delete({
+     *   where: {
+     *     // ... filter to delete one ZipzoongCareRequestModel
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends ZipzoongCareRequestModelDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, ZipzoongCareRequestModelDeleteArgs<ExtArgs>>
+    ): Prisma__ZipzoongCareRequestModelClient<$Types.GetResult<ZipzoongCareRequestModelPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one ZipzoongCareRequestModel.
+     * @param {ZipzoongCareRequestModelUpdateArgs} args - Arguments to update one ZipzoongCareRequestModel.
+     * @example
+     * // Update one ZipzoongCareRequestModel
+     * const zipzoongCareRequestModel = await prisma.zipzoongCareRequestModel.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends ZipzoongCareRequestModelUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, ZipzoongCareRequestModelUpdateArgs<ExtArgs>>
+    ): Prisma__ZipzoongCareRequestModelClient<$Types.GetResult<ZipzoongCareRequestModelPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more ZipzoongCareRequestModels.
+     * @param {ZipzoongCareRequestModelDeleteManyArgs} args - Arguments to filter ZipzoongCareRequestModels to delete.
+     * @example
+     * // Delete a few ZipzoongCareRequestModels
+     * const { count } = await prisma.zipzoongCareRequestModel.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends ZipzoongCareRequestModelDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, ZipzoongCareRequestModelDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ZipzoongCareRequestModels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZipzoongCareRequestModelUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ZipzoongCareRequestModels
+     * const zipzoongCareRequestModel = await prisma.zipzoongCareRequestModel.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends ZipzoongCareRequestModelUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, ZipzoongCareRequestModelUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ZipzoongCareRequestModel.
+     * @param {ZipzoongCareRequestModelUpsertArgs} args - Arguments to update or create a ZipzoongCareRequestModel.
+     * @example
+     * // Update or create a ZipzoongCareRequestModel
+     * const zipzoongCareRequestModel = await prisma.zipzoongCareRequestModel.upsert({
+     *   create: {
+     *     // ... data to create a ZipzoongCareRequestModel
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ZipzoongCareRequestModel we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends ZipzoongCareRequestModelUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, ZipzoongCareRequestModelUpsertArgs<ExtArgs>>
+    ): Prisma__ZipzoongCareRequestModelClient<$Types.GetResult<ZipzoongCareRequestModelPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of ZipzoongCareRequestModels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZipzoongCareRequestModelCountArgs} args - Arguments to filter ZipzoongCareRequestModels to count.
+     * @example
+     * // Count the number of ZipzoongCareRequestModels
+     * const count = await prisma.zipzoongCareRequestModel.count({
+     *   where: {
+     *     // ... the filter for the ZipzoongCareRequestModels we want to count
+     *   }
+     * })
+    **/
+    count<T extends ZipzoongCareRequestModelCountArgs>(
+      args?: Subset<T, ZipzoongCareRequestModelCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ZipzoongCareRequestModelCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ZipzoongCareRequestModel.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZipzoongCareRequestModelAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ZipzoongCareRequestModelAggregateArgs>(args: Subset<T, ZipzoongCareRequestModelAggregateArgs>): Prisma.PrismaPromise<GetZipzoongCareRequestModelAggregateType<T>>
+
+    /**
+     * Group by ZipzoongCareRequestModel.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZipzoongCareRequestModelGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ZipzoongCareRequestModelGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ZipzoongCareRequestModelGroupByArgs['orderBy'] }
+        : { orderBy?: ZipzoongCareRequestModelGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ZipzoongCareRequestModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetZipzoongCareRequestModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ZipzoongCareRequestModel model
+   */
+  readonly fields: ZipzoongCareRequestModelFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ZipzoongCareRequestModel.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__ZipzoongCareRequestModelClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    client<T extends ClientModelArgs<ExtArgs> = {}>(args?: Subset<T, ClientModelArgs<ExtArgs>>): Prisma__ClientModelClient<$Types.GetResult<ClientModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  /**
+   * Fields of the ZipzoongCareRequestModel model
+   */ 
+  interface ZipzoongCareRequestModelFieldRefs {
+    readonly id: FieldRef<"ZipzoongCareRequestModel", 'String'>
+    readonly created_at: FieldRef<"ZipzoongCareRequestModel", 'DateTime'>
+    readonly updated_at: FieldRef<"ZipzoongCareRequestModel", 'DateTime'>
+    readonly is_deleted: FieldRef<"ZipzoongCareRequestModel", 'Boolean'>
+    readonly deleted_at: FieldRef<"ZipzoongCareRequestModel", 'DateTime'>
+    readonly client_id: FieldRef<"ZipzoongCareRequestModel", 'String'>
+    readonly url: FieldRef<"ZipzoongCareRequestModel", 'String'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * ZipzoongCareRequestModel findUnique
+   */
+  export type ZipzoongCareRequestModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareRequestModel
+     */
+    select?: ZipzoongCareRequestModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareRequestModelInclude<ExtArgs> | null
+    /**
+     * Filter, which ZipzoongCareRequestModel to fetch.
+     */
+    where: ZipzoongCareRequestModelWhereUniqueInput
+  }
+
+
+  /**
+   * ZipzoongCareRequestModel findUniqueOrThrow
+   */
+  export type ZipzoongCareRequestModelFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareRequestModel
+     */
+    select?: ZipzoongCareRequestModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareRequestModelInclude<ExtArgs> | null
+    /**
+     * Filter, which ZipzoongCareRequestModel to fetch.
+     */
+    where: ZipzoongCareRequestModelWhereUniqueInput
+  }
+
+
+  /**
+   * ZipzoongCareRequestModel findFirst
+   */
+  export type ZipzoongCareRequestModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareRequestModel
+     */
+    select?: ZipzoongCareRequestModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareRequestModelInclude<ExtArgs> | null
+    /**
+     * Filter, which ZipzoongCareRequestModel to fetch.
+     */
+    where?: ZipzoongCareRequestModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZipzoongCareRequestModels to fetch.
+     */
+    orderBy?: ZipzoongCareRequestModelOrderByWithRelationInput | ZipzoongCareRequestModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ZipzoongCareRequestModels.
+     */
+    cursor?: ZipzoongCareRequestModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZipzoongCareRequestModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZipzoongCareRequestModels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ZipzoongCareRequestModels.
+     */
+    distinct?: ZipzoongCareRequestModelScalarFieldEnum | ZipzoongCareRequestModelScalarFieldEnum[]
+  }
+
+
+  /**
+   * ZipzoongCareRequestModel findFirstOrThrow
+   */
+  export type ZipzoongCareRequestModelFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareRequestModel
+     */
+    select?: ZipzoongCareRequestModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareRequestModelInclude<ExtArgs> | null
+    /**
+     * Filter, which ZipzoongCareRequestModel to fetch.
+     */
+    where?: ZipzoongCareRequestModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZipzoongCareRequestModels to fetch.
+     */
+    orderBy?: ZipzoongCareRequestModelOrderByWithRelationInput | ZipzoongCareRequestModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ZipzoongCareRequestModels.
+     */
+    cursor?: ZipzoongCareRequestModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZipzoongCareRequestModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZipzoongCareRequestModels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ZipzoongCareRequestModels.
+     */
+    distinct?: ZipzoongCareRequestModelScalarFieldEnum | ZipzoongCareRequestModelScalarFieldEnum[]
+  }
+
+
+  /**
+   * ZipzoongCareRequestModel findMany
+   */
+  export type ZipzoongCareRequestModelFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareRequestModel
+     */
+    select?: ZipzoongCareRequestModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareRequestModelInclude<ExtArgs> | null
+    /**
+     * Filter, which ZipzoongCareRequestModels to fetch.
+     */
+    where?: ZipzoongCareRequestModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZipzoongCareRequestModels to fetch.
+     */
+    orderBy?: ZipzoongCareRequestModelOrderByWithRelationInput | ZipzoongCareRequestModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ZipzoongCareRequestModels.
+     */
+    cursor?: ZipzoongCareRequestModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZipzoongCareRequestModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZipzoongCareRequestModels.
+     */
+    skip?: number
+    distinct?: ZipzoongCareRequestModelScalarFieldEnum | ZipzoongCareRequestModelScalarFieldEnum[]
+  }
+
+
+  /**
+   * ZipzoongCareRequestModel create
+   */
+  export type ZipzoongCareRequestModelCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareRequestModel
+     */
+    select?: ZipzoongCareRequestModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareRequestModelInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ZipzoongCareRequestModel.
+     */
+    data: XOR<ZipzoongCareRequestModelCreateInput, ZipzoongCareRequestModelUncheckedCreateInput>
+  }
+
+
+  /**
+   * ZipzoongCareRequestModel createMany
+   */
+  export type ZipzoongCareRequestModelCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ZipzoongCareRequestModels.
+     */
+    data: ZipzoongCareRequestModelCreateManyInput | ZipzoongCareRequestModelCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * ZipzoongCareRequestModel update
+   */
+  export type ZipzoongCareRequestModelUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareRequestModel
+     */
+    select?: ZipzoongCareRequestModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareRequestModelInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ZipzoongCareRequestModel.
+     */
+    data: XOR<ZipzoongCareRequestModelUpdateInput, ZipzoongCareRequestModelUncheckedUpdateInput>
+    /**
+     * Choose, which ZipzoongCareRequestModel to update.
+     */
+    where: ZipzoongCareRequestModelWhereUniqueInput
+  }
+
+
+  /**
+   * ZipzoongCareRequestModel updateMany
+   */
+  export type ZipzoongCareRequestModelUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ZipzoongCareRequestModels.
+     */
+    data: XOR<ZipzoongCareRequestModelUpdateManyMutationInput, ZipzoongCareRequestModelUncheckedUpdateManyInput>
+    /**
+     * Filter which ZipzoongCareRequestModels to update
+     */
+    where?: ZipzoongCareRequestModelWhereInput
+  }
+
+
+  /**
+   * ZipzoongCareRequestModel upsert
+   */
+  export type ZipzoongCareRequestModelUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareRequestModel
+     */
+    select?: ZipzoongCareRequestModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareRequestModelInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ZipzoongCareRequestModel to update in case it exists.
+     */
+    where: ZipzoongCareRequestModelWhereUniqueInput
+    /**
+     * In case the ZipzoongCareRequestModel found by the `where` argument doesn't exist, create a new ZipzoongCareRequestModel with this data.
+     */
+    create: XOR<ZipzoongCareRequestModelCreateInput, ZipzoongCareRequestModelUncheckedCreateInput>
+    /**
+     * In case the ZipzoongCareRequestModel was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ZipzoongCareRequestModelUpdateInput, ZipzoongCareRequestModelUncheckedUpdateInput>
+  }
+
+
+  /**
+   * ZipzoongCareRequestModel delete
+   */
+  export type ZipzoongCareRequestModelDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareRequestModel
+     */
+    select?: ZipzoongCareRequestModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareRequestModelInclude<ExtArgs> | null
+    /**
+     * Filter which ZipzoongCareRequestModel to delete.
+     */
+    where: ZipzoongCareRequestModelWhereUniqueInput
+  }
+
+
+  /**
+   * ZipzoongCareRequestModel deleteMany
+   */
+  export type ZipzoongCareRequestModelDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ZipzoongCareRequestModels to delete
+     */
+    where?: ZipzoongCareRequestModelWhereInput
+  }
+
+
+  /**
+   * ZipzoongCareRequestModel without action
+   */
+  export type ZipzoongCareRequestModelArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareRequestModel
+     */
+    select?: ZipzoongCareRequestModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareRequestModelInclude<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model ZipzoongCareModel
+   */
+
+
+  export type AggregateZipzoongCareModel = {
+    _count: ZipzoongCareModelCountAggregateOutputType | null
+    _min: ZipzoongCareModelMinAggregateOutputType | null
+    _max: ZipzoongCareModelMaxAggregateOutputType | null
+  }
+
+  export type ZipzoongCareModelMinAggregateOutputType = {
+    id: string | null
+    created_at: Date | null
+    updated_at: Date | null
+    is_deleted: boolean | null
+    deleted_at: Date | null
+    biz_user_id: string | null
+    url: string | null
+  }
+
+  export type ZipzoongCareModelMaxAggregateOutputType = {
+    id: string | null
+    created_at: Date | null
+    updated_at: Date | null
+    is_deleted: boolean | null
+    deleted_at: Date | null
+    biz_user_id: string | null
+    url: string | null
+  }
+
+  export type ZipzoongCareModelCountAggregateOutputType = {
+    id: number
+    created_at: number
+    updated_at: number
+    is_deleted: number
+    deleted_at: number
+    biz_user_id: number
+    url: number
+    _all: number
+  }
+
+
+  export type ZipzoongCareModelMinAggregateInputType = {
+    id?: true
+    created_at?: true
+    updated_at?: true
+    is_deleted?: true
+    deleted_at?: true
+    biz_user_id?: true
+    url?: true
+  }
+
+  export type ZipzoongCareModelMaxAggregateInputType = {
+    id?: true
+    created_at?: true
+    updated_at?: true
+    is_deleted?: true
+    deleted_at?: true
+    biz_user_id?: true
+    url?: true
+  }
+
+  export type ZipzoongCareModelCountAggregateInputType = {
+    id?: true
+    created_at?: true
+    updated_at?: true
+    is_deleted?: true
+    deleted_at?: true
+    biz_user_id?: true
+    url?: true
+    _all?: true
+  }
+
+  export type ZipzoongCareModelAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ZipzoongCareModel to aggregate.
+     */
+    where?: ZipzoongCareModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZipzoongCareModels to fetch.
+     */
+    orderBy?: ZipzoongCareModelOrderByWithRelationInput | ZipzoongCareModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ZipzoongCareModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZipzoongCareModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZipzoongCareModels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ZipzoongCareModels
+    **/
+    _count?: true | ZipzoongCareModelCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ZipzoongCareModelMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ZipzoongCareModelMaxAggregateInputType
+  }
+
+  export type GetZipzoongCareModelAggregateType<T extends ZipzoongCareModelAggregateArgs> = {
+        [P in keyof T & keyof AggregateZipzoongCareModel]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateZipzoongCareModel[P]>
+      : GetScalarType<T[P], AggregateZipzoongCareModel[P]>
+  }
+
+
+
+
+  export type ZipzoongCareModelGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    where?: ZipzoongCareModelWhereInput
+    orderBy?: ZipzoongCareModelOrderByWithAggregationInput | ZipzoongCareModelOrderByWithAggregationInput[]
+    by: ZipzoongCareModelScalarFieldEnum[] | ZipzoongCareModelScalarFieldEnum
+    having?: ZipzoongCareModelScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ZipzoongCareModelCountAggregateInputType | true
+    _min?: ZipzoongCareModelMinAggregateInputType
+    _max?: ZipzoongCareModelMaxAggregateInputType
+  }
+
+
+  export type ZipzoongCareModelGroupByOutputType = {
+    id: string
+    created_at: Date
+    updated_at: Date
+    is_deleted: boolean
+    deleted_at: Date | null
+    biz_user_id: string
+    url: string
+    _count: ZipzoongCareModelCountAggregateOutputType | null
+    _min: ZipzoongCareModelMinAggregateOutputType | null
+    _max: ZipzoongCareModelMaxAggregateOutputType | null
+  }
+
+  type GetZipzoongCareModelGroupByPayload<T extends ZipzoongCareModelGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ZipzoongCareModelGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ZipzoongCareModelGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ZipzoongCareModelGroupByOutputType[P]>
+            : GetScalarType<T[P], ZipzoongCareModelGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ZipzoongCareModelSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    is_deleted?: boolean
+    deleted_at?: boolean
+    biz_user_id?: boolean
+    url?: boolean
+    biz_user?: boolean | BIZUserModelArgs<ExtArgs>
+  }, ExtArgs["result"]["zipzoongCareModel"]>
+
+  export type ZipzoongCareModelSelectScalar = {
+    id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    is_deleted?: boolean
+    deleted_at?: boolean
+    biz_user_id?: boolean
+    url?: boolean
+  }
+
+  export type ZipzoongCareModelInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    biz_user?: boolean | BIZUserModelArgs<ExtArgs>
+  }
+
+
+  type ZipzoongCareModelGetPayload<S extends boolean | null | undefined | ZipzoongCareModelArgs> = $Types.GetResult<ZipzoongCareModelPayload, S>
+
+  type ZipzoongCareModelCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
+    Omit<ZipzoongCareModelFindManyArgs, 'select' | 'include'> & {
+      select?: ZipzoongCareModelCountAggregateInputType | true
+    }
+
+  export interface ZipzoongCareModelDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ZipzoongCareModel'], meta: { name: 'ZipzoongCareModel' } }
+    /**
+     * Find zero or one ZipzoongCareModel that matches the filter.
+     * @param {ZipzoongCareModelFindUniqueArgs} args - Arguments to find a ZipzoongCareModel
+     * @example
+     * // Get one ZipzoongCareModel
+     * const zipzoongCareModel = await prisma.zipzoongCareModel.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends ZipzoongCareModelFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, ZipzoongCareModelFindUniqueArgs<ExtArgs>>
+    ): Prisma__ZipzoongCareModelClient<$Types.GetResult<ZipzoongCareModelPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one ZipzoongCareModel that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {ZipzoongCareModelFindUniqueOrThrowArgs} args - Arguments to find a ZipzoongCareModel
+     * @example
+     * // Get one ZipzoongCareModel
+     * const zipzoongCareModel = await prisma.zipzoongCareModel.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends ZipzoongCareModelFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, ZipzoongCareModelFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__ZipzoongCareModelClient<$Types.GetResult<ZipzoongCareModelPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first ZipzoongCareModel that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZipzoongCareModelFindFirstArgs} args - Arguments to find a ZipzoongCareModel
+     * @example
+     * // Get one ZipzoongCareModel
+     * const zipzoongCareModel = await prisma.zipzoongCareModel.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends ZipzoongCareModelFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, ZipzoongCareModelFindFirstArgs<ExtArgs>>
+    ): Prisma__ZipzoongCareModelClient<$Types.GetResult<ZipzoongCareModelPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first ZipzoongCareModel that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZipzoongCareModelFindFirstOrThrowArgs} args - Arguments to find a ZipzoongCareModel
+     * @example
+     * // Get one ZipzoongCareModel
+     * const zipzoongCareModel = await prisma.zipzoongCareModel.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends ZipzoongCareModelFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, ZipzoongCareModelFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__ZipzoongCareModelClient<$Types.GetResult<ZipzoongCareModelPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more ZipzoongCareModels that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZipzoongCareModelFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ZipzoongCareModels
+     * const zipzoongCareModels = await prisma.zipzoongCareModel.findMany()
+     * 
+     * // Get first 10 ZipzoongCareModels
+     * const zipzoongCareModels = await prisma.zipzoongCareModel.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const zipzoongCareModelWithIdOnly = await prisma.zipzoongCareModel.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends ZipzoongCareModelFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, ZipzoongCareModelFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Types.GetResult<ZipzoongCareModelPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a ZipzoongCareModel.
+     * @param {ZipzoongCareModelCreateArgs} args - Arguments to create a ZipzoongCareModel.
+     * @example
+     * // Create one ZipzoongCareModel
+     * const ZipzoongCareModel = await prisma.zipzoongCareModel.create({
+     *   data: {
+     *     // ... data to create a ZipzoongCareModel
+     *   }
+     * })
+     * 
+    **/
+    create<T extends ZipzoongCareModelCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, ZipzoongCareModelCreateArgs<ExtArgs>>
+    ): Prisma__ZipzoongCareModelClient<$Types.GetResult<ZipzoongCareModelPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many ZipzoongCareModels.
+     *     @param {ZipzoongCareModelCreateManyArgs} args - Arguments to create many ZipzoongCareModels.
+     *     @example
+     *     // Create many ZipzoongCareModels
+     *     const zipzoongCareModel = await prisma.zipzoongCareModel.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends ZipzoongCareModelCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, ZipzoongCareModelCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a ZipzoongCareModel.
+     * @param {ZipzoongCareModelDeleteArgs} args - Arguments to delete one ZipzoongCareModel.
+     * @example
+     * // Delete one ZipzoongCareModel
+     * const ZipzoongCareModel = await prisma.zipzoongCareModel.delete({
+     *   where: {
+     *     // ... filter to delete one ZipzoongCareModel
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends ZipzoongCareModelDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, ZipzoongCareModelDeleteArgs<ExtArgs>>
+    ): Prisma__ZipzoongCareModelClient<$Types.GetResult<ZipzoongCareModelPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one ZipzoongCareModel.
+     * @param {ZipzoongCareModelUpdateArgs} args - Arguments to update one ZipzoongCareModel.
+     * @example
+     * // Update one ZipzoongCareModel
+     * const zipzoongCareModel = await prisma.zipzoongCareModel.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends ZipzoongCareModelUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, ZipzoongCareModelUpdateArgs<ExtArgs>>
+    ): Prisma__ZipzoongCareModelClient<$Types.GetResult<ZipzoongCareModelPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more ZipzoongCareModels.
+     * @param {ZipzoongCareModelDeleteManyArgs} args - Arguments to filter ZipzoongCareModels to delete.
+     * @example
+     * // Delete a few ZipzoongCareModels
+     * const { count } = await prisma.zipzoongCareModel.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends ZipzoongCareModelDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, ZipzoongCareModelDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ZipzoongCareModels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZipzoongCareModelUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ZipzoongCareModels
+     * const zipzoongCareModel = await prisma.zipzoongCareModel.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends ZipzoongCareModelUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, ZipzoongCareModelUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ZipzoongCareModel.
+     * @param {ZipzoongCareModelUpsertArgs} args - Arguments to update or create a ZipzoongCareModel.
+     * @example
+     * // Update or create a ZipzoongCareModel
+     * const zipzoongCareModel = await prisma.zipzoongCareModel.upsert({
+     *   create: {
+     *     // ... data to create a ZipzoongCareModel
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ZipzoongCareModel we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends ZipzoongCareModelUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, ZipzoongCareModelUpsertArgs<ExtArgs>>
+    ): Prisma__ZipzoongCareModelClient<$Types.GetResult<ZipzoongCareModelPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of ZipzoongCareModels.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZipzoongCareModelCountArgs} args - Arguments to filter ZipzoongCareModels to count.
+     * @example
+     * // Count the number of ZipzoongCareModels
+     * const count = await prisma.zipzoongCareModel.count({
+     *   where: {
+     *     // ... the filter for the ZipzoongCareModels we want to count
+     *   }
+     * })
+    **/
+    count<T extends ZipzoongCareModelCountArgs>(
+      args?: Subset<T, ZipzoongCareModelCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ZipzoongCareModelCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ZipzoongCareModel.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZipzoongCareModelAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ZipzoongCareModelAggregateArgs>(args: Subset<T, ZipzoongCareModelAggregateArgs>): Prisma.PrismaPromise<GetZipzoongCareModelAggregateType<T>>
+
+    /**
+     * Group by ZipzoongCareModel.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZipzoongCareModelGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ZipzoongCareModelGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ZipzoongCareModelGroupByArgs['orderBy'] }
+        : { orderBy?: ZipzoongCareModelGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ZipzoongCareModelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetZipzoongCareModelGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ZipzoongCareModel model
+   */
+  readonly fields: ZipzoongCareModelFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ZipzoongCareModel.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__ZipzoongCareModelClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> implements Prisma.PrismaPromise<T> {
+    private readonly _dmmf;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+
+    biz_user<T extends BIZUserModelArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModelArgs<ExtArgs>>): Prisma__BIZUserModelClient<$Types.GetResult<BIZUserModelPayload<ExtArgs>, T, 'findUnique'> | Null, never, ExtArgs>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  /**
+   * Fields of the ZipzoongCareModel model
+   */ 
+  interface ZipzoongCareModelFieldRefs {
+    readonly id: FieldRef<"ZipzoongCareModel", 'String'>
+    readonly created_at: FieldRef<"ZipzoongCareModel", 'DateTime'>
+    readonly updated_at: FieldRef<"ZipzoongCareModel", 'DateTime'>
+    readonly is_deleted: FieldRef<"ZipzoongCareModel", 'Boolean'>
+    readonly deleted_at: FieldRef<"ZipzoongCareModel", 'DateTime'>
+    readonly biz_user_id: FieldRef<"ZipzoongCareModel", 'String'>
+    readonly url: FieldRef<"ZipzoongCareModel", 'String'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * ZipzoongCareModel findUnique
+   */
+  export type ZipzoongCareModelFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareModel
+     */
+    select?: ZipzoongCareModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareModelInclude<ExtArgs> | null
+    /**
+     * Filter, which ZipzoongCareModel to fetch.
+     */
+    where: ZipzoongCareModelWhereUniqueInput
+  }
+
+
+  /**
+   * ZipzoongCareModel findUniqueOrThrow
+   */
+  export type ZipzoongCareModelFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareModel
+     */
+    select?: ZipzoongCareModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareModelInclude<ExtArgs> | null
+    /**
+     * Filter, which ZipzoongCareModel to fetch.
+     */
+    where: ZipzoongCareModelWhereUniqueInput
+  }
+
+
+  /**
+   * ZipzoongCareModel findFirst
+   */
+  export type ZipzoongCareModelFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareModel
+     */
+    select?: ZipzoongCareModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareModelInclude<ExtArgs> | null
+    /**
+     * Filter, which ZipzoongCareModel to fetch.
+     */
+    where?: ZipzoongCareModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZipzoongCareModels to fetch.
+     */
+    orderBy?: ZipzoongCareModelOrderByWithRelationInput | ZipzoongCareModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ZipzoongCareModels.
+     */
+    cursor?: ZipzoongCareModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZipzoongCareModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZipzoongCareModels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ZipzoongCareModels.
+     */
+    distinct?: ZipzoongCareModelScalarFieldEnum | ZipzoongCareModelScalarFieldEnum[]
+  }
+
+
+  /**
+   * ZipzoongCareModel findFirstOrThrow
+   */
+  export type ZipzoongCareModelFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareModel
+     */
+    select?: ZipzoongCareModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareModelInclude<ExtArgs> | null
+    /**
+     * Filter, which ZipzoongCareModel to fetch.
+     */
+    where?: ZipzoongCareModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZipzoongCareModels to fetch.
+     */
+    orderBy?: ZipzoongCareModelOrderByWithRelationInput | ZipzoongCareModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ZipzoongCareModels.
+     */
+    cursor?: ZipzoongCareModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZipzoongCareModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZipzoongCareModels.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ZipzoongCareModels.
+     */
+    distinct?: ZipzoongCareModelScalarFieldEnum | ZipzoongCareModelScalarFieldEnum[]
+  }
+
+
+  /**
+   * ZipzoongCareModel findMany
+   */
+  export type ZipzoongCareModelFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareModel
+     */
+    select?: ZipzoongCareModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareModelInclude<ExtArgs> | null
+    /**
+     * Filter, which ZipzoongCareModels to fetch.
+     */
+    where?: ZipzoongCareModelWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZipzoongCareModels to fetch.
+     */
+    orderBy?: ZipzoongCareModelOrderByWithRelationInput | ZipzoongCareModelOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ZipzoongCareModels.
+     */
+    cursor?: ZipzoongCareModelWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZipzoongCareModels from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZipzoongCareModels.
+     */
+    skip?: number
+    distinct?: ZipzoongCareModelScalarFieldEnum | ZipzoongCareModelScalarFieldEnum[]
+  }
+
+
+  /**
+   * ZipzoongCareModel create
+   */
+  export type ZipzoongCareModelCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareModel
+     */
+    select?: ZipzoongCareModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareModelInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ZipzoongCareModel.
+     */
+    data: XOR<ZipzoongCareModelCreateInput, ZipzoongCareModelUncheckedCreateInput>
+  }
+
+
+  /**
+   * ZipzoongCareModel createMany
+   */
+  export type ZipzoongCareModelCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ZipzoongCareModels.
+     */
+    data: ZipzoongCareModelCreateManyInput | ZipzoongCareModelCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * ZipzoongCareModel update
+   */
+  export type ZipzoongCareModelUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareModel
+     */
+    select?: ZipzoongCareModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareModelInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ZipzoongCareModel.
+     */
+    data: XOR<ZipzoongCareModelUpdateInput, ZipzoongCareModelUncheckedUpdateInput>
+    /**
+     * Choose, which ZipzoongCareModel to update.
+     */
+    where: ZipzoongCareModelWhereUniqueInput
+  }
+
+
+  /**
+   * ZipzoongCareModel updateMany
+   */
+  export type ZipzoongCareModelUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ZipzoongCareModels.
+     */
+    data: XOR<ZipzoongCareModelUpdateManyMutationInput, ZipzoongCareModelUncheckedUpdateManyInput>
+    /**
+     * Filter which ZipzoongCareModels to update
+     */
+    where?: ZipzoongCareModelWhereInput
+  }
+
+
+  /**
+   * ZipzoongCareModel upsert
+   */
+  export type ZipzoongCareModelUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareModel
+     */
+    select?: ZipzoongCareModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareModelInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ZipzoongCareModel to update in case it exists.
+     */
+    where: ZipzoongCareModelWhereUniqueInput
+    /**
+     * In case the ZipzoongCareModel found by the `where` argument doesn't exist, create a new ZipzoongCareModel with this data.
+     */
+    create: XOR<ZipzoongCareModelCreateInput, ZipzoongCareModelUncheckedCreateInput>
+    /**
+     * In case the ZipzoongCareModel was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ZipzoongCareModelUpdateInput, ZipzoongCareModelUncheckedUpdateInput>
+  }
+
+
+  /**
+   * ZipzoongCareModel delete
+   */
+  export type ZipzoongCareModelDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareModel
+     */
+    select?: ZipzoongCareModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareModelInclude<ExtArgs> | null
+    /**
+     * Filter which ZipzoongCareModel to delete.
+     */
+    where: ZipzoongCareModelWhereUniqueInput
+  }
+
+
+  /**
+   * ZipzoongCareModel deleteMany
+   */
+  export type ZipzoongCareModelDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ZipzoongCareModels to delete
+     */
+    where?: ZipzoongCareModelWhereInput
+  }
+
+
+  /**
+   * ZipzoongCareModel without action
+   */
+  export type ZipzoongCareModelArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareModel
+     */
+    select?: ZipzoongCareModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareModelInclude<ExtArgs> | null
+  }
+
+
+
+  /**
    * Model UserModel
    */
 
@@ -5911,6 +8005,7 @@ export namespace Prisma {
     profile_image_url?: boolean
     base?: boolean | UserModelArgs<ExtArgs>
     oauth_accounts?: boolean | ClientModel$oauth_accountsArgs<ExtArgs>
+    zipzoong_care_requests?: boolean | ClientModel$zipzoong_care_requestsArgs<ExtArgs>
     _count?: boolean | ClientModelCountOutputTypeArgs<ExtArgs>
   }, ExtArgs["result"]["clientModel"]>
 
@@ -5929,6 +8024,7 @@ export namespace Prisma {
   export type ClientModelInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     base?: boolean | UserModelArgs<ExtArgs>
     oauth_accounts?: boolean | ClientModel$oauth_accountsArgs<ExtArgs>
+    zipzoong_care_requests?: boolean | ClientModel$zipzoong_care_requestsArgs<ExtArgs>
     _count?: boolean | ClientModelCountOutputTypeArgs<ExtArgs>
   }
 
@@ -6309,6 +8405,8 @@ export namespace Prisma {
 
     oauth_accounts<T extends ClientModel$oauth_accountsArgs<ExtArgs> = {}>(args?: Subset<T, ClientModel$oauth_accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findMany'>| Null>;
 
+    zipzoong_care_requests<T extends ClientModel$zipzoong_care_requestsArgs<ExtArgs> = {}>(args?: Subset<T, ClientModel$zipzoong_care_requestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<ZipzoongCareRequestModelPayload<ExtArgs>, T, 'findMany'>| Null>;
+
     private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6680,6 +8778,27 @@ export namespace Prisma {
 
 
   /**
+   * ClientModel.zipzoong_care_requests
+   */
+  export type ClientModel$zipzoong_care_requestsArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareRequestModel
+     */
+    select?: ZipzoongCareRequestModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareRequestModelInclude<ExtArgs> | null
+    where?: ZipzoongCareRequestModelWhereInput
+    orderBy?: ZipzoongCareRequestModelOrderByWithRelationInput | ZipzoongCareRequestModelOrderByWithRelationInput[]
+    cursor?: ZipzoongCareRequestModelWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ZipzoongCareRequestModelScalarFieldEnum | ZipzoongCareRequestModelScalarFieldEnum[]
+  }
+
+
+  /**
    * ClientModel without action
    */
   export type ClientModelArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
@@ -6874,6 +8993,7 @@ export namespace Prisma {
     hs_provider?: boolean | BIZUserModel$hs_providerArgs<ExtArgs>
     oauth_accounts?: boolean | BIZUserModel$oauth_accountsArgs<ExtArgs>
     biz_certification_images?: boolean | BIZUserModel$biz_certification_imagesArgs<ExtArgs>
+    zipzoong_cares?: boolean | BIZUserModel$zipzoong_caresArgs<ExtArgs>
     _count?: boolean | BIZUserModelCountOutputTypeArgs<ExtArgs>
   }, ExtArgs["result"]["bIZUserModel"]>
 
@@ -6892,6 +9012,7 @@ export namespace Prisma {
     hs_provider?: boolean | BIZUserModel$hs_providerArgs<ExtArgs>
     oauth_accounts?: boolean | BIZUserModel$oauth_accountsArgs<ExtArgs>
     biz_certification_images?: boolean | BIZUserModel$biz_certification_imagesArgs<ExtArgs>
+    zipzoong_cares?: boolean | BIZUserModel$zipzoong_caresArgs<ExtArgs>
     _count?: boolean | BIZUserModelCountOutputTypeArgs<ExtArgs>
   }
 
@@ -7277,6 +9398,8 @@ export namespace Prisma {
     oauth_accounts<T extends BIZUserModel$oauth_accountsArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModel$oauth_accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<OauthAccountModelPayload<ExtArgs>, T, 'findMany'>| Null>;
 
     biz_certification_images<T extends BIZUserModel$biz_certification_imagesArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModel$biz_certification_imagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<BIZCertificationImageModelPayload<ExtArgs>, T, 'findMany'>| Null>;
+
+    zipzoong_cares<T extends BIZUserModel$zipzoong_caresArgs<ExtArgs> = {}>(args?: Subset<T, BIZUserModel$zipzoong_caresArgs<ExtArgs>>): Prisma.PrismaPromise<$Types.GetResult<ZipzoongCareModelPayload<ExtArgs>, T, 'findMany'>| Null>;
 
     private get _document();
     /**
@@ -7699,6 +9822,27 @@ export namespace Prisma {
 
 
   /**
+   * BIZUserModel.zipzoong_cares
+   */
+  export type BIZUserModel$zipzoong_caresArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZipzoongCareModel
+     */
+    select?: ZipzoongCareModelSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: ZipzoongCareModelInclude<ExtArgs> | null
+    where?: ZipzoongCareModelWhereInput
+    orderBy?: ZipzoongCareModelOrderByWithRelationInput | ZipzoongCareModelOrderByWithRelationInput[]
+    cursor?: ZipzoongCareModelWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ZipzoongCareModelScalarFieldEnum | ZipzoongCareModelScalarFieldEnum[]
+  }
+
+
+  /**
    * BIZUserModel without action
    */
   export type BIZUserModelArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
@@ -7733,7 +9877,7 @@ export namespace Prisma {
     deleted_at: Date | null
     biz_user_id: string | null
     url: string | null
-    access_type: ImageAccessType | null
+    access_type: ResourceAccessType | null
   }
 
   export type BIZCertificationImageModelMaxAggregateOutputType = {
@@ -7744,7 +9888,7 @@ export namespace Prisma {
     deleted_at: Date | null
     biz_user_id: string | null
     url: string | null
-    access_type: ImageAccessType | null
+    access_type: ResourceAccessType | null
   }
 
   export type BIZCertificationImageModelCountAggregateOutputType = {
@@ -7875,7 +10019,7 @@ export namespace Prisma {
     deleted_at: Date | null
     biz_user_id: string
     url: string
-    access_type: ImageAccessType
+    access_type: ResourceAccessType
     _count: BIZCertificationImageModelCountAggregateOutputType | null
     _min: BIZCertificationImageModelMinAggregateOutputType | null
     _max: BIZCertificationImageModelMaxAggregateOutputType | null
@@ -8333,7 +10477,7 @@ export namespace Prisma {
     readonly deleted_at: FieldRef<"BIZCertificationImageModel", 'DateTime'>
     readonly biz_user_id: FieldRef<"BIZCertificationImageModel", 'String'>
     readonly url: FieldRef<"BIZCertificationImageModel", 'String'>
-    readonly access_type: FieldRef<"BIZCertificationImageModel", 'ImageAccessType'>
+    readonly access_type: FieldRef<"BIZCertificationImageModel", 'ResourceAccessType'>
   }
     
 
@@ -18444,6 +20588,32 @@ export namespace Prisma {
   export type TermsAgreementModelScalarFieldEnum = (typeof TermsAgreementModelScalarFieldEnum)[keyof typeof TermsAgreementModelScalarFieldEnum]
 
 
+  export const ZipzoongCareRequestModelScalarFieldEnum: {
+    id: 'id',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
+    is_deleted: 'is_deleted',
+    deleted_at: 'deleted_at',
+    client_id: 'client_id',
+    url: 'url'
+  };
+
+  export type ZipzoongCareRequestModelScalarFieldEnum = (typeof ZipzoongCareRequestModelScalarFieldEnum)[keyof typeof ZipzoongCareRequestModelScalarFieldEnum]
+
+
+  export const ZipzoongCareModelScalarFieldEnum: {
+    id: 'id',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
+    is_deleted: 'is_deleted',
+    deleted_at: 'deleted_at',
+    biz_user_id: 'biz_user_id',
+    url: 'url'
+  };
+
+  export type ZipzoongCareModelScalarFieldEnum = (typeof ZipzoongCareModelScalarFieldEnum)[keyof typeof ZipzoongCareModelScalarFieldEnum]
+
+
   export const UserModelScalarFieldEnum: {
     id: 'id',
     created_at: 'created_at',
@@ -18743,16 +20913,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'ImageAccessType'
+   * Reference to a field of type 'ResourceAccessType'
    */
-  export type EnumImageAccessTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ImageAccessType'>
+  export type EnumResourceAccessTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResourceAccessType'>
     
 
 
   /**
-   * Reference to a field of type 'ImageAccessType[]'
+   * Reference to a field of type 'ResourceAccessType[]'
    */
-  export type ListEnumImageAccessTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ImageAccessType[]'>
+  export type ListEnumResourceAccessTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResourceAccessType[]'>
     
 
 
@@ -18936,6 +21106,136 @@ export namespace Prisma {
     user_id?: StringWithAggregatesFilter<"TermsAgreementModel"> | string
   }
 
+  export type ZipzoongCareRequestModelWhereInput = {
+    AND?: ZipzoongCareRequestModelWhereInput | ZipzoongCareRequestModelWhereInput[]
+    OR?: ZipzoongCareRequestModelWhereInput[]
+    NOT?: ZipzoongCareRequestModelWhereInput | ZipzoongCareRequestModelWhereInput[]
+    id?: StringFilter<"ZipzoongCareRequestModel"> | string
+    created_at?: DateTimeFilter<"ZipzoongCareRequestModel"> | Date | string
+    updated_at?: DateTimeFilter<"ZipzoongCareRequestModel"> | Date | string
+    is_deleted?: BoolFilter<"ZipzoongCareRequestModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"ZipzoongCareRequestModel"> | Date | string | null
+    client_id?: StringFilter<"ZipzoongCareRequestModel"> | string
+    url?: StringFilter<"ZipzoongCareRequestModel"> | string
+    client?: XOR<ClientModelRelationFilter, ClientModelWhereInput>
+  }
+
+  export type ZipzoongCareRequestModelOrderByWithRelationInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    client_id?: SortOrder
+    url?: SortOrder
+    client?: ClientModelOrderByWithRelationInput
+  }
+
+  export type ZipzoongCareRequestModelWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ZipzoongCareRequestModelWhereInput | ZipzoongCareRequestModelWhereInput[]
+    OR?: ZipzoongCareRequestModelWhereInput[]
+    NOT?: ZipzoongCareRequestModelWhereInput | ZipzoongCareRequestModelWhereInput[]
+    created_at?: DateTimeFilter<"ZipzoongCareRequestModel"> | Date | string
+    updated_at?: DateTimeFilter<"ZipzoongCareRequestModel"> | Date | string
+    is_deleted?: BoolFilter<"ZipzoongCareRequestModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"ZipzoongCareRequestModel"> | Date | string | null
+    client_id?: StringFilter<"ZipzoongCareRequestModel"> | string
+    url?: StringFilter<"ZipzoongCareRequestModel"> | string
+    client?: XOR<ClientModelRelationFilter, ClientModelWhereInput>
+  }, "id">
+
+  export type ZipzoongCareRequestModelOrderByWithAggregationInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    client_id?: SortOrder
+    url?: SortOrder
+    _count?: ZipzoongCareRequestModelCountOrderByAggregateInput
+    _max?: ZipzoongCareRequestModelMaxOrderByAggregateInput
+    _min?: ZipzoongCareRequestModelMinOrderByAggregateInput
+  }
+
+  export type ZipzoongCareRequestModelScalarWhereWithAggregatesInput = {
+    AND?: ZipzoongCareRequestModelScalarWhereWithAggregatesInput | ZipzoongCareRequestModelScalarWhereWithAggregatesInput[]
+    OR?: ZipzoongCareRequestModelScalarWhereWithAggregatesInput[]
+    NOT?: ZipzoongCareRequestModelScalarWhereWithAggregatesInput | ZipzoongCareRequestModelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ZipzoongCareRequestModel"> | string
+    created_at?: DateTimeWithAggregatesFilter<"ZipzoongCareRequestModel"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"ZipzoongCareRequestModel"> | Date | string
+    is_deleted?: BoolWithAggregatesFilter<"ZipzoongCareRequestModel"> | boolean
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"ZipzoongCareRequestModel"> | Date | string | null
+    client_id?: StringWithAggregatesFilter<"ZipzoongCareRequestModel"> | string
+    url?: StringWithAggregatesFilter<"ZipzoongCareRequestModel"> | string
+  }
+
+  export type ZipzoongCareModelWhereInput = {
+    AND?: ZipzoongCareModelWhereInput | ZipzoongCareModelWhereInput[]
+    OR?: ZipzoongCareModelWhereInput[]
+    NOT?: ZipzoongCareModelWhereInput | ZipzoongCareModelWhereInput[]
+    id?: StringFilter<"ZipzoongCareModel"> | string
+    created_at?: DateTimeFilter<"ZipzoongCareModel"> | Date | string
+    updated_at?: DateTimeFilter<"ZipzoongCareModel"> | Date | string
+    is_deleted?: BoolFilter<"ZipzoongCareModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"ZipzoongCareModel"> | Date | string | null
+    biz_user_id?: StringFilter<"ZipzoongCareModel"> | string
+    url?: StringFilter<"ZipzoongCareModel"> | string
+    biz_user?: XOR<BIZUserModelRelationFilter, BIZUserModelWhereInput>
+  }
+
+  export type ZipzoongCareModelOrderByWithRelationInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    biz_user_id?: SortOrder
+    url?: SortOrder
+    biz_user?: BIZUserModelOrderByWithRelationInput
+  }
+
+  export type ZipzoongCareModelWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ZipzoongCareModelWhereInput | ZipzoongCareModelWhereInput[]
+    OR?: ZipzoongCareModelWhereInput[]
+    NOT?: ZipzoongCareModelWhereInput | ZipzoongCareModelWhereInput[]
+    created_at?: DateTimeFilter<"ZipzoongCareModel"> | Date | string
+    updated_at?: DateTimeFilter<"ZipzoongCareModel"> | Date | string
+    is_deleted?: BoolFilter<"ZipzoongCareModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"ZipzoongCareModel"> | Date | string | null
+    biz_user_id?: StringFilter<"ZipzoongCareModel"> | string
+    url?: StringFilter<"ZipzoongCareModel"> | string
+    biz_user?: XOR<BIZUserModelRelationFilter, BIZUserModelWhereInput>
+  }, "id">
+
+  export type ZipzoongCareModelOrderByWithAggregationInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    biz_user_id?: SortOrder
+    url?: SortOrder
+    _count?: ZipzoongCareModelCountOrderByAggregateInput
+    _max?: ZipzoongCareModelMaxOrderByAggregateInput
+    _min?: ZipzoongCareModelMinOrderByAggregateInput
+  }
+
+  export type ZipzoongCareModelScalarWhereWithAggregatesInput = {
+    AND?: ZipzoongCareModelScalarWhereWithAggregatesInput | ZipzoongCareModelScalarWhereWithAggregatesInput[]
+    OR?: ZipzoongCareModelScalarWhereWithAggregatesInput[]
+    NOT?: ZipzoongCareModelScalarWhereWithAggregatesInput | ZipzoongCareModelScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ZipzoongCareModel"> | string
+    created_at?: DateTimeWithAggregatesFilter<"ZipzoongCareModel"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"ZipzoongCareModel"> | Date | string
+    is_deleted?: BoolWithAggregatesFilter<"ZipzoongCareModel"> | boolean
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"ZipzoongCareModel"> | Date | string | null
+    biz_user_id?: StringWithAggregatesFilter<"ZipzoongCareModel"> | string
+    url?: StringWithAggregatesFilter<"ZipzoongCareModel"> | string
+  }
+
   export type UserModelWhereInput = {
     AND?: UserModelWhereInput | UserModelWhereInput[]
     OR?: UserModelWhereInput[]
@@ -19022,6 +21322,7 @@ export namespace Prisma {
     profile_image_url?: StringNullableFilter<"ClientModel"> | string | null
     base?: XOR<UserModelRelationFilter, UserModelWhereInput>
     oauth_accounts?: OauthAccountModelListRelationFilter
+    zipzoong_care_requests?: ZipzoongCareRequestModelListRelationFilter
   }
 
   export type ClientModelOrderByWithRelationInput = {
@@ -19036,6 +21337,7 @@ export namespace Prisma {
     profile_image_url?: SortOrderInput | SortOrder
     base?: UserModelOrderByWithRelationInput
     oauth_accounts?: OauthAccountModelOrderByRelationAggregateInput
+    zipzoong_care_requests?: ZipzoongCareRequestModelOrderByRelationAggregateInput
   }
 
   export type ClientModelWhereUniqueInput = Prisma.AtLeast<{
@@ -19053,6 +21355,7 @@ export namespace Prisma {
     profile_image_url?: StringNullableFilter<"ClientModel"> | string | null
     base?: XOR<UserModelRelationFilter, UserModelWhereInput>
     oauth_accounts?: OauthAccountModelListRelationFilter
+    zipzoong_care_requests?: ZipzoongCareRequestModelListRelationFilter
   }, "id">
 
   export type ClientModelOrderByWithAggregationInput = {
@@ -19100,6 +21403,7 @@ export namespace Prisma {
     hs_provider?: XOR<HSProviderModelNullableRelationFilter, HSProviderModelWhereInput> | null
     oauth_accounts?: OauthAccountModelListRelationFilter
     biz_certification_images?: BIZCertificationImageModelListRelationFilter
+    zipzoong_cares?: ZipzoongCareModelListRelationFilter
   }
 
   export type BIZUserModelOrderByWithRelationInput = {
@@ -19114,6 +21418,7 @@ export namespace Prisma {
     hs_provider?: HSProviderModelOrderByWithRelationInput
     oauth_accounts?: OauthAccountModelOrderByRelationAggregateInput
     biz_certification_images?: BIZCertificationImageModelOrderByRelationAggregateInput
+    zipzoong_cares?: ZipzoongCareModelOrderByRelationAggregateInput
   }
 
   export type BIZUserModelWhereUniqueInput = Prisma.AtLeast<{
@@ -19131,6 +21436,7 @@ export namespace Prisma {
     hs_provider?: XOR<HSProviderModelNullableRelationFilter, HSProviderModelWhereInput> | null
     oauth_accounts?: OauthAccountModelListRelationFilter
     biz_certification_images?: BIZCertificationImageModelListRelationFilter
+    zipzoong_cares?: ZipzoongCareModelListRelationFilter
   }, "id">
 
   export type BIZUserModelOrderByWithAggregationInput = {
@@ -19168,7 +21474,7 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableFilter<"BIZCertificationImageModel"> | Date | string | null
     biz_user_id?: StringFilter<"BIZCertificationImageModel"> | string
     url?: StringFilter<"BIZCertificationImageModel"> | string
-    access_type?: EnumImageAccessTypeFilter<"BIZCertificationImageModel"> | ImageAccessType
+    access_type?: EnumResourceAccessTypeFilter<"BIZCertificationImageModel"> | ResourceAccessType
     biz_user?: XOR<BIZUserModelRelationFilter, BIZUserModelWhereInput>
   }
 
@@ -19195,7 +21501,7 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableFilter<"BIZCertificationImageModel"> | Date | string | null
     biz_user_id?: StringFilter<"BIZCertificationImageModel"> | string
     url?: StringFilter<"BIZCertificationImageModel"> | string
-    access_type?: EnumImageAccessTypeFilter<"BIZCertificationImageModel"> | ImageAccessType
+    access_type?: EnumResourceAccessTypeFilter<"BIZCertificationImageModel"> | ResourceAccessType
     biz_user?: XOR<BIZUserModelRelationFilter, BIZUserModelWhereInput>
   }, "id">
 
@@ -19224,7 +21530,7 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableWithAggregatesFilter<"BIZCertificationImageModel"> | Date | string | null
     biz_user_id?: StringWithAggregatesFilter<"BIZCertificationImageModel"> | string
     url?: StringWithAggregatesFilter<"BIZCertificationImageModel"> | string
-    access_type?: EnumImageAccessTypeWithAggregatesFilter<"BIZCertificationImageModel"> | ImageAccessType
+    access_type?: EnumResourceAccessTypeWithAggregatesFilter<"BIZCertificationImageModel"> | ResourceAccessType
   }
 
   export type REAgentModelWhereInput = {
@@ -20169,6 +22475,144 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
   }
 
+  export type ZipzoongCareRequestModelCreateInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    url: string
+    client: ClientModelCreateNestedOneWithoutZipzoong_care_requestsInput
+  }
+
+  export type ZipzoongCareRequestModelUncheckedCreateInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    client_id: string
+    url: string
+  }
+
+  export type ZipzoongCareRequestModelUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    url?: StringFieldUpdateOperationsInput | string
+    client?: ClientModelUpdateOneRequiredWithoutZipzoong_care_requestsNestedInput
+  }
+
+  export type ZipzoongCareRequestModelUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    client_id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ZipzoongCareRequestModelCreateManyInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    client_id: string
+    url: string
+  }
+
+  export type ZipzoongCareRequestModelUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ZipzoongCareRequestModelUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    client_id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ZipzoongCareModelCreateInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    url: string
+    biz_user: BIZUserModelCreateNestedOneWithoutZipzoong_caresInput
+  }
+
+  export type ZipzoongCareModelUncheckedCreateInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    biz_user_id: string
+    url: string
+  }
+
+  export type ZipzoongCareModelUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    url?: StringFieldUpdateOperationsInput | string
+    biz_user?: BIZUserModelUpdateOneRequiredWithoutZipzoong_caresNestedInput
+  }
+
+  export type ZipzoongCareModelUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biz_user_id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ZipzoongCareModelCreateManyInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    biz_user_id: string
+    url: string
+  }
+
+  export type ZipzoongCareModelUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ZipzoongCareModelUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biz_user_id?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
   export type UserModelCreateInput = {
     id: string
     created_at: Date | string
@@ -20262,6 +22706,7 @@ export namespace Prisma {
     profile_image_url?: string | null
     base: UserModelCreateNestedOneWithoutClientInput
     oauth_accounts?: OauthAccountModelCreateNestedManyWithoutClientInput
+    zipzoong_care_requests?: ZipzoongCareRequestModelCreateNestedManyWithoutClientInput
   }
 
   export type ClientModelUncheckedCreateInput = {
@@ -20275,6 +22720,7 @@ export namespace Prisma {
     address_extra?: string | null
     profile_image_url?: string | null
     oauth_accounts?: OauthAccountModelUncheckedCreateNestedManyWithoutClientInput
+    zipzoong_care_requests?: ZipzoongCareRequestModelUncheckedCreateNestedManyWithoutClientInput
   }
 
   export type ClientModelUpdateInput = {
@@ -20288,6 +22734,7 @@ export namespace Prisma {
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
     base?: UserModelUpdateOneRequiredWithoutClientNestedInput
     oauth_accounts?: OauthAccountModelUpdateManyWithoutClientNestedInput
+    zipzoong_care_requests?: ZipzoongCareRequestModelUpdateManyWithoutClientNestedInput
   }
 
   export type ClientModelUncheckedUpdateInput = {
@@ -20301,6 +22748,7 @@ export namespace Prisma {
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
     oauth_accounts?: OauthAccountModelUncheckedUpdateManyWithoutClientNestedInput
+    zipzoong_care_requests?: ZipzoongCareRequestModelUncheckedUpdateManyWithoutClientNestedInput
   }
 
   export type ClientModelCreateManyInput = {
@@ -20349,6 +22797,7 @@ export namespace Prisma {
     hs_provider?: HSProviderModelCreateNestedOneWithoutBaseInput
     oauth_accounts?: OauthAccountModelCreateNestedManyWithoutBiz_userInput
     biz_certification_images?: BIZCertificationImageModelCreateNestedManyWithoutBiz_userInput
+    zipzoong_cares?: ZipzoongCareModelCreateNestedManyWithoutBiz_userInput
   }
 
   export type BIZUserModelUncheckedCreateInput = {
@@ -20362,6 +22811,7 @@ export namespace Prisma {
     hs_provider?: HSProviderModelUncheckedCreateNestedOneWithoutBaseInput
     oauth_accounts?: OauthAccountModelUncheckedCreateNestedManyWithoutBiz_userInput
     biz_certification_images?: BIZCertificationImageModelUncheckedCreateNestedManyWithoutBiz_userInput
+    zipzoong_cares?: ZipzoongCareModelUncheckedCreateNestedManyWithoutBiz_userInput
   }
 
   export type BIZUserModelUpdateInput = {
@@ -20375,6 +22825,7 @@ export namespace Prisma {
     hs_provider?: HSProviderModelUpdateOneWithoutBaseNestedInput
     oauth_accounts?: OauthAccountModelUpdateManyWithoutBiz_userNestedInput
     biz_certification_images?: BIZCertificationImageModelUpdateManyWithoutBiz_userNestedInput
+    zipzoong_cares?: ZipzoongCareModelUpdateManyWithoutBiz_userNestedInput
   }
 
   export type BIZUserModelUncheckedUpdateInput = {
@@ -20388,6 +22839,7 @@ export namespace Prisma {
     hs_provider?: HSProviderModelUncheckedUpdateOneWithoutBaseNestedInput
     oauth_accounts?: OauthAccountModelUncheckedUpdateManyWithoutBiz_userNestedInput
     biz_certification_images?: BIZCertificationImageModelUncheckedUpdateManyWithoutBiz_userNestedInput
+    zipzoong_cares?: ZipzoongCareModelUncheckedUpdateManyWithoutBiz_userNestedInput
   }
 
   export type BIZUserModelCreateManyInput = {
@@ -20423,7 +22875,7 @@ export namespace Prisma {
     is_deleted: boolean
     deleted_at?: Date | string | null
     url: string
-    access_type: ImageAccessType
+    access_type: ResourceAccessType
     biz_user: BIZUserModelCreateNestedOneWithoutBiz_certification_imagesInput
   }
 
@@ -20435,7 +22887,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     biz_user_id: string
     url: string
-    access_type: ImageAccessType
+    access_type: ResourceAccessType
   }
 
   export type BIZCertificationImageModelUpdateInput = {
@@ -20445,7 +22897,7 @@ export namespace Prisma {
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     url?: StringFieldUpdateOperationsInput | string
-    access_type?: EnumImageAccessTypeFieldUpdateOperationsInput | ImageAccessType
+    access_type?: EnumResourceAccessTypeFieldUpdateOperationsInput | ResourceAccessType
     biz_user?: BIZUserModelUpdateOneRequiredWithoutBiz_certification_imagesNestedInput
   }
 
@@ -20457,7 +22909,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biz_user_id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    access_type?: EnumImageAccessTypeFieldUpdateOperationsInput | ImageAccessType
+    access_type?: EnumResourceAccessTypeFieldUpdateOperationsInput | ResourceAccessType
   }
 
   export type BIZCertificationImageModelCreateManyInput = {
@@ -20468,7 +22920,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     biz_user_id: string
     url: string
-    access_type: ImageAccessType
+    access_type: ResourceAccessType
   }
 
   export type BIZCertificationImageModelUpdateManyMutationInput = {
@@ -20478,7 +22930,7 @@ export namespace Prisma {
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     url?: StringFieldUpdateOperationsInput | string
-    access_type?: EnumImageAccessTypeFieldUpdateOperationsInput | ImageAccessType
+    access_type?: EnumResourceAccessTypeFieldUpdateOperationsInput | ResourceAccessType
   }
 
   export type BIZCertificationImageModelUncheckedUpdateManyInput = {
@@ -20489,7 +22941,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     biz_user_id?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    access_type?: EnumImageAccessTypeFieldUpdateOperationsInput | ImageAccessType
+    access_type?: EnumResourceAccessTypeFieldUpdateOperationsInput | ResourceAccessType
   }
 
   export type REAgentModelCreateInput = {
@@ -21572,6 +24024,76 @@ export namespace Prisma {
     user_id?: SortOrder
   }
 
+  export type ClientModelRelationFilter = {
+    is?: ClientModelWhereInput
+    isNot?: ClientModelWhereInput
+  }
+
+  export type ZipzoongCareRequestModelCountOrderByAggregateInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrder
+    client_id?: SortOrder
+    url?: SortOrder
+  }
+
+  export type ZipzoongCareRequestModelMaxOrderByAggregateInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrder
+    client_id?: SortOrder
+    url?: SortOrder
+  }
+
+  export type ZipzoongCareRequestModelMinOrderByAggregateInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrder
+    client_id?: SortOrder
+    url?: SortOrder
+  }
+
+  export type BIZUserModelRelationFilter = {
+    is?: BIZUserModelWhereInput
+    isNot?: BIZUserModelWhereInput
+  }
+
+  export type ZipzoongCareModelCountOrderByAggregateInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrder
+    biz_user_id?: SortOrder
+    url?: SortOrder
+  }
+
+  export type ZipzoongCareModelMaxOrderByAggregateInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrder
+    biz_user_id?: SortOrder
+    url?: SortOrder
+  }
+
+  export type ZipzoongCareModelMinOrderByAggregateInput = {
+    id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    is_deleted?: SortOrder
+    deleted_at?: SortOrder
+    biz_user_id?: SortOrder
+    url?: SortOrder
+  }
+
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -21658,7 +24180,17 @@ export namespace Prisma {
     none?: OauthAccountModelWhereInput
   }
 
+  export type ZipzoongCareRequestModelListRelationFilter = {
+    every?: ZipzoongCareRequestModelWhereInput
+    some?: ZipzoongCareRequestModelWhereInput
+    none?: ZipzoongCareRequestModelWhereInput
+  }
+
   export type OauthAccountModelOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ZipzoongCareRequestModelOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -21724,7 +24256,17 @@ export namespace Prisma {
     none?: BIZCertificationImageModelWhereInput
   }
 
+  export type ZipzoongCareModelListRelationFilter = {
+    every?: ZipzoongCareModelWhereInput
+    some?: ZipzoongCareModelWhereInput
+    none?: ZipzoongCareModelWhereInput
+  }
+
   export type BIZCertificationImageModelOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ZipzoongCareModelOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -21755,16 +24297,11 @@ export namespace Prisma {
     profile_image_url?: SortOrder
   }
 
-  export type EnumImageAccessTypeFilter<$PrismaModel = never> = {
-    equals?: ImageAccessType | EnumImageAccessTypeFieldRefInput<$PrismaModel>
-    in?: ImageAccessType[] | ListEnumImageAccessTypeFieldRefInput<$PrismaModel>
-    notIn?: ImageAccessType[] | ListEnumImageAccessTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumImageAccessTypeFilter<$PrismaModel> | ImageAccessType
-  }
-
-  export type BIZUserModelRelationFilter = {
-    is?: BIZUserModelWhereInput
-    isNot?: BIZUserModelWhereInput
+  export type EnumResourceAccessTypeFilter<$PrismaModel = never> = {
+    equals?: ResourceAccessType | EnumResourceAccessTypeFieldRefInput<$PrismaModel>
+    in?: ResourceAccessType[] | ListEnumResourceAccessTypeFieldRefInput<$PrismaModel>
+    notIn?: ResourceAccessType[] | ListEnumResourceAccessTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumResourceAccessTypeFilter<$PrismaModel> | ResourceAccessType
   }
 
   export type BIZCertificationImageModelCountOrderByAggregateInput = {
@@ -21800,14 +24337,14 @@ export namespace Prisma {
     access_type?: SortOrder
   }
 
-  export type EnumImageAccessTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: ImageAccessType | EnumImageAccessTypeFieldRefInput<$PrismaModel>
-    in?: ImageAccessType[] | ListEnumImageAccessTypeFieldRefInput<$PrismaModel>
-    notIn?: ImageAccessType[] | ListEnumImageAccessTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumImageAccessTypeWithAggregatesFilter<$PrismaModel> | ImageAccessType
+  export type EnumResourceAccessTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: ResourceAccessType | EnumResourceAccessTypeFieldRefInput<$PrismaModel>
+    in?: ResourceAccessType[] | ListEnumResourceAccessTypeFieldRefInput<$PrismaModel>
+    notIn?: ResourceAccessType[] | ListEnumResourceAccessTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumResourceAccessTypeWithAggregatesFilter<$PrismaModel> | ResourceAccessType
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumImageAccessTypeFilter<$PrismaModel>
-    _max?: NestedEnumImageAccessTypeFilter<$PrismaModel>
+    _min?: NestedEnumResourceAccessTypeFilter<$PrismaModel>
+    _max?: NestedEnumResourceAccessTypeFilter<$PrismaModel>
   }
 
   export type REExpertiseModelRelationFilter = {
@@ -22363,6 +24900,34 @@ export namespace Prisma {
     update?: XOR<XOR<UserModelUpdateToOneWithWhereWithoutTerms_agreementsInput, UserModelUpdateWithoutTerms_agreementsInput>, UserModelUncheckedUpdateWithoutTerms_agreementsInput>
   }
 
+  export type ClientModelCreateNestedOneWithoutZipzoong_care_requestsInput = {
+    create?: XOR<ClientModelCreateWithoutZipzoong_care_requestsInput, ClientModelUncheckedCreateWithoutZipzoong_care_requestsInput>
+    connectOrCreate?: ClientModelCreateOrConnectWithoutZipzoong_care_requestsInput
+    connect?: ClientModelWhereUniqueInput
+  }
+
+  export type ClientModelUpdateOneRequiredWithoutZipzoong_care_requestsNestedInput = {
+    create?: XOR<ClientModelCreateWithoutZipzoong_care_requestsInput, ClientModelUncheckedCreateWithoutZipzoong_care_requestsInput>
+    connectOrCreate?: ClientModelCreateOrConnectWithoutZipzoong_care_requestsInput
+    upsert?: ClientModelUpsertWithoutZipzoong_care_requestsInput
+    connect?: ClientModelWhereUniqueInput
+    update?: XOR<XOR<ClientModelUpdateToOneWithWhereWithoutZipzoong_care_requestsInput, ClientModelUpdateWithoutZipzoong_care_requestsInput>, ClientModelUncheckedUpdateWithoutZipzoong_care_requestsInput>
+  }
+
+  export type BIZUserModelCreateNestedOneWithoutZipzoong_caresInput = {
+    create?: XOR<BIZUserModelCreateWithoutZipzoong_caresInput, BIZUserModelUncheckedCreateWithoutZipzoong_caresInput>
+    connectOrCreate?: BIZUserModelCreateOrConnectWithoutZipzoong_caresInput
+    connect?: BIZUserModelWhereUniqueInput
+  }
+
+  export type BIZUserModelUpdateOneRequiredWithoutZipzoong_caresNestedInput = {
+    create?: XOR<BIZUserModelCreateWithoutZipzoong_caresInput, BIZUserModelUncheckedCreateWithoutZipzoong_caresInput>
+    connectOrCreate?: BIZUserModelCreateOrConnectWithoutZipzoong_caresInput
+    upsert?: BIZUserModelUpsertWithoutZipzoong_caresInput
+    connect?: BIZUserModelWhereUniqueInput
+    update?: XOR<XOR<BIZUserModelUpdateToOneWithWhereWithoutZipzoong_caresInput, BIZUserModelUpdateWithoutZipzoong_caresInput>, BIZUserModelUncheckedUpdateWithoutZipzoong_caresInput>
+  }
+
   export type ClientModelCreateNestedOneWithoutBaseInput = {
     create?: XOR<ClientModelCreateWithoutBaseInput, ClientModelUncheckedCreateWithoutBaseInput>
     connectOrCreate?: ClientModelCreateOrConnectWithoutBaseInput
@@ -22486,11 +25051,25 @@ export namespace Prisma {
     connect?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
   }
 
+  export type ZipzoongCareRequestModelCreateNestedManyWithoutClientInput = {
+    create?: XOR<ZipzoongCareRequestModelCreateWithoutClientInput, ZipzoongCareRequestModelUncheckedCreateWithoutClientInput> | ZipzoongCareRequestModelCreateWithoutClientInput[] | ZipzoongCareRequestModelUncheckedCreateWithoutClientInput[]
+    connectOrCreate?: ZipzoongCareRequestModelCreateOrConnectWithoutClientInput | ZipzoongCareRequestModelCreateOrConnectWithoutClientInput[]
+    createMany?: ZipzoongCareRequestModelCreateManyClientInputEnvelope
+    connect?: ZipzoongCareRequestModelWhereUniqueInput | ZipzoongCareRequestModelWhereUniqueInput[]
+  }
+
   export type OauthAccountModelUncheckedCreateNestedManyWithoutClientInput = {
     create?: XOR<OauthAccountModelCreateWithoutClientInput, OauthAccountModelUncheckedCreateWithoutClientInput> | OauthAccountModelCreateWithoutClientInput[] | OauthAccountModelUncheckedCreateWithoutClientInput[]
     connectOrCreate?: OauthAccountModelCreateOrConnectWithoutClientInput | OauthAccountModelCreateOrConnectWithoutClientInput[]
     createMany?: OauthAccountModelCreateManyClientInputEnvelope
     connect?: OauthAccountModelWhereUniqueInput | OauthAccountModelWhereUniqueInput[]
+  }
+
+  export type ZipzoongCareRequestModelUncheckedCreateNestedManyWithoutClientInput = {
+    create?: XOR<ZipzoongCareRequestModelCreateWithoutClientInput, ZipzoongCareRequestModelUncheckedCreateWithoutClientInput> | ZipzoongCareRequestModelCreateWithoutClientInput[] | ZipzoongCareRequestModelUncheckedCreateWithoutClientInput[]
+    connectOrCreate?: ZipzoongCareRequestModelCreateOrConnectWithoutClientInput | ZipzoongCareRequestModelCreateOrConnectWithoutClientInput[]
+    createMany?: ZipzoongCareRequestModelCreateManyClientInputEnvelope
+    connect?: ZipzoongCareRequestModelWhereUniqueInput | ZipzoongCareRequestModelWhereUniqueInput[]
   }
 
   export type NullableEnumGenderTypeFieldUpdateOperationsInput = {
@@ -22519,6 +25098,20 @@ export namespace Prisma {
     deleteMany?: OauthAccountModelScalarWhereInput | OauthAccountModelScalarWhereInput[]
   }
 
+  export type ZipzoongCareRequestModelUpdateManyWithoutClientNestedInput = {
+    create?: XOR<ZipzoongCareRequestModelCreateWithoutClientInput, ZipzoongCareRequestModelUncheckedCreateWithoutClientInput> | ZipzoongCareRequestModelCreateWithoutClientInput[] | ZipzoongCareRequestModelUncheckedCreateWithoutClientInput[]
+    connectOrCreate?: ZipzoongCareRequestModelCreateOrConnectWithoutClientInput | ZipzoongCareRequestModelCreateOrConnectWithoutClientInput[]
+    upsert?: ZipzoongCareRequestModelUpsertWithWhereUniqueWithoutClientInput | ZipzoongCareRequestModelUpsertWithWhereUniqueWithoutClientInput[]
+    createMany?: ZipzoongCareRequestModelCreateManyClientInputEnvelope
+    set?: ZipzoongCareRequestModelWhereUniqueInput | ZipzoongCareRequestModelWhereUniqueInput[]
+    disconnect?: ZipzoongCareRequestModelWhereUniqueInput | ZipzoongCareRequestModelWhereUniqueInput[]
+    delete?: ZipzoongCareRequestModelWhereUniqueInput | ZipzoongCareRequestModelWhereUniqueInput[]
+    connect?: ZipzoongCareRequestModelWhereUniqueInput | ZipzoongCareRequestModelWhereUniqueInput[]
+    update?: ZipzoongCareRequestModelUpdateWithWhereUniqueWithoutClientInput | ZipzoongCareRequestModelUpdateWithWhereUniqueWithoutClientInput[]
+    updateMany?: ZipzoongCareRequestModelUpdateManyWithWhereWithoutClientInput | ZipzoongCareRequestModelUpdateManyWithWhereWithoutClientInput[]
+    deleteMany?: ZipzoongCareRequestModelScalarWhereInput | ZipzoongCareRequestModelScalarWhereInput[]
+  }
+
   export type OauthAccountModelUncheckedUpdateManyWithoutClientNestedInput = {
     create?: XOR<OauthAccountModelCreateWithoutClientInput, OauthAccountModelUncheckedCreateWithoutClientInput> | OauthAccountModelCreateWithoutClientInput[] | OauthAccountModelUncheckedCreateWithoutClientInput[]
     connectOrCreate?: OauthAccountModelCreateOrConnectWithoutClientInput | OauthAccountModelCreateOrConnectWithoutClientInput[]
@@ -22531,6 +25124,20 @@ export namespace Prisma {
     update?: OauthAccountModelUpdateWithWhereUniqueWithoutClientInput | OauthAccountModelUpdateWithWhereUniqueWithoutClientInput[]
     updateMany?: OauthAccountModelUpdateManyWithWhereWithoutClientInput | OauthAccountModelUpdateManyWithWhereWithoutClientInput[]
     deleteMany?: OauthAccountModelScalarWhereInput | OauthAccountModelScalarWhereInput[]
+  }
+
+  export type ZipzoongCareRequestModelUncheckedUpdateManyWithoutClientNestedInput = {
+    create?: XOR<ZipzoongCareRequestModelCreateWithoutClientInput, ZipzoongCareRequestModelUncheckedCreateWithoutClientInput> | ZipzoongCareRequestModelCreateWithoutClientInput[] | ZipzoongCareRequestModelUncheckedCreateWithoutClientInput[]
+    connectOrCreate?: ZipzoongCareRequestModelCreateOrConnectWithoutClientInput | ZipzoongCareRequestModelCreateOrConnectWithoutClientInput[]
+    upsert?: ZipzoongCareRequestModelUpsertWithWhereUniqueWithoutClientInput | ZipzoongCareRequestModelUpsertWithWhereUniqueWithoutClientInput[]
+    createMany?: ZipzoongCareRequestModelCreateManyClientInputEnvelope
+    set?: ZipzoongCareRequestModelWhereUniqueInput | ZipzoongCareRequestModelWhereUniqueInput[]
+    disconnect?: ZipzoongCareRequestModelWhereUniqueInput | ZipzoongCareRequestModelWhereUniqueInput[]
+    delete?: ZipzoongCareRequestModelWhereUniqueInput | ZipzoongCareRequestModelWhereUniqueInput[]
+    connect?: ZipzoongCareRequestModelWhereUniqueInput | ZipzoongCareRequestModelWhereUniqueInput[]
+    update?: ZipzoongCareRequestModelUpdateWithWhereUniqueWithoutClientInput | ZipzoongCareRequestModelUpdateWithWhereUniqueWithoutClientInput[]
+    updateMany?: ZipzoongCareRequestModelUpdateManyWithWhereWithoutClientInput | ZipzoongCareRequestModelUpdateManyWithWhereWithoutClientInput[]
+    deleteMany?: ZipzoongCareRequestModelScalarWhereInput | ZipzoongCareRequestModelScalarWhereInput[]
   }
 
   export type UserModelCreateNestedOneWithoutBiz_userInput = {
@@ -22565,6 +25172,13 @@ export namespace Prisma {
     connect?: BIZCertificationImageModelWhereUniqueInput | BIZCertificationImageModelWhereUniqueInput[]
   }
 
+  export type ZipzoongCareModelCreateNestedManyWithoutBiz_userInput = {
+    create?: XOR<ZipzoongCareModelCreateWithoutBiz_userInput, ZipzoongCareModelUncheckedCreateWithoutBiz_userInput> | ZipzoongCareModelCreateWithoutBiz_userInput[] | ZipzoongCareModelUncheckedCreateWithoutBiz_userInput[]
+    connectOrCreate?: ZipzoongCareModelCreateOrConnectWithoutBiz_userInput | ZipzoongCareModelCreateOrConnectWithoutBiz_userInput[]
+    createMany?: ZipzoongCareModelCreateManyBiz_userInputEnvelope
+    connect?: ZipzoongCareModelWhereUniqueInput | ZipzoongCareModelWhereUniqueInput[]
+  }
+
   export type REAgentModelUncheckedCreateNestedOneWithoutBaseInput = {
     create?: XOR<REAgentModelCreateWithoutBaseInput, REAgentModelUncheckedCreateWithoutBaseInput>
     connectOrCreate?: REAgentModelCreateOrConnectWithoutBaseInput
@@ -22589,6 +25203,13 @@ export namespace Prisma {
     connectOrCreate?: BIZCertificationImageModelCreateOrConnectWithoutBiz_userInput | BIZCertificationImageModelCreateOrConnectWithoutBiz_userInput[]
     createMany?: BIZCertificationImageModelCreateManyBiz_userInputEnvelope
     connect?: BIZCertificationImageModelWhereUniqueInput | BIZCertificationImageModelWhereUniqueInput[]
+  }
+
+  export type ZipzoongCareModelUncheckedCreateNestedManyWithoutBiz_userInput = {
+    create?: XOR<ZipzoongCareModelCreateWithoutBiz_userInput, ZipzoongCareModelUncheckedCreateWithoutBiz_userInput> | ZipzoongCareModelCreateWithoutBiz_userInput[] | ZipzoongCareModelUncheckedCreateWithoutBiz_userInput[]
+    connectOrCreate?: ZipzoongCareModelCreateOrConnectWithoutBiz_userInput | ZipzoongCareModelCreateOrConnectWithoutBiz_userInput[]
+    createMany?: ZipzoongCareModelCreateManyBiz_userInputEnvelope
+    connect?: ZipzoongCareModelWhereUniqueInput | ZipzoongCareModelWhereUniqueInput[]
   }
 
   export type UserModelUpdateOneRequiredWithoutBiz_userNestedInput = {
@@ -22647,6 +25268,20 @@ export namespace Prisma {
     deleteMany?: BIZCertificationImageModelScalarWhereInput | BIZCertificationImageModelScalarWhereInput[]
   }
 
+  export type ZipzoongCareModelUpdateManyWithoutBiz_userNestedInput = {
+    create?: XOR<ZipzoongCareModelCreateWithoutBiz_userInput, ZipzoongCareModelUncheckedCreateWithoutBiz_userInput> | ZipzoongCareModelCreateWithoutBiz_userInput[] | ZipzoongCareModelUncheckedCreateWithoutBiz_userInput[]
+    connectOrCreate?: ZipzoongCareModelCreateOrConnectWithoutBiz_userInput | ZipzoongCareModelCreateOrConnectWithoutBiz_userInput[]
+    upsert?: ZipzoongCareModelUpsertWithWhereUniqueWithoutBiz_userInput | ZipzoongCareModelUpsertWithWhereUniqueWithoutBiz_userInput[]
+    createMany?: ZipzoongCareModelCreateManyBiz_userInputEnvelope
+    set?: ZipzoongCareModelWhereUniqueInput | ZipzoongCareModelWhereUniqueInput[]
+    disconnect?: ZipzoongCareModelWhereUniqueInput | ZipzoongCareModelWhereUniqueInput[]
+    delete?: ZipzoongCareModelWhereUniqueInput | ZipzoongCareModelWhereUniqueInput[]
+    connect?: ZipzoongCareModelWhereUniqueInput | ZipzoongCareModelWhereUniqueInput[]
+    update?: ZipzoongCareModelUpdateWithWhereUniqueWithoutBiz_userInput | ZipzoongCareModelUpdateWithWhereUniqueWithoutBiz_userInput[]
+    updateMany?: ZipzoongCareModelUpdateManyWithWhereWithoutBiz_userInput | ZipzoongCareModelUpdateManyWithWhereWithoutBiz_userInput[]
+    deleteMany?: ZipzoongCareModelScalarWhereInput | ZipzoongCareModelScalarWhereInput[]
+  }
+
   export type REAgentModelUncheckedUpdateOneWithoutBaseNestedInput = {
     create?: XOR<REAgentModelCreateWithoutBaseInput, REAgentModelUncheckedCreateWithoutBaseInput>
     connectOrCreate?: REAgentModelCreateOrConnectWithoutBaseInput
@@ -22695,14 +25330,28 @@ export namespace Prisma {
     deleteMany?: BIZCertificationImageModelScalarWhereInput | BIZCertificationImageModelScalarWhereInput[]
   }
 
+  export type ZipzoongCareModelUncheckedUpdateManyWithoutBiz_userNestedInput = {
+    create?: XOR<ZipzoongCareModelCreateWithoutBiz_userInput, ZipzoongCareModelUncheckedCreateWithoutBiz_userInput> | ZipzoongCareModelCreateWithoutBiz_userInput[] | ZipzoongCareModelUncheckedCreateWithoutBiz_userInput[]
+    connectOrCreate?: ZipzoongCareModelCreateOrConnectWithoutBiz_userInput | ZipzoongCareModelCreateOrConnectWithoutBiz_userInput[]
+    upsert?: ZipzoongCareModelUpsertWithWhereUniqueWithoutBiz_userInput | ZipzoongCareModelUpsertWithWhereUniqueWithoutBiz_userInput[]
+    createMany?: ZipzoongCareModelCreateManyBiz_userInputEnvelope
+    set?: ZipzoongCareModelWhereUniqueInput | ZipzoongCareModelWhereUniqueInput[]
+    disconnect?: ZipzoongCareModelWhereUniqueInput | ZipzoongCareModelWhereUniqueInput[]
+    delete?: ZipzoongCareModelWhereUniqueInput | ZipzoongCareModelWhereUniqueInput[]
+    connect?: ZipzoongCareModelWhereUniqueInput | ZipzoongCareModelWhereUniqueInput[]
+    update?: ZipzoongCareModelUpdateWithWhereUniqueWithoutBiz_userInput | ZipzoongCareModelUpdateWithWhereUniqueWithoutBiz_userInput[]
+    updateMany?: ZipzoongCareModelUpdateManyWithWhereWithoutBiz_userInput | ZipzoongCareModelUpdateManyWithWhereWithoutBiz_userInput[]
+    deleteMany?: ZipzoongCareModelScalarWhereInput | ZipzoongCareModelScalarWhereInput[]
+  }
+
   export type BIZUserModelCreateNestedOneWithoutBiz_certification_imagesInput = {
     create?: XOR<BIZUserModelCreateWithoutBiz_certification_imagesInput, BIZUserModelUncheckedCreateWithoutBiz_certification_imagesInput>
     connectOrCreate?: BIZUserModelCreateOrConnectWithoutBiz_certification_imagesInput
     connect?: BIZUserModelWhereUniqueInput
   }
 
-  export type EnumImageAccessTypeFieldUpdateOperationsInput = {
-    set?: ImageAccessType
+  export type EnumResourceAccessTypeFieldUpdateOperationsInput = {
+    set?: ResourceAccessType
   }
 
   export type BIZUserModelUpdateOneRequiredWithoutBiz_certification_imagesNestedInput = {
@@ -23294,21 +25943,21 @@ export namespace Prisma {
     _max?: NestedEnumGenderTypeNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumImageAccessTypeFilter<$PrismaModel = never> = {
-    equals?: ImageAccessType | EnumImageAccessTypeFieldRefInput<$PrismaModel>
-    in?: ImageAccessType[] | ListEnumImageAccessTypeFieldRefInput<$PrismaModel>
-    notIn?: ImageAccessType[] | ListEnumImageAccessTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumImageAccessTypeFilter<$PrismaModel> | ImageAccessType
+  export type NestedEnumResourceAccessTypeFilter<$PrismaModel = never> = {
+    equals?: ResourceAccessType | EnumResourceAccessTypeFieldRefInput<$PrismaModel>
+    in?: ResourceAccessType[] | ListEnumResourceAccessTypeFieldRefInput<$PrismaModel>
+    notIn?: ResourceAccessType[] | ListEnumResourceAccessTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumResourceAccessTypeFilter<$PrismaModel> | ResourceAccessType
   }
 
-  export type NestedEnumImageAccessTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: ImageAccessType | EnumImageAccessTypeFieldRefInput<$PrismaModel>
-    in?: ImageAccessType[] | ListEnumImageAccessTypeFieldRefInput<$PrismaModel>
-    notIn?: ImageAccessType[] | ListEnumImageAccessTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumImageAccessTypeWithAggregatesFilter<$PrismaModel> | ImageAccessType
+  export type NestedEnumResourceAccessTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: ResourceAccessType | EnumResourceAccessTypeFieldRefInput<$PrismaModel>
+    in?: ResourceAccessType[] | ListEnumResourceAccessTypeFieldRefInput<$PrismaModel>
+    notIn?: ResourceAccessType[] | ListEnumResourceAccessTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumResourceAccessTypeWithAggregatesFilter<$PrismaModel> | ResourceAccessType
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumImageAccessTypeFilter<$PrismaModel>
-    _max?: NestedEnumImageAccessTypeFilter<$PrismaModel>
+    _min?: NestedEnumResourceAccessTypeFilter<$PrismaModel>
+    _max?: NestedEnumResourceAccessTypeFilter<$PrismaModel>
   }
 
   export type NestedEnumOauthTypeFilter<$PrismaModel = never> = {
@@ -23517,6 +26166,142 @@ export namespace Prisma {
     biz_user?: BIZUserModelUncheckedUpdateOneWithoutBaseNestedInput
   }
 
+  export type ClientModelCreateWithoutZipzoong_care_requestsInput = {
+    birth?: Date | string | null
+    gender?: GenderType | null
+    phone?: string | null
+    address_zone_code?: string | null
+    address_road?: string | null
+    address_detail?: string | null
+    address_extra?: string | null
+    profile_image_url?: string | null
+    base: UserModelCreateNestedOneWithoutClientInput
+    oauth_accounts?: OauthAccountModelCreateNestedManyWithoutClientInput
+  }
+
+  export type ClientModelUncheckedCreateWithoutZipzoong_care_requestsInput = {
+    id: string
+    birth?: Date | string | null
+    gender?: GenderType | null
+    phone?: string | null
+    address_zone_code?: string | null
+    address_road?: string | null
+    address_detail?: string | null
+    address_extra?: string | null
+    profile_image_url?: string | null
+    oauth_accounts?: OauthAccountModelUncheckedCreateNestedManyWithoutClientInput
+  }
+
+  export type ClientModelCreateOrConnectWithoutZipzoong_care_requestsInput = {
+    where: ClientModelWhereUniqueInput
+    create: XOR<ClientModelCreateWithoutZipzoong_care_requestsInput, ClientModelUncheckedCreateWithoutZipzoong_care_requestsInput>
+  }
+
+  export type ClientModelUpsertWithoutZipzoong_care_requestsInput = {
+    update: XOR<ClientModelUpdateWithoutZipzoong_care_requestsInput, ClientModelUncheckedUpdateWithoutZipzoong_care_requestsInput>
+    create: XOR<ClientModelCreateWithoutZipzoong_care_requestsInput, ClientModelUncheckedCreateWithoutZipzoong_care_requestsInput>
+    where?: ClientModelWhereInput
+  }
+
+  export type ClientModelUpdateToOneWithWhereWithoutZipzoong_care_requestsInput = {
+    where?: ClientModelWhereInput
+    data: XOR<ClientModelUpdateWithoutZipzoong_care_requestsInput, ClientModelUncheckedUpdateWithoutZipzoong_care_requestsInput>
+  }
+
+  export type ClientModelUpdateWithoutZipzoong_care_requestsInput = {
+    birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderTypeFieldUpdateOperationsInput | GenderType | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address_zone_code?: NullableStringFieldUpdateOperationsInput | string | null
+    address_road?: NullableStringFieldUpdateOperationsInput | string | null
+    address_detail?: NullableStringFieldUpdateOperationsInput | string | null
+    address_extra?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    base?: UserModelUpdateOneRequiredWithoutClientNestedInput
+    oauth_accounts?: OauthAccountModelUpdateManyWithoutClientNestedInput
+  }
+
+  export type ClientModelUncheckedUpdateWithoutZipzoong_care_requestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderTypeFieldUpdateOperationsInput | GenderType | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address_zone_code?: NullableStringFieldUpdateOperationsInput | string | null
+    address_road?: NullableStringFieldUpdateOperationsInput | string | null
+    address_detail?: NullableStringFieldUpdateOperationsInput | string | null
+    address_extra?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    oauth_accounts?: OauthAccountModelUncheckedUpdateManyWithoutClientNestedInput
+  }
+
+  export type BIZUserModelCreateWithoutZipzoong_caresInput = {
+    is_verified: boolean
+    introduction_title: string
+    introduction_content: string
+    phone: string
+    profile_image_url: string
+    base: UserModelCreateNestedOneWithoutBiz_userInput
+    re_agent?: REAgentModelCreateNestedOneWithoutBaseInput
+    hs_provider?: HSProviderModelCreateNestedOneWithoutBaseInput
+    oauth_accounts?: OauthAccountModelCreateNestedManyWithoutBiz_userInput
+    biz_certification_images?: BIZCertificationImageModelCreateNestedManyWithoutBiz_userInput
+  }
+
+  export type BIZUserModelUncheckedCreateWithoutZipzoong_caresInput = {
+    id: string
+    is_verified: boolean
+    introduction_title: string
+    introduction_content: string
+    phone: string
+    profile_image_url: string
+    re_agent?: REAgentModelUncheckedCreateNestedOneWithoutBaseInput
+    hs_provider?: HSProviderModelUncheckedCreateNestedOneWithoutBaseInput
+    oauth_accounts?: OauthAccountModelUncheckedCreateNestedManyWithoutBiz_userInput
+    biz_certification_images?: BIZCertificationImageModelUncheckedCreateNestedManyWithoutBiz_userInput
+  }
+
+  export type BIZUserModelCreateOrConnectWithoutZipzoong_caresInput = {
+    where: BIZUserModelWhereUniqueInput
+    create: XOR<BIZUserModelCreateWithoutZipzoong_caresInput, BIZUserModelUncheckedCreateWithoutZipzoong_caresInput>
+  }
+
+  export type BIZUserModelUpsertWithoutZipzoong_caresInput = {
+    update: XOR<BIZUserModelUpdateWithoutZipzoong_caresInput, BIZUserModelUncheckedUpdateWithoutZipzoong_caresInput>
+    create: XOR<BIZUserModelCreateWithoutZipzoong_caresInput, BIZUserModelUncheckedCreateWithoutZipzoong_caresInput>
+    where?: BIZUserModelWhereInput
+  }
+
+  export type BIZUserModelUpdateToOneWithWhereWithoutZipzoong_caresInput = {
+    where?: BIZUserModelWhereInput
+    data: XOR<BIZUserModelUpdateWithoutZipzoong_caresInput, BIZUserModelUncheckedUpdateWithoutZipzoong_caresInput>
+  }
+
+  export type BIZUserModelUpdateWithoutZipzoong_caresInput = {
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
+    introduction_title?: StringFieldUpdateOperationsInput | string
+    introduction_content?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    profile_image_url?: StringFieldUpdateOperationsInput | string
+    base?: UserModelUpdateOneRequiredWithoutBiz_userNestedInput
+    re_agent?: REAgentModelUpdateOneWithoutBaseNestedInput
+    hs_provider?: HSProviderModelUpdateOneWithoutBaseNestedInput
+    oauth_accounts?: OauthAccountModelUpdateManyWithoutBiz_userNestedInput
+    biz_certification_images?: BIZCertificationImageModelUpdateManyWithoutBiz_userNestedInput
+  }
+
+  export type BIZUserModelUncheckedUpdateWithoutZipzoong_caresInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
+    introduction_title?: StringFieldUpdateOperationsInput | string
+    introduction_content?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    profile_image_url?: StringFieldUpdateOperationsInput | string
+    re_agent?: REAgentModelUncheckedUpdateOneWithoutBaseNestedInput
+    hs_provider?: HSProviderModelUncheckedUpdateOneWithoutBaseNestedInput
+    oauth_accounts?: OauthAccountModelUncheckedUpdateManyWithoutBiz_userNestedInput
+    biz_certification_images?: BIZCertificationImageModelUncheckedUpdateManyWithoutBiz_userNestedInput
+  }
+
   export type ClientModelCreateWithoutBaseInput = {
     birth?: Date | string | null
     gender?: GenderType | null
@@ -23527,6 +26312,7 @@ export namespace Prisma {
     address_extra?: string | null
     profile_image_url?: string | null
     oauth_accounts?: OauthAccountModelCreateNestedManyWithoutClientInput
+    zipzoong_care_requests?: ZipzoongCareRequestModelCreateNestedManyWithoutClientInput
   }
 
   export type ClientModelUncheckedCreateWithoutBaseInput = {
@@ -23539,6 +26325,7 @@ export namespace Prisma {
     address_extra?: string | null
     profile_image_url?: string | null
     oauth_accounts?: OauthAccountModelUncheckedCreateNestedManyWithoutClientInput
+    zipzoong_care_requests?: ZipzoongCareRequestModelUncheckedCreateNestedManyWithoutClientInput
   }
 
   export type ClientModelCreateOrConnectWithoutBaseInput = {
@@ -23556,6 +26343,7 @@ export namespace Prisma {
     hs_provider?: HSProviderModelCreateNestedOneWithoutBaseInput
     oauth_accounts?: OauthAccountModelCreateNestedManyWithoutBiz_userInput
     biz_certification_images?: BIZCertificationImageModelCreateNestedManyWithoutBiz_userInput
+    zipzoong_cares?: ZipzoongCareModelCreateNestedManyWithoutBiz_userInput
   }
 
   export type BIZUserModelUncheckedCreateWithoutBaseInput = {
@@ -23568,6 +26356,7 @@ export namespace Prisma {
     hs_provider?: HSProviderModelUncheckedCreateNestedOneWithoutBaseInput
     oauth_accounts?: OauthAccountModelUncheckedCreateNestedManyWithoutBiz_userInput
     biz_certification_images?: BIZCertificationImageModelUncheckedCreateNestedManyWithoutBiz_userInput
+    zipzoong_cares?: ZipzoongCareModelUncheckedCreateNestedManyWithoutBiz_userInput
   }
 
   export type BIZUserModelCreateOrConnectWithoutBaseInput = {
@@ -23624,6 +26413,7 @@ export namespace Prisma {
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
     oauth_accounts?: OauthAccountModelUpdateManyWithoutClientNestedInput
+    zipzoong_care_requests?: ZipzoongCareRequestModelUpdateManyWithoutClientNestedInput
   }
 
   export type ClientModelUncheckedUpdateWithoutBaseInput = {
@@ -23636,6 +26426,7 @@ export namespace Prisma {
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
     oauth_accounts?: OauthAccountModelUncheckedUpdateManyWithoutClientNestedInput
+    zipzoong_care_requests?: ZipzoongCareRequestModelUncheckedUpdateManyWithoutClientNestedInput
   }
 
   export type BIZUserModelUpsertWithoutBaseInput = {
@@ -23659,6 +26450,7 @@ export namespace Prisma {
     hs_provider?: HSProviderModelUpdateOneWithoutBaseNestedInput
     oauth_accounts?: OauthAccountModelUpdateManyWithoutBiz_userNestedInput
     biz_certification_images?: BIZCertificationImageModelUpdateManyWithoutBiz_userNestedInput
+    zipzoong_cares?: ZipzoongCareModelUpdateManyWithoutBiz_userNestedInput
   }
 
   export type BIZUserModelUncheckedUpdateWithoutBaseInput = {
@@ -23671,6 +26463,7 @@ export namespace Prisma {
     hs_provider?: HSProviderModelUncheckedUpdateOneWithoutBaseNestedInput
     oauth_accounts?: OauthAccountModelUncheckedUpdateManyWithoutBiz_userNestedInput
     biz_certification_images?: BIZCertificationImageModelUncheckedUpdateManyWithoutBiz_userNestedInput
+    zipzoong_cares?: ZipzoongCareModelUncheckedUpdateManyWithoutBiz_userNestedInput
   }
 
   export type TermsAgreementModelUpsertWithWhereUniqueWithoutUserInput = {
@@ -23770,6 +26563,34 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ZipzoongCareRequestModelCreateWithoutClientInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    url: string
+  }
+
+  export type ZipzoongCareRequestModelUncheckedCreateWithoutClientInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    url: string
+  }
+
+  export type ZipzoongCareRequestModelCreateOrConnectWithoutClientInput = {
+    where: ZipzoongCareRequestModelWhereUniqueInput
+    create: XOR<ZipzoongCareRequestModelCreateWithoutClientInput, ZipzoongCareRequestModelUncheckedCreateWithoutClientInput>
+  }
+
+  export type ZipzoongCareRequestModelCreateManyClientInputEnvelope = {
+    data: ZipzoongCareRequestModelCreateManyClientInput | ZipzoongCareRequestModelCreateManyClientInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserModelUpsertWithoutClientInput = {
     update: XOR<UserModelUpdateWithoutClientInput, UserModelUncheckedUpdateWithoutClientInput>
     create: XOR<UserModelCreateWithoutClientInput, UserModelUncheckedCreateWithoutClientInput>
@@ -23844,6 +26665,35 @@ export namespace Prisma {
     address_road?: StringNullableFilter<"OauthAccountModel"> | string | null
     address_detail?: StringNullableFilter<"OauthAccountModel"> | string | null
     address_extra?: StringNullableFilter<"OauthAccountModel"> | string | null
+  }
+
+  export type ZipzoongCareRequestModelUpsertWithWhereUniqueWithoutClientInput = {
+    where: ZipzoongCareRequestModelWhereUniqueInput
+    update: XOR<ZipzoongCareRequestModelUpdateWithoutClientInput, ZipzoongCareRequestModelUncheckedUpdateWithoutClientInput>
+    create: XOR<ZipzoongCareRequestModelCreateWithoutClientInput, ZipzoongCareRequestModelUncheckedCreateWithoutClientInput>
+  }
+
+  export type ZipzoongCareRequestModelUpdateWithWhereUniqueWithoutClientInput = {
+    where: ZipzoongCareRequestModelWhereUniqueInput
+    data: XOR<ZipzoongCareRequestModelUpdateWithoutClientInput, ZipzoongCareRequestModelUncheckedUpdateWithoutClientInput>
+  }
+
+  export type ZipzoongCareRequestModelUpdateManyWithWhereWithoutClientInput = {
+    where: ZipzoongCareRequestModelScalarWhereInput
+    data: XOR<ZipzoongCareRequestModelUpdateManyMutationInput, ZipzoongCareRequestModelUncheckedUpdateManyWithoutClientInput>
+  }
+
+  export type ZipzoongCareRequestModelScalarWhereInput = {
+    AND?: ZipzoongCareRequestModelScalarWhereInput | ZipzoongCareRequestModelScalarWhereInput[]
+    OR?: ZipzoongCareRequestModelScalarWhereInput[]
+    NOT?: ZipzoongCareRequestModelScalarWhereInput | ZipzoongCareRequestModelScalarWhereInput[]
+    id?: StringFilter<"ZipzoongCareRequestModel"> | string
+    created_at?: DateTimeFilter<"ZipzoongCareRequestModel"> | Date | string
+    updated_at?: DateTimeFilter<"ZipzoongCareRequestModel"> | Date | string
+    is_deleted?: BoolFilter<"ZipzoongCareRequestModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"ZipzoongCareRequestModel"> | Date | string | null
+    client_id?: StringFilter<"ZipzoongCareRequestModel"> | string
+    url?: StringFilter<"ZipzoongCareRequestModel"> | string
   }
 
   export type UserModelCreateWithoutBiz_userInput = {
@@ -23998,7 +26848,7 @@ export namespace Prisma {
     is_deleted: boolean
     deleted_at?: Date | string | null
     url: string
-    access_type: ImageAccessType
+    access_type: ResourceAccessType
   }
 
   export type BIZCertificationImageModelUncheckedCreateWithoutBiz_userInput = {
@@ -24008,7 +26858,7 @@ export namespace Prisma {
     is_deleted: boolean
     deleted_at?: Date | string | null
     url: string
-    access_type: ImageAccessType
+    access_type: ResourceAccessType
   }
 
   export type BIZCertificationImageModelCreateOrConnectWithoutBiz_userInput = {
@@ -24018,6 +26868,34 @@ export namespace Prisma {
 
   export type BIZCertificationImageModelCreateManyBiz_userInputEnvelope = {
     data: BIZCertificationImageModelCreateManyBiz_userInput | BIZCertificationImageModelCreateManyBiz_userInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ZipzoongCareModelCreateWithoutBiz_userInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    url: string
+  }
+
+  export type ZipzoongCareModelUncheckedCreateWithoutBiz_userInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    url: string
+  }
+
+  export type ZipzoongCareModelCreateOrConnectWithoutBiz_userInput = {
+    where: ZipzoongCareModelWhereUniqueInput
+    create: XOR<ZipzoongCareModelCreateWithoutBiz_userInput, ZipzoongCareModelUncheckedCreateWithoutBiz_userInput>
+  }
+
+  export type ZipzoongCareModelCreateManyBiz_userInputEnvelope = {
+    data: ZipzoongCareModelCreateManyBiz_userInput | ZipzoongCareModelCreateManyBiz_userInput[]
     skipDuplicates?: boolean
   }
 
@@ -24175,7 +27053,36 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableFilter<"BIZCertificationImageModel"> | Date | string | null
     biz_user_id?: StringFilter<"BIZCertificationImageModel"> | string
     url?: StringFilter<"BIZCertificationImageModel"> | string
-    access_type?: EnumImageAccessTypeFilter<"BIZCertificationImageModel"> | ImageAccessType
+    access_type?: EnumResourceAccessTypeFilter<"BIZCertificationImageModel"> | ResourceAccessType
+  }
+
+  export type ZipzoongCareModelUpsertWithWhereUniqueWithoutBiz_userInput = {
+    where: ZipzoongCareModelWhereUniqueInput
+    update: XOR<ZipzoongCareModelUpdateWithoutBiz_userInput, ZipzoongCareModelUncheckedUpdateWithoutBiz_userInput>
+    create: XOR<ZipzoongCareModelCreateWithoutBiz_userInput, ZipzoongCareModelUncheckedCreateWithoutBiz_userInput>
+  }
+
+  export type ZipzoongCareModelUpdateWithWhereUniqueWithoutBiz_userInput = {
+    where: ZipzoongCareModelWhereUniqueInput
+    data: XOR<ZipzoongCareModelUpdateWithoutBiz_userInput, ZipzoongCareModelUncheckedUpdateWithoutBiz_userInput>
+  }
+
+  export type ZipzoongCareModelUpdateManyWithWhereWithoutBiz_userInput = {
+    where: ZipzoongCareModelScalarWhereInput
+    data: XOR<ZipzoongCareModelUpdateManyMutationInput, ZipzoongCareModelUncheckedUpdateManyWithoutBiz_userInput>
+  }
+
+  export type ZipzoongCareModelScalarWhereInput = {
+    AND?: ZipzoongCareModelScalarWhereInput | ZipzoongCareModelScalarWhereInput[]
+    OR?: ZipzoongCareModelScalarWhereInput[]
+    NOT?: ZipzoongCareModelScalarWhereInput | ZipzoongCareModelScalarWhereInput[]
+    id?: StringFilter<"ZipzoongCareModel"> | string
+    created_at?: DateTimeFilter<"ZipzoongCareModel"> | Date | string
+    updated_at?: DateTimeFilter<"ZipzoongCareModel"> | Date | string
+    is_deleted?: BoolFilter<"ZipzoongCareModel"> | boolean
+    deleted_at?: DateTimeNullableFilter<"ZipzoongCareModel"> | Date | string | null
+    biz_user_id?: StringFilter<"ZipzoongCareModel"> | string
+    url?: StringFilter<"ZipzoongCareModel"> | string
   }
 
   export type BIZUserModelCreateWithoutBiz_certification_imagesInput = {
@@ -24188,6 +27095,7 @@ export namespace Prisma {
     re_agent?: REAgentModelCreateNestedOneWithoutBaseInput
     hs_provider?: HSProviderModelCreateNestedOneWithoutBaseInput
     oauth_accounts?: OauthAccountModelCreateNestedManyWithoutBiz_userInput
+    zipzoong_cares?: ZipzoongCareModelCreateNestedManyWithoutBiz_userInput
   }
 
   export type BIZUserModelUncheckedCreateWithoutBiz_certification_imagesInput = {
@@ -24200,6 +27108,7 @@ export namespace Prisma {
     re_agent?: REAgentModelUncheckedCreateNestedOneWithoutBaseInput
     hs_provider?: HSProviderModelUncheckedCreateNestedOneWithoutBaseInput
     oauth_accounts?: OauthAccountModelUncheckedCreateNestedManyWithoutBiz_userInput
+    zipzoong_cares?: ZipzoongCareModelUncheckedCreateNestedManyWithoutBiz_userInput
   }
 
   export type BIZUserModelCreateOrConnectWithoutBiz_certification_imagesInput = {
@@ -24228,6 +27137,7 @@ export namespace Prisma {
     re_agent?: REAgentModelUpdateOneWithoutBaseNestedInput
     hs_provider?: HSProviderModelUpdateOneWithoutBaseNestedInput
     oauth_accounts?: OauthAccountModelUpdateManyWithoutBiz_userNestedInput
+    zipzoong_cares?: ZipzoongCareModelUpdateManyWithoutBiz_userNestedInput
   }
 
   export type BIZUserModelUncheckedUpdateWithoutBiz_certification_imagesInput = {
@@ -24240,6 +27150,7 @@ export namespace Prisma {
     re_agent?: REAgentModelUncheckedUpdateOneWithoutBaseNestedInput
     hs_provider?: HSProviderModelUncheckedUpdateOneWithoutBaseNestedInput
     oauth_accounts?: OauthAccountModelUncheckedUpdateManyWithoutBiz_userNestedInput
+    zipzoong_cares?: ZipzoongCareModelUncheckedUpdateManyWithoutBiz_userNestedInput
   }
 
   export type BIZUserModelCreateWithoutRe_agentInput = {
@@ -24252,6 +27163,7 @@ export namespace Prisma {
     hs_provider?: HSProviderModelCreateNestedOneWithoutBaseInput
     oauth_accounts?: OauthAccountModelCreateNestedManyWithoutBiz_userInput
     biz_certification_images?: BIZCertificationImageModelCreateNestedManyWithoutBiz_userInput
+    zipzoong_cares?: ZipzoongCareModelCreateNestedManyWithoutBiz_userInput
   }
 
   export type BIZUserModelUncheckedCreateWithoutRe_agentInput = {
@@ -24264,6 +27176,7 @@ export namespace Prisma {
     hs_provider?: HSProviderModelUncheckedCreateNestedOneWithoutBaseInput
     oauth_accounts?: OauthAccountModelUncheckedCreateNestedManyWithoutBiz_userInput
     biz_certification_images?: BIZCertificationImageModelUncheckedCreateNestedManyWithoutBiz_userInput
+    zipzoong_cares?: ZipzoongCareModelUncheckedCreateNestedManyWithoutBiz_userInput
   }
 
   export type BIZUserModelCreateOrConnectWithoutRe_agentInput = {
@@ -24347,6 +27260,7 @@ export namespace Prisma {
     hs_provider?: HSProviderModelUpdateOneWithoutBaseNestedInput
     oauth_accounts?: OauthAccountModelUpdateManyWithoutBiz_userNestedInput
     biz_certification_images?: BIZCertificationImageModelUpdateManyWithoutBiz_userNestedInput
+    zipzoong_cares?: ZipzoongCareModelUpdateManyWithoutBiz_userNestedInput
   }
 
   export type BIZUserModelUncheckedUpdateWithoutRe_agentInput = {
@@ -24359,6 +27273,7 @@ export namespace Prisma {
     hs_provider?: HSProviderModelUncheckedUpdateOneWithoutBaseNestedInput
     oauth_accounts?: OauthAccountModelUncheckedUpdateManyWithoutBiz_userNestedInput
     biz_certification_images?: BIZCertificationImageModelUncheckedUpdateManyWithoutBiz_userNestedInput
+    zipzoong_cares?: ZipzoongCareModelUncheckedUpdateManyWithoutBiz_userNestedInput
   }
 
   export type REExpertiseModelUpsertWithoutRe_agentsInput = {
@@ -24505,6 +27420,7 @@ export namespace Prisma {
     re_agent?: REAgentModelCreateNestedOneWithoutBaseInput
     oauth_accounts?: OauthAccountModelCreateNestedManyWithoutBiz_userInput
     biz_certification_images?: BIZCertificationImageModelCreateNestedManyWithoutBiz_userInput
+    zipzoong_cares?: ZipzoongCareModelCreateNestedManyWithoutBiz_userInput
   }
 
   export type BIZUserModelUncheckedCreateWithoutHs_providerInput = {
@@ -24517,6 +27433,7 @@ export namespace Prisma {
     re_agent?: REAgentModelUncheckedCreateNestedOneWithoutBaseInput
     oauth_accounts?: OauthAccountModelUncheckedCreateNestedManyWithoutBiz_userInput
     biz_certification_images?: BIZCertificationImageModelUncheckedCreateNestedManyWithoutBiz_userInput
+    zipzoong_cares?: ZipzoongCareModelUncheckedCreateNestedManyWithoutBiz_userInput
   }
 
   export type BIZUserModelCreateOrConnectWithoutHs_providerInput = {
@@ -24605,6 +27522,7 @@ export namespace Prisma {
     re_agent?: REAgentModelUpdateOneWithoutBaseNestedInput
     oauth_accounts?: OauthAccountModelUpdateManyWithoutBiz_userNestedInput
     biz_certification_images?: BIZCertificationImageModelUpdateManyWithoutBiz_userNestedInput
+    zipzoong_cares?: ZipzoongCareModelUpdateManyWithoutBiz_userNestedInput
   }
 
   export type BIZUserModelUncheckedUpdateWithoutHs_providerInput = {
@@ -24617,6 +27535,7 @@ export namespace Prisma {
     re_agent?: REAgentModelUncheckedUpdateOneWithoutBaseNestedInput
     oauth_accounts?: OauthAccountModelUncheckedUpdateManyWithoutBiz_userNestedInput
     biz_certification_images?: BIZCertificationImageModelUncheckedUpdateManyWithoutBiz_userNestedInput
+    zipzoong_cares?: ZipzoongCareModelUncheckedUpdateManyWithoutBiz_userNestedInput
   }
 
   export type HSSubExpertiseRelationModelUpsertWithWhereUniqueWithoutHs_providerInput = {
@@ -25104,6 +28023,7 @@ export namespace Prisma {
     address_extra?: string | null
     profile_image_url?: string | null
     base: UserModelCreateNestedOneWithoutClientInput
+    zipzoong_care_requests?: ZipzoongCareRequestModelCreateNestedManyWithoutClientInput
   }
 
   export type ClientModelUncheckedCreateWithoutOauth_accountsInput = {
@@ -25116,6 +28036,7 @@ export namespace Prisma {
     address_detail?: string | null
     address_extra?: string | null
     profile_image_url?: string | null
+    zipzoong_care_requests?: ZipzoongCareRequestModelUncheckedCreateNestedManyWithoutClientInput
   }
 
   export type ClientModelCreateOrConnectWithoutOauth_accountsInput = {
@@ -25133,6 +28054,7 @@ export namespace Prisma {
     re_agent?: REAgentModelCreateNestedOneWithoutBaseInput
     hs_provider?: HSProviderModelCreateNestedOneWithoutBaseInput
     biz_certification_images?: BIZCertificationImageModelCreateNestedManyWithoutBiz_userInput
+    zipzoong_cares?: ZipzoongCareModelCreateNestedManyWithoutBiz_userInput
   }
 
   export type BIZUserModelUncheckedCreateWithoutOauth_accountsInput = {
@@ -25145,6 +28067,7 @@ export namespace Prisma {
     re_agent?: REAgentModelUncheckedCreateNestedOneWithoutBaseInput
     hs_provider?: HSProviderModelUncheckedCreateNestedOneWithoutBaseInput
     biz_certification_images?: BIZCertificationImageModelUncheckedCreateNestedManyWithoutBiz_userInput
+    zipzoong_cares?: ZipzoongCareModelUncheckedCreateNestedManyWithoutBiz_userInput
   }
 
   export type BIZUserModelCreateOrConnectWithoutOauth_accountsInput = {
@@ -25173,6 +28096,7 @@ export namespace Prisma {
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
     base?: UserModelUpdateOneRequiredWithoutClientNestedInput
+    zipzoong_care_requests?: ZipzoongCareRequestModelUpdateManyWithoutClientNestedInput
   }
 
   export type ClientModelUncheckedUpdateWithoutOauth_accountsInput = {
@@ -25185,6 +28109,7 @@ export namespace Prisma {
     address_detail?: NullableStringFieldUpdateOperationsInput | string | null
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zipzoong_care_requests?: ZipzoongCareRequestModelUncheckedUpdateManyWithoutClientNestedInput
   }
 
   export type BIZUserModelUpsertWithoutOauth_accountsInput = {
@@ -25208,6 +28133,7 @@ export namespace Prisma {
     re_agent?: REAgentModelUpdateOneWithoutBaseNestedInput
     hs_provider?: HSProviderModelUpdateOneWithoutBaseNestedInput
     biz_certification_images?: BIZCertificationImageModelUpdateManyWithoutBiz_userNestedInput
+    zipzoong_cares?: ZipzoongCareModelUpdateManyWithoutBiz_userNestedInput
   }
 
   export type BIZUserModelUncheckedUpdateWithoutOauth_accountsInput = {
@@ -25220,6 +28146,7 @@ export namespace Prisma {
     re_agent?: REAgentModelUncheckedUpdateOneWithoutBaseNestedInput
     hs_provider?: HSProviderModelUncheckedUpdateOneWithoutBaseNestedInput
     biz_certification_images?: BIZCertificationImageModelUncheckedUpdateManyWithoutBiz_userNestedInput
+    zipzoong_cares?: ZipzoongCareModelUncheckedUpdateManyWithoutBiz_userNestedInput
   }
 
   export type TermsAgreementModelCreateManyTermsInput = {
@@ -25315,6 +28242,15 @@ export namespace Prisma {
     address_extra?: string | null
   }
 
+  export type ZipzoongCareRequestModelCreateManyClientInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    url: string
+  }
+
   export type OauthAccountModelUpdateWithoutClientInput = {
     id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25378,6 +28314,33 @@ export namespace Prisma {
     address_extra?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type ZipzoongCareRequestModelUpdateWithoutClientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ZipzoongCareRequestModelUncheckedUpdateWithoutClientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ZipzoongCareRequestModelUncheckedUpdateManyWithoutClientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
   export type OauthAccountModelCreateManyBiz_userInput = {
     id: string
     created_at: Date | string
@@ -25406,7 +28369,16 @@ export namespace Prisma {
     is_deleted: boolean
     deleted_at?: Date | string | null
     url: string
-    access_type: ImageAccessType
+    access_type: ResourceAccessType
+  }
+
+  export type ZipzoongCareModelCreateManyBiz_userInput = {
+    id: string
+    created_at: Date | string
+    updated_at: Date | string
+    is_deleted: boolean
+    deleted_at?: Date | string | null
+    url: string
   }
 
   export type OauthAccountModelUpdateWithoutBiz_userInput = {
@@ -25479,7 +28451,7 @@ export namespace Prisma {
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     url?: StringFieldUpdateOperationsInput | string
-    access_type?: EnumImageAccessTypeFieldUpdateOperationsInput | ImageAccessType
+    access_type?: EnumResourceAccessTypeFieldUpdateOperationsInput | ResourceAccessType
   }
 
   export type BIZCertificationImageModelUncheckedUpdateWithoutBiz_userInput = {
@@ -25489,7 +28461,7 @@ export namespace Prisma {
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     url?: StringFieldUpdateOperationsInput | string
-    access_type?: EnumImageAccessTypeFieldUpdateOperationsInput | ImageAccessType
+    access_type?: EnumResourceAccessTypeFieldUpdateOperationsInput | ResourceAccessType
   }
 
   export type BIZCertificationImageModelUncheckedUpdateManyWithoutBiz_userInput = {
@@ -25499,7 +28471,34 @@ export namespace Prisma {
     is_deleted?: BoolFieldUpdateOperationsInput | boolean
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     url?: StringFieldUpdateOperationsInput | string
-    access_type?: EnumImageAccessTypeFieldUpdateOperationsInput | ImageAccessType
+    access_type?: EnumResourceAccessTypeFieldUpdateOperationsInput | ResourceAccessType
+  }
+
+  export type ZipzoongCareModelUpdateWithoutBiz_userInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ZipzoongCareModelUncheckedUpdateWithoutBiz_userInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    url?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ZipzoongCareModelUncheckedUpdateManyWithoutBiz_userInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_deleted?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    url?: StringFieldUpdateOperationsInput | string
   }
 
   export type REPortfolioModelCreateManyRe_agentInput = {

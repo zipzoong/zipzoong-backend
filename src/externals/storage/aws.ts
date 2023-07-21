@@ -28,7 +28,9 @@ export namespace AWS {
             sha256: Hash.bind(null, "sha256"),
         });
 
-        const PutCommand = (type: IUpload.ResourceType): PutObjectCommand => {
+        const PutCommand = (
+            type: IUpload.ResourceType | IUpload.CareRequestType,
+        ): PutObjectCommand => {
             const now = new Date();
             const year = now.getUTCFullYear();
             const month = `${now.getUTCMonth() + 1}`.padStart(2, "0");
@@ -36,42 +38,48 @@ export namespace AWS {
             const input: PutObjectCommandInput = {
                 Bucket: Configuration.AWS_S3,
                 Key: undefined,
-                Metadata: {
-                    "x-amz-meta-size": "original",
-                },
+                Metadata: { version: "original" },
             };
             switch (type) {
                 case "profile":
-                    input.Key = `images/user_profiles/${year}${month}${date}_${randomUUID()}`;
-                    input.ContentType = "image/*";
+                    input.Key = `images/user_profiles/${year}${month}${date}_${randomUUID()}.jpeg`;
+                    // input.ContentType = "image/jpeg"; -> 아무 기능도 못함
+                    // input.ContentLength = 0; -> 이미지 사이즈 제한
                     break;
                 case "portfolio":
-                    input.Key = `images/portfolios/${year}${month}${date}_${randomUUID()}`;
-                    input.ContentType = "image/*";
+                    input.Key = `images/portfolios/${year}${month}${date}_${randomUUID()}.jpeg`;
                     break;
                 case "biz_certification":
-                    input.Key = `images/biz_certifications/${year}${month}${date}_${randomUUID()}`;
-                    input.ContentType = "image/*";
+                    input.Key = `images/biz_certifications/${year}${month}${date}_${randomUUID()}.jpeg`;
+                    break;
+                case "care_request":
+                    input.Key = `josns/care_requests/${year}${month}${date}_${randomUUID()}.json`;
                     break;
             }
             return new PutObjectCommand(input);
         };
 
-        const AccessType = (type: IUpload.ResourceType): IUpload.AccessType =>
-            type === "biz_certification" ? "zipzoong_s3" : "public";
+        const AccessType = (
+            type: IUpload.ResourceType | IUpload.CareRequestType,
+        ): IUpload.AccessType =>
+            type === "biz_certification"
+                ? "zipzoong_s3"
+                : type === "care_request"
+                ? "zipzoong_s3"
+                : "public";
 
         export const getPresignedUploadUrl: IStorage["getUploadUrl"] = async (
-            input,
+            resource_type,
         ) => {
             try {
-                const cmd = PutCommand(input.resource_type);
+                const cmd = PutCommand(resource_type);
                 const presigned_url = await getSignedUrl(client, cmd, {
                     expiresIn: 180, // 3min
                 });
                 const url = new URL(presigned_url);
                 url.search = "";
                 return Result.Ok.map({
-                    access_type: AccessType(input.resource_type),
+                    access_type: AccessType(resource_type),
                     url: url.href,
                     presigned_url,
                 });
@@ -86,7 +94,9 @@ export namespace AWS {
                 try {
                     const parsedUrl = parseUrl(input.url);
                     return formatUrl(
-                        await presigner.presign(new HttpRequest(parsedUrl)),
+                        await presigner.presign(new HttpRequest(parsedUrl), {
+                            expiresIn: 180, // 3min
+                        }),
                     );
                 } catch (error) {
                     return input.url;

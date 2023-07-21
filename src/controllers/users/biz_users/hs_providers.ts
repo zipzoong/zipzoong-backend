@@ -43,7 +43,7 @@ export class UsersHSProvidersMeController {
      *
      * @tag hs-providers
      *
-     * @param access_token 생활서비스 전문가 권한을 갖는 액세스 토큰
+     * @param access_token Authorization access access_token
      *
      * @return 생활서비스 전문가 상세 정보
      */
@@ -64,7 +64,7 @@ export class UsersHSProvidersMeController {
      *
      * @tag hs-providers
      *
-     * @param access_token 생활서비스 전문가 권한을 갖는 액세스 토큰
+     * @param access_token Authorization access access_token
      *
      * @param body 포트폴리오 정보
      */
@@ -86,7 +86,7 @@ export class UsersHSProvidersMeController {
      *
      * @tag hs-providers
      *
-     * @param access_token 생활서비스 전문가 권한을 갖는 액세스 토큰
+     * @param access_token Authorization access access_token
      *
      * @param query 페이지 정보
      *
@@ -136,7 +136,7 @@ export class UsersHSProvidersSomeoneController {
      *
      * @tag hs-providers
      *
-     * @param access_token 아무 사용자 권한을 갖는 액세스 토큰
+     * @param access_token Authorization access access_token
      *
      * @param provider_id 생활서비스 전문가 id
      *

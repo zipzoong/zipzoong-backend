@@ -31,6 +31,6 @@ export const ZipzoongCareStatus = createEnum("ZipzoongCareStatus", (Enum) => {
  * public - 그냥 접근 가능한 이미지 url
  * zipzoong_s3 - "zipzoong" s3에 private으로 저장된 리소스, sign 작업 필요
  */
-export const ImageAccessType = createEnum("ImageAccessType", (Enum) => {
+export const ResourceAccessType = createEnum("ResourceAccessType", (Enum) => {
     Enum.addValue("public").addValue("zipzoong_s3");
 });

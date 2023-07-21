@@ -39,7 +39,7 @@ enum ZipzoongCareStatus {
   cancelled
 }
 
-enum ImageAccessType {
+enum ResourceAccessType {
   public
   zipzoong_s3
 }
@@ -75,6 +75,32 @@ model TermsAgreementModel {
   @@map("terms_agreements")
 }
 
+model ZipzoongCareRequestModel {
+  id         String      @id
+  created_at DateTime    @database.Timestamptz
+  updated_at DateTime    @database.Timestamptz
+  is_deleted Boolean
+  deleted_at DateTime?   @database.Timestamptz
+  client_id  String
+  url        String
+  client     ClientModel @relation(fields: [client_id], references: [id])
+
+  @@map("temp_zipzoong_care_requests")
+}
+
+model ZipzoongCareModel {
+  id          String       @id
+  created_at  DateTime     @database.Timestamptz
+  updated_at  DateTime     @database.Timestamptz
+  is_deleted  Boolean
+  deleted_at  DateTime?    @database.Timestamptz
+  biz_user_id String
+  url         String
+  biz_user    BIZUserModel @relation(fields: [biz_user_id], references: [id])
+
+  @@map("temp_zipzoong_cares")
+}
+
 model UserModel {
   id               String                @id
   created_at       DateTime              @database.Timestamptz
@@ -91,17 +117,18 @@ model UserModel {
 }
 
 model ClientModel {
-  id                String              @id
-  birth             DateTime?           @database.Date
-  gender            GenderType?
-  phone             String?
-  address_zone_code String?
-  address_road      String?
-  address_detail    String?
-  address_extra     String?
-  profile_image_url String?
-  base              UserModel           @relation(fields: [id], references: [id])
-  oauth_accounts    OauthAccountModel[]
+  id                     String                     @id
+  birth                  DateTime?                  @database.Date
+  gender                 GenderType?
+  phone                  String?
+  address_zone_code      String?
+  address_road           String?
+  address_detail         String?
+  address_extra          String?
+  profile_image_url      String?
+  base                   UserModel                  @relation(fields: [id], references: [id])
+  oauth_accounts         OauthAccountModel[]
+  zipzoong_care_requests ZipzoongCareRequestModel[]
 
   @@map("clients")
 }
@@ -118,20 +145,21 @@ model BIZUserModel {
   hs_provider              HSProviderModel?
   oauth_accounts           OauthAccountModel[]
   biz_certification_images BIZCertificationImageModel[]
+  zipzoong_cares           ZipzoongCareModel[]
 
   @@map("biz_users")
 }
 
 model BIZCertificationImageModel {
-  id          String          @id
-  created_at  DateTime        @database.Timestamptz
-  updated_at  DateTime        @database.Timestamptz
+  id          String             @id
+  created_at  DateTime           @database.Timestamptz
+  updated_at  DateTime           @database.Timestamptz
   is_deleted  Boolean
-  deleted_at  DateTime?       @database.Timestamptz
+  deleted_at  DateTime?          @database.Timestamptz
   biz_user_id String
   url         String
-  access_type ImageAccessType
-  biz_user    BIZUserModel    @relation(fields: [biz_user_id], references: [id])
+  access_type ResourceAccessType
+  biz_user    BIZUserModel       @relation(fields: [biz_user_id], references: [id])
 
   @@map("biz_certification_images")
 }

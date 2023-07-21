@@ -128,6 +128,26 @@ exports.Prisma.TermsAgreementModelScalarFieldEnum = {
   user_id: 'user_id'
 };
 
+exports.Prisma.ZipzoongCareRequestModelScalarFieldEnum = {
+  id: 'id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  is_deleted: 'is_deleted',
+  deleted_at: 'deleted_at',
+  client_id: 'client_id',
+  url: 'url'
+};
+
+exports.Prisma.ZipzoongCareModelScalarFieldEnum = {
+  id: 'id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  is_deleted: 'is_deleted',
+  deleted_at: 'deleted_at',
+  biz_user_id: 'biz_user_id',
+  url: 'url'
+};
+
 exports.Prisma.UserModelScalarFieldEnum = {
   id: 'id',
   created_at: 'created_at',
@@ -319,7 +339,7 @@ exports.GenderType = {
   male: 'male'
 };
 
-exports.ImageAccessType = {
+exports.ResourceAccessType = {
   public: 'public',
   zipzoong_s3: 'zipzoong_s3'
 };
@@ -333,6 +353,8 @@ exports.OauthType = {
 exports.Prisma.ModelName = {
   TermsModel: 'TermsModel',
   TermsAgreementModel: 'TermsAgreementModel',
+  ZipzoongCareRequestModel: 'ZipzoongCareRequestModel',
+  ZipzoongCareModel: 'ZipzoongCareModel',
   UserModel: 'UserModel',
   ClientModel: 'ClientModel',
   BIZUserModel: 'BIZUserModel',

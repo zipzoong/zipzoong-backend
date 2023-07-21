@@ -36,7 +36,7 @@ import type { IAuthentication } from "./../../../structures/IAuthentication";
  * 
  * @tag authentication
  * 
- * @param account_token 계정 토큰
+ * @param account_token Authorization account account_token
  * 
  * @param body 사용자 정보
  * 

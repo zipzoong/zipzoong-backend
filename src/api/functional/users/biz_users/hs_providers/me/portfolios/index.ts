@@ -20,7 +20,7 @@ import type { IHSPortfolio } from "./../../../../../../structures/IHSPortfolio";
  * 
  * @tag hs-providers
  * 
- * @param access_token 생활서비스 전문가 권한을 갖는 액세스 토큰
+ * @param access_token Authorization access access_token
  * 
  * @param body 포트폴리오 정보
  * 
@@ -82,7 +82,7 @@ export namespace create {
  * 
  * @tag hs-providers
  * 
- * @param access_token 생활서비스 전문가 권한을 갖는 액세스 토큰
+ * @param access_token Authorization access access_token
  * 
  * @param query 페이지 정보
  * 

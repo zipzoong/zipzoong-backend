@@ -23,7 +23,7 @@ export * as portfolios from "./portfolios";
  * 
  * @tag re-agents
  * 
- * @param access_token 공인중개사 권한을 갖는 액세스 토큰
+ * @param access_token Authorization access access_token
  * 
  * @return 공인중개사 상세 정보
  * 

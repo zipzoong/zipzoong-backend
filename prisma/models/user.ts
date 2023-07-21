@@ -1,9 +1,10 @@
 import { createModel } from "schemix";
 import { RelationalFieldOptions } from "schemix/dist/typings/prisma-type-options";
-import { GenderType, ImageAccessType } from "../enums";
+import { GenderType, ResourceAccessType } from "../enums";
 import { Entity } from "../mixins";
 import { OauthAccount } from "./account";
 import { TermsAgreement } from "./terms";
+import { ZipzoongCare, ZipzoongCareRequest } from "./zipzoong_care";
 
 const one_to_one: RelationalFieldOptions = {
     fields: ["id"],
@@ -37,6 +38,7 @@ export const Client = createModel("ClientModel", (model) => {
         .string("profile_image_url", { optional: true })
         .relation("base", User, one_to_one)
         .relation("oauth_accounts", OauthAccount, { list: true })
+        .relation("zipzoong_care_requests", ZipzoongCareRequest, { list: true })
         .map("clients");
 });
 
@@ -58,6 +60,7 @@ export const BIZUser = createModel("BIZUserModel", (model) => {
         .relation("biz_certification_images", BIZCertificationImage, {
             list: true,
         })
+        .relation("zipzoong_cares", ZipzoongCare, { list: true })
         .map("biz_users");
 });
 
@@ -68,7 +71,7 @@ export const BIZCertificationImage = createModel(
             .mixin(Entity)
             .string("biz_user_id")
             .string("url")
-            .enum("access_type", ImageAccessType)
+            .enum("access_type", ResourceAccessType)
             .relation("biz_user", BIZUser, {
                 fields: ["biz_user_id"],
                 references: ["id"],

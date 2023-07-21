@@ -20,7 +20,7 @@ import type { IREAgent } from "./../../../../../structures/user/IREAgent";
  * 
  * @tag re-agents
  * 
- * @param access_token 아무 사용자 권한을 갖는 액세스 토큰
+ * @param access_token Authorization access access_token
  * 
  * @param agent_id 공인 중개사 id
  * 

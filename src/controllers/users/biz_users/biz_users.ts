@@ -18,7 +18,7 @@ export class UsersBIZCertificationsController {
      *
      * @tag hs-providers
      *
-     * @param access_token 사업자 권한을 가진 액세스 토큰
+     * @param access_token Authorization access access_token
      *
      * @return 사업자 인증 서류 이미지 url 목록
      */
@@ -43,7 +43,7 @@ export class UsersBIZCertificationsController {
      *
      * @tag hs-providers
      *
-     * @param access_token 사업자 권한을 가진 액세스 토큰
+     * @param access_token Authorization access access_token
      *
      * @param body 업로드할 이미지 정보
      */

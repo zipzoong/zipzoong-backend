@@ -22,6 +22,7 @@ export interface IUpload {
 export namespace IUpload {
     export type AccessType = "public" | "zipzoong_s3";
     export type ResourceType = "profile" | "portfolio" | "biz_certification";
+    export type CareRequestType = "care_request";
     export interface IBody {
         /**
          * 등록하고자 하는 리소스의 유형을 입력한다.

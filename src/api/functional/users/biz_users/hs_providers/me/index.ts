@@ -23,7 +23,7 @@ export * as portfolios from "./portfolios";
  * 
  * @tag hs-providers
  * 
- * @param access_token 생활서비스 전문가 권한을 갖는 액세스 토큰
+ * @param access_token Authorization access access_token
  * 
  * @return 생활서비스 전문가 상세 정보
  * 

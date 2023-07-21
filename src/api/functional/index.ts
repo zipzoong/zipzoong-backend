@@ -11,3 +11,4 @@ export * as terms from "./terms";
 export * as upload from "./upload";
 export * as users from "./users";
 export * as verification from "./verification";
+export * as zipzoong_cares from "./zipzoong_cares";

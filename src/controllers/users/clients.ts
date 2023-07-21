@@ -18,7 +18,7 @@ export class UsersClientsController {
      *
      * @tag clients
      *
-     * @param access_token 일반 고객 권한을 가진 액세스 토큰
+     * @param access_token Authorization access access_token
      *
      * @return 내 정보
      */

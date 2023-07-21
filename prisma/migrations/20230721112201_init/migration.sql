@@ -14,7 +14,7 @@ CREATE TYPE "TermsType" AS ENUM ('all', 'CL', 'BIZ', 'HS', 'RE');
 CREATE TYPE "ZipzoongCareStatus" AS ENUM ('pending', 'caring', 'cared', 'cancelled');
 
 -- CreateEnum
-CREATE TYPE "ImageAccessType" AS ENUM ('public', 'zipzoong_s3');
+CREATE TYPE "ResourceAccessType" AS ENUM ('public', 'zipzoong_s3');
 
 -- CreateTable
 CREATE TABLE "terms" (
@@ -43,6 +43,32 @@ CREATE TABLE "terms_agreements" (
     "user_id" TEXT NOT NULL,
 
     CONSTRAINT "terms_agreements_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "temp_zipzoong_care_requests" (
+    "id" TEXT NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL,
+    "updated_at" TIMESTAMPTZ NOT NULL,
+    "is_deleted" BOOLEAN NOT NULL,
+    "deleted_at" TIMESTAMPTZ,
+    "client_id" TEXT NOT NULL,
+    "url" TEXT NOT NULL,
+
+    CONSTRAINT "temp_zipzoong_care_requests_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "temp_zipzoong_cares" (
+    "id" TEXT NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL,
+    "updated_at" TIMESTAMPTZ NOT NULL,
+    "is_deleted" BOOLEAN NOT NULL,
+    "deleted_at" TIMESTAMPTZ,
+    "biz_user_id" TEXT NOT NULL,
+    "url" TEXT NOT NULL,
+
+    CONSTRAINT "temp_zipzoong_cares_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -94,7 +120,7 @@ CREATE TABLE "biz_certification_images" (
     "deleted_at" TIMESTAMPTZ,
     "biz_user_id" TEXT NOT NULL,
     "url" TEXT NOT NULL,
-    "access_type" "ImageAccessType" NOT NULL,
+    "access_type" "ResourceAccessType" NOT NULL,
 
     CONSTRAINT "biz_certification_images_pkey" PRIMARY KEY ("id")
 );
@@ -268,6 +294,12 @@ ALTER TABLE "terms_agreements" ADD CONSTRAINT "terms_agreements_terms_id_fkey" F
 
 -- AddForeignKey
 ALTER TABLE "terms_agreements" ADD CONSTRAINT "terms_agreements_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "temp_zipzoong_care_requests" ADD CONSTRAINT "temp_zipzoong_care_requests_client_id_fkey" FOREIGN KEY ("client_id") REFERENCES "clients"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "temp_zipzoong_cares" ADD CONSTRAINT "temp_zipzoong_cares_biz_user_id_fkey" FOREIGN KEY ("biz_user_id") REFERENCES "biz_users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "clients" ADD CONSTRAINT "clients_id_fkey" FOREIGN KEY ("id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

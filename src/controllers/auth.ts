@@ -1,14 +1,28 @@
 import { TypedBody, TypedRoute } from "@nestia/core";
-import { Controller, HttpCode, HttpStatus } from "@nestjs/common";
+import { Controller, HttpCode, HttpStatus, Res } from "@nestjs/common";
+import { Response } from "express";
 import { IAuthentication } from "@APP/api/structures/IAuthentication";
 import { IUser } from "@APP/api/structures/user/IUser";
+import { Kakao } from "@APP/externals/oauth/kakao/sdk";
 import { prisma } from "@APP/infrastructure/DB";
 import { Authentication } from "@APP/providers/authentication";
-import { Authorization } from "../decorators/authorization";
-import { httpResponse } from "../internal";
+import { Authorization } from "./decorators/authorization";
+import { httpResponse } from "./internal";
 
 @Controller("auth")
 export class AuthController {
+    /**
+     * 카카오 로그인 페이지 리다이렉트 api
+     *
+     * @summary redirect kakao oauth login page
+     *
+     * @tag authentication
+     */
+    @HttpCode(HttpStatus.FOUND)
+    @TypedRoute.Get("oauth/kakao")
+    kakao(@Res() res: Response) {
+        return res.redirect(Kakao.LoginUri);
+    }
     /**
      * 전달된 정보에 대응하는 특정 회원에 대한 권한이 부여된 인증 토큰을 발급한다.
      *
@@ -65,7 +79,7 @@ export class AuthController {
      *
      * @tag authentication
      *
-     * @param account_token 계정 토큰
+     * @param account_token Authorization account account_token
      *
      * @return 계정 프로필 정보
      */
@@ -89,7 +103,7 @@ export class AuthAccessTokenController {
      *
      * @tag authentication
      *
-     * @param refresh_token 액세스 토큰 재발급 토큰
+     * @param refresh_token Authorization refresh refresh_token
      *
      * @return 액세스 토큰
      */
@@ -130,7 +144,7 @@ export class AUthUserController {
      *
      * @tag authentication
      *
-     * @param account_token 계정 토큰
+     * @param account_token Authorization account account_token
      *
      * @param body 사용자 정보
      *
