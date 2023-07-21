@@ -52,7 +52,9 @@ const test = async (connection: IConnection): Promise<0 | -1> => {
 
     if (isEmpty(executions)) {
         console.log("✅ \x1b[32mAll Tests Passed\x1b[0m");
+        console.log();
         console.log(`Test Count: \x1b[36m${report.executions.length}\x1b[0m`);
+        console.log();
         console.log(
             `Total Test Time: \x1b[33m${report.time.toLocaleString()}\x1b[0m ms`,
         );
