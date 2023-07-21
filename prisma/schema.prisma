@@ -8,14 +8,317 @@ generator client {
   output   = "../db"
 }
 
-model UserModel {
-  id         String    @id
-  created_at DateTime  @database.Timestamptz
-  updated_at DateTime  @database.Timestamptz
+enum GenderType {
+  female
+  male
+}
+
+enum OauthType {
+  kakao
+  naver
+  apple
+}
+
+enum ServiceType {
+  HS
+  RE
+}
+
+enum TermsType {
+  all
+  CL
+  BIZ
+  HS
+  RE
+}
+
+enum ZipzoongCareStatus {
+  pending
+  caring
+  cared
+  cancelled
+}
+
+enum ResourceAccessType {
+  public
+  zipzoong_s3
+}
+
+model TermsModel {
+  id          String                @id
+  created_at  DateTime              @database.Timestamptz
+  updated_at  DateTime              @database.Timestamptz
+  is_deleted  Boolean
+  deleted_at  DateTime?             @database.Timestamptz
+  title       String
+  version     String
+  url         String
+  is_required Boolean
+  type        TermsType
+  agreements  TermsAgreementModel[]
+
+  @@map("terms")
+}
+
+model TermsAgreementModel {
+  id         String     @id
+  created_at DateTime   @database.Timestamptz
+  updated_at DateTime   @database.Timestamptz
   is_deleted Boolean
-  deleted_at DateTime? @database.Timestamptz
-  name       String
-  email      String
+  deleted_at DateTime?  @database.Timestamptz
+  terms_id   String
+  user_id    String
+  terms      TermsModel @relation(fields: [terms_id], references: [id])
+  user       UserModel  @relation(fields: [user_id], references: [id])
+
+  @@unique([user_id, terms_id])
+  @@map("terms_agreements")
+}
+
+model ZipzoongCareRequestModel {
+  id         String      @id
+  created_at DateTime    @database.Timestamptz
+  updated_at DateTime    @database.Timestamptz
+  is_deleted Boolean
+  deleted_at DateTime?   @database.Timestamptz
+  client_id  String
+  url        String
+  client     ClientModel @relation(fields: [client_id], references: [id])
+
+  @@map("temp_zipzoong_care_requests")
+}
+
+model ZipzoongCareModel {
+  id          String       @id
+  created_at  DateTime     @database.Timestamptz
+  updated_at  DateTime     @database.Timestamptz
+  is_deleted  Boolean
+  deleted_at  DateTime?    @database.Timestamptz
+  biz_user_id String
+  url         String
+  biz_user    BIZUserModel @relation(fields: [biz_user_id], references: [id])
+
+  @@map("temp_zipzoong_cares")
+}
+
+model UserModel {
+  id               String                @id
+  created_at       DateTime              @database.Timestamptz
+  updated_at       DateTime              @database.Timestamptz
+  is_deleted       Boolean
+  deleted_at       DateTime?             @database.Timestamptz
+  name             String
+  email            String?
+  client           ClientModel?
+  biz_user         BIZUserModel?
+  terms_agreements TermsAgreementModel[]
 
   @@map("users")
+}
+
+model ClientModel {
+  id                     String                     @id
+  birth                  DateTime?                  @database.Date
+  gender                 GenderType?
+  phone                  String?
+  address_zone_code      String?
+  address_road           String?
+  address_detail         String?
+  address_extra          String?
+  profile_image_url      String?
+  base                   UserModel                  @relation(fields: [id], references: [id])
+  oauth_accounts         OauthAccountModel[]
+  zipzoong_care_requests ZipzoongCareRequestModel[]
+
+  @@map("clients")
+}
+
+model BIZUserModel {
+  id                       String                       @id
+  is_verified              Boolean
+  introduction_title       String
+  introduction_content     String
+  phone                    String
+  profile_image_url        String
+  base                     UserModel                    @relation(fields: [id], references: [id])
+  re_agent                 REAgentModel?
+  hs_provider              HSProviderModel?
+  oauth_accounts           OauthAccountModel[]
+  biz_certification_images BIZCertificationImageModel[]
+  zipzoong_cares           ZipzoongCareModel[]
+
+  @@map("biz_users")
+}
+
+model BIZCertificationImageModel {
+  id          String             @id
+  created_at  DateTime           @database.Timestamptz
+  updated_at  DateTime           @database.Timestamptz
+  is_deleted  Boolean
+  deleted_at  DateTime?          @database.Timestamptz
+  biz_user_id String
+  url         String
+  access_type ResourceAccessType
+  biz_user    BIZUserModel       @relation(fields: [biz_user_id], references: [id])
+
+  @@map("biz_certification_images")
+}
+
+model REAgentModel {
+  id                     String             @id
+  is_licensed            Boolean
+  expertise_id           String
+  re_number              String
+  re_name                String
+  re_phone               String
+  re_licensed_agent_name String
+  re_address_zone_code   String
+  re_address_road        String
+  re_address_detail      String?
+  re_address_extra       String?
+  biz_open_date          DateTime           @database.Date
+  base                   BIZUserModel       @relation(fields: [id], references: [id])
+  expertise              REExpertiseModel   @relation(fields: [expertise_id], references: [id])
+  portfolios             REPortfolioModel[]
+
+  @@map("re_agents")
+}
+
+model REExpertiseModel {
+  id         String         @id
+  created_at DateTime       @database.Timestamptz
+  updated_at DateTime       @database.Timestamptz
+  is_deleted Boolean
+  deleted_at DateTime?      @database.Timestamptz
+  name       String         @unique
+  re_agents  REAgentModel[]
+
+  @@map("re_expertises")
+}
+
+model HSProviderModel {
+  id                      String                        @id
+  address_zone_code       String
+  address_road            String
+  address_detail          String?
+  address_extra           String?
+  biz_phone               String
+  biz_registration_number String
+  biz_open_date           DateTime                      @database.Date
+  base                    BIZUserModel                  @relation(fields: [id], references: [id])
+  expertise_relation      HSSubExpertiseRelationModel[]
+  portfolios              HSPortfolioModel[]
+
+  @@map("hs_providers")
+}
+
+model HSSubExpertiseModel {
+  id                 String                        @id
+  created_at         DateTime                      @database.Timestamptz
+  updated_at         DateTime                      @database.Timestamptz
+  is_deleted         Boolean
+  deleted_at         DateTime?                     @database.Timestamptz
+  name               String
+  super_expertise_id String
+  relations          HSSubExpertiseRelationModel[]
+  super_expertise    HSSuperExpertiseModel         @relation(fields: [super_expertise_id], references: [id])
+
+  @@map("hs_sub_expertises")
+}
+
+model HSSuperExpertiseModel {
+  id             String                @id
+  created_at     DateTime              @database.Timestamptz
+  updated_at     DateTime              @database.Timestamptz
+  is_deleted     Boolean
+  deleted_at     DateTime?             @database.Timestamptz
+  name           String                @unique
+  sub_expertises HSSubExpertiseModel[]
+
+  @@map("hs_super_expertises")
+}
+
+model HSSubExpertiseRelationModel {
+  id               String              @id
+  created_at       DateTime            @database.Timestamptz
+  updated_at       DateTime            @database.Timestamptz
+  is_deleted       Boolean
+  deleted_at       DateTime?           @database.Timestamptz
+  hs_provider_id   String
+  sub_expertise_id String
+  hs_provider      HSProviderModel     @relation(fields: [hs_provider_id], references: [id])
+  sub_expertise    HSSubExpertiseModel @relation(fields: [sub_expertise_id], references: [id])
+
+  @@unique([hs_provider_id, sub_expertise_id])
+  @@map("hs_sub_expertise_relations")
+}
+
+model REPortfolioModel {
+  id          String       @id
+  created_at  DateTime     @database.Timestamptz
+  updated_at  DateTime     @database.Timestamptz
+  is_deleted  Boolean
+  deleted_at  DateTime?    @database.Timestamptz
+  re_agent_id String
+  title       String
+  main_url    String
+  is_visible  Boolean
+  re_agent    REAgentModel @relation(fields: [re_agent_id], references: [id])
+
+  @@map("re_portfolios")
+}
+
+model HSPortfolioModel {
+  id             String          @id
+  created_at     DateTime        @database.Timestamptz
+  updated_at     DateTime        @database.Timestamptz
+  is_deleted     Boolean
+  deleted_at     DateTime?       @database.Timestamptz
+  hs_provider_id String
+  title          String
+  main_url       String
+  is_visible     Boolean
+  hs_provider    HSProviderModel @relation(fields: [hs_provider_id], references: [id])
+
+  @@map("hs_portfolios")
+}
+
+model OauthAccountModel {
+  id                String        @id
+  created_at        DateTime      @database.Timestamptz
+  updated_at        DateTime      @database.Timestamptz
+  is_deleted        Boolean
+  deleted_at        DateTime?     @database.Timestamptz
+  oauth_type        OauthType
+  oauth_sub         String
+  biz_user_id       String?
+  client_id         String?
+  name              String?
+  email             String?
+  phone             String?
+  profile_image_url String?
+  birth             String?
+  gender            GenderType?
+  address_zone_code String?
+  address_road      String?
+  address_detail    String?
+  address_extra     String?
+  client            ClientModel?  @relation(fields: [client_id], references: [id])
+  biz_user          BIZUserModel? @relation(fields: [biz_user_id], references: [id])
+
+  @@map("oauth_accounts")
+}
+
+model PhoneVerificationModel {
+  id             String    @id
+  created_at     DateTime  @database.Timestamptz
+  updated_at     DateTime  @database.Timestamptz
+  is_deleted     Boolean
+  deleted_at     DateTime? @database.Timestamptz
+  phone          String
+  code           String
+  transaction_id String
+  is_verified    Boolean
+
+  @@map("phone_verifications")
 }

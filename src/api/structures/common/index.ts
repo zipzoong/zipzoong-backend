@@ -1,2 +1,2 @@
-export * from "./pagination";
-export * from "./datetime";
+export * from "./IPagination";
+export * from "./IAddress";

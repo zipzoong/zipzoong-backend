@@ -1,8 +1,8 @@
 import { isUndefined } from "@fxts/core";
-
 import crypto from "crypto";
-import { Result } from "./result";
 import { IResult } from "@APP/api/types";
+import { InternalError } from "./failure";
+import { Result } from "./result";
 
 export namespace Crypto {
     const IV_LEN = 12;
@@ -21,11 +21,8 @@ export namespace Crypto {
     }: {
         plain: string;
         key: string;
-    }): IResult<string, "key Invalid" | "Unexpected Error"> => {
+    }): IResult<string, InternalError> => {
         try {
-            if (key.length !== 32)
-                return Result.Error.map("key Invalid" as const);
-
             const iv = crypto.randomBytes(IV_LEN);
             const cipher = crypto.createCipheriv("aes-256-gcm", key, iv, {
                 authTagLength: TAG_LEN,
@@ -38,8 +35,8 @@ export namespace Crypto {
                     "base64",
                 )}.${encrypted}`,
             );
-        } catch {
-            return Result.Error.map("Unexpected Error" as const);
+        } catch (error) {
+            return Result.Error.map(InternalError.create(error as Error));
         }
     };
 
@@ -58,17 +55,11 @@ export namespace Crypto {
     }: {
         token: string;
         key: string;
-    }): IResult<
-        string,
-        "key Invalid" | "Token Invalid" | "Unexpected Error"
-    > => {
+    }): IResult<string, "TOKEN_INVALID" | InternalError> => {
         try {
-            if (key.length !== 32)
-                return Result.Error.map("key Invalid" as const);
-
             const [iv, tag, encrypted] = token.split(".");
             if (isUndefined(iv) || isUndefined(tag) || isUndefined(encrypted))
-                return Result.Error.map("Token Invalid" as const);
+                return Result.Error.map("TOKEN_INVALID" as const);
 
             const decipher = crypto
                 .createDecipheriv("aes-256-gcm", key, Buffer.from(iv, "base64"))
@@ -78,8 +69,8 @@ export namespace Crypto {
                 decipher.update(encrypted, "base64", "utf8") +
                     decipher.final("utf8"),
             );
-        } catch {
-            return Result.Error.map("Unexpected Error" as const);
+        } catch (error) {
+            return Result.Error.map(InternalError.create(error as Error));
         }
     };
 }

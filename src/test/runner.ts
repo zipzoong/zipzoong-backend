@@ -1,8 +1,3 @@
-import stripAnsi from "strip-ansi";
-import { createWriteStream } from "fs";
-import path from "path";
-import { IConnection } from "@nestia/fetcher";
-import { DynamicExecutor } from "@nestia/e2e";
 import {
     each,
     filter,
@@ -14,6 +9,11 @@ import {
     sort,
     toArray,
 } from "@fxts/core";
+import { DynamicExecutor } from "@nestia/e2e";
+import { IConnection } from "@nestia/fetcher";
+import { createWriteStream } from "fs";
+import path from "path";
+import stripAnsi from "strip-ansi";
 import { Backend } from "@APP/application";
 import { Configuration } from "@APP/infrastructure/config";
 
@@ -33,11 +33,6 @@ const test = async (connection: IConnection): Promise<0 | -1> => {
         parameters: () => [connection],
     })(__dirname + "/features");
 
-    const a: Error | null = {} as any;
-    if (negate(isNull)(a)) {
-        a;
-    }
-
     const executions = pipe(
         report.executions,
 
@@ -52,14 +47,15 @@ const test = async (connection: IConnection): Promise<0 | -1> => {
         toArray,
     );
 
-    logger.write("\n</details>");
+    logger.write("\n</details>\n");
     console.log();
-
     if (isEmpty(executions)) {
         console.log("✅ \x1b[32mAll Tests Passed\x1b[0m");
+        console.log();
         console.log(`Test Count: \x1b[36m${report.executions.length}\x1b[0m`);
+        console.log();
         console.log(
-            `Total Test Time: \x1b[33m${report.time.toLocaleString()}\x1b[0mms`,
+            `Total Test Time: \x1b[33m${report.time.toLocaleString()}\x1b[0m ms`,
         );
         return 0;
     } else {

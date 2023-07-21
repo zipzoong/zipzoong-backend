@@ -1,12 +1,11 @@
-import { IFailure } from "@APP/api/types";
 import { HttpError } from "@nestia/fetcher";
-import { HttpStatus } from "@nestjs/common";
 import assert from "assert";
-import typia from "typia";
+import { parseFailure } from "@APP/api";
+import { IFailure } from "@APP/api/types";
 
 export const test_failure =
     <T = void>(api: (input: T) => Promise<unknown>) =>
-    (status: HttpStatus, expected: IFailure) =>
+    (expected: IFailure) =>
     async (input: T) => {
         try {
             await api(input);
@@ -15,10 +14,7 @@ export const test_failure =
             if (!(error instanceof HttpError)) {
                 throw error;
             }
-            assert.strictEqual(error.status, status);
-            assert.deepStrictEqual(
-                typia.assertParse<IFailure>(error.message),
-                expected,
-            );
+            const failure = parseFailure(error);
+            assert.deepStrictEqual(failure, expected);
         }
     };

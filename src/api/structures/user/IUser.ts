@@ -1,0 +1,64 @@
+import { IAuthentication } from "../IAuthentication";
+import { IClient } from "./IClient";
+import { IHSProvider } from "./IHSProvider";
+import { IREAgent } from "./IREAgent";
+
+export type IUser = IClient | IREAgent | IHSProvider;
+
+export namespace IUser {
+    export type Type = "client" | "real estate agent" | "home service provider";
+    export type GenderType = "female" | "male";
+    export interface IBase<T extends Type> {
+        /**
+         * 사용자 유형
+         *
+         * - client: 일반 회원
+         * - real estate: 공인중개사
+         * - home service: 생활서비스 전문가
+         */
+        readonly type: T;
+        /** 사용자 고유 id */
+        readonly id: string;
+        /**
+         * 사용자명
+         *
+         * - 사용자가 home service provider인 경우, 업체 상호명이다.
+         */
+        readonly name: string;
+        /**
+         * 사용자 이메일
+         *
+         * @format email
+         */
+        readonly email: null | string;
+        /**
+         * 사용자 정보 생성일
+         *
+         * @format date-time
+         */
+        readonly created_at: string;
+        /**
+         * 최근 수정일
+         *
+         * @format date-time
+         */
+        readonly updated_at: string;
+    }
+
+    export type ICreateRequest =
+        | IClient.ICreateRequest
+        | IREAgent.ICreateRequest
+        | IHSProvider.ICreateRequest;
+
+    export namespace FailureCode {
+        export type Validate =
+            | IAuthentication.FailureCode.TokenVerify
+            | "USER_INVALID";
+        export type ValidateType =
+            | Validate
+            | IAuthentication.FailureCode.PermissionInSufficient;
+        export type Verify = "USER_UNVERIFIED";
+        export type GetPublic = "USER_NOT_FOUND";
+        export type GetOne = GetPublic | "USER_INACTIVE";
+    }
+}
