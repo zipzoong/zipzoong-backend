@@ -11,6 +11,8 @@ import typia from "typia";
 import type { IHSProvider } from "./../../../../../structures/user/IHSProvider";
 
 export * as portfolios from "./portfolios";
+export * as biz_info from "./biz_info";
+export * as expertise from "./expertise";
 
 /**
  * 생활서비스 전문가 개인정보를 요청한다.

@@ -104,6 +104,52 @@ export class UsersHSProvidersMeController {
     }
 }
 
+@Controller(route + "/me/biz-info")
+export class UsersHSProvidersBIZInfoUpdateController {
+    /**
+     * 생활서비스 전문가 사업자 정보 수정
+     *
+     * - 사업자 정보가 변경될 경우, 필요시 증명 서류를 추가로 저장해야 한다.
+     *
+     * @summary 생활서비스 전문가 사업자 정보 수정
+     *
+     * @tag hs-providers
+     *
+     * @param access_token Authorization access access_token
+     *
+     * @param body 사업자 정보
+     */
+    @TypedRoute.Put()
+    update(
+        @Authorization("access") access_token: string,
+        @TypedBody() body: IHSProvider.IUpdate.IBIZInfo,
+    ): Promise<void> {
+        throw Error();
+    }
+}
+
+@Controller(route + "/me/expertise")
+export class UsersHSProvidersExpertiseUpdateController {
+    /**
+     * 생활서비스 전문가 전문분야 수정
+     *
+     * @summary 생활서비스 전문가 전문분야 수정
+     *
+     * @tag hs-providers
+     *
+     * @param access_token Authorization access access_token
+     *
+     * @param body 프로필 이미지 정보
+     */
+    @TypedRoute.Put()
+    update(
+        @Authorization("access") access_token: string,
+        @TypedBody() body: IHSProvider.IUpdate.ISubExpertise,
+    ): Promise<void> {
+        throw Error();
+    }
+}
+
 @Controller(route + "/:provider_id")
 export class UsersHSProvidersSomeoneController {
     /**

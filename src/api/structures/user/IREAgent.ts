@@ -179,6 +179,20 @@ export namespace IREAgent {
 
     export type IPaginatedSummary = IPaginatedResponse<ISummary>;
 
+    export namespace IUpdate {
+        export interface IRealEstate extends Mutable<IREAgent.IRealEstate> {}
+        export interface IExpertise {
+            /**
+             * 개업/소속 공인중개사 구분
+             */
+            is_licensed: boolean;
+            /**
+             * 전문분야 id
+             */
+            expertise_id: string;
+        }
+    }
+
     export namespace FailureCode {
         export type GetPublic = IUser.FailureCode.GetPublic;
         export type GetContact =

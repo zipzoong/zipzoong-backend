@@ -11,6 +11,8 @@ import typia from "typia";
 import type { IREAgent } from "./../../../../../structures/user/IREAgent";
 
 export * as portfolios from "./portfolios";
+export * as real_estate from "./real_estate";
+export * as expertise from "./expertise";
 
 /**
  * 공인중개사 개인정보를 요청한다.

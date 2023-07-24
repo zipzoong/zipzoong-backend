@@ -1,6 +1,6 @@
 import { TypedBody, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
-import { IBIZUser } from "@APP/api";
+import { IBIZUser, IVerification } from "@APP/api";
 import { Authorization } from "@APP/controllers/decorators/authorization";
 import { httpResponse } from "@APP/controllers/internal";
 import { BIZUser } from "@APP/providers/user/biz_user";
@@ -56,5 +56,101 @@ export class UsersBIZCertificationsController {
             access_token,
         )(body);
         httpResponse(result);
+    }
+}
+
+@Controller("users/biz-users/me/introduction")
+export class UsersBIZUsersIntroductionUpdateController {
+    /**
+     * 사업자 자기소개 수정
+     *
+     * @summary 사업자 자기소개 수정
+     *
+     * @tag re-agents
+     *
+     * @tag hs-providers
+     *
+     * @param access_token Authorization access access_token
+     *
+     * @param body 자기 소개 정보
+     */
+    @TypedRoute.Put()
+    update(
+        @Authorization("access") access_token: string,
+        @TypedBody() body: IBIZUser.IUpdate.IIntroduction,
+    ): Promise<void> {
+        throw Error();
+    }
+}
+
+@Controller("users/biz-users/me/phone")
+export class UsersBIZUsersPhoneUpdateController {
+    /**
+     * 사업자 개인 전화번호 수정
+     *
+     * @summary 사업자 개인 전화번호 수정
+     *
+     * @tag re-agents
+     *
+     * @tag hs-providers
+     *
+     * @param access_token Authorization access access_token
+     *
+     * @param body 인증된 전화번호 접근 방식
+     */
+    @TypedRoute.Put()
+    update(
+        @Authorization("access") access_token: string,
+        @TypedBody() body: IVerification.IVerifiedPhone,
+    ): Promise<void> {
+        throw Error();
+    }
+}
+
+@Controller("users/biz-users/me/name")
+export class UsersBIZUsersNameUpdateController {
+    /**
+     * 사업자 이름 수정
+     *
+     * @summary 사업자 이름 수정
+     *
+     * @tag re-agents
+     *
+     * @tag hs-providers
+     *
+     * @param access_token Authorization access access_token
+     *
+     * @param body 이름 정보
+     */
+    @TypedRoute.Put()
+    update(
+        @Authorization("access") access_token: string,
+        @TypedBody() body: IBIZUser.IUpdate.IName,
+    ): Promise<void> {
+        throw Error();
+    }
+}
+
+@Controller("users/biz-users/me/profile-image")
+export class UsersBIZUsersProfileImageUpdateController {
+    /**
+     * 사업자 프로필 이미지 수정
+     *
+     * @summary 사업자 프로필 이미지 수정
+     *
+     * @tag re-agents
+     *
+     * @tag hs-providers
+     *
+     * @param access_token Authorization access access_token
+     *
+     * @param body 프로필 이미지 정보
+     */
+    @TypedRoute.Put()
+    update(
+        @Authorization("access") access_token: string,
+        @TypedBody() body: IBIZUser.IUpdate.IProfileImage,
+    ): Promise<void> {
+        throw Error();
     }
 }

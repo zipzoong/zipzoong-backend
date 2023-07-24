@@ -84,7 +84,16 @@ export namespace IClient {
          */
         email: null | IVerification.IVerifiedEmail;
     }
+
     export type IPrivate = IClient;
+
+    export interface IUpdateProfile
+        extends Partial<
+            Pick<
+                Mutable<IClient>,
+                "name" | "profile_image_url" | "birth" | "gender" | "address"
+            >
+        > {}
 
     export namespace FailureCode {
         export type GetPrivate = IUser.FailureCode.ValidateType;

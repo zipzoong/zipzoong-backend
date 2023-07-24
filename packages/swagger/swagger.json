@@ -990,6 +990,378 @@
         ]
       }
     },
+    "/users/biz-users/me/introduction": {
+      "put": {
+        "tags": [
+          "re-agents",
+          "hs-providers"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "자기 소개 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IBIZUser.IUpdate.IIntroduction"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "사업자 자기소개 수정",
+        "description": "사업자 자기소개 수정\n\n@summary 사업자 자기소개 수정\n\n@tag re-agents\n\n@tag hs-providers\n\n@param access_token Authorization access access_token\n\n@param body 자기 소개 정보",
+        "x-nestia-namespace": "users.biz-users.me.introduction.update",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "사업자 자기소개 수정",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "re-agents",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "hs-providers",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "access_token",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Authorization access access_token",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "자기 소개 정보",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/users/biz-users/me/phone": {
+      "put": {
+        "tags": [
+          "re-agents",
+          "hs-providers"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "인증된 전화번호 접근 방식",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IVerification.IVerifiedPhone"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "사업자 개인 전화번호 수정",
+        "description": "사업자 개인 전화번호 수정\n\n@summary 사업자 개인 전화번호 수정\n\n@tag re-agents\n\n@tag hs-providers\n\n@param access_token Authorization access access_token\n\n@param body 인증된 전화번호 접근 방식",
+        "x-nestia-namespace": "users.biz-users.me.phone.update",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "사업자 개인 전화번호 수정",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "re-agents",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "hs-providers",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "access_token",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Authorization access access_token",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "인증된 전화번호 접근 방식",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/users/biz-users/me/name": {
+      "put": {
+        "tags": [
+          "re-agents",
+          "hs-providers"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "이름 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IBIZUser.IUpdate.IName"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "사업자 이름 수정",
+        "description": "사업자 이름 수정\n\n@summary 사업자 이름 수정\n\n@tag re-agents\n\n@tag hs-providers\n\n@param access_token Authorization access access_token\n\n@param body 이름 정보",
+        "x-nestia-namespace": "users.biz-users.me.name.update",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "사업자 이름 수정",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "re-agents",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "hs-providers",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "access_token",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Authorization access access_token",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "이름 정보",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/users/biz-users/me/profile-image": {
+      "put": {
+        "tags": [
+          "re-agents",
+          "hs-providers"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "프로필 이미지 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IBIZUser.IUpdate.IProfileImage"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "사업자 프로필 이미지 수정",
+        "description": "사업자 프로필 이미지 수정\n\n@summary 사업자 프로필 이미지 수정\n\n@tag re-agents\n\n@tag hs-providers\n\n@param access_token Authorization access access_token\n\n@param body 프로필 이미지 정보",
+        "x-nestia-namespace": "users.biz-users.me.profile-image.update",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "사업자 프로필 이미지 수정",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "re-agents",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "hs-providers",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "access_token",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Authorization access access_token",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "프로필 이미지 정보",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
     "/users/biz-users/hs-providers": {
       "get": {
         "tags": [
@@ -1311,6 +1683,172 @@
             "text": [
               {
                 "text": "포트폴리오 상세 정보 목록",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/users/biz-users/hs-providers/me/biz-info": {
+      "put": {
+        "tags": [
+          "hs-providers"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "사업자 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IHSProvider.IUpdate.IBIZInfo"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "생활서비스 전문가 사업자 정보 수정",
+        "description": "생활서비스 전문가 사업자 정보 수정\n\n- 사업자 정보가 변경될 경우, 필요시 증명 서류를 추가로 저장해야 한다.\n\n@summary 생활서비스 전문가 사업자 정보 수정\n\n@tag hs-providers\n\n@param access_token Authorization access access_token\n\n@param body 사업자 정보",
+        "x-nestia-namespace": "users.biz-users.hs-providers.me.biz-info.update",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "생활서비스 전문가 사업자 정보 수정",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "hs-providers",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "access_token",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Authorization access access_token",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "사업자 정보",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/users/biz-users/hs-providers/me/expertise": {
+      "put": {
+        "tags": [
+          "hs-providers"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "프로필 이미지 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IHSProvider.IUpdate.ISubExpertise"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "생활서비스 전문가 전문분야 수정",
+        "description": "생활서비스 전문가 전문분야 수정\n\n@summary 생활서비스 전문가 전문분야 수정\n\n@tag hs-providers\n\n@param access_token Authorization access access_token\n\n@param body 프로필 이미지 정보",
+        "x-nestia-namespace": "users.biz-users.hs-providers.me.expertise.update",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "생활서비스 전문가 전문분야 수정",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "hs-providers",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "access_token",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Authorization access access_token",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "프로필 이미지 정보",
                 "kind": "text"
               }
             ]
@@ -1929,6 +2467,172 @@
         ]
       }
     },
+    "/users/biz-users/re-agents/me/real-estate": {
+      "put": {
+        "tags": [
+          "re-agents"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "부동산 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IREAgent.IUpdate.IRealEstate"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "공인중개사 부동산 정보 수정",
+        "description": "공인중개사 부동산 정보 수정\n\n@summary 공인중개사 부동산 정보 수정\n\n@tag re-agents\n\n@param access_token Authorization access access_token\n\n@param body 부동산 정보",
+        "x-nestia-namespace": "users.biz-users.re-agents.me.real-estate.update",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "공인중개사 부동산 정보 수정",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "re-agents",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "access_token",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Authorization access access_token",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "부동산 정보",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/users/biz-users/re-agents/me/expertise": {
+      "put": {
+        "tags": [
+          "re-agents"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "전문 분야",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IREAgent.IUpdate.IExpertise"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "공인중개사 전문 분야 수정",
+        "description": "공인중개사 전문 분야 수정\n\n@summary 공인중개사 전문 분야 수정\n\n@tag re-agents\n\n@param access_token Authorization access access_token\n\n@param body 전문 분야",
+        "x-nestia-namespace": "users.biz-users.re-agents.me.expertise.update",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "공인중개사 전문 분야 수정",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "re-agents",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "access_token",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Authorization access access_token",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "전문 분야",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
     "/users/biz-users/re-agents/{agent_id}": {
       "get": {
         "tags": [
@@ -2275,6 +2979,172 @@
             "text": [
               {
                 "text": "내 정보",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/users/clients/me/profile": {
+      "put": {
+        "tags": [
+          "clients"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "사용자 프로필 정보 전체",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IClient.IUpdateProfile"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "일반 고객 프로필 수정",
+        "description": "일반 고객 프로필 수정\n\n@summary 일반 고객 프로필 수정\n\n@tag clients\n\n@param access_token Authorization access access_token\n\n@param body 사용자 프로필 정보 전체",
+        "x-nestia-namespace": "users.clients.me.profile.update",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "일반 고객 프로필 수정",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "clients",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "access_token",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Authorization access access_token",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "사용자 프로필 정보 전체",
+                "kind": "text"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "/users/clients/me/phone": {
+      "put": {
+        "tags": [
+          "clients"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "인증된 전화번호 접근 방식",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IVerification.IVerifiedPhone"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "일반 고객 전화번호 수정",
+        "description": "일반 고객 전화번호 수정\n\n@summary 일반 고객 전화번호 수정\n\n@tag clients\n\n@param access_token Authorization access access_token\n\n@param body 인증된 전화번호 접근 방식",
+        "x-nestia-namespace": "users.clients.me.phone.update",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "summary",
+            "text": [
+              {
+                "text": "일반 고객 전화번호 수정",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "clients",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "access_token",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Authorization access access_token",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "인증된 전화번호 접근 방식",
                 "kind": "text"
               }
             ]
@@ -4126,6 +4996,116 @@
         "description": "미리 서명된 url이란 실제 이미지나 영상 등의 리소스를 저장소에 업로드하기 위한 서명까지 받은 형태의 url로서 리소스를 업로드할 때 사용한다.",
         "x-typia-jsDocTags": []
       },
+      "IBIZUser.IUpdate.IIntroduction": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "description": "사업자 소개 제목\n\n@maxLength 20",
+            "x-typia-metaTags": [
+              {
+                "kind": "maxLength",
+                "value": 20
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "maxLength",
+                "text": [
+                  {
+                    "text": "20",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "maxLength": 20
+          },
+          "content": {
+            "description": "사업자 소개 내용\n\n@maxLength 500",
+            "x-typia-metaTags": [
+              {
+                "kind": "maxLength",
+                "value": 500
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "maxLength",
+                "text": [
+                  {
+                    "text": "500",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "nullable": false,
+        "required": [
+          "title",
+          "content"
+        ],
+        "x-typia-jsDocTags": []
+      },
+      "IBIZUser.IUpdate.IName": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "사용자명\n\n- 사용자가 home service provider인 경우, 업체 상호명이다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "name"
+        ],
+        "x-typia-jsDocTags": []
+      },
+      "IBIZUser.IUpdate.IProfileImage": {
+        "type": "object",
+        "properties": {
+          "profile_image_url": {
+            "description": "변경할 프로필 이미지\n\n사업자는 반드시 본인 혹은 대표의 얼굴을 프로필 이미지로 지정해야 한다.\n\n@format url",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "url"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "url",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "url"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "profile_image_url"
+        ],
+        "description": "변경할 프로필 이미지\n\n사업자는 반드시 본인 혹은 대표의 얼굴을 프로필 이미지로 지정해야 한다.\n\n@format url",
+        "x-typia-jsDocTags": []
+      },
       "IHSProvider.ISearch": {
         "type": "object",
         "properties": {
@@ -4822,6 +5802,75 @@
           "updated_at"
         ],
         "description": "포트폴리오 정보 최근 수정일\n\n@format date-time",
+        "x-typia-jsDocTags": []
+      },
+      "IHSProvider.IUpdate.IBIZInfo": {
+        "type": "object",
+        "properties": {
+          "registration_number": {
+            "description": "사업자 등록번호",
+            "x-typia-required": false,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "biz_phone": {
+            "description": "업체 대표 전화번호",
+            "x-typia-required": false,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "open_date": {
+            "description": "개업일(신고일자)\n\nYYYY-MM-DD\n\n@format date",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "date"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "date",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "date"
+          },
+          "address": {
+            "$ref": "#/components/schemas/IAddress"
+          }
+        },
+        "nullable": false,
+        "x-typia-jsDocTags": []
+      },
+      "IHSProvider.IUpdate.ISubExpertise": {
+        "type": "object",
+        "properties": {
+          "sub_expertise_ids": {
+            "description": "하위 전문 분야를 모두 변경한다.\n\n기존의 상위 전문 분야와 동일한 하위 전문분야로만 변경할 수 있다.\n\n유지하고 싶은 하위 전문 분야 id로 리스트에 포함해야 한다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "array",
+            "items": {
+              "description": "하위 전문 분야를 모두 변경한다.\n\n기존의 상위 전문 분야와 동일한 하위 전문분야로만 변경할 수 있다.\n\n유지하고 싶은 하위 전문 분야 id로 리스트에 포함해야 한다.",
+              "x-typia-required": true,
+              "x-typia-optional": false,
+              "type": "string"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "sub_expertise_ids"
+        ],
+        "description": "하위 전문 분야를 모두 변경한다.\n\n기존의 상위 전문 분야와 동일한 하위 전문분야로만 변경할 수 있다.\n\n유지하고 싶은 하위 전문 분야 id로 리스트에 포함해야 한다.",
         "x-typia-jsDocTags": []
       },
       "IHSProvider.IPublic": {
@@ -5838,6 +6887,96 @@
         "description": "포트폴리오 정보 최근 수정일\n\n@format date-time",
         "x-typia-jsDocTags": []
       },
+      "IREAgent.IUpdate.IRealEstate": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "description": "중개 등록번호",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "name": {
+            "description": "상호명",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "phone": {
+            "description": "부동산 전화번호\n\n- 없을 경우, 대표자 연락처",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "licensed_agent_name": {
+            "description": "대표자명",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/IAddress"
+          },
+          "open_date": {
+            "description": "부동산 등록일자\n\nYYYY-MM-DD\n\n@format date",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "date"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "date",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "number",
+          "name",
+          "phone",
+          "licensed_agent_name",
+          "address",
+          "open_date"
+        ],
+        "x-typia-jsDocTags": []
+      },
+      "IREAgent.IUpdate.IExpertise": {
+        "type": "object",
+        "properties": {
+          "is_licensed": {
+            "description": "개업/소속 공인중개사 구분",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "boolean"
+          },
+          "expertise_id": {
+            "description": "전문분야 id",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "is_licensed",
+          "expertise_id"
+        ],
+        "description": "전문분야 id",
+        "x-typia-jsDocTags": []
+      },
       "IREAgent.IPublic": {
         "type": "object",
         "properties": {
@@ -6352,6 +7491,83 @@
           "updated_at"
         ],
         "description": "사용자 프로필 이미지\n\n@format url",
+        "x-typia-jsDocTags": []
+      },
+      "IClient.IUpdateProfile": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "사용자명\n\n- 사용자가 home service provider인 경우, 업체 상호명이다.",
+            "x-typia-required": false,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "profile_image_url": {
+            "description": "사용자 프로필 이미지\n\n@format url",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "url"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "url",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "url",
+            "nullable": true
+          },
+          "address": {
+            "$ref": "#/components/schemas/IAddress.Nullable"
+          },
+          "gender": {
+            "description": "성별",
+            "x-typia-required": false,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "female",
+              "male"
+            ],
+            "nullable": true
+          },
+          "birth": {
+            "description": "생일(양력)\n\nYYYY-MM-DD 형식\n\n@format date",
+            "x-typia-metaTags": [
+              {
+                "kind": "format",
+                "value": "date"
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "date",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          }
+        },
+        "nullable": false,
         "x-typia-jsDocTags": []
       },
       "IVerification.IRequest.ICreatePhone": {

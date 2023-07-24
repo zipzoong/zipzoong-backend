@@ -1,5 +1,6 @@
 import { TypedBody, TypedParam, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
+import { IVerification } from "@APP/api";
 import { IREPortfolio } from "@APP/api/structures/IREPortfolio";
 import { IREAgent } from "@APP/api/structures/user/IREAgent";
 import { REPortfolio } from "@APP/providers/re_portfolio";
@@ -101,6 +102,50 @@ export class UsersREAgentsMeController {
             query,
         );
         return httpResponse(result);
+    }
+}
+
+@Controller(route + "/me/real-estate")
+export class UsersREAgentsBIZInfoUpdateController {
+    /**
+     * 공인중개사 부동산 정보 수정
+     *
+     * @summary 공인중개사 부동산 정보 수정
+     *
+     * @tag re-agents
+     *
+     * @param access_token Authorization access access_token
+     *
+     * @param body 부동산 정보
+     */
+    @TypedRoute.Put()
+    update(
+        @Authorization("access") access_token: string,
+        @TypedBody() body: IREAgent.IUpdate.IRealEstate,
+    ): Promise<void> {
+        throw Error();
+    }
+}
+
+@Controller(route + "/me/expertise")
+export class UsersREAgentsExpertiseUpdateController {
+    /**
+     * 공인중개사 전문 분야 수정
+     *
+     * @summary 공인중개사 전문 분야 수정
+     *
+     * @tag re-agents
+     *
+     * @param access_token Authorization access access_token
+     *
+     * @param body 전문 분야
+     */
+    @TypedRoute.Put()
+    update(
+        @Authorization("access") access_token: string,
+        @TypedBody() body: IREAgent.IUpdate.IExpertise,
+    ): Promise<void> {
+        throw Error();
     }
 }
 

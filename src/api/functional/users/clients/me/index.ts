@@ -10,6 +10,9 @@ import typia from "typia";
 
 import type { IClient } from "./../../../../structures/user/IClient";
 
+export * as profile from "./profile";
+export * as phone from "./phone";
+
 /**
  * 일반 고객 내 정보 보기 요청
  * 
