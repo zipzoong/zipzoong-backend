@@ -3080,7 +3080,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/IVerification.IVerifiedPhone"
+                "$ref": "#/components/schemas/IVerification.IVerifiedPhone.IVerification"
               }
             }
           },

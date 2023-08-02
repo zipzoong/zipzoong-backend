@@ -28,7 +28,7 @@ import type { IVerification } from "./../../../../../structures/IVerification";
  */
 export async function update(
     connection: IConnection,
-    body: IVerification.IVerifiedPhone,
+    body: IVerification.IVerifiedPhone.IVerification,
 ): Promise<void> {
     return !!connection.simulate
         ? update.simulate(
@@ -45,7 +45,7 @@ export async function update(
           );
 }
 export namespace update {
-    export type Input = IVerification.IVerifiedPhone;
+    export type Input = IVerification.IVerifiedPhone.IVerification;
 
     export const METHOD = "PUT" as const;
     export const PATH: string = "/users/clients/me/phone";

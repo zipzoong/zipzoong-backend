@@ -2,6 +2,7 @@ import { TypedBody, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
 import { IVerification } from "@APP/api";
 import { IClient } from "@APP/api/structures/user/IClient";
+import { prisma } from "@APP/infrastructure/DB";
 import { Client } from "@APP/providers/user/client";
 import { Authorization } from "../decorators/authorization";
 import { httpResponse } from "../internal";
@@ -47,7 +48,12 @@ export class UsersClientsController {
         @Authorization("access") access_token: string,
         @TypedBody() body: IClient.IUpdateProfile,
     ): Promise<void> {
-        throw Error("");
+        return prisma.$transaction(async (tx) => {
+            const result = await Client.Service.updateProfile(tx)(access_token)(
+                body,
+            );
+            httpResponse(result);
+        });
     }
 }
 
@@ -67,8 +73,13 @@ export class UsersClientsMePhoneUpdateController {
     @TypedRoute.Put()
     update(
         @Authorization("access") access_token: string,
-        @TypedBody() body: IVerification.IVerifiedPhone,
+        @TypedBody() body: IVerification.IVerifiedPhone.IVerification,
     ): Promise<void> {
-        throw Error();
+        return prisma.$transaction(async (tx) => {
+            const result = await Client.Service.updatePhone(tx)(access_token)(
+                body,
+            );
+            httpResponse(result);
+        });
     }
 }

@@ -398,7 +398,7 @@ export namespace Service {
             >
         > =>
             input.type === "verification"
-                ? Verification.Service.isVerifiedPhone(tx)(input)
+                ? Verification.Service.assertVerifiedPhone(tx)(input)
                 : account.phone === input.phone
                 ? Result.Ok.map(input.phone)
                 : Result.Error.map(

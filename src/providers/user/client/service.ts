@@ -1,11 +1,19 @@
 import { Prisma } from "@PRISMA";
-import { isNull, isString, pipe, unless } from "@fxts/core";
+import { isNil, isNull, isString, pipe, unless } from "@fxts/core";
 import { HttpStatus } from "@nestjs/common";
+import { IVerification } from "@APP/api";
 import { IClient } from "@APP/api/structures/user/IClient";
 import { IUser } from "@APP/api/structures/user/IUser";
 import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
-import { Failure, InternalError, Result, isDeleted } from "@APP/utils";
+import { Verification } from "@APP/providers/verification";
+import {
+    DateMapper,
+    Failure,
+    InternalError,
+    Result,
+    isDeleted,
+} from "@APP/utils";
 import { User } from "../user";
 import { Mapper } from "./mapper";
 import { PrismaJson, PrismaMapper } from "./prisma";
@@ -75,4 +83,85 @@ export namespace Service {
     export const isVerified = (
         agg: IClient,
     ): agg is IClient & { phone: string } => isString(agg.phone);
+
+    export const updateProfile =
+        (tx: Prisma.TransactionClient = prisma) =>
+        (access_token: string) =>
+        async (
+            input: IClient.IUpdateProfile,
+        ): Promise<
+            IResult<
+                null,
+                InternalError | Failure<IClient.FailureCode.UpdateProfile>
+            >
+        > => {
+            const permission = await User.Service.validateType("client")(tx)(
+                access_token,
+            );
+            if (Result.Error.is(permission)) return permission;
+            const user = Result.Ok.flatten(permission);
+
+            return pipe(
+                user.id,
+
+                async (id) => {
+                    await tx.userModel.updateMany({
+                        where: { id },
+                        data: {
+                            name: input.name,
+                            updated_at: DateMapper.toISO(),
+                        },
+                    });
+                    await tx.clientModel.updateMany({
+                        where: { id },
+                        data: {
+                            birth: isNil(input.birth)
+                                ? input.birth
+                                : new Date(input.birth),
+                            gender: input.gender,
+                            profile_image_url: input.profile_image_url,
+                        },
+                    });
+                },
+
+                () => Result.Ok.map(null),
+            );
+        };
+
+    export const updatePhone =
+        (tx: Prisma.TransactionClient = prisma) =>
+        (access_token: string) =>
+        async (
+            input: IVerification.IVerifiedPhone.IVerification,
+        ): Promise<
+            IResult<
+                null,
+                InternalError | Failure<IClient.FailureCode.UpdatePhone>
+            >
+        > => {
+            const permission = await User.Service.validateType("client")(tx)(
+                access_token,
+            );
+            if (Result.Error.is(permission)) return permission;
+            const user = Result.Ok.flatten(permission);
+            return pipe(
+                input,
+
+                Verification.Service.assertVerifiedPhone(tx),
+
+                unless(Result.Error.is, async (ok) => {
+                    const phone = Result.Ok.flatten(ok);
+                    await tx.clientModel.updateMany({
+                        where: { id: user.id },
+                        data: { phone },
+                    });
+                    await tx.userModel.updateMany({
+                        where: { id: user.id },
+                        data: { updated_at: DateMapper.toISO() },
+                    });
+
+                    return Result.Ok.map(null);
+                }),
+            );
+        };
 }

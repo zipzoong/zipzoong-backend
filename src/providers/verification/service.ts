@@ -129,7 +129,7 @@ export namespace Service {
         return Result.Ok.map({ verification_id: verification.id });
     };
 
-    export const isVerifiedPhone =
+    export const assertVerifiedPhone =
         (tx: Prisma.TransactionClient = prisma) =>
         async ({
             phone,

@@ -97,5 +97,9 @@ export namespace IClient {
 
     export namespace FailureCode {
         export type GetPrivate = IUser.FailureCode.ValidateType;
+        export type UpdateProfile = IUser.FailureCode.ValidateType;
+        export type UpdatePhone =
+            | IUser.FailureCode.ValidateType
+            | IVerification.FailureCode.IsVerifiedPhone;
     }
 }
