@@ -125,7 +125,6 @@ export namespace IAuthentication {
             | "EXPERTISE_INVALID"
             | "TERMS_INSUFFICIENT"
             | "TERMS_INVALID";
-
         export type RefreshAccessToken = IUser.FailureCode.Validate;
     }
 }

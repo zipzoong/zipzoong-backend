@@ -19,11 +19,7 @@ export * as phone from "./phone";
  * {@link IClient.FailureCode.GetPrivate 에러 코드}
  * 
  * @summary 일반 고객 내 정보 요청
- * 
  * @tag clients
- * 
- * @param access_token Authorization access access_token
- * 
  * @return 내 정보
  * 
  * @controller UsersClientsController.get()

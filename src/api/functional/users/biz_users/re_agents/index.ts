@@ -19,11 +19,8 @@ export * as portfolios from "./portfolios";
  * 검색기준에 맞는 인증된 공인중개사 간단 정보 목록을 확안할 수 있다.
  * 
  * @summary 공인중개사 목록 검색
- * 
  * @tag re-agents
- * 
  * @param query 필터링, 정렬 기준
- * 
  * @return 공인중개사 간단 정보 목록
  * 
  * @controller UsersREAgentsController.getList()
@@ -96,11 +93,8 @@ export namespace getList {
  * {@link IREAgent.FailureCode.GetPublic 에러 코드}
  * 
  * @summary 공인 중개사 공개 프로필 정보 조회
- * 
  * @tag re-agents
- * 
  * @param agent_id 공인 중개사 id
- * 
  * @return 공인 중개사 공개정보
  * 
  * @controller UsersREAgentsSomeoneController.getOne()

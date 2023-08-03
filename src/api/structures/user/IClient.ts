@@ -100,6 +100,6 @@ export namespace IClient {
         export type UpdateProfile = IUser.FailureCode.ValidateType;
         export type UpdatePhone =
             | IUser.FailureCode.ValidateType
-            | IVerification.FailureCode.IsVerifiedPhone;
+            | IVerification.FailureCode.assertVerifiedPhone;
     }
 }

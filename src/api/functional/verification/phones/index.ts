@@ -23,11 +23,8 @@ export * as verify from "./verify";
  * {@link IVerification.FailureCode.CreatePhone 에러 코드}
  * 
  * @summary 휴대전화 인증 정보 생성
- * 
  * @tag verification
- * 
  * @param body 인증받을 휴대전화 번호
- * 
  * @return 인증 만료일자(생성일로부터 5분)
  * 
  * @controller VerificationPhonesController.create()
@@ -44,7 +41,13 @@ export async function create(
               body,
           )
         : Fetcher.fetch(
-              connection,
+              {
+                  ...connection,
+                  headers: {
+                      ...(connection.headers ?? {}),
+                      "Content-Type": "application/json",
+                  },
+              },
               create.ENCRYPTED,
               create.METHOD,
               create.path(),

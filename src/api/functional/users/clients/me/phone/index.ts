@@ -14,12 +14,10 @@ import type { IVerification } from "./../../../../../structures/IVerification";
 /**
  * 일반 고객 전화번호 수정
  * 
+ * {@link IClient.FailureCode.UpdatePhone 에러 코드}
+ * 
  * @summary 일반 고객 전화번호 수정
- * 
  * @tag clients
- * 
- * @param access_token Authorization access access_token
- * 
  * @param body 인증된 전화번호 접근 방식
  * 
  * @controller UsersClientsMePhoneUpdateController.update()
@@ -36,7 +34,13 @@ export async function update(
               body,
           )
         : Fetcher.fetch(
-              connection,
+              {
+                  ...connection,
+                  headers: {
+                      ...(connection.headers ?? {}),
+                      "Content-Type": "application/json",
+                  },
+              },
               update.ENCRYPTED,
               update.METHOD,
               update.path(),

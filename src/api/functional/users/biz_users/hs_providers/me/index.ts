@@ -22,11 +22,7 @@ export * as expertise from "./expertise";
  * {@link IHSProvider.FailureCode.GetPrivate 에러 코드}
  * 
  * @summary 생활서비스 전문가 내 정보 조회
- * 
  * @tag hs-providers
- * 
- * @param access_token Authorization access access_token
- * 
  * @return 생활서비스 전문가 상세 정보
  * 
  * @controller UsersHSProvidersMeController.get()

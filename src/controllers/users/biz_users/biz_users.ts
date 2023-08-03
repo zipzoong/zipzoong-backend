@@ -3,6 +3,7 @@ import { Controller } from "@nestjs/common";
 import { IBIZUser, IVerification } from "@APP/api";
 import { Authorization } from "@APP/controllers/decorators/authorization";
 import { httpResponse } from "@APP/controllers/internal";
+import { prisma } from "@APP/infrastructure/DB";
 import { BIZUser } from "@APP/providers/user/biz_user";
 
 @Controller("users/biz-users/me/certifications")
@@ -64,6 +65,8 @@ export class UsersBIZUsersIntroductionUpdateController {
     /**
      * 사업자 자기소개 수정
      *
+     * {@link IBIZUser.FailureCode.UpdateIntroduction 에러 코드}
+     *
      * @summary 사업자 자기소개 수정
      *
      * @tag re-agents
@@ -79,7 +82,12 @@ export class UsersBIZUsersIntroductionUpdateController {
         @Authorization("access") access_token: string,
         @TypedBody() body: IBIZUser.IUpdate.IIntroduction,
     ): Promise<void> {
-        throw Error();
+        return prisma.$transaction(async (tx) => {
+            const result = await BIZUser.Service.updateIntroduction(tx)(
+                access_token,
+            )(body);
+            httpResponse(result);
+        });
     }
 }
 
@@ -87,6 +95,8 @@ export class UsersBIZUsersIntroductionUpdateController {
 export class UsersBIZUsersPhoneUpdateController {
     /**
      * 사업자 개인 전화번호 수정
+     *
+     * {@link IBIZUser.FailureCode.UpdatePhone 에러 코드}
      *
      * @summary 사업자 개인 전화번호 수정
      *
@@ -101,9 +111,14 @@ export class UsersBIZUsersPhoneUpdateController {
     @TypedRoute.Put()
     update(
         @Authorization("access") access_token: string,
-        @TypedBody() body: IVerification.IVerifiedPhone,
+        @TypedBody() body: IVerification.IVerifiedPhone.IVerification,
     ): Promise<void> {
-        throw Error();
+        return prisma.$transaction(async (tx) => {
+            const result = await BIZUser.Service.updatePhone(tx)(access_token)(
+                body,
+            );
+            httpResponse(result);
+        });
     }
 }
 

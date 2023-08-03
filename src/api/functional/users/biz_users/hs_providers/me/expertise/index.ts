@@ -15,11 +15,7 @@ import type { IHSProvider } from "./../../../../../../structures/user/IHSProvide
  * 생활서비스 전문가 전문분야 수정
  * 
  * @summary 생활서비스 전문가 전문분야 수정
- * 
  * @tag hs-providers
- * 
- * @param access_token Authorization access access_token
- * 
  * @param body 프로필 이미지 정보
  * 
  * @controller UsersHSProvidersExpertiseUpdateController.update()
@@ -36,7 +32,13 @@ export async function update(
               body,
           )
         : Fetcher.fetch(
-              connection,
+              {
+                  ...connection,
+                  headers: {
+                      ...(connection.headers ?? {}),
+                      "Content-Type": "application/json",
+                  },
+              },
               update.ENCRYPTED,
               update.METHOD,
               update.path(),

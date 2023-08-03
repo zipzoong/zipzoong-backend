@@ -4,6 +4,7 @@ import { IUpload } from "../IUpload";
 import { IHSProvider } from "./IHSProvider";
 import { IREAgent } from "./IREAgent";
 import { IUser } from "./IUser";
+import { IVerification } from "../IVerification";
 
 export type IBIZUser = IHSProvider | IREAgent;
 
@@ -62,5 +63,12 @@ export namespace IBIZUser {
         export type CreateCertification =
             | IUser.FailureCode.Validate
             | IAuthentication.FailureCode.PermissionInSufficient;
+        export type UpdateIntroduction =
+            | IUser.FailureCode.Validate
+            | IAuthentication.FailureCode.PermissionInSufficient;
+        export type UpdatePhone =
+            | IUser.FailureCode.Validate
+            | IAuthentication.FailureCode.PermissionInSufficient
+            | IVerification.FailureCode.assertVerifiedPhone;
     }
 }

@@ -19,11 +19,8 @@ import type { IAuthentication } from "./../../../structures/IAuthentication";
  * {@link IAuthentication.FailureCode.SignUp 에러 코드}
  * 
  * @summary 계정 생성(회원가입)
- * 
  * @tag authentication
- * 
  * @param body oauth code, oauth type
- * 
  * @return 계정 권한이 부여된 토큰
  * 
  * @controller AuthController.create()
@@ -40,7 +37,13 @@ export async function create(
               body,
           )
         : Fetcher.fetch(
-              connection,
+              {
+                  ...connection,
+                  headers: {
+                      ...(connection.headers ?? {}),
+                      "Content-Type": "application/json",
+                  },
+              },
               create.ENCRYPTED,
               create.METHOD,
               create.path(),

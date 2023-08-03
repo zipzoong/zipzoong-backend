@@ -15,11 +15,7 @@ import type { IREAgent } from "./../../../../../../structures/user/IREAgent";
  * 공인중개사 전문 분야 수정
  * 
  * @summary 공인중개사 전문 분야 수정
- * 
  * @tag re-agents
- * 
- * @param access_token Authorization access access_token
- * 
  * @param body 전문 분야
  * 
  * @controller UsersREAgentsExpertiseUpdateController.update()
@@ -36,7 +32,13 @@ export async function update(
               body,
           )
         : Fetcher.fetch(
-              connection,
+              {
+                  ...connection,
+                  headers: {
+                      ...(connection.headers ?? {}),
+                      "Content-Type": "application/json",
+                  },
+              },
               update.ENCRYPTED,
               update.METHOD,
               update.path(),

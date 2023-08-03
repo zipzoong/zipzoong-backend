@@ -17,11 +17,8 @@ import type { IAuthentication } from "./../../../structures/IAuthentication";
  * {@link IAuthentication.FailureCode.SignIn 에러 코드}
  * 
  * @summary 로그인
- * 
  * @tag authentication
- * 
  * @param body oauth code, oauth type, user type
- * 
  * @return 사용자 권한이 부여된 토큰
  * 
  * @controller AuthController.execute()
@@ -38,7 +35,13 @@ export async function execute(
               body,
           )
         : Fetcher.fetch(
-              connection,
+              {
+                  ...connection,
+                  headers: {
+                      ...(connection.headers ?? {}),
+                      "Content-Type": "application/json",
+                  },
+              },
               execute.ENCRYPTED,
               execute.METHOD,
               execute.path(),

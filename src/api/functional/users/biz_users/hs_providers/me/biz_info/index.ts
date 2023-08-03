@@ -17,11 +17,7 @@ import type { IHSProvider } from "./../../../../../../structures/user/IHSProvide
  * - 사업자 정보가 변경될 경우, 필요시 증명 서류를 추가로 저장해야 한다.
  * 
  * @summary 생활서비스 전문가 사업자 정보 수정
- * 
  * @tag hs-providers
- * 
- * @param access_token Authorization access access_token
- * 
  * @param body 사업자 정보
  * 
  * @controller UsersHSProvidersBIZInfoUpdateController.update()
@@ -38,7 +34,13 @@ export async function update(
               body,
           )
         : Fetcher.fetch(
-              connection,
+              {
+                  ...connection,
+                  headers: {
+                      ...(connection.headers ?? {}),
+                      "Content-Type": "application/json",
+                  },
+              },
               update.ENCRYPTED,
               update.METHOD,
               update.path(),

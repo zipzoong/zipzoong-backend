@@ -135,7 +135,10 @@ export namespace Service {
             phone,
             verification_id,
         }: IVerification.IVerifiedPhone.IVerification): Promise<
-            IResult<string, Failure<IVerification.FailureCode.IsVerifiedPhone>>
+            IResult<
+                string,
+                Failure<IVerification.FailureCode.assertVerifiedPhone>
+            >
         > =>
             pipe(
                 verification_id,

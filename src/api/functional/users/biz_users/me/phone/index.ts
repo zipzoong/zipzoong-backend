@@ -14,14 +14,11 @@ import type { IVerification } from "./../../../../../structures/IVerification";
 /**
  * 사업자 개인 전화번호 수정
  * 
+ * {@link IBIZUser.FailureCode.UpdatePhone 에러 코드}
+ * 
  * @summary 사업자 개인 전화번호 수정
- * 
  * @tag re-agents
- * 
  * @tag hs-providers
- * 
- * @param access_token Authorization access access_token
- * 
  * @param body 인증된 전화번호 접근 방식
  * 
  * @controller UsersBIZUsersPhoneUpdateController.update()
@@ -30,7 +27,7 @@ import type { IVerification } from "./../../../../../structures/IVerification";
  */
 export async function update(
     connection: IConnection,
-    body: IVerification.IVerifiedPhone,
+    body: IVerification.IVerifiedPhone.IVerification,
 ): Promise<void> {
     return !!connection.simulate
         ? update.simulate(
@@ -38,7 +35,13 @@ export async function update(
               body,
           )
         : Fetcher.fetch(
-              connection,
+              {
+                  ...connection,
+                  headers: {
+                      ...(connection.headers ?? {}),
+                      "Content-Type": "application/json",
+                  },
+              },
               update.ENCRYPTED,
               update.METHOD,
               update.path(),
@@ -47,7 +50,7 @@ export async function update(
           );
 }
 export namespace update {
-    export type Input = IVerification.IVerifiedPhone;
+    export type Input = IVerification.IVerifiedPhone.IVerification;
 
     export const METHOD = "PUT" as const;
     export const PATH: string = "/users/biz-users/me/phone";

@@ -148,7 +148,7 @@ export namespace IVerification {
         export type VerifyPhone =
             | "VERIFICATION_NOT_FOUND"
             | "VERIFICATION_EXPIRED";
-        export type IsVerifiedPhone =
+        export type assertVerifiedPhone =
             | "VERIFICATION_NOT_FOUND"
             | "VERIFICATION_UNCOMPLETED";
         export type GetVerifiedPhone =

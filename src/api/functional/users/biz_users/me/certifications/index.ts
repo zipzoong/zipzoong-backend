@@ -17,13 +17,8 @@ import type { IBIZUser } from "./../../../../../structures/user/IBIZUser";
  * {@link IBIZUser.FailureCode.GetCertificationList 에러 코드}
  * 
  * @summary 사업자 인증 서류 이미지 목록 조회
- * 
  * @tag re-agents
- * 
  * @tag hs-providers
- * 
- * @param access_token Authorization access access_token
- * 
  * @return 사업자 인증 서류 이미지 url 목록
  * 
  * @controller UsersBIZCertificationsController.getList()
@@ -77,13 +72,8 @@ export namespace getList {
  * {@link IBIZUser.FailureCode.CreateCertification 에러 코드}
  * 
  * @summary 사업자 인증 서류 이미지 추가
- * 
  * @tag re-agents
- * 
  * @tag hs-providers
- * 
- * @param access_token Authorization access access_token
- * 
  * @param body 업로드할 이미지 정보
  * 
  * @controller UsersBIZCertificationsController.create()
@@ -100,7 +90,13 @@ export async function create(
               body,
           )
         : Fetcher.fetch(
-              connection,
+              {
+                  ...connection,
+                  headers: {
+                      ...(connection.headers ?? {}),
+                      "Content-Type": "application/json",
+                  },
+              },
               create.ENCRYPTED,
               create.METHOD,
               create.path(),

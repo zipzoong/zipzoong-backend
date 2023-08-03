@@ -35,6 +35,8 @@ export class UsersClientsController {
     /**
      * 일반 고객 프로필 수정
      *
+     * {@link IClient.FailureCode.UpdateProfile 에러 코드}
+     *
      * @summary 일반 고객 프로필 수정
      *
      * @tag clients
@@ -61,6 +63,8 @@ export class UsersClientsController {
 export class UsersClientsMePhoneUpdateController {
     /**
      * 일반 고객 전화번호 수정
+     *
+     * {@link IClient.FailureCode.UpdatePhone 에러 코드}
      *
      * @summary 일반 고객 전화번호 수정
      *

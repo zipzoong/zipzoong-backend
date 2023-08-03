@@ -16,11 +16,7 @@ import type { IAuthentication } from "./../../../../structures/IAuthentication";
  * {@link IAuthentication.FailureCode.RefreshAccessToken 에러 코드}
  * 
  * @summary 액세스 토큰 재발급
- * 
  * @tag authentication
- * 
- * @param refresh_token Authorization refresh refresh_token
- * 
  * @return 액세스 토큰
  * 
  * @controller AuthAccessTokenController.create()

@@ -15,13 +15,8 @@ import type { IBIZUser } from "./../../../../../structures/user/IBIZUser";
  * 사업자 이름 수정
  * 
  * @summary 사업자 이름 수정
- * 
  * @tag re-agents
- * 
  * @tag hs-providers
- * 
- * @param access_token Authorization access access_token
- * 
  * @param body 이름 정보
  * 
  * @controller UsersBIZUsersNameUpdateController.update()
@@ -38,7 +33,13 @@ export async function update(
               body,
           )
         : Fetcher.fetch(
-              connection,
+              {
+                  ...connection,
+                  headers: {
+                      ...(connection.headers ?? {}),
+                      "Content-Type": "application/json",
+                  },
+              },
               update.ENCRYPTED,
               update.METHOD,
               update.path(),

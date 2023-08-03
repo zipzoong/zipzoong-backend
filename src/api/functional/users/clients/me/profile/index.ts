@@ -14,12 +14,10 @@ import type { IClient } from "./../../../../../structures/user/IClient";
 /**
  * 일반 고객 프로필 수정
  * 
+ * {@link IClient.FailureCode.UpdateProfile 에러 코드}
+ * 
  * @summary 일반 고객 프로필 수정
- * 
  * @tag clients
- * 
- * @param access_token Authorization access access_token
- * 
  * @param body 사용자 프로필 정보 전체
  * 
  * @controller UsersClientsController.update()
@@ -36,7 +34,13 @@ export async function update(
               body,
           )
         : Fetcher.fetch(
-              connection,
+              {
+                  ...connection,
+                  headers: {
+                      ...(connection.headers ?? {}),
+                      "Content-Type": "application/json",
+                  },
+              },
               update.ENCRYPTED,
               update.METHOD,
               update.path(),

@@ -12,7 +12,6 @@ import typia from "typia";
  * 카카오 로그인 페이지 주소를 요청합니다.
  * 
  * @summary 카카오 로그인 페이지 주소 요청
- * 
  * @tag authentication
  * 
  * @controller AuthController.kakao()
