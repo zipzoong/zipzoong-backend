@@ -149,19 +149,21 @@ export namespace Service {
 
                 Verification.Service.assertVerifiedPhone(tx),
 
-                unless(Result.Error.is, async (ok) => {
-                    const phone = Result.Ok.flatten(ok);
-                    await tx.clientModel.updateMany({
-                        where: { id: user.id },
-                        data: { phone },
-                    });
-                    await tx.userModel.updateMany({
-                        where: { id: user.id },
-                        data: { updated_at: DateMapper.toISO() },
-                    });
+                unless(
+                    Result.Error.is,
+                    Result.Ok.asyncLift(async (phone) => {
+                        await tx.clientModel.updateMany({
+                            where: { id: user.id },
+                            data: { phone },
+                        });
+                        await tx.userModel.updateMany({
+                            where: { id: user.id },
+                            data: { updated_at: DateMapper.toISO() },
+                        });
 
-                    return Result.Ok.map(null);
-                }),
+                        return null;
+                    }),
+                ),
             );
         };
 }

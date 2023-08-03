@@ -127,6 +127,8 @@ export class UsersBIZUsersNameUpdateController {
     /**
      * 사업자 이름 수정
      *
+     * {@link IBIZUser.FailureCode.UpdateName 에러 코드}
+     *
      * @summary 사업자 이름 수정
      *
      * @tag re-agents
@@ -142,7 +144,12 @@ export class UsersBIZUsersNameUpdateController {
         @Authorization("access") access_token: string,
         @TypedBody() body: IBIZUser.IUpdate.IName,
     ): Promise<void> {
-        throw Error();
+        return prisma.$transaction(async (tx) => {
+            const result = await BIZUser.Service.updateName(tx)(access_token)(
+                body,
+            );
+            httpResponse(result);
+        });
     }
 }
 
@@ -150,6 +157,8 @@ export class UsersBIZUsersNameUpdateController {
 export class UsersBIZUsersProfileImageUpdateController {
     /**
      * 사업자 프로필 이미지 수정
+     *
+     * {@link IBIZUser.FailureCode.UpdateProfileImageUrl 에러 코드}
      *
      * @summary 사업자 프로필 이미지 수정
      *
@@ -164,8 +173,13 @@ export class UsersBIZUsersProfileImageUpdateController {
     @TypedRoute.Put()
     update(
         @Authorization("access") access_token: string,
-        @TypedBody() body: IBIZUser.IUpdate.IProfileImage,
+        @TypedBody() body: IBIZUser.IUpdate.IProfileImageUrl,
     ): Promise<void> {
-        throw Error();
+        return prisma.$transaction(async (tx) => {
+            const result = await BIZUser.Service.updateProfileImageUrl(tx)(
+                access_token,
+            )(body);
+            httpResponse(result);
+        });
     }
 }

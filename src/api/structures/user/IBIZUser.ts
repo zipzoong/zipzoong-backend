@@ -44,7 +44,7 @@ export namespace IBIZUser {
         export interface IIntroduction
             extends Mutable<IBIZUser.IIntroduction> {}
         export interface IName extends Pick<Mutable<IBIZUser>, "name"> {}
-        export interface IProfileImage {
+        export interface IProfileImageUrl {
             /**
              * 변경할 프로필 이미지
              *
@@ -70,5 +70,11 @@ export namespace IBIZUser {
             | IUser.FailureCode.Validate
             | IAuthentication.FailureCode.PermissionInSufficient
             | IVerification.FailureCode.assertVerifiedPhone;
+        export type UpdateName =
+            | IUser.FailureCode.Validate
+            | IAuthentication.FailureCode.PermissionInSufficient;
+        export type UpdateProfileImageUrl =
+            | IUser.FailureCode.Validate
+            | IAuthentication.FailureCode.PermissionInSufficient;
     }
 }

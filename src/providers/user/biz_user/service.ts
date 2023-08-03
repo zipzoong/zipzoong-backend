@@ -217,4 +217,93 @@ export namespace Service {
                 ),
             );
         };
+
+    export const updateName =
+        (tx: Prisma.TransactionClient = prisma) =>
+        (access_token: string) =>
+        async (
+            input: IBIZUser.IUpdate.IName,
+        ): Promise<
+            IResult<
+                null,
+                InternalError | Failure<IBIZUser.FailureCode.UpdateName>
+            >
+        > => {
+            const permission = await User.Service.validate(tx)(access_token);
+            if (Result.Error.is(permission)) return permission;
+            const user = Result.Ok.flatten(permission);
+            if (
+                user.type !== "home service provider" &&
+                user.type !== "real estate agent"
+            )
+                return Result.Error.map(
+                    Failure.create({
+                        cause: "PERMISSION_INSUFFICIENT",
+                        message: "해당 요청에 대한 권한이 없습니다.",
+                        statusCode: HttpStatus.FORBIDDEN,
+                    }),
+                );
+            return pipe(
+                input,
+
+                async ({ name }) => {
+                    await tx.userModel.updateMany({
+                        where: { id: user.id },
+                        data: { name, updated_at: DateMapper.toISO() },
+                    });
+                    await tx.bIZUserModel.updateMany({
+                        where: { id: user.id },
+                        data: { is_verified: false },
+                    });
+                    return null;
+                },
+
+                Result.Ok.map,
+            );
+        };
+
+    export const updateProfileImageUrl =
+        (tx: Prisma.TransactionClient = prisma) =>
+        (access_token: string) =>
+        async (
+            input: IBIZUser.IUpdate.IProfileImageUrl,
+        ): Promise<
+            IResult<
+                null,
+                | InternalError
+                | Failure<IBIZUser.FailureCode.UpdateProfileImageUrl>
+            >
+        > => {
+            const permission = await User.Service.validate(tx)(access_token);
+            if (Result.Error.is(permission)) return permission;
+            const user = Result.Ok.flatten(permission);
+            if (
+                user.type !== "home service provider" &&
+                user.type !== "real estate agent"
+            )
+                return Result.Error.map(
+                    Failure.create({
+                        cause: "PERMISSION_INSUFFICIENT",
+                        message: "해당 요청에 대한 권한이 없습니다.",
+                        statusCode: HttpStatus.FORBIDDEN,
+                    }),
+                );
+            return pipe(
+                input,
+
+                async ({ profile_image_url }) => {
+                    await tx.userModel.updateMany({
+                        where: { id: user.id },
+                        data: { updated_at: DateMapper.toISO() },
+                    });
+                    await tx.bIZUserModel.updateMany({
+                        where: { id: user.id },
+                        data: { profile_image_url, is_verified: false },
+                    });
+                    return null;
+                },
+
+                Result.Ok.map,
+            );
+        };
 }
