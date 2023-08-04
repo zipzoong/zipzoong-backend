@@ -1,6 +1,7 @@
 import { IVerification } from "@APP/api/structures/IVerification";
 import { IAddress } from "./common";
 import { IUser } from "./user/IUser";
+import { IHSProvider, IREAgent } from "../module";
 
 export namespace IAuthentication {
     export type OauthType = "kakao";
@@ -119,13 +120,13 @@ export namespace IAuthentication {
         export type CreateUser =
             | TokenVerify
             | AccountVerify
-            | IVerification.FailureCode.IsVerifiedPhone
+            | IVerification.FailureCode.assertVerifiedPhone
+            | IREAgent.FailureCode.Create
+            | IHSProvider.FailureCode.Create
             | "VERIFICATION_INVALID"
             | "USER_ALREADY_EXIST"
-            | "EXPERTISE_INVALID"
             | "TERMS_INSUFFICIENT"
             | "TERMS_INVALID";
-
         export type RefreshAccessToken = IUser.FailureCode.Validate;
     }
 }

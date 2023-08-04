@@ -383,7 +383,7 @@ export namespace Service {
                 ),
             );
 
-    export const isVerifiedPhone =
+    export const assertVerifiedPhone =
         (tx: Prisma.TransactionClient = prisma) =>
         (account: OauthAccountModel) =>
         async (
@@ -392,13 +392,13 @@ export namespace Service {
             IResult<
                 string,
                 Failure<
-                    | IVerification.FailureCode.IsVerifiedPhone
+                    | IVerification.FailureCode.assertVerifiedPhone
                     | "VERIFICATION_INVALID"
                 >
             >
         > =>
             input.type === "verification"
-                ? Verification.Service.isVerifiedPhone(tx)(input)
+                ? Verification.Service.assertVerifiedPhone(tx)(input)
                 : account.phone === input.phone
                 ? Result.Ok.map(input.phone)
                 : Result.Error.map(
@@ -460,7 +460,7 @@ export namespace Service {
 
                     const client_phone_result = isNull(input.phone)
                         ? Result.Ok.map(null)
-                        : await isVerifiedPhone(tx)(account)(input.phone);
+                        : await assertVerifiedPhone(tx)(account)(input.phone);
 
                     if (Result.Error.is(client_phone_result))
                         return client_phone_result;
@@ -486,7 +486,7 @@ export namespace Service {
                                 statusCode: HttpStatus.FORBIDDEN,
                             }),
                         );
-                    const agent_phone_result = await isVerifiedPhone(tx)(
+                    const agent_phone_result = await assertVerifiedPhone(tx)(
                         account,
                     )(input.phone);
                     if (Result.Error.is(agent_phone_result))
@@ -518,7 +518,7 @@ export namespace Service {
                                 statusCode: HttpStatus.FORBIDDEN,
                             }),
                         );
-                    const provider_phone_result = await isVerifiedPhone(tx)(
+                    const provider_phone_result = await assertVerifiedPhone(tx)(
                         account,
                     )(input.phone);
                     if (Result.Error.is(provider_phone_result))
@@ -572,7 +572,7 @@ export namespace Service {
                         client: Client.Service.getOne,
                         "real estate agent": REAgent.Service.getOne,
                         "home service provider": HSProvider.Service.getOne,
-                    }[payload.user_type](tx)(payload.user_id)),
+                    })[payload.user_type](tx)(payload.user_id),
 
                 unless(
                     Result.Ok.is<

@@ -15,9 +15,7 @@ import type { IExpertise } from "./../../structures/IExpertise";
  * 생활서비스 상위 전문 분야 목록 불러오기
  * 
  * @summary 생활서비스 상위 전문 분야 목록 조회
- * 
  * @tag hs-providers
- * 
  * @return 생활서비스 상위 전문 분야 전체 목록
  * 
  * @controller HSExpertisesController.getList()
@@ -71,11 +69,8 @@ export namespace getList {
  * {@link IExpertise.FailureCode.GetOne 에러 코드}
  * 
  * @summary 생활서비스 상위 전문 분야 조회
- * 
  * @tag hs-providers
- * 
  * @param expertise_id 상위 전문분야 id
- * 
  * @return 생활서비스 상위 전문 분야
  * 
  * @controller HSExpertisesController.get()

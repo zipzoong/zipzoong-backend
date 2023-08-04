@@ -18,11 +18,7 @@ import type { IAuthentication } from "./../../../structures/IAuthentication";
  * {@link IAuthentication.FailureCode.GetProfile 에러 코드}
  * 
  * @summary 계정 프로필 조회
- * 
  * @tag authentication
- * 
- * @param account_token Authorization account account_token
- * 
  * @return 계정 프로필 정보
  * 
  * @controller AuthController.get()

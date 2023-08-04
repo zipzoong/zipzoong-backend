@@ -19,11 +19,8 @@ import type { IUpload } from "./../../structures/IUpload";
  * 3분뒤 만료됩니다.
  * 
  * @summary 리소스 업로드용 presigned url 요청
- * 
  * @tag resources
- * 
  * @param body 리소스 유형 정보를 입력한다.
- * 
  * @return 리소스 업로드 정보
  * 
  * @controller UploadController.getUrl()
@@ -40,7 +37,13 @@ export async function getUrl(
               body,
           )
         : Fetcher.fetch(
-              connection,
+              {
+                  ...connection,
+                  headers: {
+                      ...(connection.headers ?? {}),
+                      "Content-Type": "application/json",
+                  },
+              },
               getUrl.ENCRYPTED,
               getUrl.METHOD,
               getUrl.path(),

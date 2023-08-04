@@ -84,9 +84,20 @@ export namespace IClient {
          */
         email: null | IVerification.IVerifiedEmail;
     }
+
     export type IPrivate = IClient;
+
+    export interface IUpdateProfile
+        extends Pick<
+            Mutable<IClient>,
+            "name" | "profile_image_url" | "birth" | "gender" | "address"
+        > {}
 
     export namespace FailureCode {
         export type GetPrivate = IUser.FailureCode.ValidateType;
+        export type UpdateProfile = IUser.FailureCode.ValidateType;
+        export type UpdatePhone =
+            | IUser.FailureCode.ValidateType
+            | IVerification.FailureCode.assertVerifiedPhone;
     }
 }

@@ -11,6 +11,8 @@ import typia from "typia";
 import type { IHSProvider } from "./../../../../../structures/user/IHSProvider";
 
 export * as portfolios from "./portfolios";
+export * as biz_info from "./biz_info";
+export * as expertise from "./expertise";
 
 /**
  * 생활서비스 전문가 개인정보를 요청한다.
@@ -20,11 +22,7 @@ export * as portfolios from "./portfolios";
  * {@link IHSProvider.FailureCode.GetPrivate 에러 코드}
  * 
  * @summary 생활서비스 전문가 내 정보 조회
- * 
  * @tag hs-providers
- * 
- * @param access_token Authorization access access_token
- * 
  * @return 생활서비스 전문가 상세 정보
  * 
  * @controller UsersHSProvidersMeController.get()

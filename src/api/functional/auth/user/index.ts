@@ -33,13 +33,8 @@ import type { IAuthentication } from "./../../../structures/IAuthentication";
  * - `VERIFICATION_UNCOMPLETED` : 인증이 완료되지 않은 정보인 경우
  * 
  * @summary 사용자 정보 생성
- * 
  * @tag authentication
- * 
- * @param account_token Authorization account account_token
- * 
  * @param body 사용자 정보
- * 
  * @return 사용자 토큰(access token)
  * 
  * @controller AUthUserController.create()
@@ -56,7 +51,13 @@ export async function create(
               body,
           )
         : Fetcher.fetch(
-              connection,
+              {
+                  ...connection,
+                  headers: {
+                      ...(connection.headers ?? {}),
+                      "Content-Type": "application/json",
+                  },
+              },
               create.ENCRYPTED,
               create.METHOD,
               create.path(),

@@ -29,13 +29,15 @@ const Prisma = {}
 exports.Prisma = Prisma
 
 /**
- * Prisma Client JS version: 5.0.0
- * Query Engine version: 6b0aef69b7cdfc787f822ecd7cdc76d5f1991584
+ * Prisma Client JS version: 5.1.0
+ * Query Engine version: a9b7003df90aa623086e4d6f4e43c72468e6339b
  */
 Prisma.prismaVersion = {
-  client: "5.0.0",
-  engine: "6b0aef69b7cdfc787f822ecd7cdc76d5f1991584"
+  client: "5.1.0",
+  engine: "a9b7003df90aa623086e4d6f4e43c72468e6339b"
 }
+
+false
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
 Prisma.PrismaClientUnknownRequestError = PrismaClientUnknownRequestError
@@ -79,7 +81,7 @@ Prisma.NullTypes = {
 /**
  * Enums
  */
-
+exports.$Enums = {}
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   ReadUncommitted: 'ReadUncommitted',
   ReadCommitted: 'ReadCommitted',
@@ -308,7 +310,7 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-exports.TermsType = {
+exports.TermsType = exports.$Enums.TermsType = {
   all: 'all',
   CL: 'CL',
   BIZ: 'BIZ',
@@ -316,17 +318,17 @@ exports.TermsType = {
   RE: 'RE'
 };
 
-exports.GenderType = {
+exports.GenderType = exports.$Enums.GenderType = {
   female: 'female',
   male: 'male'
 };
 
-exports.ResourceAccessType = {
+exports.ResourceAccessType = exports.$Enums.ResourceAccessType = {
   public: 'public',
   zipzoong_s3: 'zipzoong_s3'
 };
 
-exports.OauthType = {
+exports.OauthType = exports.$Enums.OauthType = {
   kakao: 'kakao',
   naver: 'naver',
   apple: 'apple'
@@ -384,20 +386,30 @@ const config = {
     "schemaEnvPath": "../.env"
   },
   "relativePath": "../prisma",
-  "clientVersion": "5.0.0",
-  "engineVersion": "6b0aef69b7cdfc787f822ecd7cdc76d5f1991584",
+  "clientVersion": "5.1.0",
+  "engineVersion": "a9b7003df90aa623086e4d6f4e43c72468e6339b",
   "datasourceNames": [
     "database"
   ],
   "activeProvider": "postgresql",
-  "dataProxy": false
+  "dataProxy": false,
+  "postinstall": true
 }
 
 const fs = require('fs')
 
 config.dirname = __dirname
 if (!fs.existsSync(path.join(__dirname, 'schema.prisma'))) {
-  config.dirname = path.join(process.cwd(), "db")
+  const alternativePaths = [
+    "db",
+    "",
+  ]
+  
+  const alternativePath = alternativePaths.find((altPath) => {
+    return fs.existsSync(path.join(process.cwd(), altPath, 'schema.prisma'))
+  }) ?? alternativePaths[0]
+
+  config.dirname = path.join(process.cwd(), alternativePath)
   config.isBundled = true
 }
 

@@ -17,11 +17,8 @@ import type { IVerification } from "./../../../../structures/IVerification";
  * {@link IVerification.FailureCode.VerifyPhone 에러 코드}
  * 
  * @summary 휴대전화 인증
- * 
  * @tag verification
- * 
  * @param body 인증 코드와 휴대전화
- * 
  * @return 인증 정보 id
  * 
  * @controller VerificationPhonesVerifyController.execute()
@@ -38,7 +35,13 @@ export async function execute(
               body,
           )
         : Fetcher.fetch(
-              connection,
+              {
+                  ...connection,
+                  headers: {
+                      ...(connection.headers ?? {}),
+                      "Content-Type": "application/json",
+                  },
+              },
               execute.ENCRYPTED,
               execute.METHOD,
               execute.path(),

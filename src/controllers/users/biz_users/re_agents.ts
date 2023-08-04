@@ -6,6 +6,7 @@ import { REPortfolio } from "@APP/providers/re_portfolio";
 import { REAgent } from "@APP/providers/user/re_agent";
 import { Authorization } from "../../decorators/authorization";
 import { httpResponse } from "../../internal";
+import { prisma } from "@APP/infrastructure/DB";
 
 const route = "users/biz-users/re-agents";
 
@@ -101,6 +102,64 @@ export class UsersREAgentsMeController {
             query,
         );
         return httpResponse(result);
+    }
+}
+
+@Controller(route + "/me/real-estate")
+export class UsersREAgentsBIZInfoUpdateController {
+    /**
+     * 공인중개사 부동산 정보 수정
+     *
+     * {@link IREAgent.FailureCode.UpdateRealEstate 에러 코드}
+     *
+     * @summary 공인중개사 부동산 정보 수정
+     *
+     * @tag re-agents
+     *
+     * @param access_token Authorization access access_token
+     *
+     * @param body 부동산 정보
+     */
+    @TypedRoute.Put()
+    update(
+        @Authorization("access") access_token: string,
+        @TypedBody() body: IREAgent.IUpdate.IRealEstate,
+    ): Promise<void> {
+        return prisma.$transaction(async (tx) => {
+            const result = await REAgent.Service.updateRealEstate(tx)(
+                access_token,
+            )(body);
+            httpResponse(result);
+        });
+    }
+}
+
+@Controller(route + "/me/expertise")
+export class UsersREAgentsExpertiseUpdateController {
+    /**
+     * 공인중개사 전문 분야 수정
+     *
+     * {@link IREAgent.FailureCode.UpdateExpertise 에러 코드}
+     *
+     * @summary 공인중개사 전문 분야 수정
+     *
+     * @tag re-agents
+     *
+     * @param access_token Authorization access access_token
+     *
+     * @param body 전문 분야
+     */
+    @TypedRoute.Put()
+    update(
+        @Authorization("access") access_token: string,
+        @TypedBody() body: IREAgent.IUpdate.IExpertise,
+    ): Promise<void> {
+        return prisma.$transaction(async (tx) => {
+            const result = await REAgent.Service.updateExpertise(tx)(
+                access_token,
+            )(body);
+            httpResponse(result);
+        });
     }
 }
 

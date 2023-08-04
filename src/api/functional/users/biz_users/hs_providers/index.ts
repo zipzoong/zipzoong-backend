@@ -19,11 +19,8 @@ export * as portfolios from "./portfolios";
  * 검색기준에 맞는 인증된 생활서비스 전문가 간단 정보 목록을 확안할 수 있다.
  * 
  * @summary 생활서비스 전문가 목록 검색
- * 
  * @tag hs-providers
- * 
  * @param query 필터링, 정렬 기준
- * 
  * @return 생활서비스 전문가 간단 정보 목록
  * 
  * @controller UsersHSProvidersController.getList()
@@ -96,11 +93,8 @@ export namespace getList {
  * {@link IHSProvider.FailureCode.GetPublic 에러 코드}
  * 
  * @summary 생활서비스 전문가 공개 프로필 정보 조회
- * 
  * @tag hs-providers
- * 
  * @param provider_id 생활서비스 전문가 id
- * 
  * @return 생활서비스 전문가 공개정보
  * 
  * @controller UsersHSProvidersSomeoneController.getOne()

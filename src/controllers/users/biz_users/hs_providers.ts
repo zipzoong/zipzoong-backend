@@ -6,6 +6,7 @@ import { HSPortfolio } from "@APP/providers/hs_portfolio";
 import { HSProvider } from "@APP/providers/user/hs_provider";
 import { Authorization } from "../../decorators/authorization";
 import { httpResponse } from "../../internal";
+import { prisma } from "@APP/infrastructure/DB";
 
 const route = "users/biz-users/hs-providers";
 
@@ -101,6 +102,66 @@ export class UsersHSProvidersMeController {
             query,
         );
         return httpResponse(result);
+    }
+}
+
+@Controller(route + "/me/biz-info")
+export class UsersHSProvidersBIZInfoUpdateController {
+    /**
+     * 생활서비스 전문가 사업자 정보 수정
+     *
+     * - 사업자 정보가 변경될 경우, 필요시 증명 서류를 추가로 저장해야 한다.
+     *
+     * {@link IHSProvider.FailureCode.UpdateBIZInfo 에러 코드}
+     *
+     * @summary 생활서비스 전문가 사업자 정보 수정
+     *
+     * @tag hs-providers
+     *
+     * @param access_token Authorization access access_token
+     *
+     * @param body 사업자 정보
+     */
+    @TypedRoute.Put()
+    update(
+        @Authorization("access") access_token: string,
+        @TypedBody() body: IHSProvider.IUpdate.IBIZInfo,
+    ): Promise<void> {
+        return prisma.$transaction(async (tx) => {
+            const result = await HSProvider.Service.updateBIZInfo(tx)(
+                access_token,
+            )(body);
+            httpResponse(result);
+        });
+    }
+}
+
+@Controller(route + "/me/expertise")
+export class UsersHSProvidersExpertiseUpdateController {
+    /**
+     * 생활서비스 전문가 전문분야 수정
+     *
+     * {@link IHSProvider.FailureCode.UpdateExpertise 에러 코드}
+     *
+     * @summary 생활서비스 전문가 전문분야 수정
+     *
+     * @tag hs-providers
+     *
+     * @param access_token Authorization access access_token
+     *
+     * @param body 프로필 이미지 정보
+     */
+    @TypedRoute.Put()
+    update(
+        @Authorization("access") access_token: string,
+        @TypedBody() body: IHSProvider.IUpdate.ISubExpertise,
+    ): Promise<void> {
+        return prisma.$transaction(async (tx) => {
+            const result = await HSProvider.Service.updateExpertise(tx)(
+                access_token,
+            )(body);
+            httpResponse(result);
+        });
     }
 }
 

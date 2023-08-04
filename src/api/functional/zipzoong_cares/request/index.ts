@@ -18,11 +18,7 @@ import typia from "typia";
  * {@link IZipzoongCare.FailureCode.Request 에러 코드}
  * 
  * @summary 집중 케어 신청
- * 
  * @tag clients
- * 
- * @param access_token Authorization access access_token
- * 
  * @return presigned url - 집중 케어 요청 json 데이터를 업로드하기 위한 s3 presigned url
  * 
  * @controller ZipzoongCaresController.execute()
