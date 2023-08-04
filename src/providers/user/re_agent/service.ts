@@ -5,34 +5,63 @@ import { IREAgent } from "@APP/api/structures/user/IREAgent";
 import { IUser } from "@APP/api/structures/user/IUser";
 import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
-import { Failure, InternalError, Result, isDeleted } from "@APP/utils";
+import {
+    DateMapper,
+    Failure,
+    InternalError,
+    Result,
+    isDeleted,
+} from "@APP/utils";
 import { BIZUser } from "../biz_user";
 import { User } from "../user";
 import { Mapper } from "./mapper";
 import { PrismaJson, PrismaMapper } from "./prisma";
 
 export namespace Service {
+    export const assertExpertiseId =
+        (tx: Prisma.TransactionClient = prisma) =>
+        async (
+            id: string,
+        ): Promise<
+            IResult<string, Failure<IREAgent.FailureCode.ExpertiseInvalid>>
+        > => {
+            const expertise = await tx.rEExpertiseModel.findFirst({
+                where: { id },
+            });
+            return isNull(expertise) || isDeleted(expertise)
+                ? Result.Error.map(
+                      Failure.create({
+                          cause: "EXPERTISE_INVALID",
+                          message: "유효하지 않은 전문분야입니다.",
+                          statusCode: HttpStatus.BAD_REQUEST,
+                      }),
+                  )
+                : Result.Ok.map(expertise.id);
+        };
+
     export const create =
         (tx: Prisma.TransactionClient = prisma) =>
         async (
             input: IREAgent.ICreate,
-        ): Promise<IResult<string, Failure<"EXPERTISE_INVALID">>> => {
-            const re_expertise = await tx.rEExpertiseModel.findFirst({
-                where: { id: input.expertise_id },
-            });
-            if (isNull(re_expertise) || isDeleted(re_expertise))
-                return Result.Error.map(
-                    Failure.create({
-                        cause: "EXPERTISE_INVALID",
-                        message: "유효하지 않은 전문분야입니다.",
-                        statusCode: HttpStatus.BAD_REQUEST,
-                    }),
-                );
+        ): Promise<IResult<string, Failure<IREAgent.FailureCode.Create>>> =>
+            pipe(
+                input.expertise_id,
 
-            const data = PrismaJson.createData(input);
-            await tx.rEAgentModel.create({ data });
-            return Result.Ok.map(data.base.create.base.create.id);
-        };
+                assertExpertiseId(tx),
+
+                unless(
+                    Result.Error.is,
+                    Result.Ok.asyncLift(async (expertise_id) => {
+                        const data = PrismaJson.createData({
+                            ...input,
+                            expertise_id,
+                        });
+                        await tx.rEAgentModel.create({ data });
+                        return data.base.create.base.create.id;
+                    }),
+                ),
+            );
+
     export const getOne =
         (tx: Prisma.TransactionClient = prisma) =>
         async (
@@ -208,4 +237,102 @@ export namespace Service {
 
                 unless(Result.Error.is, Result.Ok.lift(Mapper.toPrivate)),
             );
+
+    export const updateRealEstate =
+        (tx: Prisma.TransactionClient = prisma) =>
+        (access_token: string) =>
+        async (
+            input: IREAgent.IUpdate.IRealEstate,
+        ): Promise<
+            IResult<
+                null,
+                InternalError | Failure<IREAgent.FailureCode.UpdateRealEstate>
+            >
+        > => {
+            const permission = await User.Service.validateType(
+                "real estate agent",
+            )(tx)(access_token);
+            if (Result.Error.is(permission)) return permission;
+            const user = Result.Ok.flatten(permission);
+            return pipe(
+                user.id,
+
+                (id) => [
+                    tx.userModel.updateMany({
+                        where: { id },
+                        data: { updated_at: DateMapper.toISO() },
+                    }),
+                    tx.bIZUserModel.updateMany({
+                        where: { id },
+                        data: { is_verified: false },
+                    }),
+                    tx.rEAgentModel.updateMany({
+                        where: { id },
+                        data: {
+                            re_name: input.name,
+                            re_number: input.number,
+                            re_phone: input.phone,
+                            re_licensed_agent_name: input.licensed_agent_name,
+                            re_address_road: input.address.road,
+                            re_address_zone_code: input.address.zone_code,
+                            re_address_detail: input.address.detail,
+                            re_address_extra: input.address.extra,
+                        },
+                    }),
+                ],
+
+                Promise.all,
+
+                () => null,
+
+                Result.Ok.map,
+            );
+        };
+
+    export const updateExpertise =
+        (tx: Prisma.TransactionClient = prisma) =>
+        (access_token: string) =>
+        async (
+            input: IREAgent.IUpdate.IExpertise,
+        ): Promise<
+            IResult<
+                null,
+                InternalError | Failure<IREAgent.FailureCode.UpdateExpertise>
+            >
+        > => {
+            const permission = await User.Service.validateType(
+                "real estate agent",
+            )(tx)(access_token);
+            if (Result.Error.is(permission)) return permission;
+            const user = Result.Ok.flatten(permission);
+            return pipe(
+                input.expertise_id,
+
+                assertExpertiseId(tx),
+
+                unless(
+                    Result.Error.is,
+                    Result.Ok.asyncLift(async (expertise_id) => {
+                        await Promise.all([
+                            tx.userModel.updateMany({
+                                where: { id: user.id },
+                                data: { updated_at: DateMapper.toISO() },
+                            }),
+                            tx.bIZUserModel.updateMany({
+                                where: { id: user.id },
+                                data: { is_verified: false },
+                            }),
+                            tx.rEAgentModel.updateMany({
+                                where: { id: user.id },
+                                data: {
+                                    is_licensed: input.is_licensed,
+                                    expertise_id,
+                                },
+                            }),
+                        ]);
+                        return null;
+                    }),
+                ),
+            );
+        };
 }

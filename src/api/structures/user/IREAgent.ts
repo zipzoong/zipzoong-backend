@@ -194,11 +194,17 @@ export namespace IREAgent {
     }
 
     export namespace FailureCode {
+        export type ExpertiseInvalid = "EXPERTISE_INVALID";
+        export type Create = ExpertiseInvalid;
         export type GetPublic = IUser.FailureCode.GetPublic;
         export type GetContact =
             | IUser.FailureCode.Validate
             | IUser.FailureCode.Verify
             | GetPublic;
         export type GetPrivate = IUser.FailureCode.ValidateType;
+        export type UpdateRealEstate = IUser.FailureCode.ValidateType;
+        export type UpdateExpertise =
+            | IUser.FailureCode.ValidateType
+            | ExpertiseInvalid;
     }
 }

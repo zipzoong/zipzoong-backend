@@ -1219,7 +1219,7 @@
           }
         },
         "summary": "사업자 이름 수정",
-        "description": "사업자 이름 수정",
+        "description": "사업자 이름 수정\n\n{@link IBIZUser.FailureCode.UpdateName 에러 코드}",
         "x-nestia-namespace": "users.biz-users.me.name.update",
         "x-nestia-jsDocTags": [
           {
@@ -1299,7 +1299,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/IBIZUser.IUpdate.IProfileImage"
+                "$ref": "#/components/schemas/IBIZUser.IUpdate.IProfileImageUrl"
               }
             }
           },
@@ -1313,7 +1313,7 @@
           }
         },
         "summary": "사업자 프로필 이미지 수정",
-        "description": "사업자 프로필 이미지 수정",
+        "description": "사업자 프로필 이미지 수정\n\n{@link IBIZUser.FailureCode.UpdateProfileImageUrl 에러 코드}",
         "x-nestia-namespace": "users.biz-users.me.profile-image.update",
         "x-nestia-jsDocTags": [
           {
@@ -1736,7 +1736,7 @@
           }
         },
         "summary": "생활서비스 전문가 사업자 정보 수정",
-        "description": "생활서비스 전문가 사업자 정보 수정\n\n- 사업자 정보가 변경될 경우, 필요시 증명 서류를 추가로 저장해야 한다.",
+        "description": "생활서비스 전문가 사업자 정보 수정\n\n- 사업자 정보가 변경될 경우, 필요시 증명 서류를 추가로 저장해야 한다.\n\n{@link IHSProvider.FailureCode.UpdateBIZInfo 에러 코드}",
         "x-nestia-namespace": "users.biz-users.hs-providers.me.biz-info.update",
         "x-nestia-jsDocTags": [
           {
@@ -1820,7 +1820,7 @@
           }
         },
         "summary": "생활서비스 전문가 전문분야 수정",
-        "description": "생활서비스 전문가 전문분야 수정",
+        "description": "생활서비스 전문가 전문분야 수정\n\n{@link IHSProvider.FailureCode.UpdateExpertise 에러 코드}",
         "x-nestia-namespace": "users.biz-users.hs-providers.me.expertise.update",
         "x-nestia-jsDocTags": [
           {
@@ -2519,7 +2519,7 @@
           }
         },
         "summary": "공인중개사 부동산 정보 수정",
-        "description": "공인중개사 부동산 정보 수정",
+        "description": "공인중개사 부동산 정보 수정\n\n{@link IREAgent.FailureCode.UpdateRealEstate 에러 코드}",
         "x-nestia-namespace": "users.biz-users.re-agents.me.real-estate.update",
         "x-nestia-jsDocTags": [
           {
@@ -2603,7 +2603,7 @@
           }
         },
         "summary": "공인중개사 전문 분야 수정",
-        "description": "공인중개사 전문 분야 수정",
+        "description": "공인중개사 전문 분야 수정\n\n{@link IREAgent.FailureCode.UpdateExpertise 에러 코드}",
         "x-nestia-namespace": "users.biz-users.re-agents.me.expertise.update",
         "x-nestia-jsDocTags": [
           {
@@ -5082,7 +5082,7 @@
         ],
         "x-typia-jsDocTags": []
       },
-      "IBIZUser.IUpdate.IProfileImage": {
+      "IBIZUser.IUpdate.IProfileImageUrl": {
         "type": "object",
         "properties": {
           "profile_image_url": {
@@ -5810,13 +5810,13 @@
         "properties": {
           "registration_number": {
             "description": "사업자 등록번호",
-            "x-typia-required": false,
+            "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string"
           },
           "biz_phone": {
             "description": "업체 대표 전화번호",
-            "x-typia-required": false,
+            "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string"
           },
@@ -5839,7 +5839,7 @@
                 ]
               }
             ],
-            "x-typia-required": false,
+            "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string",
             "format": "date"
@@ -5849,6 +5849,12 @@
           }
         },
         "nullable": false,
+        "required": [
+          "registration_number",
+          "biz_phone",
+          "open_date",
+          "address"
+        ],
         "x-typia-jsDocTags": []
       },
       "IHSProvider.IUpdate.ISubExpertise": {
@@ -5856,15 +5862,50 @@
         "properties": {
           "sub_expertise_ids": {
             "description": "하위 전문 분야를 모두 변경한다.\n\n기존의 상위 전문 분야와 동일한 하위 전문분야로만 변경할 수 있다.\n\n유지하고 싶은 하위 전문 분야 id로 리스트에 포함해야 한다.",
+            "x-typia-metaTags": [
+              {
+                "kind": "minItems",
+                "value": 1
+              }
+            ],
+            "x-typia-jsDocTags": [
+              {
+                "name": "minItems",
+                "text": [
+                  {
+                    "text": "1",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
             "x-typia-required": true,
             "x-typia-optional": false,
             "type": "array",
             "items": {
               "description": "하위 전문 분야를 모두 변경한다.\n\n기존의 상위 전문 분야와 동일한 하위 전문분야로만 변경할 수 있다.\n\n유지하고 싶은 하위 전문 분야 id로 리스트에 포함해야 한다.",
+              "x-typia-metaTags": [
+                {
+                  "kind": "minItems",
+                  "value": 1
+                }
+              ],
+              "x-typia-jsDocTags": [
+                {
+                  "name": "minItems",
+                  "text": [
+                    {
+                      "text": "1",
+                      "kind": "text"
+                    }
+                  ]
+                }
+              ],
               "x-typia-required": true,
               "x-typia-optional": false,
               "type": "string"
-            }
+            },
+            "minItems": 1
           }
         },
         "nullable": false,
@@ -7482,7 +7523,7 @@
         "properties": {
           "name": {
             "description": "사용자명\n\n- 사용자가 home service provider인 경우, 업체 상호명이다.",
-            "x-typia-required": false,
+            "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string"
           },
@@ -7505,7 +7546,7 @@
                 ]
               }
             ],
-            "x-typia-required": false,
+            "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string",
             "format": "url",
@@ -7516,7 +7557,7 @@
           },
           "gender": {
             "description": "성별",
-            "x-typia-required": false,
+            "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string",
             "enum": [
@@ -7544,7 +7585,7 @@
                 ]
               }
             ],
-            "x-typia-required": false,
+            "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string",
             "format": "date",
@@ -7552,6 +7593,13 @@
           }
         },
         "nullable": false,
+        "required": [
+          "name",
+          "profile_image_url",
+          "address",
+          "gender",
+          "birth"
+        ],
         "x-typia-jsDocTags": []
       },
       "IVerification.IRequest.ICreatePhone": {

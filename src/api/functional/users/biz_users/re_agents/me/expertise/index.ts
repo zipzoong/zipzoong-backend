@@ -14,6 +14,8 @@ import type { IREAgent } from "./../../../../../../structures/user/IREAgent";
 /**
  * 공인중개사 전문 분야 수정
  * 
+ * {@link IREAgent.FailureCode.UpdateExpertise 에러 코드}
+ * 
  * @summary 공인중개사 전문 분야 수정
  * @tag re-agents
  * @param body 전문 분야

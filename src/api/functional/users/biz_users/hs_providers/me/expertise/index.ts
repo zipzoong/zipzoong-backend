@@ -14,6 +14,8 @@ import type { IHSProvider } from "./../../../../../../structures/user/IHSProvide
 /**
  * 생활서비스 전문가 전문분야 수정
  * 
+ * {@link IHSProvider.FailureCode.UpdateExpertise 에러 코드}
+ * 
  * @summary 생활서비스 전문가 전문분야 수정
  * @tag hs-providers
  * @param body 프로필 이미지 정보

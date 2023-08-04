@@ -146,23 +146,27 @@ export namespace Service {
             return pipe(
                 user.id,
 
-                async (id) => {
-                    await tx.userModel.updateMany({
+                (id) => [
+                    tx.userModel.updateMany({
                         where: { id },
                         data: {
                             updated_at: DateMapper.toISO(),
                         },
-                    });
-                    await tx.bIZUserModel.updateMany({
+                    }),
+                    tx.bIZUserModel.updateMany({
                         where: { id },
                         data: {
                             introduction_title: input.title,
                             introduction_content: input.content,
                         },
-                    });
-                },
+                    }),
+                ],
 
-                () => Result.Ok.map(null),
+                Promise.all,
+
+                () => null,
+
+                Result.Ok.map,
             );
         };
 
@@ -200,18 +204,20 @@ export namespace Service {
                 unless(
                     Result.Error.is,
                     Result.Ok.asyncLift(async (phone) => {
-                        await tx.userModel.updateMany({
-                            where: {
-                                id: user.id,
-                            },
-                            data: {
-                                updated_at: DateMapper.toISO(),
-                            },
-                        });
-                        await tx.bIZUserModel.updateMany({
-                            where: { id: user.id },
-                            data: { phone },
-                        });
+                        await Promise.all([
+                            tx.userModel.updateMany({
+                                where: {
+                                    id: user.id,
+                                },
+                                data: {
+                                    updated_at: DateMapper.toISO(),
+                                },
+                            }),
+                            tx.bIZUserModel.updateMany({
+                                where: { id: user.id },
+                                data: { phone },
+                            }),
+                        ]);
                         return null;
                     }),
                 ),
@@ -244,19 +250,25 @@ export namespace Service {
                     }),
                 );
             return pipe(
-                input,
+                user.id,
 
-                async ({ name }) => {
-                    await tx.userModel.updateMany({
-                        where: { id: user.id },
-                        data: { name, updated_at: DateMapper.toISO() },
-                    });
-                    await tx.bIZUserModel.updateMany({
-                        where: { id: user.id },
+                (id) => [
+                    tx.userModel.updateMany({
+                        where: { id },
+                        data: {
+                            name: input.name,
+                            updated_at: DateMapper.toISO(),
+                        },
+                    }),
+                    tx.bIZUserModel.updateMany({
+                        where: { id },
                         data: { is_verified: false },
-                    });
-                    return null;
-                },
+                    }),
+                ],
+
+                Promise.all,
+
+                () => null,
 
                 Result.Ok.map,
             );
@@ -289,19 +301,25 @@ export namespace Service {
                     }),
                 );
             return pipe(
-                input,
+                user.id,
 
-                async ({ profile_image_url }) => {
-                    await tx.userModel.updateMany({
-                        where: { id: user.id },
+                (id) => [
+                    tx.userModel.updateMany({
+                        where: { id },
                         data: { updated_at: DateMapper.toISO() },
-                    });
-                    await tx.bIZUserModel.updateMany({
-                        where: { id: user.id },
-                        data: { profile_image_url, is_verified: false },
-                    });
-                    return null;
-                },
+                    }),
+                    tx.bIZUserModel.updateMany({
+                        where: { id },
+                        data: {
+                            profile_image_url: input.profile_image_url,
+                            is_verified: false,
+                        },
+                    }),
+                ],
+
+                Promise.all,
+
+                () => null,
 
                 Result.Ok.map,
             );

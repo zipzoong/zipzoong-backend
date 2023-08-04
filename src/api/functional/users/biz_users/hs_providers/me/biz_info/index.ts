@@ -16,6 +16,8 @@ import type { IHSProvider } from "./../../../../../../structures/user/IHSProvide
  * 
  * - 사업자 정보가 변경될 경우, 필요시 증명 서류를 추가로 저장해야 한다.
  * 
+ * {@link IHSProvider.FailureCode.UpdateBIZInfo 에러 코드}
+ * 
  * @summary 생활서비스 전문가 사업자 정보 수정
  * @tag hs-providers
  * @param body 사업자 정보

@@ -1,5 +1,5 @@
 import { Prisma } from "@PRISMA";
-import { isNil, isNull, isString, pipe, unless } from "@fxts/core";
+import { isNull, isString, pipe, unless } from "@fxts/core";
 import { HttpStatus } from "@nestjs/common";
 import { IVerification } from "@APP/api";
 import { IClient } from "@APP/api/structures/user/IClient";
@@ -104,27 +104,31 @@ export namespace Service {
             return pipe(
                 user.id,
 
-                async (id) => {
-                    await tx.userModel.updateMany({
+                (id) => [
+                    tx.userModel.updateMany({
                         where: { id },
                         data: {
                             name: input.name,
                             updated_at: DateMapper.toISO(),
                         },
-                    });
-                    await tx.clientModel.updateMany({
+                    }),
+                    tx.clientModel.updateMany({
                         where: { id },
                         data: {
-                            birth: isNil(input.birth)
+                            birth: isNull(input.birth)
                                 ? input.birth
                                 : new Date(input.birth),
                             gender: input.gender,
                             profile_image_url: input.profile_image_url,
                         },
-                    });
-                },
+                    }),
+                ],
 
-                () => Result.Ok.map(null),
+                Promise.all,
+
+                () => null,
+
+                Result.Ok.map,
             );
         };
 
@@ -152,15 +156,16 @@ export namespace Service {
                 unless(
                     Result.Error.is,
                     Result.Ok.asyncLift(async (phone) => {
-                        await tx.clientModel.updateMany({
-                            where: { id: user.id },
-                            data: { phone },
-                        });
-                        await tx.userModel.updateMany({
-                            where: { id: user.id },
-                            data: { updated_at: DateMapper.toISO() },
-                        });
-
+                        await Promise.all([
+                            tx.clientModel.updateMany({
+                                where: { id: user.id },
+                                data: { phone },
+                            }),
+                            tx.userModel.updateMany({
+                                where: { id: user.id },
+                                data: { updated_at: DateMapper.toISO() },
+                            }),
+                        ]);
                         return null;
                     }),
                 ),

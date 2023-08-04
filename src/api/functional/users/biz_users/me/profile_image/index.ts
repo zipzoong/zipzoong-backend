@@ -14,6 +14,8 @@ import type { IBIZUser } from "./../../../../../structures/user/IBIZUser";
 /**
  * 사업자 프로필 이미지 수정
  * 
+ * {@link IBIZUser.FailureCode.UpdateProfileImageUrl 에러 코드}
+ * 
  * @summary 사업자 프로필 이미지 수정
  * @tag re-agents
  * @tag hs-providers
@@ -25,7 +27,7 @@ import type { IBIZUser } from "./../../../../../structures/user/IBIZUser";
  */
 export async function update(
     connection: IConnection,
-    body: IBIZUser.IUpdate.IProfileImage,
+    body: IBIZUser.IUpdate.IProfileImageUrl,
 ): Promise<void> {
     return !!connection.simulate
         ? update.simulate(
@@ -48,7 +50,7 @@ export async function update(
           );
 }
 export namespace update {
-    export type Input = IBIZUser.IUpdate.IProfileImage;
+    export type Input = IBIZUser.IUpdate.IProfileImageUrl;
 
     export const METHOD = "PUT" as const;
     export const PATH: string = "/users/biz-users/me/profile-image";

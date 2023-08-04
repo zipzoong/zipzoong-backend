@@ -14,6 +14,8 @@ import type { IREAgent } from "./../../../../../../structures/user/IREAgent";
 /**
  * 공인중개사 부동산 정보 수정
  * 
+ * {@link IREAgent.FailureCode.UpdateRealEstate 에러 코드}
+ * 
  * @summary 공인중개사 부동산 정보 수정
  * @tag re-agents
  * @param body 부동산 정보

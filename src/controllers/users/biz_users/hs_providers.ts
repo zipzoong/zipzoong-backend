@@ -6,6 +6,7 @@ import { HSPortfolio } from "@APP/providers/hs_portfolio";
 import { HSProvider } from "@APP/providers/user/hs_provider";
 import { Authorization } from "../../decorators/authorization";
 import { httpResponse } from "../../internal";
+import { prisma } from "@APP/infrastructure/DB";
 
 const route = "users/biz-users/hs-providers";
 
@@ -111,6 +112,8 @@ export class UsersHSProvidersBIZInfoUpdateController {
      *
      * - 사업자 정보가 변경될 경우, 필요시 증명 서류를 추가로 저장해야 한다.
      *
+     * {@link IHSProvider.FailureCode.UpdateBIZInfo 에러 코드}
+     *
      * @summary 생활서비스 전문가 사업자 정보 수정
      *
      * @tag hs-providers
@@ -124,7 +127,12 @@ export class UsersHSProvidersBIZInfoUpdateController {
         @Authorization("access") access_token: string,
         @TypedBody() body: IHSProvider.IUpdate.IBIZInfo,
     ): Promise<void> {
-        throw Error();
+        return prisma.$transaction(async (tx) => {
+            const result = await HSProvider.Service.updateBIZInfo(tx)(
+                access_token,
+            )(body);
+            httpResponse(result);
+        });
     }
 }
 
@@ -132,6 +140,8 @@ export class UsersHSProvidersBIZInfoUpdateController {
 export class UsersHSProvidersExpertiseUpdateController {
     /**
      * 생활서비스 전문가 전문분야 수정
+     *
+     * {@link IHSProvider.FailureCode.UpdateExpertise 에러 코드}
      *
      * @summary 생활서비스 전문가 전문분야 수정
      *
@@ -146,7 +156,12 @@ export class UsersHSProvidersExpertiseUpdateController {
         @Authorization("access") access_token: string,
         @TypedBody() body: IHSProvider.IUpdate.ISubExpertise,
     ): Promise<void> {
-        throw Error();
+        return prisma.$transaction(async (tx) => {
+            const result = await HSProvider.Service.updateExpertise(tx)(
+                access_token,
+            )(body);
+            httpResponse(result);
+        });
     }
 }
 

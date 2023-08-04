@@ -1,12 +1,12 @@
 import { TypedBody, TypedParam, TypedQuery, TypedRoute } from "@nestia/core";
 import { Controller } from "@nestjs/common";
-import { IVerification } from "@APP/api";
 import { IREPortfolio } from "@APP/api/structures/IREPortfolio";
 import { IREAgent } from "@APP/api/structures/user/IREAgent";
 import { REPortfolio } from "@APP/providers/re_portfolio";
 import { REAgent } from "@APP/providers/user/re_agent";
 import { Authorization } from "../../decorators/authorization";
 import { httpResponse } from "../../internal";
+import { prisma } from "@APP/infrastructure/DB";
 
 const route = "users/biz-users/re-agents";
 
@@ -110,6 +110,8 @@ export class UsersREAgentsBIZInfoUpdateController {
     /**
      * 공인중개사 부동산 정보 수정
      *
+     * {@link IREAgent.FailureCode.UpdateRealEstate 에러 코드}
+     *
      * @summary 공인중개사 부동산 정보 수정
      *
      * @tag re-agents
@@ -123,7 +125,12 @@ export class UsersREAgentsBIZInfoUpdateController {
         @Authorization("access") access_token: string,
         @TypedBody() body: IREAgent.IUpdate.IRealEstate,
     ): Promise<void> {
-        throw Error();
+        return prisma.$transaction(async (tx) => {
+            const result = await REAgent.Service.updateRealEstate(tx)(
+                access_token,
+            )(body);
+            httpResponse(result);
+        });
     }
 }
 
@@ -131,6 +138,8 @@ export class UsersREAgentsBIZInfoUpdateController {
 export class UsersREAgentsExpertiseUpdateController {
     /**
      * 공인중개사 전문 분야 수정
+     *
+     * {@link IREAgent.FailureCode.UpdateExpertise 에러 코드}
      *
      * @summary 공인중개사 전문 분야 수정
      *
@@ -145,7 +154,12 @@ export class UsersREAgentsExpertiseUpdateController {
         @Authorization("access") access_token: string,
         @TypedBody() body: IREAgent.IUpdate.IExpertise,
     ): Promise<void> {
-        throw Error();
+        return prisma.$transaction(async (tx) => {
+            const result = await REAgent.Service.updateExpertise(tx)(
+                access_token,
+            )(body);
+            httpResponse(result);
+        });
     }
 }
 

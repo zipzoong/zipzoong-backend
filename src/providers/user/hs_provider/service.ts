@@ -14,32 +14,37 @@ import { IUser } from "@APP/api/structures/user/IUser";
 import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
 import {
+    DateMapper,
     Failure,
     InternalError,
     Result,
     isDeleted,
     isUnDeleted,
+    pick,
 } from "@APP/utils";
 import { BIZUser } from "../biz_user";
 import { User } from "../user";
 import { Mapper } from "./mapper";
 import { PrismaJson, PrismaMapper } from "./prisma";
+import { randomUUID } from "crypto";
 
 export namespace Service {
-    export const create =
+    const assertSubExpertiseIds =
         (tx: Prisma.TransactionClient = prisma) =>
         async (
-            input: IHSProvider.ICreate,
-        ): Promise<IResult<string, Failure<"EXPERTISE_INVALID">>> => {
+            sub_expertise_ids: string[],
+        ): Promise<
+            IResult<string[], Failure<IHSProvider.FailureCode.ExpertiseInvalid>>
+        > => {
             const hs_expertises = (
                 await tx.hSSubExpertiseModel.findMany({
-                    where: { id: { in: input.sub_expertise_ids } },
+                    where: { id: { in: sub_expertise_ids } },
                 })
             ).filter(isUnDeleted);
             if (hs_expertises.length === 0)
                 return Result.Error.map(
                     Failure.create({
-                        cause: "EXPERTISE_INVALID",
+                        cause: "EXPERTISE_REQUIRED",
                         message: "전문분야가 최소 한 개 이상이어야 합니다.",
                         statusCode: HttpStatus.BAD_REQUEST,
                     }),
@@ -53,13 +58,31 @@ export namespace Service {
             )
                 return Result.Error.map(
                     Failure.create({
-                        cause: "EXPERTISE_INVALID",
+                        cause: "SUPER_EXPERTISE_MISMATCH",
                         message:
                             "선택된 모든 하위 전문분야의 상위 분야는 같아야 합니다.",
                         statusCode: HttpStatus.BAD_REQUEST,
                     }),
                 );
-            const data = PrismaJson.createData(input);
+            return Result.Ok.map(hs_expertises.map(pick("id")));
+        };
+
+    export const create =
+        (tx: Prisma.TransactionClient = prisma) =>
+        async (
+            input: IHSProvider.ICreate,
+        ): Promise<
+            IResult<string, Failure<IHSProvider.FailureCode.Create>>
+        > => {
+            const sub_expertise_ids_result = await assertSubExpertiseIds(tx)(
+                input.sub_expertise_ids,
+            );
+            if (Result.Error.is(sub_expertise_ids_result))
+                return sub_expertise_ids_result;
+            const data = PrismaJson.createData({
+                ...input,
+                sub_expertise_ids: Result.Ok.flatten(sub_expertise_ids_result),
+            });
             await tx.hSProviderModel.create({ data });
             return Result.Ok.map(data.base.create.base.create.id);
         };
@@ -251,4 +274,130 @@ export namespace Service {
 
                 unless(Result.Error.is, Result.Ok.lift(Mapper.toPrivate)),
             );
+
+    export const updateBIZInfo =
+        (tx: Prisma.TransactionClient = prisma) =>
+        (access_token: string) =>
+        async (
+            input: IHSProvider.IUpdate.IBIZInfo,
+        ): Promise<
+            IResult<
+                null,
+                InternalError | Failure<IHSProvider.FailureCode.UpdateBIZInfo>
+            >
+        > => {
+            const permission = await User.Service.validateType(
+                "home service provider",
+            )(tx)(access_token);
+            if (Result.Error.is(permission)) return permission;
+            const user = Result.Ok.flatten(permission);
+            return pipe(
+                user.id,
+
+                (id) => [
+                    tx.userModel.updateMany({
+                        where: { id },
+                        data: { updated_at: DateMapper.toISO() },
+                    }),
+                    tx.bIZUserModel.updateMany({
+                        where: { id },
+                        data: { is_verified: false },
+                    }),
+                    tx.hSProviderModel.updateMany({
+                        where: { id },
+                        data: {
+                            biz_registration_number: input.registration_number,
+                            biz_phone: input.biz_phone,
+                            biz_open_date: new Date(input.open_date),
+                            address_zone_code: input.address.zone_code,
+                            address_road: input.address.road,
+                            address_detail: input.address.detail,
+                            address_extra: input.address.extra,
+                        },
+                    }),
+                ],
+
+                Promise.all,
+
+                () => null,
+
+                Result.Ok.map,
+            );
+        };
+
+    export const updateExpertise =
+        (tx: Prisma.TransactionClient = prisma) =>
+        (access_token: string) =>
+        async (
+            input: IHSProvider.IUpdate.ISubExpertise,
+        ): Promise<
+            IResult<
+                null,
+                InternalError | Failure<IHSProvider.FailureCode.UpdateExpertise>
+            >
+        > => {
+            const permission = await User.Service.validateType(
+                "home service provider",
+            )(tx)(access_token);
+            if (Result.Error.is(permission)) return permission;
+            const user = Result.Ok.flatten(permission);
+            return pipe(
+                input,
+
+                pick("sub_expertise_ids"),
+
+                assertSubExpertiseIds(tx),
+
+                unless(
+                    Result.Error.is,
+                    Result.Ok.asyncLift(async (ids) => {
+                        const now = DateMapper.toISO();
+                        await Promise.all([
+                            tx.userModel.updateMany({
+                                where: { id: user.id },
+                                data: { updated_at: DateMapper.toISO() },
+                            }),
+                            tx.bIZUserModel.updateMany({
+                                where: { id: user.id },
+                                data: { is_verified: false },
+                            }),
+                            tx.hSSubExpertiseRelationModel.updateMany({
+                                where: {
+                                    hs_provider_id: user.id,
+                                    sub_expertise_id: { notIn: ids },
+                                },
+                                data: {
+                                    is_deleted: true,
+                                    deleted_at: now,
+                                },
+                            }),
+                            ...ids.map((sub_expertise_id) =>
+                                tx.hSSubExpertiseRelationModel.upsert({
+                                    where: {
+                                        hs_provider_id_sub_expertise_id: {
+                                            hs_provider_id: user.id,
+                                            sub_expertise_id,
+                                        },
+                                    },
+                                    update: {
+                                        is_deleted: false,
+                                        deleted_at: null,
+                                    },
+                                    create: {
+                                        id: randomUUID(),
+                                        hs_provider_id: user.id,
+                                        sub_expertise_id,
+                                        created_at: now,
+                                        updated_at: now,
+                                        is_deleted: false,
+                                        deleted_at: null,
+                                    },
+                                }),
+                            ),
+                        ]);
+                        return null;
+                    }),
+                ),
+            );
+        };
 }

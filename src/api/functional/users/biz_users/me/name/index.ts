@@ -14,6 +14,8 @@ import type { IBIZUser } from "./../../../../../structures/user/IBIZUser";
 /**
  * 사업자 이름 수정
  * 
+ * {@link IBIZUser.FailureCode.UpdateName 에러 코드}
+ * 
  * @summary 사업자 이름 수정
  * @tag re-agents
  * @tag hs-providers
