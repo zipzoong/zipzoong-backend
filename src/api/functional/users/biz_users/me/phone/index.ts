@@ -19,6 +19,7 @@ import type { IVerification } from "./../../../../../structures/IVerification";
  * @summary 사업자 개인 전화번호 수정
  * @tag re-agents
  * @tag hs-providers
+ * @security access
  * @param body 인증된 전화번호 접근 방식
  * 
  * @controller UsersBIZUsersPhoneUpdateController.update()

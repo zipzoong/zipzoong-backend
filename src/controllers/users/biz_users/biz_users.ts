@@ -19,7 +19,7 @@ export class UsersBIZCertificationsController {
      *
      * @tag hs-providers
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @return 사업자 인증 서류 이미지 url 목록
      */
@@ -44,7 +44,7 @@ export class UsersBIZCertificationsController {
      *
      * @tag hs-providers
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @param body 업로드할 이미지 정보
      */
@@ -73,7 +73,7 @@ export class UsersBIZUsersIntroductionUpdateController {
      *
      * @tag hs-providers
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @param body 자기 소개 정보
      */
@@ -104,7 +104,7 @@ export class UsersBIZUsersPhoneUpdateController {
      *
      * @tag hs-providers
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @param body 인증된 전화번호 접근 방식
      */
@@ -135,7 +135,7 @@ export class UsersBIZUsersNameUpdateController {
      *
      * @tag hs-providers
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @param body 이름 정보
      */
@@ -166,7 +166,7 @@ export class UsersBIZUsersProfileImageUpdateController {
      *
      * @tag hs-providers
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @param body 프로필 이미지 정보
      */

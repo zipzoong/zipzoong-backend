@@ -19,6 +19,7 @@ import type { IBIZUser } from "./../../../../../structures/user/IBIZUser";
  * @summary 사업자 인증 서류 이미지 목록 조회
  * @tag re-agents
  * @tag hs-providers
+ * @security access
  * @return 사업자 인증 서류 이미지 url 목록
  * 
  * @controller UsersBIZCertificationsController.getList()
@@ -74,6 +75,7 @@ export namespace getList {
  * @summary 사업자 인증 서류 이미지 추가
  * @tag re-agents
  * @tag hs-providers
+ * @security access
  * @param body 업로드할 이미지 정보
  * 
  * @controller UsersBIZCertificationsController.create()

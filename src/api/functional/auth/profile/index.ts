@@ -19,6 +19,7 @@ import type { IAuthentication } from "./../../../structures/IAuthentication";
  * 
  * @summary 계정 프로필 조회
  * @tag authentication
+ * @security account
  * @return 계정 프로필 정보
  * 
  * @controller AuthController.get()

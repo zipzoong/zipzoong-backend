@@ -19,6 +19,7 @@ import type { IBIZUser } from "./../../../../../structures/user/IBIZUser";
  * @summary 사업자 자기소개 수정
  * @tag re-agents
  * @tag hs-providers
+ * @security access
  * @param body 자기 소개 정보
  * 
  * @controller UsersBIZUsersIntroductionUpdateController.update()

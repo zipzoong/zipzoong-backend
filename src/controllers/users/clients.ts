@@ -20,7 +20,7 @@ export class UsersClientsController {
      *
      * @tag clients
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @return 내 정보
      */
@@ -41,7 +41,7 @@ export class UsersClientsController {
      *
      * @tag clients
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @param body 사용자 프로필 정보 전체
      */
@@ -70,7 +70,7 @@ export class UsersClientsMePhoneUpdateController {
      *
      * @tag clients
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @param body 인증된 전화번호 접근 방식
      */

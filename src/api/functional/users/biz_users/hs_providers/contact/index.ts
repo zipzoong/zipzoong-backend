@@ -18,6 +18,7 @@ import type { IHSProvider } from "./../../../../../structures/user/IHSProvider";
  * 
  * @summary 생활서비스 전문가 연락처 정보 조회
  * @tag hs-providers
+ * @security access
  * @param provider_id 생활서비스 전문가 id
  * @return 생활서비스 전문가 연락처 정보
  * 

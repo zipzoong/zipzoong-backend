@@ -18,6 +18,7 @@ import type { IVerification } from "./../../../../../structures/IVerification";
  * 
  * @summary 일반 고객 전화번호 수정
  * @tag clients
+ * @security access
  * @param body 인증된 전화번호 접근 방식
  * 
  * @controller UsersClientsMePhoneUpdateController.update()

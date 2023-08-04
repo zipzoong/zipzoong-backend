@@ -23,6 +23,7 @@ export * as requests from "./requests";
  * @summary 집중 케어 목록 불러오기
  * @tag re-agents
  * @tag hs-providers
+ * @security access
  * @return 집중 케어 정보를 불러오기 위한 url list
  * 
  * @controller ZipzoongCaresController.getList()

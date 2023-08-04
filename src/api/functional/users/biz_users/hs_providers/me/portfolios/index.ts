@@ -18,6 +18,7 @@ import type { IHSPortfolio } from "./../../../../../../structures/IHSPortfolio";
  * 
  * @summary 생활서비스 전문가 포트폴리오 추가
  * @tag hs-providers
+ * @security access
  * @param body 포트폴리오 정보
  * 
  * @controller UsersHSProvidersMeController.create()
@@ -82,6 +83,7 @@ export namespace create {
  * 
  * @summary 내 포트폴리오 목록 조회
  * @tag hs-providers
+ * @security access
  * @param query 페이지 정보
  * @return 포트폴리오 상세 정보 목록
  * 

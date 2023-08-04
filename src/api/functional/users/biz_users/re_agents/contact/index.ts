@@ -18,6 +18,7 @@ import type { IREAgent } from "./../../../../../structures/user/IREAgent";
  * 
  * @summary 공인 중개사 연락처 정보 조회
  * @tag re-agents
+ * @security access
  * @param agent_id 공인 중개사 id
  * @return 공인 중개사 연락처 정보
  * 

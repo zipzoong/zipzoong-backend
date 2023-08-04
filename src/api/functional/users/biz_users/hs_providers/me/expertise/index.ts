@@ -18,6 +18,7 @@ import type { IHSProvider } from "./../../../../../../structures/user/IHSProvide
  * 
  * @summary 생활서비스 전문가 전문분야 수정
  * @tag hs-providers
+ * @security access
  * @param body 프로필 이미지 정보
  * 
  * @controller UsersHSProvidersExpertiseUpdateController.update()
