@@ -661,6 +661,7 @@
         ],
         "parameters": [
           {
+            "name": "query",
             "in": "query",
             "description": "검색 결과에 포함시킬 유형 정보를 포함한다.",
             "schema": {
@@ -1361,6 +1362,7 @@
         ],
         "parameters": [
           {
+            "name": "query",
             "in": "query",
             "description": "필터링, 정렬 기준",
             "schema": {
@@ -1588,6 +1590,7 @@
         ],
         "parameters": [
           {
+            "name": "query",
             "in": "query",
             "description": "페이지 정보",
             "schema": {
@@ -2029,6 +2032,7 @@
             "required": true
           },
           {
+            "name": "query",
             "in": "query",
             "description": "페이지 정보",
             "schema": {
@@ -2126,6 +2130,7 @@
         ],
         "parameters": [
           {
+            "name": "query",
             "in": "query",
             "description": "필터링, 정렬 기준",
             "schema": {
@@ -2353,6 +2358,7 @@
         ],
         "parameters": [
           {
+            "name": "query",
             "in": "query",
             "description": "페이지 정보",
             "schema": {
@@ -2794,6 +2800,7 @@
             "required": true
           },
           {
+            "name": "query",
             "in": "query",
             "description": "페이지 정보",
             "schema": {
