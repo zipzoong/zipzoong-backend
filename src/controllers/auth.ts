@@ -76,7 +76,7 @@ export class AuthController {
      *
      * @tag authentication
      *
-     * @param account_token Authorization account account_token
+     * @security account
      *
      * @return 계정 프로필 정보
      */
@@ -100,7 +100,7 @@ export class AuthAccessTokenController {
      *
      * @tag authentication
      *
-     * @param refresh_token Authorization refresh refresh_token
+     * @security refresh
      *
      * @return 액세스 토큰
      */
@@ -130,7 +130,9 @@ export class AUthUserController {
      * - `ACCOUNT_NOT_FOUND` : 집중 서버에 계정 정보가 없는 경우
      * - `ACCOUNT_INACTIVE` : 비활성화된 계정인 경우
      * - `USER_ALREADY_EXIST` : 이미 연동된 해당 유형의 사용자 정보가 있는 경우
-     * - `EXPERTISE_INVALID` : 사업자 전문분야 정보가 유효하지 않은 경우
+     * - `EXPERTISE_INVALID` : 공인중개사 전문분야 정보가 유효하지 않은 경우
+     * - `EXPERTISE_REQUIRED` : 유효한 생활서비스 전문가 전문분야가 없을 때
+     * - `SUPER_EXPERTISE_MISMATCH` : 선택된 생활서비스 전문가 전문분야의 상위 전문분야가 일치하지 않을 때
      * - `TERMS_INSUFFICIENT` : 필수 약관 동의가 불충분한 경우
      * - `TERMS_INVALID` : 약관 정보가 유효하지 않은 경우
      * - `VERIFICATION_INVALID` : 인증 정보가 잘못된 경우
@@ -141,7 +143,7 @@ export class AUthUserController {
      *
      * @tag authentication
      *
-     * @param account_token Authorization account account_token
+     * @security account
      *
      * @param body 사용자 정보
      *

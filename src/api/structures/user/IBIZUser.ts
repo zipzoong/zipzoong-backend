@@ -1,6 +1,12 @@
+import { Mutable } from "@APP/api/types";
 import { IAuthentication } from "../IAuthentication";
 import { IUpload } from "../IUpload";
+import { IHSProvider } from "./IHSProvider";
+import { IREAgent } from "./IREAgent";
 import { IUser } from "./IUser";
+import { IVerification } from "../IVerification";
+
+export type IBIZUser = IHSProvider | IREAgent;
 
 export namespace IBIZUser {
     export interface IIntroduction {
@@ -34,11 +40,40 @@ export namespace IBIZUser {
         url: string;
     }
 
+    export namespace IUpdate {
+        export interface IIntroduction
+            extends Mutable<IBIZUser.IIntroduction> {}
+        export interface IName extends Pick<Mutable<IBIZUser>, "name"> {}
+        export interface IProfileImageUrl {
+            /**
+             * 변경할 프로필 이미지
+             *
+             * 사업자는 반드시 본인 혹은 대표의 얼굴을 프로필 이미지로 지정해야 한다.
+             *
+             * @format url
+             */
+            profile_image_url: string;
+        }
+    }
+
     export namespace FailureCode {
         export type GetCertificationList =
             | IUser.FailureCode.Validate
             | IAuthentication.FailureCode.PermissionInSufficient;
         export type CreateCertification =
+            | IUser.FailureCode.Validate
+            | IAuthentication.FailureCode.PermissionInSufficient;
+        export type UpdateIntroduction =
+            | IUser.FailureCode.Validate
+            | IAuthentication.FailureCode.PermissionInSufficient;
+        export type UpdatePhone =
+            | IUser.FailureCode.Validate
+            | IAuthentication.FailureCode.PermissionInSufficient
+            | IVerification.FailureCode.assertVerifiedPhone;
+        export type UpdateName =
+            | IUser.FailureCode.Validate
+            | IAuthentication.FailureCode.PermissionInSufficient;
+        export type UpdateProfileImageUrl =
             | IUser.FailureCode.Validate
             | IAuthentication.FailureCode.PermissionInSufficient;
     }

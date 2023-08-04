@@ -17,13 +17,9 @@ import type { IHSProvider } from "./../../../../../structures/user/IHSProvider";
  * {@link IHSProvider.FailureCode.GetContact 에러 코드}
  * 
  * @summary 생활서비스 전문가 연락처 정보 조회
- * 
  * @tag hs-providers
- * 
- * @param access_token Authorization access access_token
- * 
+ * @security access
  * @param provider_id 생활서비스 전문가 id
- * 
  * @return 생활서비스 전문가 연락처 정보
  * 
  * @controller UsersHSProvidersSomeoneController.get()

@@ -11,6 +11,8 @@ import typia from "typia";
 import type { IREAgent } from "./../../../../../structures/user/IREAgent";
 
 export * as portfolios from "./portfolios";
+export * as real_estate from "./real_estate";
+export * as expertise from "./expertise";
 
 /**
  * 공인중개사 개인정보를 요청한다.
@@ -20,11 +22,8 @@ export * as portfolios from "./portfolios";
  * {@link IREAgent.FailureCode.GetPrivate 에러 코드}
  * 
  * @summary 공인중개사 내 정보 조회
- * 
  * @tag re-agents
- * 
- * @param access_token Authorization access access_token
- * 
+ * @security access
  * @return 공인중개사 상세 정보
  * 
  * @controller UsersREAgentsMeController.get()

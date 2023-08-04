@@ -14,9 +14,7 @@ import type { IExpertise } from "./../../structures/IExpertise";
  * 공인중개사 전문 분야 목록 불러오기
  * 
  * @summary 공인중개사 전문 분야 목록 조회
- * 
  * @tag re-agents
- * 
  * @return 공인중개사 전문 분야 전체 목록
  * 
  * @controller REExpertisesController.getList()

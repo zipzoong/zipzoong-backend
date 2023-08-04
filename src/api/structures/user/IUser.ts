@@ -1,9 +1,10 @@
 import { IAuthentication } from "../IAuthentication";
+import { IBIZUser } from "./IBIZUser";
 import { IClient } from "./IClient";
 import { IHSProvider } from "./IHSProvider";
 import { IREAgent } from "./IREAgent";
 
-export type IUser = IClient | IREAgent | IHSProvider;
+export type IUser = IClient | IBIZUser;
 
 export namespace IUser {
     export type Type = "client" | "real estate agent" | "home service provider";

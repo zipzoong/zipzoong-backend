@@ -17,13 +17,9 @@ import type { IHSPortfolio } from "./../../../../../structures/IHSPortfolio";
  * {@link IHSPortfolio.FailureCode.GetPublicList 에러 코드}
  * 
  * @summary 생활서비스 전문가 포트폴리오 목록 검색
- * 
  * @tag hs-providers
- * 
  * @param provider_id 생활서비스 전문가 id
- * 
  * @param query 페이지 정보
- * 
  * @return 포트폴리오 공개 정보 목록
  * 
  * @controller UsersHSProvidersSomeoneController.getList()

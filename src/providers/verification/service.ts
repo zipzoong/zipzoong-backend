@@ -129,13 +129,16 @@ export namespace Service {
         return Result.Ok.map({ verification_id: verification.id });
     };
 
-    export const isVerifiedPhone =
+    export const assertVerifiedPhone =
         (tx: Prisma.TransactionClient = prisma) =>
         async ({
             phone,
             verification_id,
         }: IVerification.IVerifiedPhone.IVerification): Promise<
-            IResult<string, Failure<IVerification.FailureCode.IsVerifiedPhone>>
+            IResult<
+                string,
+                Failure<IVerification.FailureCode.assertVerifiedPhone>
+            >
         > =>
             pipe(
                 verification_id,

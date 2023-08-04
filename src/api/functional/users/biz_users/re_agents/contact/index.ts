@@ -17,13 +17,9 @@ import type { IREAgent } from "./../../../../../structures/user/IREAgent";
  * {@link IREAgent.FailureCode.GetContact 에러 코드}
  * 
  * @summary 공인 중개사 연락처 정보 조회
- * 
  * @tag re-agents
- * 
- * @param access_token Authorization access access_token
- * 
+ * @security access
  * @param agent_id 공인 중개사 id
- * 
  * @return 공인 중개사 연락처 정보
  * 
  * @controller UsersREAgentsSomeoneController.get()

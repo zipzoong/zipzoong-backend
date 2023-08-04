@@ -169,12 +169,41 @@ export namespace IHSProvider {
 
     export type IPaginatedSummary = IPaginatedResponse<ISummary>;
 
+    export namespace IUpdate {
+        export interface IBIZInfo
+            extends Pick<
+                Mutable<IHSProvider>,
+                "registration_number" | "biz_phone" | "open_date" | "address"
+            > {}
+
+        export interface ISubExpertise {
+            /**
+             * 하위 전문 분야를 모두 변경한다.
+             *
+             * 기존의 상위 전문 분야와 동일한 하위 전문분야로만 변경할 수 있다.
+             *
+             * 유지하고 싶은 하위 전문 분야 id로 리스트에 포함해야 한다.
+             *
+             * @minItems 1
+             */
+            sub_expertise_ids: string[];
+        }
+    }
+
     export namespace FailureCode {
+        export type ExpertiseInvalid =
+            | "EXPERTISE_REQUIRED"
+            | "SUPER_EXPERTISE_MISMATCH";
+        export type Create = ExpertiseInvalid;
         export type GetPublic = IUser.FailureCode.GetPublic;
         export type GetContact =
             | IUser.FailureCode.Validate
             | IUser.FailureCode.Verify
             | GetPublic;
         export type GetPrivate = IUser.FailureCode.ValidateType;
+        export type UpdateBIZInfo = IUser.FailureCode.ValidateType;
+        export type UpdateExpertise =
+            | IUser.FailureCode.ValidateType
+            | ExpertiseInvalid;
     }
 }

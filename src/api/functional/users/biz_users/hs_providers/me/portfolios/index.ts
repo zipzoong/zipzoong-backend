@@ -17,11 +17,8 @@ import type { IHSPortfolio } from "./../../../../../../structures/IHSPortfolio";
  * {@link IHSPortfolio.FailureCode.Create 에러 코드}
  * 
  * @summary 생활서비스 전문가 포트폴리오 추가
- * 
  * @tag hs-providers
- * 
- * @param access_token Authorization access access_token
- * 
+ * @security access
  * @param body 포트폴리오 정보
  * 
  * @controller UsersHSProvidersMeController.create()
@@ -38,7 +35,13 @@ export async function create(
               body,
           )
         : Fetcher.fetch(
-              connection,
+              {
+                  ...connection,
+                  headers: {
+                      ...(connection.headers ?? {}),
+                      "Content-Type": "application/json",
+                  },
+              },
               create.ENCRYPTED,
               create.METHOD,
               create.path(),
@@ -79,13 +82,9 @@ export namespace create {
  * {@link IHSPortfolio.FailureCode.GetPrivateList 에러 코드}
  * 
  * @summary 내 포트폴리오 목록 조회
- * 
  * @tag hs-providers
- * 
- * @param access_token Authorization access access_token
- * 
+ * @security access
  * @param query 페이지 정보
- * 
  * @return 포트폴리오 상세 정보 목록
  * 
  * @controller UsersHSProvidersMeController.getList()

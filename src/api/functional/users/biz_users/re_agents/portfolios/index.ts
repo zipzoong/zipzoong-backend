@@ -17,13 +17,9 @@ import type { IREPortfolio } from "./../../../../../structures/IREPortfolio";
  * {@link IREPortfolio.FailureCode.GetPublicList 에러 코드}
  * 
  * @summary 공인 중개사 포트폴리오 목록 검색
- * 
  * @tag re-agents
- * 
  * @param agent_id 공인 중개사 id
- * 
  * @param query 페이지 정보
- * 
  * @return 포트폴리오 공개 정보 목록
  * 
  * @controller UsersREAgentsSomeoneController.getList()

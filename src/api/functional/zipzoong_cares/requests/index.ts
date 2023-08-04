@@ -18,13 +18,9 @@ import typia from "typia";
  * {@link IZipzoongCare.FailureCode.GetRequestList 에러 코드}
  * 
  * @summary 집중 케어 신청 목록 불러오기
- * 
  * @tag re-agents
- * 
  * @tag hs-providers
- * 
- * @param access_token Authorization access access_token
- * 
+ * @security access
  * @return 집중 케어 신청 정보를 불러오기 위한 url list
  * 
  * @controller ZipzoongCaresRequestsController.getList()
