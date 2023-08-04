@@ -23,6 +23,7 @@ export * as expertise from "./expertise";
  * 
  * @summary 공인중개사 내 정보 조회
  * @tag re-agents
+ * @security access
  * @return 공인중개사 상세 정보
  * 
  * @controller UsersREAgentsMeController.get()

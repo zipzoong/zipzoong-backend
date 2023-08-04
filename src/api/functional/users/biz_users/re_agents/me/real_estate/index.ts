@@ -18,6 +18,7 @@ import type { IREAgent } from "./../../../../../../structures/user/IREAgent";
  * 
  * @summary 공인중개사 부동산 정보 수정
  * @tag re-agents
+ * @security access
  * @param body 부동산 정보
  * 
  * @controller UsersREAgentsBIZInfoUpdateController.update()

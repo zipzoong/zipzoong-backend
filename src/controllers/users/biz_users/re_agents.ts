@@ -44,7 +44,7 @@ export class UsersREAgentsMeController {
      *
      * @tag re-agents
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @return 공인중개사 상세 정보
      */
@@ -65,7 +65,7 @@ export class UsersREAgentsMeController {
      *
      * @tag re-agents
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @param body 포트폴리오 정보
      */
@@ -87,7 +87,7 @@ export class UsersREAgentsMeController {
      *
      * @tag re-agents
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @param query 페이지 정보
      *
@@ -116,7 +116,7 @@ export class UsersREAgentsBIZInfoUpdateController {
      *
      * @tag re-agents
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @param body 부동산 정보
      */
@@ -145,7 +145,7 @@ export class UsersREAgentsExpertiseUpdateController {
      *
      * @tag re-agents
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @param body 전문 분야
      */
@@ -195,7 +195,7 @@ export class UsersREAgentsSomeoneController {
      *
      * @tag re-agents
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @param agent_id 공인 중개사 id
      *

@@ -17,6 +17,7 @@ import type { IAuthentication } from "./../../../../structures/IAuthentication";
  * 
  * @summary 액세스 토큰 재발급
  * @tag authentication
+ * @security refresh
  * @return 액세스 토큰
  * 
  * @controller AuthAccessTokenController.create()

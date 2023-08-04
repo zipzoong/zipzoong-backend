@@ -20,6 +20,7 @@ import type { IHSProvider } from "./../../../../../../structures/user/IHSProvide
  * 
  * @summary 생활서비스 전문가 사업자 정보 수정
  * @tag hs-providers
+ * @security access
  * @param body 사업자 정보
  * 
  * @controller UsersHSProvidersBIZInfoUpdateController.update()

@@ -19,7 +19,7 @@ export class ZipzoongCaresController {
      *
      * @tag clients
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @return presigned url - 집중 케어 요청 json 데이터를 업로드하기 위한 s3 presigned url
      */
@@ -46,7 +46,7 @@ export class ZipzoongCaresController {
      *
      * @tag hs-providers
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @return 집중 케어 정보를 불러오기 위한 url list
      */
@@ -76,7 +76,7 @@ export class ZipzoongCaresRequestsController {
      *
      * @tag hs-providers
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @return 집중 케어 신청 정보를 불러오기 위한 url list
      */

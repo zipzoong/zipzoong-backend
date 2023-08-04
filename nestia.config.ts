@@ -23,10 +23,20 @@ const NESTIA_CONFIG: nestia.INestiaConfig = {
             },
         ],
         security: {
-            bearer: {
+            account: {
                 type: "apiKey",
-                name: "Authorization",
                 in: "header",
+                name: "Authorization",
+            },
+            access: {
+                type: "apiKey",
+                in: "header",
+                name: "Authorization",
+            },
+            refresh: {
+                type: "apiKey",
+                in: "header",
+                name: "Authorization",
             },
         },
     },

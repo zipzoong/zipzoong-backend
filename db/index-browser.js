@@ -12,14 +12,15 @@ const {
 const Prisma = {}
 
 exports.Prisma = Prisma
+exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 5.1.0
- * Query Engine version: a9b7003df90aa623086e4d6f4e43c72468e6339b
+ * Prisma Client JS version: 5.1.1
+ * Query Engine version: 6a3747c37ff169c90047725a05a6ef02e32ac97e
  */
 Prisma.prismaVersion = {
-  client: "5.1.0",
-  engine: "a9b7003df90aa623086e4d6f4e43c72468e6339b"
+  client: "5.1.1",
+  engine: "6a3747c37ff169c90047725a05a6ef02e32ac97e"
 }
 
 

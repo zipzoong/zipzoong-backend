@@ -23,6 +23,7 @@ export * as expertise from "./expertise";
  * 
  * @summary 생활서비스 전문가 내 정보 조회
  * @tag hs-providers
+ * @security access
  * @return 생활서비스 전문가 상세 정보
  * 
  * @controller UsersHSProvidersMeController.get()

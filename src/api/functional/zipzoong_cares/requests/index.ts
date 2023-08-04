@@ -20,6 +20,7 @@ import typia from "typia";
  * @summary 집중 케어 신청 목록 불러오기
  * @tag re-agents
  * @tag hs-providers
+ * @security access
  * @return 집중 케어 신청 정보를 불러오기 위한 url list
  * 
  * @controller ZipzoongCaresRequestsController.getList()

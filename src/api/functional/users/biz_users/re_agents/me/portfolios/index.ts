@@ -18,6 +18,7 @@ import type { IREPortfolio } from "./../../../../../../structures/IREPortfolio";
  * 
  * @summary 공인중개사 포트폴리오 추가
  * @tag re-agents
+ * @security access
  * @param body 포트폴리오 정보
  * 
  * @controller UsersREAgentsMeController.create()
@@ -82,6 +83,7 @@ export namespace create {
  * 
  * @summary 내 포트폴리오 목록 조회
  * @tag re-agents
+ * @security access
  * @param query 페이지 정보
  * @return 포트폴리오 상세 정보 목록
  * 

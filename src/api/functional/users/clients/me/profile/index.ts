@@ -18,6 +18,7 @@ import type { IClient } from "./../../../../../structures/user/IClient";
  * 
  * @summary 일반 고객 프로필 수정
  * @tag clients
+ * @security access
  * @param body 사용자 프로필 정보 전체
  * 
  * @controller UsersClientsController.update()

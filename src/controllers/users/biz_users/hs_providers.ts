@@ -44,7 +44,7 @@ export class UsersHSProvidersMeController {
      *
      * @tag hs-providers
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @return 생활서비스 전문가 상세 정보
      */
@@ -65,7 +65,7 @@ export class UsersHSProvidersMeController {
      *
      * @tag hs-providers
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @param body 포트폴리오 정보
      */
@@ -87,7 +87,7 @@ export class UsersHSProvidersMeController {
      *
      * @tag hs-providers
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @param query 페이지 정보
      *
@@ -118,7 +118,7 @@ export class UsersHSProvidersBIZInfoUpdateController {
      *
      * @tag hs-providers
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @param body 사업자 정보
      */
@@ -147,7 +147,7 @@ export class UsersHSProvidersExpertiseUpdateController {
      *
      * @tag hs-providers
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @param body 프로필 이미지 정보
      */
@@ -197,7 +197,7 @@ export class UsersHSProvidersSomeoneController {
      *
      * @tag hs-providers
      *
-     * @param access_token Authorization access access_token
+     * @security access
      *
      * @param provider_id 생활서비스 전문가 id
      *
