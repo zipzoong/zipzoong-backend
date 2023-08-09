@@ -5,14 +5,13 @@ import { randomUUID } from "crypto";
 import { IAuthentication } from "@APP/api/structures/IAuthentication";
 import { IVerification } from "@APP/api/structures/IVerification";
 import { IUser } from "@APP/api/structures/user/IUser";
-import { IResult } from "@APP/api/types";
 import { Oauth } from "@APP/externals/oauth";
 import { Kakao } from "@APP/externals/oauth/kakao/sdk";
 import { prisma } from "@APP/infrastructure/DB";
 import {
     DateMapper,
-    Failure,
-    InternalError,
+    ExternalFailure,
+    InternalFailure,
     Result,
     isDeleted,
     pick,
@@ -23,8 +22,8 @@ import { Client } from "../user/client";
 import { HSProvider } from "../user/hs_provider";
 import { REAgent } from "../user/re_agent";
 import { Verification } from "../verification";
-import { IToken } from "./interface";
 import { Token } from "./token";
+import { ITerms } from "@APP/api";
 
 export namespace Service {
     const idMapper: Record<IUser.Type, "client" | "biz_user"> = {
@@ -35,64 +34,26 @@ export namespace Service {
 
     export const getKakaoLoginUrl = () => Kakao.LoginUri;
 
-    export const verifyToken =
-        <T extends IToken.IBase>(
-            verify: (
-                token: string,
-            ) => IResult<
-                T,
-                IAuthentication.FailureCode.TokenVerify | InternalError
-            >,
-        ) =>
-        (
-            token: string,
-        ): IResult<
-            T,
-            Failure<IAuthentication.FailureCode.TokenVerify> | InternalError
-        > =>
-            pipe(
-                token,
-
-                verify,
-
-                unless(
-                    Result.Ok.is,
-                    Result.Error.lift((cause) =>
-                        cause === "TOKEN_EXPIRED"
-                            ? Failure.create({
-                                  cause,
-                                  message: "토큰이 만료되었습니다.",
-                                  statusCode: HttpStatus.FORBIDDEN,
-                              })
-                            : cause === "TOKEN_INVALID"
-                            ? Failure.create({
-                                  cause: "TOKEN_INVALID",
-                                  message: "유효하지 않은 토큰입니다.",
-                                  statusCode: HttpStatus.FORBIDDEN,
-                              })
-                            : cause,
-                    ),
-                ),
-            );
-
     const getAccount =
         (tx: Prisma.TransactionClient = prisma) =>
         async (
             account_token: string,
         ): Promise<
-            IResult<
+            Result<
                 OauthAccountModel,
-                | Failure<
-                      | IAuthentication.FailureCode.TokenVerify
-                      | IAuthentication.FailureCode.AccountVerify
+                | ExternalFailure<"Crypto.decrypt">
+                | InternalFailure<
+                      | IAuthentication.FailureCode.TokenInvalid
+                      | IAuthentication.FailureCode.TokenExpired
+                      | IAuthentication.FailureCode.AccountNotFound
+                      | IAuthentication.FailureCode.AccountInactive
                   >
-                | InternalError
             >
         > =>
             pipe(
                 account_token,
 
-                verifyToken(Token.Account.verify),
+                Token.Account.verify,
 
                 unless(Result.Error.is, (payload) =>
                     pipe(
@@ -108,24 +69,11 @@ export namespace Service {
                         (model) =>
                             isNull(model)
                                 ? Result.Error.map(
-                                      Failure.create<IAuthentication.FailureCode.AccountVerify>(
-                                          {
-                                              cause: "ACCOUNT_NOT_FOUND",
-                                              message:
-                                                  "존재하지 않는 계정입니다.",
-                                              statusCode: HttpStatus.NOT_FOUND,
-                                          },
-                                      ),
+                                      new InternalFailure("ACCOUNT_NOT_FOUND"),
                                   )
                                 : isDeleted(model)
                                 ? Result.Error.map(
-                                      Failure.create<IAuthentication.FailureCode.AccountVerify>(
-                                          {
-                                              cause: "ACCOUNT_INACTIVE",
-                                              message: "비활성화된 계정입니다.",
-                                              statusCode: HttpStatus.FORBIDDEN,
-                                          },
-                                      ),
+                                      new InternalFailure("ACCOUNT_INACTIVE"),
                                   )
                                 : Result.Ok.map(model),
                     ),
@@ -136,7 +84,10 @@ export namespace Service {
         (user_type: IUser.Type) =>
         (
             user_id: string,
-        ): IResult<IAuthentication.IResponse.ISignIn, InternalError> => {
+        ): Result<
+            IAuthentication.IResponse.ISignIn,
+            ExternalFailure<"Crypto.encrypt">
+        > => {
             const access_token = Token.Access.generate({
                 user_id,
                 user_type,
@@ -158,9 +109,15 @@ export namespace Service {
     export const signIn = async (
         input: IAuthentication.ISignIn,
     ): Promise<
-        IResult<
+        Result<
             IAuthentication.IResponse.ISignIn,
-            Failure<IAuthentication.FailureCode.SignIn> | InternalError
+            | ExternalFailure<"Crypto.encrypt" | "OAUTH">
+            | InternalFailure<
+                  | IAuthentication.FailureCode.AccountNotFound
+                  | IAuthentication.FailureCode.AccountInactive
+                  | IUser.FailureCode.NotFound
+                  | IUser.FailureCode.Inactive
+              >
         >
     > =>
         pipe(
@@ -208,23 +165,11 @@ export namespace Service {
                     (model) =>
                         isNull(model)
                             ? Result.Error.map(
-                                  Failure.create<IAuthentication.FailureCode.AccountVerify>(
-                                      {
-                                          cause: "ACCOUNT_NOT_FOUND",
-                                          message: "존재하지 않는 계정입니다.",
-                                          statusCode: HttpStatus.NOT_FOUND,
-                                      },
-                                  ),
+                                  new InternalFailure("ACCOUNT_NOT_FOUND"),
                               )
                             : isDeleted(model)
                             ? Result.Error.map(
-                                  Failure.create<IAuthentication.FailureCode.AccountVerify>(
-                                      {
-                                          cause: "ACCOUNT_INACTIVE",
-                                          message: "비활성화된 계정입니다.",
-                                          statusCode: HttpStatus.FORBIDDEN,
-                                      },
-                                  ),
+                                  new InternalFailure("ACCOUNT_INACTIVE"),
                               )
                             : pipe(
                                   model[idMapper[input.user]],
@@ -232,26 +177,14 @@ export namespace Service {
                                   (account) =>
                                       isNull(account)
                                           ? Result.Error.map(
-                                                Failure.create<IUser.FailureCode.GetOne>(
-                                                    {
-                                                        cause: "USER_NOT_FOUND",
-                                                        message:
-                                                            "사용자 정보가 존재하지 않습니다.",
-                                                        statusCode:
-                                                            HttpStatus.FORBIDDEN,
-                                                    },
+                                                new InternalFailure(
+                                                    "USER_NOT_FOUND",
                                                 ),
                                             )
                                           : isDeleted(account.base)
                                           ? Result.Error.map(
-                                                Failure.create<IAuthentication.FailureCode.SignIn>(
-                                                    {
-                                                        cause: "USER_INACTIVE",
-                                                        message:
-                                                            "비활성화된 사용자입니다.",
-                                                        statusCode:
-                                                            HttpStatus.FORBIDDEN,
-                                                    },
+                                                new InternalFailure(
+                                                    "USER_INACTIVE",
                                                 ),
                                             )
                                           : SignInResponse(input.user)(
@@ -265,9 +198,10 @@ export namespace Service {
     export const signUp = (
         input: IAuthentication.ISignUp,
     ): Promise<
-        IResult<
+        Result<
             IAuthentication.IResponse.ISignUp,
-            InternalError | Failure<IAuthentication.FailureCode.SignUp>
+            | ExternalFailure<"Crypto.encrypt" | "OAUTH">
+            | InternalFailure<IAuthentication.FailureCode.AccountInactive>
         >
     > =>
         pipe(
@@ -311,11 +245,7 @@ export namespace Service {
                     (account) =>
                         isDeleted(account)
                             ? Result.Error.map(
-                                  Failure.create({
-                                      cause: "ACCOUNT_INACTIVE",
-                                      message: "비활성화된 계정입니다.",
-                                      statusCode: HttpStatus.FORBIDDEN,
-                                  }),
+                                  new InternalFailure("ACCOUNT_INACTIVE"),
                               )
                             : Token.Account.generate({
                                   account_id: account.id,
@@ -326,7 +256,8 @@ export namespace Service {
             unless(
                 Result.Error.is<
                     IAuthentication.IToken,
-                    InternalError | Failure<"ACCOUNT_INACTIVE">
+                    | ExternalFailure<"Crypto.encrypt" | "OAUTH">
+                    | InternalFailure<IAuthentication.FailureCode.AccountInactive>
                 >,
                 Result.Ok.lift((account_token) => ({ account_token })),
             ),
@@ -337,9 +268,15 @@ export namespace Service {
         (
             account_token: string,
         ): Promise<
-            IResult<
+            Result<
                 IAuthentication.IAccountProfile,
-                Failure<IAuthentication.FailureCode.GetProfile> | InternalError
+                | ExternalFailure<"Crypto.decrypt">
+                | InternalFailure<
+                      | IAuthentication.FailureCode.TokenInvalid
+                      | IAuthentication.FailureCode.TokenExpired
+                      | IAuthentication.FailureCode.AccountNotFound
+                      | IAuthentication.FailureCode.AccountInactive
+                  >
             >
         > =>
             pipe(
@@ -389,11 +326,12 @@ export namespace Service {
         async (
             input: IVerification.IVerifiedPhone,
         ): Promise<
-            IResult<
+            Result<
                 string,
-                Failure<
-                    | IVerification.FailureCode.assertVerifiedPhone
-                    | "VERIFICATION_INVALID"
+                InternalFailure<
+                    | IVerification.FailureCode.Invalid
+                    | IVerification.FailureCode.NotFound
+                    | IVerification.FailureCode.Uncompleted
                 >
             >
         > =>
@@ -401,14 +339,7 @@ export namespace Service {
                 ? Verification.Service.assertVerifiedPhone(tx)(input)
                 : account.phone === input.phone
                 ? Result.Ok.map(input.phone)
-                : Result.Error.map(
-                      Failure.create({
-                          cause: "VERIFICATION_INVALID",
-                          message:
-                              "전화번호가 계정 연락처와 일치하지 않습니다.",
-                          statusCode: HttpStatus.FORBIDDEN,
-                      }),
-                  );
+                : Result.Error.map(new InternalFailure("VERIFICATION_INVALID"));
 
     export const createUser =
         (tx: Prisma.TransactionClient = prisma) =>
@@ -416,9 +347,21 @@ export namespace Service {
         async (
             input: IUser.ICreateRequest,
         ): Promise<
-            IResult<
+            Result<
                 IAuthentication.IResponse.ISignIn,
-                InternalError | Failure<IAuthentication.FailureCode.CreateUser>
+                | ExternalFailure<"Crypto.encrypt" | "Crypto.decrypt">
+                | InternalFailure<
+                      | IAuthentication.FailureCode.TokenInvalid
+                      | IAuthentication.FailureCode.TokenExpired
+                      | IAuthentication.FailureCode.AccountNotFound
+                      | IAuthentication.FailureCode.AccountInactive
+                      | IAuthentication.FailureCode.UserAlreadyExist
+                      | IVerification.FailureCode.Invalid
+                      | IVerification.FailureCode.NotFound
+                      | IVerification.FailureCode.Uncompleted
+                      | ITerms.FailureCode.Insufficient
+                      | ITerms.FailureCode.Invalid
+                  >
             >
         > => {
             const account_result = await getAccount(tx)(account_token);
@@ -451,11 +394,7 @@ export namespace Service {
                 case "client":
                     if (negate(isNull)(account.client_id))
                         return Result.Error.map(
-                            Failure.create({
-                                cause: "USER_ALREADY_EXIST",
-                                message: "이미 연동된 사용자 정보가 있습니다.",
-                                statusCode: HttpStatus.FORBIDDEN,
-                            }),
+                            new InternalFailure("USER_ALREADY_EXIST"),
                         );
 
                     const client_phone_result = isNull(input.phone)
@@ -480,11 +419,7 @@ export namespace Service {
                 case "real estate agent":
                     if (negate(isNull)(account.biz_user_id))
                         return Result.Error.map(
-                            Failure.create({
-                                cause: "USER_ALREADY_EXIST",
-                                message: "이미 연동된 사용자 정보가 있습니다.",
-                                statusCode: HttpStatus.FORBIDDEN,
-                            }),
+                            new InternalFailure("USER_ALREADY_EXIST"),
                         );
                     const agent_phone_result = await assertVerifiedPhone(tx)(
                         account,
@@ -554,7 +489,7 @@ export namespace Service {
         async (
             refresh_token: string,
         ): Promise<
-            IResult<
+            Result<
                 IAuthentication.IResponse.IRefresh,
                 | Failure<IAuthentication.FailureCode.RefreshAccessToken>
                 | InternalError

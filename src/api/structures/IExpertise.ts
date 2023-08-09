@@ -12,6 +12,9 @@ export namespace IExpertise {
     }
 
     export namespace FailureCode {
-        export type GetOne = "EXPERTISE_NOT_FOUND";
+        export type NotFound = "EXPERTISE_NOT_FOUND";
+        export type Invalid = "EXPERTISE_INVALID";
+        export type Required = "EXPERTISE_REQUIRED";
+        export type SuperMismatch = "SUPER_EXPERTISE_MISMATCH";
     }
 }

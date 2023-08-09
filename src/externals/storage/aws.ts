@@ -16,7 +16,7 @@ import { randomUUID } from "crypto";
 import { URL } from "url";
 import { IUpload } from "@APP/api/structures/IUpload";
 import { Configuration } from "@APP/infrastructure/config";
-import { InternalError, Result } from "@APP/utils";
+import { ExternalFailure, Result } from "@APP/utils";
 import { IStorage } from "./interface";
 
 export namespace AWS {
@@ -84,7 +84,9 @@ export namespace AWS {
                     presigned_url,
                 });
             } catch (error) {
-                return Result.Error.map(InternalError.create(error as Error));
+                return Result.Error.map(
+                    ExternalFailure.get("Storage.getUploadUrl", error),
+                );
             }
         };
         export const getPresignedReadUrl: IStorage["getReadUrl"] = async (

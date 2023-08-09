@@ -3,19 +3,13 @@ import { filter, isNull, map, pipe, toArray, unless } from "@fxts/core";
 import { HttpStatus } from "@nestjs/common";
 import { IREAgent } from "@APP/api/structures/user/IREAgent";
 import { IUser } from "@APP/api/structures/user/IUser";
-import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
-import {
-    DateMapper,
-    Failure,
-    InternalError,
-    Result,
-    isDeleted,
-} from "@APP/utils";
+import { DateMapper, InternalFailure, Result, isDeleted } from "@APP/utils";
 import { BIZUser } from "../biz_user";
 import { User } from "../user";
 import { Mapper } from "./mapper";
 import { PrismaJson, PrismaMapper } from "./prisma";
+import { IExpertise } from "@APP/api";
 
 export namespace Service {
     export const assertExpertiseId =
@@ -23,19 +17,13 @@ export namespace Service {
         async (
             id: string,
         ): Promise<
-            IResult<string, Failure<IREAgent.FailureCode.ExpertiseInvalid>>
+            Result<string, InternalFailure<IExpertise.FailureCode.Invalid>>
         > => {
             const expertise = await tx.rEExpertiseModel.findFirst({
                 where: { id },
             });
             return isNull(expertise) || isDeleted(expertise)
-                ? Result.Error.map(
-                      Failure.create({
-                          cause: "EXPERTISE_INVALID",
-                          message: "유효하지 않은 전문분야입니다.",
-                          statusCode: HttpStatus.BAD_REQUEST,
-                      }),
-                  )
+                ? Result.Error.map(new InternalFailure("EXPERTISE_INVALID"))
                 : Result.Ok.map(expertise.id);
         };
 
@@ -43,7 +31,9 @@ export namespace Service {
         (tx: Prisma.TransactionClient = prisma) =>
         async (
             input: IREAgent.ICreate,
-        ): Promise<IResult<string, Failure<IREAgent.FailureCode.Create>>> =>
+        ): Promise<
+            Result<string, InternalFailure<IExpertise.FailureCode.Invalid>>
+        > =>
             pipe(
                 input.expertise_id,
 
@@ -67,7 +57,12 @@ export namespace Service {
         async (
             agent_id: string,
         ): Promise<
-            IResult<IREAgent, Failure<IUser.FailureCode.GetOne> | InternalError>
+            Result<
+                IREAgent,
+                InternalFailure<
+                    IUser.FailureCode.NotFound | IUser.FailureCode.Inactive
+                >
+            >
         > =>
             pipe(
                 agent_id,
@@ -81,20 +76,10 @@ export namespace Service {
                 (model) =>
                     isNull(model)
                         ? Result.Error.map(
-                              Failure.create({
-                                  cause: "USER_NOT_FOUND",
-                                  message: "존재하지 않는 사용자입니다.",
-                                  statusCode: HttpStatus.NOT_FOUND,
-                              }),
+                              new InternalFailure("USER_NOT_FOUND"),
                           )
                         : isDeleted(model.base.base)
-                        ? Result.Error.map(
-                              Failure.create({
-                                  cause: "USER_INACTIVE",
-                                  message: "비활성화된 사용자입니다.",
-                                  statusCode: HttpStatus.FORBIDDEN,
-                              }),
-                          )
+                        ? Result.Error.map(new InternalFailure("USER_INACTIVE"))
                         : PrismaMapper.to(model),
             );
 
@@ -137,7 +122,10 @@ export namespace Service {
         async (
             agent_id: string,
         ): Promise<
-            IResult<IREAgent.IPublic, Failure<IUser.FailureCode.GetPublic>>
+            Result<
+                IREAgent.IPublic,
+                InternalFailure<IUser.FailureCode.NotFound>
+            >
         > =>
             pipe(
                 agent_id,
@@ -146,12 +134,8 @@ export namespace Service {
 
                 unless(
                     Result.Ok.is,
-                    Result.Error.lift(() =>
-                        Failure.create({
-                            cause: "USER_NOT_FOUND",
-                            message: "사용자를 찾을 수 없습니다.",
-                            statusCode: HttpStatus.NOT_FOUND,
-                        }),
+                    Result.Error.lift(
+                        () => new InternalFailure("USER_NOT_FOUND"),
                     ),
                 ),
 
@@ -159,11 +143,7 @@ export namespace Service {
                     BIZUser.Service.isVerified(Result.Ok.flatten(ok))
                         ? ok
                         : Result.Error.map(
-                              Failure.create({
-                                  cause: "USER_NOT_FOUND",
-                                  message: "사용자를 찾을 수 없습니다.",
-                                  statusCode: HttpStatus.NOT_FOUND,
-                              }),
+                              new InternalFailure("USER_NOT_FOUND"),
                           ),
                 ),
 
@@ -176,9 +156,9 @@ export namespace Service {
         async (
             agent_id: string,
         ): Promise<
-            IResult<
+            Result<
                 IREAgent.IContact,
-                Failure<IREAgent.FailureCode.GetContact> | InternalError
+                InternalFailure<IUser.FailureCode.NotFound>
             >
         > => {
             const permission = await User.Service.validate(tx)(access_token);
@@ -225,7 +205,7 @@ export namespace Service {
         (
             access_token: string,
         ): Promise<
-            IResult<
+            Result<
                 IREAgent.IPrivate,
                 InternalError | Failure<IREAgent.FailureCode.GetPrivate>
             >
@@ -244,7 +224,7 @@ export namespace Service {
         async (
             input: IREAgent.IUpdate.IRealEstate,
         ): Promise<
-            IResult<
+            Result<
                 null,
                 InternalError | Failure<IREAgent.FailureCode.UpdateRealEstate>
             >
@@ -295,7 +275,7 @@ export namespace Service {
         async (
             input: IREAgent.IUpdate.IExpertise,
         ): Promise<
-            IResult<
+            Result<
                 null,
                 InternalError | Failure<IREAgent.FailureCode.UpdateExpertise>
             >

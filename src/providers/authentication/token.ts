@@ -1,9 +1,14 @@
 import { pipe, unless } from "@fxts/core";
 import typia from "typia";
 import { IAuthentication } from "@APP/api/structures/IAuthentication";
-import { IResult } from "@APP/api/types";
 import { Configuration } from "@APP/infrastructure/config";
-import { Crypto, DateMapper, InternalError, Result } from "@APP/utils";
+import {
+    Crypto,
+    DateMapper,
+    ExternalFailure,
+    InternalFailure,
+    Result,
+} from "@APP/utils";
 import { IToken } from "./interface";
 
 export namespace Token {
@@ -18,19 +23,31 @@ export namespace Token {
         token: string;
         key: string;
         parser: (input: string) => T;
-    }): IResult<T, IAuthentication.FailureCode.TokenVerify | InternalError> =>
+    }): Result<
+        T,
+        | ExternalFailure<"Crypto.decrypt">
+        | InternalFailure<
+              | IAuthentication.FailureCode.TokenInvalid
+              | IAuthentication.FailureCode.TokenExpired
+          >
+    > =>
         pipe(
             Crypto.decrypt({ token, key }),
+
             unless(Result.Error.is, (input) => {
                 try {
                     const payload = parser(Result.Ok.flatten(input));
                     const expired_at = new Date(payload.expired_at);
                     const now = new Date();
                     if (now > expired_at)
-                        return Result.Error.map("TOKEN_EXPIRED" as const);
+                        return Result.Error.map(
+                            new InternalFailure("TOKEN_EXPIRED"),
+                        );
                     return Result.Ok.map(payload);
                 } catch {
-                    return Result.Error.map("TOKEN_INVALID" as const);
+                    return Result.Error.map(
+                        new InternalFailure("TOKEN_INVALID"),
+                    );
                 }
             }),
         );
@@ -41,9 +58,9 @@ export namespace Token {
 
         export const generate = ({
             account_id,
-        }: Pick<IToken.IAccount, "account_id">): IResult<
+        }: Pick<IToken.IAccount, "account_id">): Result<
             IAuthentication.IToken,
-            InternalError
+            ExternalFailure<"Crypto.encrypt">
         > => {
             const expired_at = DateMapper.toISO(
                 new Date(Date.now() + duration),
@@ -81,9 +98,9 @@ export namespace Token {
         export const generate = ({
             user_id,
             user_type,
-        }: Pick<IToken.IAccess, "user_id" | "user_type">): IResult<
+        }: Pick<IToken.IAccess, "user_id" | "user_type">): Result<
             IAuthentication.IToken,
-            InternalError
+            ExternalFailure<"Crypto.encrypt">
         > => {
             const expired_at = DateMapper.toISO(
                 new Date(Date.now() + duration),
@@ -122,9 +139,9 @@ export namespace Token {
         export const generate = ({
             user_id,
             user_type,
-        }: Pick<IToken.IRefresh, "user_id" | "user_type">): IResult<
+        }: Pick<IToken.IRefresh, "user_id" | "user_type">): Result<
             IAuthentication.IToken,
-            InternalError
+            ExternalFailure<"Crypto.encrypt">
         > => {
             const expired_at = DateMapper.toISO(
                 new Date(Date.now() + duration),

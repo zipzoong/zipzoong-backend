@@ -28,4 +28,9 @@ export namespace ITerms {
          */
         type: Type[];
     }
+
+    export namespace FailureCode {
+        export type Insufficient = "TERMS_INSUFFICIENT";
+        export type Invalid = "TERMS_INVALID";
+    }
 }

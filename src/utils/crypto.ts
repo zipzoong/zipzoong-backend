@@ -1,8 +1,8 @@
 import { isUndefined } from "@fxts/core";
 import crypto from "crypto";
-import { IResult } from "@APP/api/types";
-import { InternalError } from "./failure";
 import { Result } from "./result";
+import { ExternalFailure, InternalFailure } from "./error";
+import { IAuthentication } from "@APP/api";
 
 export namespace Crypto {
     const IV_LEN = 12;
@@ -21,7 +21,7 @@ export namespace Crypto {
     }: {
         plain: string;
         key: string;
-    }): IResult<string, InternalError> => {
+    }): Result<string, ExternalFailure<"Crypto.encrypt">> => {
         try {
             const iv = crypto.randomBytes(IV_LEN);
             const cipher = crypto.createCipheriv("aes-256-gcm", key, iv, {
@@ -36,7 +36,9 @@ export namespace Crypto {
                 )}.${encrypted}`,
             );
         } catch (error) {
-            return Result.Error.map(InternalError.create(error as Error));
+            return Result.Error.map(
+                ExternalFailure.get("Crypto.encrypt", error),
+            );
         }
     };
 
@@ -55,11 +57,15 @@ export namespace Crypto {
     }: {
         token: string;
         key: string;
-    }): IResult<string, "TOKEN_INVALID" | InternalError> => {
+    }): Result<
+        string,
+        | ExternalFailure<"Crypto.decrypt">
+        | InternalFailure<IAuthentication.FailureCode.TokenInvalid>
+    > => {
         try {
             const [iv, tag, encrypted] = token.split(".");
             if (isUndefined(iv) || isUndefined(tag) || isUndefined(encrypted))
-                return Result.Error.map("TOKEN_INVALID" as const);
+                return Result.Error.map(new InternalFailure("TOKEN_INVALID"));
 
             const decipher = crypto
                 .createDecipheriv("aes-256-gcm", key, Buffer.from(iv, "base64"))
@@ -70,7 +76,9 @@ export namespace Crypto {
                     decipher.final("utf8"),
             );
         } catch (error) {
-            return Result.Error.map(InternalError.create(error as Error));
+            return Result.Error.map(
+                ExternalFailure.get("Crypto.decrypt", error),
+            );
         }
     };
 }

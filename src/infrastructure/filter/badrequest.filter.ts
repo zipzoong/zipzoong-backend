@@ -5,7 +5,6 @@ import {
     ExceptionFilter,
 } from "@nestjs/common";
 import { HttpAdapterHost } from "@nestjs/core";
-import { IFailure } from "@APP/api/types";
 
 @Catch(BadRequestException)
 export class BadRequestExceptionFilter implements ExceptionFilter {
@@ -16,10 +15,7 @@ export class BadRequestExceptionFilter implements ExceptionFilter {
         const ctx = host.switchToHttp();
         httpAdapter.reply(
             ctx.getResponse(),
-            {
-                cause: "INVALID_INPUT",
-                message: exception.message,
-            } satisfies IFailure,
+            "INVALID_INPUT",
             exception.getStatus(),
         );
     }

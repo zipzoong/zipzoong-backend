@@ -2,9 +2,9 @@ import { Prisma } from "@PRISMA";
 import { randomUUID } from "crypto";
 import typia from "typia";
 import { IREAgent } from "@APP/api/structures/user/IREAgent";
-import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
-import { DateMapper, InternalError, Result } from "@APP/utils";
+import { DateMapper, InternalFailure, Result } from "@APP/utils";
+import { IUser } from "@APP/api";
 
 export namespace PrismaJson {
     export const createData = (input: IREAgent.ICreate) => {
@@ -72,7 +72,7 @@ export namespace PrismaJson {
             re_address_detail: true,
             re_address_extra: true,
             biz_open_date: true,
-        } satisfies Prisma.REAgentModelSelect);
+        }) satisfies Prisma.REAgentModelSelect;
 
     export const select = () =>
         ({
@@ -109,7 +109,7 @@ export namespace PrismaJson {
             re_address_detail: true,
             re_address_extra: true,
             biz_open_date: true,
-        } satisfies Prisma.REAgentModelSelect);
+        }) satisfies Prisma.REAgentModelSelect;
 }
 
 export namespace PrismaMapper {
@@ -123,7 +123,10 @@ export namespace PrismaMapper {
                 >
             >
         >,
-    ): IResult<IREAgent.ISummary, InternalError> => {
+    ): Result<
+        IREAgent.ISummary,
+        InternalFailure<IUser.FailureCode.Invalid>
+    > => {
         const agent: IREAgent.ISummary = {
             type: "real estate agent",
             id: input.base.base.id,
@@ -152,13 +155,7 @@ export namespace PrismaMapper {
 
         return typia.equals<IREAgent.ISummary>(agent)
             ? Result.Ok.map(agent)
-            : Result.Error.map(
-                  InternalError.create(
-                      Error(
-                          `Fail to map REAgent Summary. id: | ${input.base.base.id} |`,
-                      ),
-                  ),
-              );
+            : Result.Error.map(new InternalFailure("USER_INVALID"));
     };
 
     export const to = (
@@ -171,7 +168,7 @@ export namespace PrismaMapper {
                 >
             >
         >,
-    ): IResult<IREAgent, InternalError> => {
+    ): Result<IREAgent, InternalFailure<IUser.FailureCode.Invalid>> => {
         const agent: IREAgent = {
             type: "real estate agent",
             id: input.base.base.id,
@@ -205,12 +202,6 @@ export namespace PrismaMapper {
 
         return typia.equals<IREAgent>(agent)
             ? Result.Ok.map(agent)
-            : Result.Error.map(
-                  InternalError.create(
-                      Error(
-                          `Fail to map REAgent Private. id: | ${input.base.base.id} |`,
-                      ),
-                  ),
-              );
+            : Result.Error.map(new InternalFailure("USER_INVALID"));
     };
 }

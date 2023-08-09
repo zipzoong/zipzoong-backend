@@ -1,7 +1,5 @@
-import { IVerification } from "@APP/api/structures/IVerification";
 import { IAddress } from "./common";
 import { IUser } from "./user/IUser";
-import { IHSProvider, IREAgent } from "../module";
 
 export namespace IAuthentication {
     export type OauthType = "kakao";
@@ -111,22 +109,9 @@ export namespace IAuthentication {
     }
 
     export namespace FailureCode {
-        export type PermissionInSufficient = "PERMISSION_INSUFFICIENT";
-        export type TokenVerify = "TOKEN_EXPIRED" | "TOKEN_INVALID";
-        export type AccountVerify = "ACCOUNT_NOT_FOUND" | "ACCOUNT_INACTIVE";
-        export type SignIn = AccountVerify | IUser.FailureCode.GetOne;
-        export type SignUp = "ACCOUNT_INACTIVE";
-        export type GetProfile = TokenVerify | AccountVerify;
-        export type CreateUser =
-            | TokenVerify
-            | AccountVerify
-            | IVerification.FailureCode.assertVerifiedPhone
-            | IREAgent.FailureCode.Create
-            | IHSProvider.FailureCode.Create
-            | "VERIFICATION_INVALID"
-            | "USER_ALREADY_EXIST"
-            | "TERMS_INSUFFICIENT"
-            | "TERMS_INVALID";
-        export type RefreshAccessToken = IUser.FailureCode.Validate;
+        export type TokenExpired = "TOKEN_EXPIRED";
+        export type TokenInvalid = "TOKEN_INVALID";
+        export type AccountNotFound = "ACCOUNT_NOT_FOUND";
+        export type AccountInactive = "ACCOUNT_INACTIVE";
     }
 }

@@ -1,15 +1,13 @@
 import { Prisma } from "@PRISMA";
 import { isNull, pipe, unless } from "@fxts/core";
-import { HttpStatus } from "@nestjs/common";
 import { randomInt, randomUUID } from "crypto";
 import { IVerification } from "@APP/api/structures/IVerification";
-import { IResult } from "@APP/api/types";
 import { SMS } from "@APP/externals/sms";
 import { prisma } from "@APP/infrastructure/DB";
 import {
     DateMapper,
-    Failure,
-    InternalError,
+    ExternalFailure,
+    InternalFailure,
     Result,
     isDeleted,
 } from "@APP/utils";
@@ -21,9 +19,13 @@ export namespace Service {
     export const createPhone = (
         input: IVerification.IRequest.ICreatePhone,
     ): Promise<
-        IResult<
+        Result<
             IVerification.IResponse.ICreate,
-            Failure<IVerification.FailureCode.CreatePhone> | InternalError
+            | ExternalFailure<"SMS.send">
+            | InternalFailure<
+                  | IVerification.FailureCode.CountryCodeUnsupported
+                  | IVerification.FailureCode.PhoneInvalid
+              >
         >
     > => {
         const phone = input.phone;
@@ -59,28 +61,6 @@ export namespace Service {
                     };
                 }),
             ),
-            unless(
-                Result.Ok.is,
-                Result.Error.lift((cause) => {
-                    if (cause === "COUNTRY_CODE_UNSUPPORTED")
-                        return Failure.create<IVerification.FailureCode.CreatePhone>(
-                            {
-                                cause: "COUNTRY_CODE_UNSUPPORTED",
-                                message: "지원하지 않는 국가코드입니다.",
-                                statusCode: HttpStatus.BAD_REQUEST,
-                            },
-                        );
-                    if (cause === "PHONE_INVALID")
-                        return Failure.create<IVerification.FailureCode.CreatePhone>(
-                            {
-                                cause: "PHONE_INVALID",
-                                message: "전화번호 형식이 올바르지 않습니다.",
-                                statusCode: HttpStatus.BAD_REQUEST,
-                            },
-                        );
-                    return cause;
-                }),
-            ),
         );
     };
 
@@ -88,9 +68,12 @@ export namespace Service {
         phone,
         code,
     }: IVerification.IRequest.IVerifyPhone): Promise<
-        IResult<
+        Result<
             IVerification.IResponse.IVerify,
-            Failure<IVerification.FailureCode.VerifyPhone>
+            InternalFailure<
+                | IVerification.FailureCode.NotFound
+                | IVerification.FailureCode.Expired
+            >
         >
     > => {
         const deadline = new Date(Date.now() - duration);
@@ -105,20 +88,12 @@ export namespace Service {
             verification.is_verified
         )
             return Result.Error.map(
-                Failure.create<IVerification.FailureCode.VerifyPhone>({
-                    cause: "VERIFICATION_NOT_FOUND",
-                    message: "알맞는 인증 정보를 찾을 수 없습니다.",
-                    statusCode: HttpStatus.NOT_FOUND,
-                }),
+                new InternalFailure("VERIFICATION_NOT_FOUND"),
             );
 
         if (deadline > verification.created_at)
             return Result.Error.map(
-                Failure.create<IVerification.FailureCode.VerifyPhone>({
-                    cause: "VERIFICATION_EXPIRED",
-                    message: "인증이 만료되었습니다.",
-                    statusCode: HttpStatus.FORBIDDEN,
-                }),
+                new InternalFailure("VERIFICATION_EXPIRED"),
             );
 
         await prisma.phoneVerificationModel.updateMany({
@@ -135,9 +110,12 @@ export namespace Service {
             phone,
             verification_id,
         }: IVerification.IVerifiedPhone.IVerification): Promise<
-            IResult<
+            Result<
                 string,
-                Failure<IVerification.FailureCode.assertVerifiedPhone>
+                InternalFailure<
+                    | IVerification.FailureCode.NotFound
+                    | IVerification.FailureCode.Uncompleted
+                >
             >
         > =>
             pipe(
@@ -151,12 +129,7 @@ export namespace Service {
                     isDeleted(verification) ||
                     verification.phone !== phone
                         ? Result.Error.map(
-                              Failure.create({
-                                  cause: "VERIFICATION_NOT_FOUND",
-                                  message:
-                                      "전화번호 인증 정보가 존재하지 않습니다.",
-                                  statusCode: HttpStatus.NOT_FOUND,
-                              }),
+                              new InternalFailure("VERIFICATION_NOT_FOUND"),
                           )
                         : Result.Ok.map(verification),
 
@@ -175,12 +148,9 @@ export namespace Service {
                             return verification.is_verified
                                 ? Result.Ok.map(phone)
                                 : Result.Error.map(
-                                      Failure.create({
-                                          cause: "VERIFICATION_UNCOMPLETED",
-                                          message:
-                                              "인증이 완료되지 않았습니다.",
-                                          statusCode: HttpStatus.NOT_FOUND,
-                                      }),
+                                      new InternalFailure(
+                                          "VERIFICATION_UNCOMPLETED",
+                                      ),
                                   );
                         },
                     ),

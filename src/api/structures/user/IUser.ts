@@ -1,4 +1,3 @@
-import { IAuthentication } from "../IAuthentication";
 import { IBIZUser } from "./IBIZUser";
 import { IClient } from "./IClient";
 import { IHSProvider } from "./IHSProvider";
@@ -52,14 +51,11 @@ export namespace IUser {
         | IHSProvider.ICreateRequest;
 
     export namespace FailureCode {
-        export type Validate =
-            | IAuthentication.FailureCode.TokenVerify
-            | "USER_INVALID";
-        export type ValidateType =
-            | Validate
-            | IAuthentication.FailureCode.PermissionInSufficient;
-        export type Verify = "USER_UNVERIFIED";
-        export type GetPublic = "USER_NOT_FOUND";
-        export type GetOne = GetPublic | "USER_INACTIVE";
+        export type NotFound = "USER_NOT_FOUND";
+        export type Invalid = "USER_INVALID";
+        export type Unverified = "USER_UNVERIFIED";
+        export type Inactive = "USER_INACTIVE";
+        export type AlreadyExist = "USER_ALREADY_EXIST";
+        export type TypeMismatch = "USER_TYPE_MISMATCH";
     }
 }

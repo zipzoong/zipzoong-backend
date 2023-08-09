@@ -1,5 +1,5 @@
-import { IResult } from "@APP/api/types";
-import { InternalError } from "@APP/utils";
+import { IVerification } from "@APP/api";
+import { ExternalFailure, InternalFailure, Result } from "@APP/utils";
 
 export interface ISMS {
     send: (input: {
@@ -7,9 +7,13 @@ export interface ISMS {
         /** @default COMM */
         contentType?: "COMM" | "AD";
     }) => Promise<
-        IResult<
+        Result<
             string,
-            "PHONE_INVALID" | "COUNTRY_CODE_UNSUPPORTED" | InternalError
+            | ExternalFailure<"SMS.send">
+            | InternalFailure<
+                  | IVerification.FailureCode.PhoneInvalid
+                  | IVerification.FailureCode.CountryCodeUnsupported
+              >
         >
     >;
 }

@@ -1,19 +1,18 @@
 import { isUndefined } from "@fxts/core";
 import typia from "typia";
 import { IAuthentication } from "@APP/api/structures/IAuthentication";
-import { IResult } from "@APP/api/types";
-import { InternalError, Result } from "@APP/utils";
+import { ExternalFailure, Result } from "@APP/utils";
 import { Kakao } from "./kakao/sdk";
 
 export const Oauth: Record<
     IAuthentication.OauthType,
     (code: string) => Promise<
-        IResult<
+        Result<
             {
                 oauth_sub: string;
                 profile: IAuthentication.IAccountProfile;
             },
-            InternalError
+            ExternalFailure<"OAUTH">
         >
     >
 > = {
@@ -86,7 +85,7 @@ export const Oauth: Record<
             };
             return Result.Ok.map({ oauth_sub, profile });
         } catch (error) {
-            return Result.Error.map(InternalError.create(error as Error));
+            return Result.Error.map(ExternalFailure.get("OAUTH", error));
         }
     },
 };

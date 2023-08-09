@@ -6,7 +6,7 @@ const NESTIA_CONFIG: nestia.INestiaConfig = {
         exclude: ["src/**/*.document.ts"],
     },
     output: "src/api",
-    json: true,
+    json: false,
     primitive: false,
     simulate: true,
     swagger: {

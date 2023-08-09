@@ -1,6 +1,5 @@
 import { IUpload } from "@APP/api/structures/IUpload";
-import { IResult } from "@APP/api/types";
-import { InternalError } from "@APP/utils";
+import { ExternalFailure, Result } from "@APP/utils";
 
 export interface IStorage {
     /**
@@ -8,7 +7,7 @@ export interface IStorage {
      */
     getUploadUrl: (
         resource_type: IUpload.ResourceType | IUpload.CareRequestType,
-    ) => Promise<IResult<IUpload, InternalError>>;
+    ) => Promise<Result<IUpload, ExternalFailure<"Storage.getUploadUrl">>>;
     /**
      * 리소스 접근을 위한 presigned url 발급 함수
      */

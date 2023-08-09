@@ -3,15 +3,15 @@ import { isUndefined } from "@fxts/core";
 import { randomUUID } from "crypto";
 import typia from "typia";
 import { IHSProvider } from "@APP/api/structures/user/IHSProvider";
-import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
 import {
     DateMapper,
-    InternalError,
+    InternalFailure,
     Result,
     isUnDeleted,
     pick,
 } from "@APP/utils";
+import { IUser } from "@APP/api";
 
 export namespace PrismaJson {
     export const createData = (input: IHSProvider.ICreate) => {
@@ -75,7 +75,7 @@ export namespace PrismaJson {
                     },
                 },
             },
-        } satisfies Prisma.HSSubExpertiseRelationModelSelect);
+        }) satisfies Prisma.HSSubExpertiseRelationModelSelect;
 
     export const summarySelect = () =>
         ({
@@ -95,7 +95,7 @@ export namespace PrismaJson {
             expertise_relation: {
                 select: expertiseRelationSelect(),
             },
-        } satisfies Prisma.HSProviderModelSelect);
+        }) satisfies Prisma.HSProviderModelSelect;
 
     export const select = () =>
         ({
@@ -129,7 +129,7 @@ export namespace PrismaJson {
             address_zone_code: true,
             address_detail: true,
             address_extra: true,
-        } satisfies Prisma.HSProviderModelSelect);
+        }) satisfies Prisma.HSProviderModelSelect;
 }
 
 export namespace PrismaMapper {
@@ -143,7 +143,7 @@ export namespace PrismaMapper {
                 >
             >
         >,
-    ): IResult<IHSProvider, InternalError> => {
+    ): Result<IHSProvider, InternalFailure<IUser.FailureCode.Invalid>> => {
         const sub_expertises = input.expertise_relation
             .filter(isUnDeleted)
             .map(pick("sub_expertise"));
@@ -151,13 +151,7 @@ export namespace PrismaMapper {
         const super_expertise = sub_expertises[0]?.super_expertise;
 
         if (isUndefined(super_expertise))
-            return Result.Error.map(
-                InternalError.create(
-                    Error(
-                        `HSProvider 전문분야 누락. id: | ${input.base.base.id} |`,
-                    ),
-                ),
-            );
+            return Result.Error.map(new InternalFailure("USER_INVALID"));
 
         const expertise = {
             id: super_expertise.id,
@@ -195,13 +189,7 @@ export namespace PrismaMapper {
 
         return typia.equals<IHSProvider>(provider)
             ? Result.Ok.map(provider)
-            : Result.Error.map(
-                  InternalError.create(
-                      Error(
-                          `Fail to map HSProvider Private. id: | ${input.base.base.id} |`,
-                      ),
-                  ),
-              );
+            : Result.Error.map(new InternalFailure("USER_INVALID"));
     };
 
     export const toSummary = (
@@ -214,7 +202,10 @@ export namespace PrismaMapper {
                 >
             >
         >,
-    ): IResult<IHSProvider.ISummary, InternalError> => {
+    ): Result<
+        IHSProvider.ISummary,
+        InternalFailure<IUser.FailureCode.Invalid>
+    > => {
         const sub_expertises = input.expertise_relation
             .filter(isUnDeleted)
             .map(pick("sub_expertise"));
@@ -222,13 +213,7 @@ export namespace PrismaMapper {
         const super_expertise = sub_expertises[0]?.super_expertise;
 
         if (isUndefined(super_expertise))
-            return Result.Error.map(
-                InternalError.create(
-                    Error(
-                        `HSProvider 전문분야 누락. id: | ${input.base.base.id} |`,
-                    ),
-                ),
-            );
+            return Result.Error.map(new InternalFailure("USER_INVALID"));
 
         const expertise = {
             id: super_expertise.id,
@@ -252,12 +237,6 @@ export namespace PrismaMapper {
 
         return typia.equals<IHSProvider.ISummary>(provider)
             ? Result.Ok.map(provider)
-            : Result.Error.map(
-                  InternalError.create(
-                      Error(
-                          `Fail to map HSProvider Summary. id: | ${input.base.base.id} |`,
-                      ),
-                  ),
-              );
+            : Result.Error.map(new InternalFailure("USER_INVALID"));
     };
 }

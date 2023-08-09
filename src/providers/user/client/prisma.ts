@@ -3,9 +3,9 @@ import { isNull, negate } from "@fxts/core";
 import { randomUUID } from "crypto";
 import typia from "typia";
 import { IClient } from "@APP/api/structures/user/IClient";
-import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
-import { DateMapper, InternalError, Result } from "@APP/utils";
+import { DateMapper, InternalFailure, Result } from "@APP/utils";
+import { IUser } from "@APP/api";
 
 export namespace PrismaJson {
     export const createData = (input: IClient.ICreate) => {
@@ -55,7 +55,7 @@ export namespace PrismaJson {
                     deleted_at: true,
                 },
             },
-        } satisfies Prisma.ClientModelSelect);
+        }) satisfies Prisma.ClientModelSelect;
 }
 
 export namespace PrismaMapper {
@@ -69,7 +69,7 @@ export namespace PrismaMapper {
                 >
             >
         >,
-    ): IResult<IClient, InternalError> => {
+    ): Result<IClient, InternalFailure<IUser.FailureCode.Invalid>> => {
         const isNotNull = negate(isNull);
         const client: IClient.IPrivate = {
             type: "client",
@@ -97,10 +97,6 @@ export namespace PrismaMapper {
         };
         return typia.equals<IClient>(client)
             ? Result.Ok.map(client)
-            : Result.Error.map(
-                  InternalError.create(
-                      Error(`Fail to map Client Private. id: | ${input.id} |`),
-                  ),
-              );
+            : Result.Error.map(new InternalFailure("USER_INVALID"));
     };
 }

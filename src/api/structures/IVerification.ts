@@ -144,15 +144,11 @@ export namespace IVerification {
     }
 
     export namespace FailureCode {
-        export type CreatePhone = "PHONE_INVALID" | "COUNTRY_CODE_UNSUPPORTED";
-        export type VerifyPhone =
-            | "VERIFICATION_NOT_FOUND"
-            | "VERIFICATION_EXPIRED";
-        export type assertVerifiedPhone =
-            | "VERIFICATION_NOT_FOUND"
-            | "VERIFICATION_UNCOMPLETED";
-        export type GetVerifiedPhone =
-            | "VERIFICATION_NOT_FOUND"
-            | "VERIFICATION_UNCOMPLETED";
+        export type PhoneInvalid = "PHONE_INVALID";
+        export type CountryCodeUnsupported = "COUNTRY_CODE_UNSUPPORTED";
+        export type Invalid = "VERIFICATION_INVALID";
+        export type NotFound = "VERIFICATION_NOT_FOUND";
+        export type Expired = "VERIFICATION_EXPIRED";
+        export type Uncompleted = "VERIFICATION_UNCOMPLETED";
     }
 }

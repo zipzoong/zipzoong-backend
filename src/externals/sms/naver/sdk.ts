@@ -3,7 +3,7 @@ import { Fetcher } from "@nestia/fetcher";
 import { createHmac } from "crypto";
 import typia from "typia";
 import { Configuration } from "@APP/infrastructure/config";
-import { InternalError, Result } from "@APP/utils";
+import { ExternalFailure, InternalFailure, Result } from "@APP/utils";
 import { ISMS } from "../interface";
 import { INaver } from "./interface";
 
@@ -57,9 +57,6 @@ export namespace Naver {
 
     /**
      * 네이버 sens 메시지 발송 API
-     *
-     * - 실패시 IError 객체 반환
-     * - 성공시 요청 id 반환
      */
     export const requestSendMessage: ISMS["send"] = async ({
         message,
@@ -72,9 +69,11 @@ export namespace Naver {
             const [countryCode, phone] = message.to.slice(1).split(" ");
 
             if (isUndefined(countryCode) || isUndefined(phone))
-                return Result.Error.map("PHONE_INVALID" as const);
+                return Result.Error.map(new InternalFailure("PHONE_INVALID"));
             if (!typia.is<INaver.CountryCode>(countryCode))
-                return Result.Error.map("COUNTRY_CODE_UNSUPPORTED" as const);
+                return Result.Error.map(
+                    new InternalFailure("COUNTRY_CODE_UNSUPPORTED"),
+                );
 
             const response = await Fetcher.fetch<
                 INaver.ISendSMSInput,
@@ -106,7 +105,7 @@ export namespace Naver {
             );
             return Result.Ok.map(response.requestId);
         } catch (error) {
-            return Result.Error.map(InternalError.create(error as Error));
+            return Result.Error.map(ExternalFailure.get("SMS.send", error));
         }
     };
 }

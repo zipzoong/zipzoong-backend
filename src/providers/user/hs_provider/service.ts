@@ -8,15 +8,13 @@ import {
     toArray,
     unless,
 } from "@fxts/core";
-import { HttpStatus } from "@nestjs/common";
 import { IHSProvider } from "@APP/api/structures/user/IHSProvider";
 import { IUser } from "@APP/api/structures/user/IUser";
-import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
 import {
     DateMapper,
-    Failure,
-    InternalError,
+    ExternalFailure,
+    InternalFailure,
     Result,
     isDeleted,
     isUnDeleted,
@@ -27,6 +25,7 @@ import { User } from "../user";
 import { Mapper } from "./mapper";
 import { PrismaJson, PrismaMapper } from "./prisma";
 import { randomUUID } from "crypto";
+import { IAuthentication, IExpertise } from "@APP/api";
 
 export namespace Service {
     const assertSubExpertiseIds =
@@ -34,7 +33,13 @@ export namespace Service {
         async (
             sub_expertise_ids: string[],
         ): Promise<
-            IResult<string[], Failure<IHSProvider.FailureCode.ExpertiseInvalid>>
+            Result<
+                string[],
+                InternalFailure<
+                    | IExpertise.FailureCode.Required
+                    | IExpertise.FailureCode.SuperMismatch
+                >
+            >
         > => {
             const hs_expertises = (
                 await tx.hSSubExpertiseModel.findMany({
@@ -43,11 +48,7 @@ export namespace Service {
             ).filter(isUnDeleted);
             if (hs_expertises.length === 0)
                 return Result.Error.map(
-                    Failure.create({
-                        cause: "EXPERTISE_REQUIRED",
-                        message: "전문분야가 최소 한 개 이상이어야 합니다.",
-                        statusCode: HttpStatus.BAD_REQUEST,
-                    }),
+                    new InternalFailure("EXPERTISE_REQUIRED"),
                 );
             if (
                 !hs_expertises.every(
@@ -57,12 +58,7 @@ export namespace Service {
                 )
             )
                 return Result.Error.map(
-                    Failure.create({
-                        cause: "SUPER_EXPERTISE_MISMATCH",
-                        message:
-                            "선택된 모든 하위 전문분야의 상위 분야는 같아야 합니다.",
-                        statusCode: HttpStatus.BAD_REQUEST,
-                    }),
+                    new InternalFailure("SUPER_EXPERTISE_MISMATCH"),
                 );
             return Result.Ok.map(hs_expertises.map(pick("id")));
         };
@@ -72,7 +68,13 @@ export namespace Service {
         async (
             input: IHSProvider.ICreate,
         ): Promise<
-            IResult<string, Failure<IHSProvider.FailureCode.Create>>
+            Result<
+                string,
+                InternalFailure<
+                    | IExpertise.FailureCode.Required
+                    | IExpertise.FailureCode.SuperMismatch
+                >
+            >
         > => {
             const sub_expertise_ids_result = await assertSubExpertiseIds(tx)(
                 input.sub_expertise_ids,
@@ -86,14 +88,19 @@ export namespace Service {
             await tx.hSProviderModel.create({ data });
             return Result.Ok.map(data.base.create.base.create.id);
         };
+
     export const getOne =
         (tx: Prisma.TransactionClient = prisma) =>
         (
             provider_id: string,
         ): Promise<
-            IResult<
+            Result<
                 IHSProvider,
-                Failure<IUser.FailureCode.GetOne> | InternalError
+                InternalFailure<
+                    | IUser.FailureCode.NotFound
+                    | IUser.FailureCode.Inactive
+                    | IUser.FailureCode.Invalid
+                >
             >
         > =>
             pipe(
@@ -108,20 +115,10 @@ export namespace Service {
                 (model) =>
                     isNull(model)
                         ? Result.Error.map(
-                              Failure.create({
-                                  cause: "USER_NOT_FOUND",
-                                  message: "존재하지 않는 사용자입니다.",
-                                  statusCode: HttpStatus.NOT_FOUND,
-                              }),
+                              new InternalFailure("USER_NOT_FOUND"),
                           )
                         : isDeleted(model.base.base)
-                        ? Result.Error.map(
-                              Failure.create({
-                                  cause: "USER_INACTIVE",
-                                  message: "비활성화된 사용자입니다.",
-                                  statusCode: HttpStatus.FORBIDDEN,
-                              }),
-                          )
+                        ? Result.Error.map(new InternalFailure("USER_INACTIVE"))
                         : PrismaMapper.to(model),
             );
 
@@ -174,7 +171,10 @@ export namespace Service {
         (
             provider_id: string,
         ): Promise<
-            IResult<IHSProvider.IPublic, Failure<IUser.FailureCode.GetPublic>>
+            Result<
+                IHSProvider.IPublic,
+                InternalFailure<IUser.FailureCode.NotFound>
+            >
         > =>
             pipe(
                 provider_id,
@@ -183,12 +183,8 @@ export namespace Service {
 
                 unless(
                     Result.Ok.is,
-                    Result.Error.lift(() =>
-                        Failure.create({
-                            cause: "USER_NOT_FOUND",
-                            message: "사용자를 찾을 수 없습니다.",
-                            statusCode: HttpStatus.NOT_FOUND,
-                        }),
+                    Result.Error.lift(
+                        () => new InternalFailure("USER_NOT_FOUND"),
                     ),
                 ),
 
@@ -196,11 +192,7 @@ export namespace Service {
                     BIZUser.Service.isVerified(Result.Ok.flatten(ok))
                         ? ok
                         : Result.Error.map(
-                              Failure.create({
-                                  cause: "USER_NOT_FOUND",
-                                  message: "사용자를 찾을 수 없습니다.",
-                                  statusCode: HttpStatus.NOT_FOUND,
-                              }),
+                              new InternalFailure("USER_NOT_FOUND"),
                           ),
                 ),
 
@@ -213,9 +205,16 @@ export namespace Service {
         async (
             provider_id: string,
         ): Promise<
-            IResult<
+            Result<
                 IHSProvider.IContact,
-                Failure<IHSProvider.FailureCode.GetContact> | InternalError
+                | ExternalFailure<"Crypto.decrypt">
+                | InternalFailure<
+                      | IAuthentication.FailureCode.TokenExpired
+                      | IAuthentication.FailureCode.TokenInvalid
+                      | IUser.FailureCode.Unverified
+                      | IUser.FailureCode.NotFound
+                      | IUser.FailureCode.Invalid
+                  >
             >
         > => {
             const permission = await User.Service.validate(tx)(access_token);
@@ -232,12 +231,8 @@ export namespace Service {
 
                 unless(
                     Result.Ok.is,
-                    Result.Error.lift(() =>
-                        Failure.create({
-                            cause: "USER_NOT_FOUND",
-                            message: "사용자를 찾을 수 없습니다.",
-                            statusCode: HttpStatus.NOT_FOUND,
-                        }),
+                    Result.Error.lift(
+                        () => new InternalFailure("USER_NOT_FOUND"),
                     ),
                 ),
 
@@ -245,11 +240,7 @@ export namespace Service {
                     BIZUser.Service.isVerified(Result.Ok.flatten(ok))
                         ? ok
                         : Result.Error.map(
-                              Failure.create({
-                                  cause: "USER_NOT_FOUND",
-                                  message: "사용자를 찾을 수 없습니다.",
-                                  statusCode: HttpStatus.NOT_FOUND,
-                              }),
+                              new InternalFailure("USER_NOT_FOUND"),
                           ),
                 ),
 
@@ -262,9 +253,15 @@ export namespace Service {
         (
             access_token: string,
         ): Promise<
-            IResult<
+            Result<
                 IHSProvider.IPrivate,
-                InternalError | Failure<IHSProvider.FailureCode.GetPrivate>
+                | ExternalFailure<"Crypto.decrypt">
+                | InternalFailure<
+                      | IAuthentication.FailureCode.TokenExpired
+                      | IAuthentication.FailureCode.TokenInvalid
+                      | IUser.FailureCode.TypeMismatch
+                      | IUser.FailureCode.Invalid
+                  >
             >
         > =>
             pipe(
@@ -281,9 +278,15 @@ export namespace Service {
         async (
             input: IHSProvider.IUpdate.IBIZInfo,
         ): Promise<
-            IResult<
+            Result<
                 null,
-                InternalError | Failure<IHSProvider.FailureCode.UpdateBIZInfo>
+                | ExternalFailure<"Crypto.decrypt">
+                | InternalFailure<
+                      | IAuthentication.FailureCode.TokenExpired
+                      | IAuthentication.FailureCode.TokenInvalid
+                      | IUser.FailureCode.TypeMismatch
+                      | IUser.FailureCode.Invalid
+                  >
             >
         > => {
             const permission = await User.Service.validateType(
@@ -331,9 +334,17 @@ export namespace Service {
         async (
             input: IHSProvider.IUpdate.ISubExpertise,
         ): Promise<
-            IResult<
+            Result<
                 null,
-                InternalError | Failure<IHSProvider.FailureCode.UpdateExpertise>
+                | ExternalFailure<"Crypto.decrypt">
+                | InternalFailure<
+                      | IAuthentication.FailureCode.TokenExpired
+                      | IAuthentication.FailureCode.TokenInvalid
+                      | IExpertise.FailureCode.SuperMismatch
+                      | IExpertise.FailureCode.Required
+                      | IUser.FailureCode.TypeMismatch
+                      | IUser.FailureCode.Invalid
+                  >
             >
         > => {
             const permission = await User.Service.validateType(

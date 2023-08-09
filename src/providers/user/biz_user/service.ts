@@ -1,11 +1,11 @@
 import { Prisma } from "@PRISMA";
 import { filter, map, pipe, toArray, toAsync, unless } from "@fxts/core";
-import { HttpStatus } from "@nestjs/common";
 import {
+    IAuthentication,
     IBIZUser,
     IHSProvider,
     IREAgent,
-    IResult,
+    IUser,
     IVerification,
 } from "@APP/api";
 import { Storage } from "@APP/externals/storage";
@@ -13,8 +13,8 @@ import { prisma } from "@APP/infrastructure/DB";
 import { Verification } from "@APP/providers/verification";
 import {
     DateMapper,
-    Failure,
-    InternalError,
+    ExternalFailure,
+    InternalFailure,
     Result,
     isUnDeleted,
 } from "@APP/utils";
@@ -22,27 +22,32 @@ import { User } from "../user";
 import { PrismaJson } from "./prisma";
 
 export namespace Service {
+    export const is = (user: IUser): user is IBIZUser => {
+        return user.type !== "client";
+    };
+
     export const getCertificationList =
         (tx: Prisma.TransactionClient = prisma) =>
         async (
             access_token: string,
         ): Promise<
-            IResult<
+            Result<
                 string[],
-                | InternalError
-                | Failure<IBIZUser.FailureCode.GetCertificationList>
+                | ExternalFailure<"Crypto.decrypt">
+                | InternalFailure<
+                      | IAuthentication.FailureCode.TokenInvalid
+                      | IAuthentication.FailureCode.TokenExpired
+                      | IUser.FailureCode.TypeMismatch
+                      | IUser.FailureCode.Invalid
+                  >
             >
         > => {
             const permission = await User.Service.validate(tx)(access_token);
             if (Result.Error.is(permission)) return permission;
             const user = Result.Ok.flatten(permission);
-            if (user.type === "client")
+            if (!is(user))
                 return Result.Error.map(
-                    Failure.create({
-                        cause: "PERMISSION_INSUFFICIENT",
-                        message: "해당 요청에 대한 권한이 없습니다.",
-                        statusCode: HttpStatus.FORBIDDEN,
-                    }),
+                    new InternalFailure("USER_TYPE_MISMATCH"),
                 );
             return pipe(
                 user.id,
@@ -70,22 +75,23 @@ export namespace Service {
         async (
             input: IBIZUser.ICertificationImageCreate,
         ): Promise<
-            IResult<
+            Result<
                 null,
-                | InternalError
-                | Failure<IBIZUser.FailureCode.CreateCertification>
+                | ExternalFailure<"Crypto.decrypt">
+                | InternalFailure<
+                      | IAuthentication.FailureCode.TokenInvalid
+                      | IAuthentication.FailureCode.TokenExpired
+                      | IUser.FailureCode.TypeMismatch
+                      | IUser.FailureCode.Invalid
+                  >
             >
         > => {
             const permission = await User.Service.validate(tx)(access_token);
             if (Result.Error.is(permission)) return permission;
             const user = Result.Ok.flatten(permission);
-            if (user.type === "client")
+            if (!is(user))
                 return Result.Error.map(
-                    Failure.create({
-                        cause: "PERMISSION_INSUFFICIENT",
-                        message: "해당 요청에 대한 권한이 없습니다.",
-                        statusCode: HttpStatus.FORBIDDEN,
-                    }),
+                    new InternalFailure("USER_TYPE_MISMATCH"),
                 );
             return pipe(
                 input,
@@ -124,24 +130,23 @@ export namespace Service {
         async (
             input: IBIZUser.IUpdate.IIntroduction,
         ): Promise<
-            IResult<
+            Result<
                 null,
-                InternalError | Failure<IBIZUser.FailureCode.UpdateIntroduction>
+                | ExternalFailure<"Crypto.decrypt">
+                | InternalFailure<
+                      | IAuthentication.FailureCode.TokenInvalid
+                      | IAuthentication.FailureCode.TokenExpired
+                      | IUser.FailureCode.TypeMismatch
+                      | IUser.FailureCode.Invalid
+                  >
             >
         > => {
             const permission = await User.Service.validate(tx)(access_token);
             if (Result.Error.is(permission)) return permission;
             const user = Result.Ok.flatten(permission);
-            if (
-                user.type !== "home service provider" &&
-                user.type !== "real estate agent"
-            )
+            if (!is(user))
                 return Result.Error.map(
-                    Failure.create({
-                        cause: "PERMISSION_INSUFFICIENT",
-                        message: "해당 요청에 대한 권한이 없습니다.",
-                        statusCode: HttpStatus.FORBIDDEN,
-                    }),
+                    new InternalFailure("USER_TYPE_MISMATCH"),
                 );
             return pipe(
                 user.id,
@@ -176,24 +181,25 @@ export namespace Service {
         async (
             input: IVerification.IVerifiedPhone.IVerification,
         ): Promise<
-            IResult<
+            Result<
                 null,
-                InternalError | Failure<IBIZUser.FailureCode.UpdatePhone>
+                | ExternalFailure<"Crypto.decrypt">
+                | InternalFailure<
+                      | IAuthentication.FailureCode.TokenExpired
+                      | IAuthentication.FailureCode.TokenInvalid
+                      | IVerification.FailureCode.Uncompleted
+                      | IVerification.FailureCode.NotFound
+                      | IUser.FailureCode.TypeMismatch
+                      | IUser.FailureCode.Invalid
+                  >
             >
         > => {
             const permission = await User.Service.validate(tx)(access_token);
             if (Result.Error.is(permission)) return permission;
             const user = Result.Ok.flatten(permission);
-            if (
-                user.type !== "home service provider" &&
-                user.type !== "real estate agent"
-            )
+            if (!is(user))
                 return Result.Error.map(
-                    Failure.create({
-                        cause: "PERMISSION_INSUFFICIENT",
-                        message: "해당 요청에 대한 권한이 없습니다.",
-                        statusCode: HttpStatus.FORBIDDEN,
-                    }),
+                    new InternalFailure("USER_TYPE_MISMATCH"),
                 );
 
             return pipe(
@@ -230,24 +236,23 @@ export namespace Service {
         async (
             input: IBIZUser.IUpdate.IName,
         ): Promise<
-            IResult<
+            Result<
                 null,
-                InternalError | Failure<IBIZUser.FailureCode.UpdateName>
+                | ExternalFailure<"Crypto.decrypt">
+                | InternalFailure<
+                      | IAuthentication.FailureCode.TokenExpired
+                      | IAuthentication.FailureCode.TokenInvalid
+                      | IUser.FailureCode.TypeMismatch
+                      | IUser.FailureCode.Invalid
+                  >
             >
         > => {
             const permission = await User.Service.validate(tx)(access_token);
             if (Result.Error.is(permission)) return permission;
             const user = Result.Ok.flatten(permission);
-            if (
-                user.type !== "home service provider" &&
-                user.type !== "real estate agent"
-            )
+            if (!is(user))
                 return Result.Error.map(
-                    Failure.create({
-                        cause: "PERMISSION_INSUFFICIENT",
-                        message: "해당 요청에 대한 권한이 없습니다.",
-                        statusCode: HttpStatus.FORBIDDEN,
-                    }),
+                    new InternalFailure("USER_TYPE_MISMATCH"),
                 );
             return pipe(
                 user.id,
@@ -280,10 +285,15 @@ export namespace Service {
         async (
             input: IBIZUser.IUpdate.IProfileImageUrl,
         ): Promise<
-            IResult<
+            Result<
                 null,
-                | InternalError
-                | Failure<IBIZUser.FailureCode.UpdateProfileImageUrl>
+                | ExternalFailure<"Crypto.decrypt">
+                | InternalFailure<
+                      | IAuthentication.FailureCode.TokenExpired
+                      | IAuthentication.FailureCode.TokenInvalid
+                      | IUser.FailureCode.TypeMismatch
+                      | IUser.FailureCode.Invalid
+                  >
             >
         > => {
             const permission = await User.Service.validate(tx)(access_token);
@@ -294,11 +304,7 @@ export namespace Service {
                 user.type !== "real estate agent"
             )
                 return Result.Error.map(
-                    Failure.create({
-                        cause: "PERMISSION_INSUFFICIENT",
-                        message: "해당 요청에 대한 권한이 없습니다.",
-                        statusCode: HttpStatus.FORBIDDEN,
-                    }),
+                    new InternalFailure("USER_TYPE_MISMATCH"),
                 );
             return pipe(
                 user.id,

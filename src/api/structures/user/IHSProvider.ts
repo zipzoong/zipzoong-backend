@@ -189,21 +189,4 @@ export namespace IHSProvider {
             sub_expertise_ids: string[];
         }
     }
-
-    export namespace FailureCode {
-        export type ExpertiseInvalid =
-            | "EXPERTISE_REQUIRED"
-            | "SUPER_EXPERTISE_MISMATCH";
-        export type Create = ExpertiseInvalid;
-        export type GetPublic = IUser.FailureCode.GetPublic;
-        export type GetContact =
-            | IUser.FailureCode.Validate
-            | IUser.FailureCode.Verify
-            | GetPublic;
-        export type GetPrivate = IUser.FailureCode.ValidateType;
-        export type UpdateBIZInfo = IUser.FailureCode.ValidateType;
-        export type UpdateExpertise =
-            | IUser.FailureCode.ValidateType
-            | ExpertiseInvalid;
-    }
 }

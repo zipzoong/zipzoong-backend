@@ -1,47 +1,17 @@
 import { Prisma } from "@PRISMA";
 import { pipe, unless } from "@fxts/core";
-import { HttpStatus } from "@nestjs/common";
 import { IAuthentication } from "@APP/api";
 import { IUser } from "@APP/api/structures/user/IUser";
-import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
 import { Authentication } from "@APP/providers/authentication";
 import { IToken } from "@APP/providers/authentication/interface";
-import { Failure, InternalError, Result, pick } from "@APP/utils";
+import { ExternalFailure, InternalFailure, Result } from "@APP/utils";
 import { BIZUser } from "../biz_user";
 import { Client } from "../client";
 import { HSProvider } from "../hs_provider";
 import { REAgent } from "../re_agent";
 
 export namespace Service {
-    /**
-     * 타입 연산이 재대로 이루어지지 않아서 any를 사용했음.
-     *
-     * 함수 수정시 주의할 것
-     */
-    const getOne =
-        <T extends IUser.Type>(user_type: T) =>
-        (tx: Prisma.TransactionClient = prisma) =>
-        async (
-            user_id: string,
-        ): Promise<
-            IResult<
-                IUser & { type: T },
-                InternalError | Failure<IUser.FailureCode.GetOne>
-            >
-        > =>
-            user_type === "client"
-                ? (Client.Service.getOne(tx)(user_id) as any)
-                : user_type === "home service provider"
-                ? (HSProvider.Service.getOne(tx)(user_id) as any)
-                : user_type === "real estate agent"
-                ? (REAgent.Service.getOne(tx)(user_id) as any)
-                : Result.Error.map(
-                      InternalError.create(
-                          Error("사용자 유형이 올바르지 않습니다."),
-                      ),
-                  );
-
     /**
      * access_token으로부터 유효한 사용자를 불러옵니다.
      *
@@ -52,14 +22,20 @@ export namespace Service {
         async (
             access_token: string,
         ): Promise<
-            IResult<IUser, InternalError | Failure<IUser.FailureCode.Validate>>
+            Result<
+                IUser,
+                | ExternalFailure<"Crypto.decrypt">
+                | InternalFailure<
+                      | IAuthentication.FailureCode.TokenInvalid
+                      | IAuthentication.FailureCode.TokenExpired
+                      | IUser.FailureCode.Invalid
+                  >
+            >
         > =>
             pipe(
                 access_token,
 
-                Authentication.Service.verifyToken(
-                    Authentication.Token.Access.verify,
-                ),
+                Authentication.Token.Access.verify,
 
                 unless(Result.Error.is, (ok) =>
                     pipe(
@@ -68,19 +44,23 @@ export namespace Service {
                         Result.Ok.flatten,
 
                         (payload) =>
-                            getOne(payload.user_type)(tx)(payload.user_id),
+                            payload.user_type === "client"
+                                ? Client.Service.getOne(tx)(payload.user_id)
+                                : payload.user_type === "home service provider"
+                                ? HSProvider.Service.getOne(tx)(payload.user_id)
+                                : REAgent.Service.getOne(tx)(payload.user_id),
 
                         unless(
-                            Result.Ok.is,
-                            Result.Error.lift((error) =>
-                                error.name === "InternalError"
-                                    ? error
-                                    : Failure.create({
-                                          cause: "USER_INVALID",
-                                          message:
-                                              "유효하지 않은 사용자입니다.",
-                                          statusCode: HttpStatus.FORBIDDEN,
-                                      }),
+                            Result.Ok.is<
+                                IUser,
+                                InternalFailure<
+                                    | IUser.FailureCode.NotFound
+                                    | IUser.FailureCode.Inactive
+                                    | IUser.FailureCode.Invalid
+                                >
+                            >,
+                            Result.Error.lift(
+                                () => new InternalFailure("USER_INVALID"),
                             ),
                         ),
                     ),
@@ -100,17 +80,21 @@ export namespace Service {
         async (
             access_token: string,
         ): Promise<
-            IResult<
+            Result<
                 IUser & { type: T },
-                InternalError | Failure<IUser.FailureCode.ValidateType>
+                | ExternalFailure<"Crypto.decrypt">
+                | InternalFailure<
+                      | IAuthentication.FailureCode.TokenInvalid
+                      | IAuthentication.FailureCode.TokenExpired
+                      | IUser.FailureCode.TypeMismatch
+                      | IUser.FailureCode.Invalid
+                  >
             >
         > =>
             pipe(
                 access_token,
 
-                Authentication.Service.verifyToken(
-                    Authentication.Token.Access.verify,
-                ),
+                Authentication.Token.Access.verify,
 
                 unless(Result.Error.is, (ok) =>
                     pipe(
@@ -121,12 +105,7 @@ export namespace Service {
                         (payload) =>
                             payload.user_type !== user_type
                                 ? Result.Error.map(
-                                      Failure.create({
-                                          cause: "PERMISSION_INSUFFICIENT",
-                                          message:
-                                              "해당 요청에 대한 권한이 없습니다.",
-                                          statusCode: HttpStatus.FORBIDDEN,
-                                      }),
+                                      new InternalFailure("USER_TYPE_MISMATCH"),
                                   )
                                 : Result.Ok.map(payload),
                     ),
@@ -135,10 +114,11 @@ export namespace Service {
                 unless(
                     Result.Error.is<
                         IToken.IAccess,
-                        | InternalError
-                        | Failure<
-                              | IAuthentication.FailureCode.TokenVerify
-                              | IAuthentication.FailureCode.PermissionInSufficient
+                        | ExternalFailure<"Crypto.decrypt">
+                        | InternalFailure<
+                              | IAuthentication.FailureCode.TokenInvalid
+                              | IAuthentication.FailureCode.TokenExpired
+                              | IUser.FailureCode.TypeMismatch
                           >
                     >,
                     (ok) =>
@@ -147,21 +127,49 @@ export namespace Service {
 
                             Result.Ok.flatten,
 
-                            pick("user_id"),
+                            (payload) =>
+                                payload.user_type === "client"
+                                    ? Client.Service.getOne(tx)(payload.user_id)
+                                    : payload.user_type ===
+                                      "home service provider"
+                                    ? HSProvider.Service.getOne(tx)(
+                                          payload.user_id,
+                                      )
+                                    : REAgent.Service.getOne(tx)(
+                                          payload.user_id,
+                                      ),
 
-                            getOne(user_type)(tx),
+                            // type narrowing by `assertion`
+                            (
+                                input: Result<
+                                    IUser,
+                                    | ExternalFailure<"Crypto.decrypt">
+                                    | InternalFailure<
+                                          | IAuthentication.FailureCode.TokenInvalid
+                                          | IAuthentication.FailureCode.TokenExpired
+                                          | IUser.FailureCode.TypeMismatch
+                                          | IUser.FailureCode.NotFound
+                                          | IUser.FailureCode.Inactive
+                                          | IUser.FailureCode.Invalid
+                                      >
+                                >,
+                            ) =>
+                                input as Result<
+                                    IUser & { type: T },
+                                    | ExternalFailure<"Crypto.decrypt">
+                                    | InternalFailure<
+                                          | IAuthentication.FailureCode.TokenInvalid
+                                          | IAuthentication.FailureCode.TokenExpired
+                                          | IUser.FailureCode.TypeMismatch
+                                          | IUser.FailureCode.NotFound
+                                          | IUser.FailureCode.Inactive
+                                      >
+                                >,
 
                             unless(
                                 Result.Ok.is,
-                                Result.Error.lift((error) =>
-                                    error.name === "InternalError"
-                                        ? error
-                                        : Failure.create({
-                                              cause: "USER_INVALID",
-                                              message:
-                                                  "유효하지 않은 사용자입니다.",
-                                              statusCode: HttpStatus.FORBIDDEN,
-                                          }),
+                                Result.Error.lift(
+                                    () => new InternalFailure("USER_INVALID"),
                                 ),
                             ),
                         ),
@@ -173,19 +181,13 @@ export namespace Service {
      */
     export const verify = <T extends IUser>(
         user: T,
-    ): IResult<T, Failure<IUser.FailureCode.Verify>> => {
+    ): Result<T, InternalFailure<IUser.FailureCode.Unverified>> => {
         const is_verified =
             user.type === "client"
                 ? Client.Service.isVerified(user)
                 : BIZUser.Service.isVerified(user);
         return is_verified
             ? Result.Ok.map(user)
-            : Result.Error.map(
-                  Failure.create({
-                      cause: "USER_UNVERIFIED",
-                      message: "승인되지 않은 사용자입니다.",
-                      statusCode: HttpStatus.FORBIDDEN,
-                  }),
-              );
+            : Result.Error.map(new InternalFailure("USER_UNVERIFIED"));
     };
 }

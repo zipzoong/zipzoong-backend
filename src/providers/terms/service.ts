@@ -1,12 +1,16 @@
 import { Prisma, TermsType } from "@PRISMA";
 import { filter, map, pipe, toArray, unless } from "@fxts/core";
-import { HttpStatus } from "@nestjs/common";
 import { randomUUID } from "crypto";
 import { ITerms } from "@APP/api/structures/ITerms";
 import { IUser } from "@APP/api/structures/user/IUser";
-import { IResult } from "@APP/api/types";
 import { prisma } from "@APP/infrastructure/DB";
-import { DateMapper, Failure, Result, isUnDeleted, pick } from "@APP/utils";
+import {
+    DateMapper,
+    InternalFailure,
+    Result,
+    isUnDeleted,
+    pick,
+} from "@APP/utils";
 
 export namespace Service {
     /**
@@ -22,7 +26,12 @@ export namespace Service {
         (
             agreement_ids: string[],
         ): Promise<
-            IResult<string[], Failure<"TERMS_INSUFFICIENT" | "TERMS_INVALID">>
+            Result<
+                string[],
+                InternalFailure<
+                    ITerms.FailureCode.Insufficient | ITerms.FailureCode.Invalid
+                >
+            >
         > =>
             pipe(
                 user_type,
@@ -53,11 +62,7 @@ export namespace Service {
                         .every((terms_id) => agreement_ids.includes(terms_id))
                         ? Result.Ok.map(terms.map(pick("id")))
                         : Result.Error.map(
-                              Failure.create<"TERMS_INSUFFICIENT">({
-                                  cause: "TERMS_INSUFFICIENT",
-                                  message: "필수 약관에 동의하지 않았습니다.",
-                                  statusCode: HttpStatus.FORBIDDEN,
-                              }),
+                              new InternalFailure("TERMS_INSUFFICIENT"),
                           ),
 
                 // 존재하지 않는 id를 포함하는가
@@ -67,12 +72,7 @@ export namespace Service {
                     )
                         ? Result.Ok.map(agreement_ids)
                         : Result.Error.map(
-                              Failure.create<"TERMS_INVALID">({
-                                  cause: "TERMS_INVALID",
-                                  message:
-                                      "유효하지 않은 약관을 포함하고 있습니다.",
-                                  statusCode: HttpStatus.BAD_REQUEST,
-                              }),
+                              new InternalFailure("TERMS_INVALID"),
                           ),
                 ),
             );
@@ -153,7 +153,7 @@ export namespace Service {
                             type: terms.type,
                             version: terms.version,
                             is_required: terms.is_required,
-                        } satisfies ITerms),
+                        }) satisfies ITerms,
                 ),
 
                 toArray,
